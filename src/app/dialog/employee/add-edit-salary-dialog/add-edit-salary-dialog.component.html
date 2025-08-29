@@ -1,0 +1,93 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-3 shadow">
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title container text-center">
+          {{ salary.id ? 'Edit Salary' : 'Add New Salary' }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form>
+            <div class="container text-left">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Employee</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="salary.empId"
+                            name="empId"
+                            placeholder="Enter empId">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Year</label>
+                        <input 
+                            type="email" 
+                            class="form-control"
+                            [(ngModel)]="salary.year"
+                            name="year"
+                            placeholder="Enter Year">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Month</label>
+                        <div class="position-relative">
+                            <input
+                            type="text"
+                            class="form-control"
+                            id="employeeroleid"
+                            [(ngModel)]="salary.month"
+                            name="month"
+                            placeholder="Enter Month">
+                        </div>
+                    </div> 
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Role Name</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="salary.roleName"
+                            name="roleName"
+                            placeholder="Enter Role Name">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Amount</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="salary.amount"
+                            name="amount"
+                            placeholder="Enter Amount">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Status</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="salary.status"
+                            name="status"
+                            placeholder="Enter status">
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+        <button type="button" class="btn btn-success" (click)="save()">
+          {{ salary.id ? 'Update' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Optional backdrop -->
+<div class="modal-backdrop fade show"></div>

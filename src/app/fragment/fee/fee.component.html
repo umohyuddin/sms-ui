@@ -1,0 +1,52 @@
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Students Fee</h5>
+    <input 
+      type="text" 
+      class="form-control w-25" 
+      placeholder="Search..."
+      [(ngModel)]="searchTerm"
+      (input)="applyFilter()" />
+      <button type="button" class="btn btn-sm btn-success me-2" (click)="onAdd()">ADD</button>
+  </div>
+
+  <div class="card-body p-0">
+    <table class="table table-striped table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">ID</th>
+          <th scope="col">Student ID</th>
+          <th scope="col">total Amount</th>
+          <th scope="col">Paid</th>
+          <th scope="col">Arears</th>
+          <th scope="col" (click)="sortData('year')" style="cursor: pointer">
+            Year <span *ngIf="sortColumn === 'year'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          </th>
+          <th scope="col" (click)="sortData('month')" style="cursor: pointer">
+            Month <span *ngIf="sortColumn === 'month'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          </th>
+          <th scope="col">Status</th>
+          <th scope="col" >Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fee of filteredlist; let i = index">
+          <th scope="row">{{i+1}}</th>
+          <td>{{ fee.feeId }}</td>
+          <td>{{ fee.studentId }}</td>
+          <td>{{ fee.totalAmount }}</td>
+          <td>{{ fee.paidAmount }}</td>
+          <td>{{ fee.arrears }}</td>
+          <td>{{ fee.year }}</td>
+          <td>{{ fee.month }}</td>
+          <td>{{ fee.status }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="onEdit(fee, i)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="onDelete(fee, i)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

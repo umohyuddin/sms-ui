@@ -1,0 +1,92 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-3 shadow">
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title container text-center">
+          {{ asessment.assessmentId ? 'Edit Assessment' : 'Add New Assessment' }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form>
+            <div class="container text-left">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Enrollment</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]=" asessment.enrollmentId"
+                            name="enrollmentId"
+                            placeholder="Enter Enrollment">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Name</label>
+                        <input 
+                            type="email" 
+                            class="form-control"
+                            [(ngModel)]="asessment.name"
+                            name="Name"
+                            placeholder="Enter Name">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Marks</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]=" asessment.marks"
+                            name="marks"
+                            placeholder="Enter Marks">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Grade</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]=" asessment.grade"
+                            name="grade"
+                            placeholder="Enter Grade">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Assessment Date</label>
+                        <input 
+                            type="date" 
+                            class="form-control"
+                            [(ngModel)]="asessment.assessmentDate"
+                            name="assessmentDate"
+                            placeholder="Enter Date">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Status</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]=" asessment.status"
+                            name="status"
+                            placeholder="Enter Status">
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+        <button type="button" class="btn btn-success" (click)="save()">
+          {{ asessment.assessmentId ? 'Update' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Optional backdrop -->
+<div class="modal-backdrop fade show"></div>

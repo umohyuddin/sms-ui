@@ -1,0 +1,133 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-3 shadow">
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title container text-center">
+          {{ employee.id ? 'Edit Employee' : 'Add New Employee' }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form>
+            <div class="container text-left">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">First Name</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="employee.firstName"
+                            name="firstName"
+                            placeholder="Enter First Name">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Last Name</label>
+                        <input 
+                            type="email" 
+                            class="form-control"
+                            [(ngModel)]="employee.lastName"
+                            name="lastName"
+                            placeholder="Enter last Name">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Role</label>
+                        <div class="position-relative">
+                            <input
+                            type="text"
+                            class="form-control"
+                            id="employeeroleid"
+                            [(ngModel)]="employee.roleId"
+                            name="role"
+                            placeholder="Enter Role">
+                        </div>
+                    </div> 
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Campus</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="employee.campusId"
+                            name="campusId"
+                            placeholder="Enter Campus ID">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Department</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="employee.department"
+                            name="department"
+                            placeholder="Enter Department">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Department ID</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="employee.departmentId"
+                            name="departmentId"
+                            placeholder="Enter Department ID">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Email</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="employee.email"
+                            name="email"
+                            placeholder="Enter Email">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Phone#</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="employee.phoneNo"
+                            name="phoneNo"
+                            placeholder="Enter phone No">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Hire Date</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="employee.hireDate"
+                            name="hireDate"
+                            placeholder="Enter hire Date">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Active Status</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="employee.isActive"
+                            name="active"
+                            placeholder="Enter Active">
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+        <button type="button" class="btn btn-success" (click)="save()">
+          {{ employee.id ? 'Update' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Optional backdrop -->
+<div class="modal-backdrop fade show"></div>

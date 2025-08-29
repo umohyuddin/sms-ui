@@ -1,0 +1,40 @@
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Department</h5>
+    <input 
+      type="text" 
+      class="form-control w-25" 
+      placeholder="Search..."
+      [(ngModel)]="searchTerm"
+      (input)="applyFilter()" />
+      <button type="button" class="btn btn-sm btn-success me-2" (click)="onAdd()">ADD</button>
+  </div>
+
+  <div class="card-body p-0">
+    <table class="table table-striped table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col" (click)="sortData('departmentName')" style="cursor: pointer">
+            Name <span *ngIf="sortColumn === 'departmentName'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          </th>
+          <th scope="col" (click)="sortData('departmentId')" style="cursor: pointer">
+            ID <span *ngIf="sortColumn === 'departmentId'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          </th>
+          <th scope="col" >Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dept of filteredDepartments; let i = index">
+          <th scope="row">{{i+1}}</th>
+          <td>{{ dept.departmentName }}</td>
+          <td>{{ dept.departmentId }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="onEdit(dept, i)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="onDelete(dept, i)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="sidebar-container p-3" style="width: 200px; height: 85vh;">
+  <ul class="list-unstyled p-0 m-0">
+    <li *ngFor="let item of menuItems">
+      <button
+        class="sidebar-btn w-100 mb-1"
+        [class.active]="activePage === item.path"
+        (click)="selectPage(item.path)"
+      >
+        {{ item.label }}
+      </button>
+    </li>
+  </ul>
+</div>

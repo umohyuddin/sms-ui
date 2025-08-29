@@ -1,0 +1,18 @@
+.sidebar-container {
+  overflow-y: auto; /* enable vertical scroll */
+  height: 100%;     /* fill the parent container */
+}
+
+.sidebar-btn {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.sidebar-btn.active {
+  background-color: #0d6efd; /* bootstrap primary */
+  color: white;
+}

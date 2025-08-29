@@ -1,0 +1,72 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-l modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-3 shadow">
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title container text-center">
+          {{ attendance.attendanceId ? 'Edit Student Attendance' : 'Add New Student Attendance' }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form>
+            <div class="container text-left">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Student</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="attendance.studentId"
+                            name="studentId"
+                            placeholder="Enter studentId">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Course</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="attendance.courseId"
+                            name="courseId"
+                            placeholder="Enter courseId">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Date</label>
+                        <input 
+                            type="date" 
+                            class="form-control"
+                            [(ngModel)]="attendance.attendanceDate"
+                            name="attendanceDate"
+                            placeholder="Enter Date">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Status</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="attendance.status"
+                            name="status"
+                            placeholder="Enter status">
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+        <button type="button" class="btn btn-success" (click)="save()">
+          {{ attendance.attendanceId ? 'Update' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Optional backdrop -->
+<div class="modal-backdrop fade show"></div>

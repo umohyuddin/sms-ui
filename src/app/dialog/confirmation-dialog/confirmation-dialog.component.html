@@ -1,0 +1,35 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-l modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-3 shadow">
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white ">
+        <h5 class="modal-title container text-center">
+          Confimation
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form>
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col mb-3">
+                        <h6>Are you sure you want to delete record!</h6>
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="yes()">YES</button>
+        <button type="button" class="btn btn-success" (click)="no()">NO</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Optional backdrop -->
+<div class="modal-backdrop fade show"></div>

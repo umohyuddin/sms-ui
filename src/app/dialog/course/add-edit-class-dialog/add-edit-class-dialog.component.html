@@ -1,0 +1,92 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-l modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-3 shadow">
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title container text-center">
+          {{ sclass.classId ? 'Edit Class' : 'Add New Class' }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form>
+            <div class="container text-left">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Course</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="sclass.courseId"
+                            name="courseId"
+                            placeholder="Enter Course">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Teacher</label>
+                        <input 
+                            type="email" 
+                            class="form-control"
+                            [(ngModel)]="sclass.teacherId"
+                            name="teacherId"
+                            placeholder="Enter Teacher">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Day</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="sclass.dayOfWeek"
+                            name="dayOfWeek"
+                            placeholder="Enter Day">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Room</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="sclass.classroom"
+                            name="classroom"
+                            placeholder="Enter Room">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Start Time</label>
+                        <input 
+                            type="time" 
+                            class="form-control"
+                            [(ngModel)]="sclass.startTime"
+                            name="startTime"
+                            placeholder="Enter Time">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">End Time</label>
+                        <input 
+                            type="time" 
+                            class="form-control"
+                            [(ngModel)]="sclass.endTime"
+                            name="endTime"
+                            placeholder="Enter Time">
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+        <button type="button" class="btn btn-success" (click)="save()">
+          {{ sclass.classId ? 'Update' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Optional backdrop -->
+<div class="modal-backdrop fade show"></div>

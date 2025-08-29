@@ -1,0 +1,142 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-3 shadow">
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title container text-center">
+          {{ student.studentId ? 'Edit Student' : 'Add New Student' }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form>
+            <div class="container text-left">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">First Name</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="student.firstName"
+                            name="firstName"
+                            placeholder="Enter First Name">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Last Name</label>
+                        <input 
+                            type="email" 
+                            class="form-control"
+                            [(ngModel)]="student.lastName"
+                            name="lastName"
+                            placeholder="Enter last Name">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Date Of Birth</label>
+                        <div class="position-relative">
+                            <input
+                            type="date"
+                            class="form-control"
+                            id="employeeroleid"
+                            [(ngModel)]="student.dateOfBirth"
+                            name="dateOfBirth"
+                            placeholder="Enter Date">
+                        </div>
+                    </div> 
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Campus</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="student.campusId"
+                            name="campusId"
+                            placeholder="Enter Campus ID">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Department</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="student.departmentId"
+                            name="department"
+                            placeholder="Enter Department">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Class</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="student.grade"
+                            name="grade"
+                            placeholder="Enter class">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Email</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="student.email"
+                            name="email"
+                            placeholder="Enter Email">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Phone#</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="student.phone"
+                            name="phoneNo"
+                            placeholder="Enter phone No">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Adress</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="student.address"
+                            name="address"
+                            placeholder="Enter address">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Active Status</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="student.isActive"
+                            name="active"
+                            placeholder="Enter Active">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Enrollment Date</label>
+                        <input 
+                            type="date" 
+                            class="form-control"
+                            [(ngModel)]="student.enrollmentDate"
+                            name="enrollmentDate"
+                            placeholder="Enter Enrollment Date">
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+        <button type="button" class="btn btn-success" (click)="save()">
+          {{ student.studentId ? 'Update' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Optional backdrop -->
+<div class="modal-backdrop fade show"></div>

@@ -1,0 +1,44 @@
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Enrollments</h5>
+    <input 
+      type="text" 
+      class="form-control w-25" 
+      placeholder="Search..."
+      [(ngModel)]="searchTerm"
+      (input)="applyFilter()" />
+      <button type="button" class="btn btn-sm btn-success me-2" (click)="onAdd()">ADD</button>
+  </div>
+
+  <div class="card-body p-0">
+    <table class="table table-striped table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">ID</th>
+          <th scope="col" (click)="sortData('studentId')" style="cursor: pointer">
+            Student <span *ngIf="sortColumn === 'studentId'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          </th>
+          <th scope="col" (click)="sortData('courseId')" style="cursor: pointer">
+            Course <span *ngIf="sortColumn === 'courseId'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          </th>
+          <th scope="col">Date</th>
+          <th scope="col" >Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let enr of filteredList; let i = index">
+          <th scope="row">{{i+1}}</th>
+          <td>{{ enr.enrollmentId }}</td>
+          <td>{{ enr.studentId }}</td>
+          <td>{{ enr.courseId }}</td>
+          <td>{{ enr.enrollmentDate }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="onEdit(enr, i)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="onDelete(enr, i)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

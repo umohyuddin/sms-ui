@@ -1,0 +1,171 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-3 shadow">
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title container text-center">
+          {{ fee.feeId ? 'Edit Student Fee' : 'Add New Student Fee' }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <form>
+            <div class="container text-left">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Student</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="fee.studentId"
+                            name="studentId"
+                            placeholder="Enter studentId">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Yeer</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="fee.year"
+                            name="year"
+                            placeholder="Enter Yeer">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Month</label>
+                        <div class="position-relative">
+                            <input
+                            type="text"
+                            class="form-control"
+                            id="employeeroleid"
+                            [(ngModel)]="fee.month"
+                            name="month"
+                            placeholder="Enter Month">
+                        </div>
+                    </div> 
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Tuition Fee</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]="fee.tuitionFee"
+                            name="tuitionFee"
+                            placeholder="Enter Amount">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Stationery</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]="fee.stationery"
+                            name="stationery"
+                            placeholder="Enter Amount">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">sports Fee</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]="fee.sports"
+                            name="sports"
+                            placeholder="Enter Amount">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Annual Fee</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]="fee.annualFee"
+                            name="annualFee"
+                            placeholder="Enter Amount">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Electricity Fee</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]="fee.electricity"
+                            name="electricity"
+                            placeholder="Enter Amount">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Maintenance</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]="fee.maintenance"
+                            name="Maintenance"
+                            placeholder="Enter Amount">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Miscellaneous</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]="fee.miscellaneous"
+                            name="miscellaneous"
+                            placeholder="Enter Amount">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Arrears</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]="fee.arrears"
+                            name="arrears"
+                            placeholder="Enter Amount">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Total Amount</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]="fee.totalAmount"
+                            name="totalAmount"
+                            placeholder="Enter Amount">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Paid Amount</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]="fee.paidAmount"
+                            name="paidAmount"
+                            placeholder="Enter Amount">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">status</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="fee.status"
+                            name="status"
+                            placeholder="Enter status">
+                    </div>
+                </div>
+            </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+        <button type="button" class="btn btn-success" (click)="save()">
+          {{ fee.feeId ? 'Update' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Optional backdrop -->
+<div class="modal-backdrop fade show"></div>

@@ -1,0 +1,50 @@
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Classes / Lectures</h5>
+    <input 
+      type="text" 
+      class="form-control w-25" 
+      placeholder="Search..."
+      [(ngModel)]="searchTerm"
+      (input)="applyFilter()" />
+      <button type="button" class="btn btn-sm btn-success me-2" (click)="onAdd()">ADD</button>
+  </div>
+
+  <div class="card-body p-0">
+    <table class="table table-striped table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">ID</th>
+          <th scope="col" (click)="sortData('courseId')" style="cursor: pointer">
+            Course <span *ngIf="sortColumn === 'courseId'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          </th>
+          <th scope="col" (click)="sortData('teacherId')" style="cursor: pointer">
+            Teacher <span *ngIf="sortColumn === 'teacherId'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          </th>
+          <th scope="col">Day</th>
+          <th scope="col">Start</th>
+          <th scope="col">End</th>
+          <th scope="col">Room</th>
+          <th scope="col" >Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let class of filteredList; let i = index">
+          <th scope="row">{{i+1}}</th>
+          <td>{{ class.classId }}</td>
+          <td>{{ class.courseId }}</td>
+          <td>{{ class.teacherId }}</td>
+          <td>{{ class.dayOfWeek }}</td>
+          <td>{{ class.startTime }}</td>
+          <td>{{ class.endTime }}</td>
+          <td>{{ class.classroom }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="onEdit(class, i)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="onDelete(class, i)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
