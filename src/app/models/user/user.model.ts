@@ -9,8 +9,8 @@ export interface User {
   email?: string;
   enabled?: boolean;
   password?: string;
-  createdAt?: string;
-  updatedAt?: string;
   active?: boolean;
   username?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

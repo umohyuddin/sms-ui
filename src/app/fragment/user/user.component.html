@@ -7,7 +7,7 @@
       placeholder="Search..."
       [(ngModel)]="searchTerm"
       (input)="applyFilter()" />
-      <button type="button" class="btn btn-sm btn-success me-2" (click)="onAddUser()">ADD</button>
+      <button type="button" class="btn btn-sm btn-success me-2" (click)="onAdd()">ADD</button>
   </div>
 
   <div class="card-body p-0">
@@ -34,8 +34,8 @@
           <td>{{ user.email }}</td>
           <td>{{ user.roleId }}</td>
           <td>
-            <button class="btn btn-sm btn-warning me-2">Edit</button>
-            <button class="btn btn-sm btn-danger">Delete</button>
+            <button class="btn btn-sm btn-warning me-2" (click)="onEdit(user, i)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="onDelete(user, i)">Delete</button>
           </td>
         </tr>
       </tbody>

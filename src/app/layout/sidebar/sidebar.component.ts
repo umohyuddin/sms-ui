@@ -32,13 +32,6 @@ export class SidebarComponent {
     { label: 'Enrollment', path: 'enrollment' },
     { label: 'Assessment', path: 'assessment' }
   ];
-
-   activePage: string = '';
-
   constructor(private router: Router) {}
 
-  selectPage(pagePath: string) {
-    this.activePage = pagePath;
-    this.router.navigate([`/home/${pagePath}`]);
-  }
 }

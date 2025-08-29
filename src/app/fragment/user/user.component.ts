@@ -6,6 +6,7 @@ import { User } from '../../models/user/user.model'
 import { AuthService } from '../../services/auth/auth.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Router, NavigationEnd } from '@angular/router';
+import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component'
 import { AddEditUserDialogComponent } from '../../dialog/user/add-edit-user-dialog/add-edit-user-dialog.component';
 import { filter } from 'rxjs/operators';
 
@@ -82,7 +83,7 @@ export class UserComponent implements OnInit {
     });
   }
 
-  onAddUser() {
+  onAdd() {
     const dialogRef = this.dialog.open(AddEditUserDialogComponent, {
       width: '400px',
       data: null
@@ -95,7 +96,7 @@ export class UserComponent implements OnInit {
     });
   }
 
-  onEditUser(user: User, index: number) {
+  onEdit(user: User, index: number) {
     const dialogRef = this.dialog.open(AddEditUserDialogComponent, {
       width: '400px',
       data: user
@@ -104,6 +105,26 @@ export class UserComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.users[index] = result;
+      }
+    });
+  }
+
+  onDelete(pUser: User, index: number) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: pUser
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.userService.deleteUser(pUser).subscribe({
+            next: res => {
+              console.log('User Deleted:', res);
+              this.users.splice(index,1);
+              this.filteredUsers = [...this.users];
+            },
+            error: err => console.error('Failed to delete User', err)
+          });
       }
     });
   }

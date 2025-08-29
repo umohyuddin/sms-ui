@@ -16,12 +16,10 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Campus</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="department.campusId"
-                            name="campusId"
-                            placeholder="Enter Campus">
+                        <select class="form-select" [(ngModel)]="department.campusId" name="campus">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let c of campus" [ngValue]="c.campusId">{{ c.name }}</option>
+                        </select>
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Name</label>

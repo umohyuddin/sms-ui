@@ -1,9 +1,11 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Salary } from '../../../models/employee/salary.modelinterface';
 import { SalaryService } from '../../../services/employee/salary.service';
+import { Employee } from '../../../models/employee/employee.modelinterface';
+import { EmployeeService } from '../../../services/employee/employee.service';
 
 @Component({
   selector: 'app-add-edit-salary-dialog',
@@ -12,14 +14,16 @@ import { SalaryService } from '../../../services/employee/salary.service';
   templateUrl: './add-edit-salary-dialog.component.html',
   styleUrl: './add-edit-salary-dialog.component.scss'
 })
-export class AddEditSalaryDialogComponent {
+export class AddEditSalaryDialogComponent implements OnInit {
 
   salary: Salary = {};
+  employee: Employee[] = [];
   isSaved: boolean = true;
 
   constructor(
     private dialogRef: MatDialogRef<AddEditSalaryDialogComponent>,
     private salaryService: SalaryService,
+    private employeeService: EmployeeService,
     @Inject(MAT_DIALOG_DATA) public data: Salary | null
   ) {
     if (data) {
@@ -29,7 +33,19 @@ export class AddEditSalaryDialogComponent {
       this.isSaved = false;
     }
   }
-
+  ngOnInit(): void {
+    this.loadEmployee();
+  }
+  loadEmployee(){
+    this.employeeService.getAllEmployee().subscribe({
+      next:res=>{
+        this.employee = res;
+      },
+      error:err=>{
+        console.error("Failed to load employee");
+      }
+    });
+  }
   save() {
     if(this.isSaved)
     {

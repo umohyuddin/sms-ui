@@ -25,12 +25,10 @@
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Campus</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="inventory.campusId"
-                            name="campusId"
-                            placeholder="Enter Campus">
+                        <select class="form-select" [(ngModel)]="inventory.campusId" name="campus">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let c of campus" [ngValue]="c.campusId">{{ c.name }}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
@@ -45,12 +43,12 @@
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Status</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="inventory.status"
-                            name="status"
-                            placeholder="Enter status">
+                        <select class="form-select" [(ngModel)]="inventory.status" name="status">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option >Available</option>
+                            <option >In_Use</option>
+                            <option >Damaged</option>
+                        </select>
                     </div>
                 </div>
             </div>

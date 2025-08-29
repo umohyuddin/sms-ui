@@ -5,7 +5,6 @@ export interface Salary {
     year?: number;
     month?: number;
     status?: string;
-    roleName?: string;
     createdAt?: string;
     updatedAt?: string;
 }

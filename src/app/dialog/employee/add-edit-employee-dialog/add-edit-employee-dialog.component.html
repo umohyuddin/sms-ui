@@ -34,26 +34,19 @@
                     </div>
                     <div class="col">
                         <label class="form-label">Role</label>
-                        <div class="position-relative">
-                            <input
-                            type="text"
-                            class="form-control"
-                            id="employeeroleid"
-                            [(ngModel)]="employee.roleId"
-                            name="role"
-                            placeholder="Enter Role">
-                        </div>
+                        <select class="form-select" [(ngModel)]="employee.roleId" name="role">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let er of employeeRole" [ngValue]="er.id">{{ er.name }}</option>
+                        </select>
                     </div> 
                 </div>
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Campus</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="employee.campusId"
-                            name="campusId"
-                            placeholder="Enter Campus ID">
+                        <select class="form-select" [(ngModel)]="employee.campusId" name="campus">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let c of campus" [ngValue]="c.campusId">{{ c.name }}</option>
+                        </select>
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Department</label>
@@ -66,12 +59,10 @@
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Department ID</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="employee.departmentId"
-                            name="departmentId"
-                            placeholder="Enter Department ID">
+                        <select class="form-select" [(ngModel)]="employee.departmentId" name="departmentid">
+                            <option [ngValue]="null">-- Select --</option>
+                            <option *ngFor="let d of department" [value]="d.departmentId">{{ d.departmentName }}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
@@ -96,7 +87,7 @@
                     <div class="col mb-3">
                         <label class="form-label">Hire Date</label>
                         <input 
-                            type="text" 
+                            type="date" 
                             class="form-control"
                             [(ngModel)]="employee.hireDate"
                             name="hireDate"
@@ -106,12 +97,14 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Active Status</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="employee.isActive"
-                            name="active"
-                            placeholder="Enter Active">
+                        <select 
+                            class="form-select" 
+                            [(ngModel)]="employee.isActive" 
+                            name="activeStatus">
+                            <option [ngValue]= "undefined">-- Select --</option>
+                            <option [value]=1>Yes</option>
+                            <option [value]=0>No</option>
+                        </select>
                     </div>
                 </div>
             </div>

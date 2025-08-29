@@ -14,15 +14,6 @@
         <form>
             <div class="container text-left">
                 <div class="row">
-                    <div class="col mb-3">
-                        <label class="form-label">Username</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="user.username"
-                            name="username"
-                            placeholder="Enter username">
-                    </div>
                     <div class="col">
                         <label class="form-label">Email</label>
                         <input 
@@ -49,79 +40,43 @@
                                 const input = this.previousElementSibling;
                                 input.type = input.type === 'password' ? 'text' : 'password';
                                 this.classList.toggle('bi-eye');
-                                this.classList.toggle('bi-eye-slash');
-                            ">
+                                this.classList.toggle('bi-eye-slash');">
                             </i>
                         </div>
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Role</label>
+                        <select class="form-select" [(ngModel)]="user.roleId" name="roleId">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let role of userRoles" [ngValue]="role.id">{{ role.roleName }}</option>
+                        </select>
                     </div> 
                 </div>
                 <div class="row">
                     <div class="col mb-3">
-                        <label class="form-label">Role</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="user.roleId"
-                            name="roleId"
-                            placeholder="Enter role ID">
+                        <label class="form-label">Campus</label>
+                        <select class="form-select" [(ngModel)]="user.cmpId" name="campus">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let c of campus" [ngValue]="c.campusId">{{ c.name }}</option>
+                        </select>
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Employee</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="user.empId"
-                            name="empId"
-                            placeholder="Enter Employee ID">
+                        <select class="form-select" [(ngModel)]="user.empId" name="employee">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let e of employee" [ngValue]="e.id">{{ e.firstName}} {{e.lastName }}</option>
+                        </select>
                     </div>
                     <div class="col mb-3">
-                        <label class="form-label">Campus</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="user.cmpId"
-                            name="cmpId"
-                            placeholder="Enter Campus ID">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col mb-3">
-                        <label class="form-label">Role</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="user.roleId"
-                            name="roleId"
-                            placeholder="Enter role ID">
-                    </div>
-                    <div class="col mb-3">
-                        <label class="form-label">Role</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="user.roleId"
-                            name="roleId"
-                            placeholder="Enter role ID">
-                    </div>
-                    <div class="col mb-3">
-                        <label class="form-label">Role</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="user.roleId"
-                            name="roleId"
-                            placeholder="Enter role ID">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col mb-3">
-                        <label class="form-label">Role</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="user.roleId"
-                            name="roleId"
-                            placeholder="Enter role ID">
+                        <label class="form-label">Enabeled</label>
+                        <select 
+                            class="form-select" 
+                            [(ngModel)]="user.enabled" 
+                            name="enabled">
+                            <option [ngValue]= "undefined">-- Select --</option>
+                            <option [ngValue]=true>Yes</option>
+                            <option [ngValue]=false>No</option>
+                        </select>
                     </div>
                 </div>
             </div>

@@ -8,6 +8,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { ApiConfig } from '../../config/api.config';
 import { User} from '../../models/user/user.model';
 import {ApiResponse } from '../../models/api-response/api-response.model';
+import { createPayload } from '../../models/api-payload/create-payload.model';
 
 
 @Injectable({
@@ -32,6 +33,52 @@ export class UserService {
           this.authService.logout();
         }
         return throwError(() => new Error(error.error?.message || 'Failed to fetch users'));
+      })
+    );
+  }
+  createUser(pUser: User): Observable<String> {
+    if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
+      return throwError(() => new Error('User is not authenticated'));
+    }
+    const payLoad = createPayload(pUser);
+    return this.http.post<ApiResponse<{ message: string }>>(ApiConfig.createUser, payLoad).pipe(
+        map((res) => res.data[0].attributes.message ),
+      catchError((error) => {
+        if (error.status === 401 && isPlatformBrowser(this.platformId)) {
+          this.authService.logout();
+        }
+        return throwError(() => new Error(error.error?.message || 'Failed to create User'));
+      })
+    );
+  }
+
+  updateUser(pUser: User): Observable<String> {
+    if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
+      return throwError(() => new Error('User is not authenticated'));
+    }
+    const payLoad = createPayload(pUser);
+    return this.http.put<ApiResponse<{ message: string }>>(ApiConfig.updateUser, payLoad).pipe(
+        map((res) => res.data[0].attributes.message ),
+      catchError((error) => {
+        if (error.status === 401 && isPlatformBrowser(this.platformId)) {
+          this.authService.logout();
+        }
+        return throwError(() => new Error(error.error?.message || 'Failed to update User'));
+      })
+    );
+  }
+
+  deleteUser(pUser: User): Observable<String> {
+    if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
+      return throwError(() => new Error('User is not authenticated'));
+    }
+    return this.http.delete<ApiResponse<{ message: string }>>(`${ApiConfig.deleteUser }/${pUser.id}`).pipe(
+        map((res) => res.data[0].attributes.message ),
+      catchError((error) => {
+        if (error.status === 401 && isPlatformBrowser(this.platformId)) {
+          this.authService.logout();
+        }
+        return throwError(() => new Error(error.error?.message || 'Failed to delete User'));
       })
     );
   }

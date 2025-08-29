@@ -1,6 +1,6 @@
 export interface Department {
     departmentId?: number;
-    campusId?: string;
+    campusId?: number;
     departmentName?: string;
     departmentHeadId?: number;
     createdAt?: string;
