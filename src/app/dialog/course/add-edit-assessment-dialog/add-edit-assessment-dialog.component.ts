@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Assessment } from '../../../models/course/assessment.modelinterface';
+import { Assessment } from '../../../models/course/assessment.model';
 import { AssessmentService } from '../../../services/course/assessment.service';
 @Component({
   selector: 'app-add-edit-assessment-dialog',
@@ -12,7 +12,7 @@ import { AssessmentService } from '../../../services/course/assessment.service';
   styleUrl: './add-edit-assessment-dialog.component.scss'
 })
 export class AddEditAssessmentDialogComponent {
-  asessment: Assessment = {};
+  asessment: Assessment = new Assessment();
   isSaved: boolean = true;
 
   constructor(

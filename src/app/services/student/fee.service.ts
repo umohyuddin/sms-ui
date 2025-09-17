@@ -7,7 +7,7 @@ import { AuthService } from '../auth/auth.service';
 import { isPlatformBrowser } from '@angular/common';
 import { ApiConfig } from '../../config/api.config';
 import {ApiResponse } from '../../models/api-response/api-response.model';
-import { Fee } from '../../models/student/fee.modelinterface';
+import { Fee } from '../../models/student/fee.model';
 import { createPayload } from '../../models/api-payload/create-payload.model';
 
 @Injectable({

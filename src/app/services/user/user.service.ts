@@ -36,6 +36,21 @@ export class UserService {
       })
     );
   }
+
+  getByUsername(pUserName: string): Observable<User> {
+    if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
+      return throwError(() => new Error('User is not authenticated'));
+    }
+    return this.http.get<ApiResponse<User>>(`${ApiConfig.getUserByUsername}/${pUserName}`).pipe(
+      map((res) => res.data[0]?.attributes),
+      catchError((error) => {
+        if (error.status === 401 && isPlatformBrowser(this.platformId)) {
+          this.authService.logout();
+        }
+        return throwError(() => new Error(error.error?.message || 'Failed to fetch users'));
+      })
+    );
+  }
   createUser(pUser: User): Observable<String> {
     if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
       return throwError(() => new Error('User is not authenticated'));

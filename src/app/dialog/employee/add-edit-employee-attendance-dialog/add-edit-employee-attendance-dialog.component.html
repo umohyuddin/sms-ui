@@ -16,12 +16,10 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Employee</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="employeeAttendance.empId"
-                            name="empId"
-                            placeholder="Enter Employee">
+                        <select class="form-select" [(ngModel)]="employeeAttendance.empId" name="employee">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let e of employee" [value]="e.id">{{ e.firstName }} {{ e.lastName }}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
@@ -39,12 +37,12 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Status</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="employeeAttendance.status"
-                            name="status"
-                            placeholder="Enter status">
+                        <select class="form-select" [(ngModel)]="employeeAttendance.status" name="status">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option >P</option>
+                            <option >L</option>
+                            <option >A</option>
+                        </select>
                     </div>
                 </div>
             </div>

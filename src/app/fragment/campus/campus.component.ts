@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CampusService} from '../../services/institute/campus.service';
-import { Campus } from '../../models/institute/campus.modelinterface'
+import { Campus } from '../../models/institute/campus.model'
 import { AddEditCampusDialogComponent } from '../../dialog/institute/campus/add-edit-campus-dialog/add-edit-campus-dialog.component'
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -44,7 +44,7 @@ export class CampusComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/campus')) {
+        if (this.router.url.includes('/dashboard/campus')) {
           this.load();
         }
       });

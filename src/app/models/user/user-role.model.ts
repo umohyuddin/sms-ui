@@ -1,4 +1,4 @@
-export interface UserRole {
+export class UserRole {
     id?: number;
     roleName?: string;
     createdAt?: string;

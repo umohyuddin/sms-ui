@@ -16,21 +16,17 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Student</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="attendance.studentId"
-                            name="studentId"
-                            placeholder="Enter studentId">
+                        <select class="form-select" [(ngModel)]="attendance.studentId" name="student">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let s of students" [value]="s.studentId">{{ s.firstName }} {{ s.lastName }}</option>
+                        </select>
                     </div>
                     <div class="col">
                         <label class="form-label">Course</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="attendance.courseId"
-                            name="courseId"
-                            placeholder="Enter courseId">
+                        <select class="form-select" [(ngModel)]="attendance.courseId" name="course">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let c of courses" [value]="c.courseId">{{ c.courseName }}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
@@ -45,12 +41,12 @@
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Status</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="attendance.status"
-                            name="status"
-                            placeholder="Enter status">
+                        <select class="form-select" [(ngModel)]="attendance.status" name="status">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option>P</option>
+                            <option>L</option>
+                            <option>A</option>
+                        </select>
                     </div>
                 </div>
             </div>

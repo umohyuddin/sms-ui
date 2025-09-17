@@ -2,9 +2,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Department } from '../../../../models/institute/department.modelinterface';
+import { Department } from '../../../../models/institute/department.model';
 import { DepartmentService } from '../../../../services/institute/department.service';
-import { Campus } from '../../../../models/institute/campus.modelinterface';
+import { Campus } from '../../../../models/institute/campus.model';
 import { CampusService } from '../../../../services/institute/campus.service';
 @Component({
   selector: 'app-add-edit-department-dialog',
@@ -15,7 +15,7 @@ import { CampusService } from '../../../../services/institute/campus.service';
 })
 export class AddEditDepartmentDialogComponent implements OnInit {
   isSaved: boolean = true;
-  department: Department ={};
+  department: Department = new Department();
   campus: Campus[] = [];
 
   constructor(

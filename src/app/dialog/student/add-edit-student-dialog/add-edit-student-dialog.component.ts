@@ -1,9 +1,13 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Student } from '../../../models/student/student.modelinterface';
+import { Student } from '../../../models/student/student.model';
 import { StudentService } from '../../../services/student/student.service';
+import { Campus } from '../../../models/institute/campus.model';
+import { CampusService } from '../../../services/institute/campus.service';
+import { Department } from '../../../models/institute/department.model';
+import { DepartmentService } from '../../../services/institute/department.service';
 
 @Component({
   selector: 'app-add-edit-student-dialog',
@@ -12,14 +16,18 @@ import { StudentService } from '../../../services/student/student.service';
   templateUrl: './add-edit-student-dialog.component.html',
   styleUrl: './add-edit-student-dialog.component.scss'
 })
-export class AddEditStudentDialogComponent {
+export class AddEditStudentDialogComponent implements OnInit {
 
-  student: Student = {};
+  student: Student = new Student();
+  campuses: Campus[] = [];
+  departments: Department[] = [];
   isSaved: boolean = true;
 
   constructor(
     private dialogRef: MatDialogRef<AddEditStudentDialogComponent>,
     private studentService: StudentService,
+    private departmentService: DepartmentService,
+    private campusService: CampusService,
     @Inject(MAT_DIALOG_DATA) public data: Student | null
   ) {
     if (data) {
@@ -30,6 +38,25 @@ export class AddEditStudentDialogComponent {
     }
   }
 
+  ngOnInit(): void {
+    this.loadCampuses();
+    this.loadDeparments();
+  }
+
+  loadCampuses(){
+    this.campusService.getAllCampus().subscribe({
+      next: (res) => {this.campuses = res;},
+      error: (err) => {console.log("Failed to fetch campuses");}
+    })
+  }
+
+  loadDeparments(){
+    this.departmentService.getAllDeparments().subscribe({
+      next: (res) => { this.departments = res; },
+      error: (err) => { console.log("failed to fetch departments");}
+    })
+  }
+  
   save() {
     if(this.isSaved)
     {

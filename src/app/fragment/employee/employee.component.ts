@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { Employee } from '../../models/employee/employee.modelinterface';
+import { Employee } from '../../models/employee/employee.model';
 import { EmployeeService } from '../../services/employee/employee.service';
 import { AddEditEmployeeDialogComponent } from '../../dialog/employee/add-edit-employee-dialog/add-edit-employee-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -43,7 +43,7 @@ export class EmployeeComponent implements OnInit {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/employee')) {
+        if (this.router.url.includes('/dashboard/employee')) {
           this.load();
         }
       });

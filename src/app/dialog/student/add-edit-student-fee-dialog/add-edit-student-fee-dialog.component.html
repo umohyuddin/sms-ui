@@ -16,33 +16,24 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Student</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="fee.studentId"
-                            name="studentId"
-                            placeholder="Enter studentId">
+                        <select class="form-select" [(ngModel)]="fee.studentId" name="student">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let s of students" [value]="s.studentId">{{ s.firstName }} {{ s.lastName }}</option>
+                        </select>
                     </div>
                     <div class="col">
                         <label class="form-label">Yeer</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="fee.year"
-                            name="year"
-                            placeholder="Enter Yeer">
+                        <select class="form-select" [(ngModel)]="fee.year" name="year">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+                        </select>
                     </div>
                     <div class="col">
                         <label class="form-label">Month</label>
-                        <div class="position-relative">
-                            <input
-                            type="text"
-                            class="form-control"
-                            id="employeeroleid"
-                            [(ngModel)]="fee.month"
-                            name="month"
-                            placeholder="Enter Month">
-                        </div>
+                        <select class="form-select" [(ngModel)]="fee.month" name="month">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let m of months" [value]="m.value">{{ m.name }}</option>
+                        </select>
                     </div> 
                 </div>
                 <div class="row">
@@ -144,12 +135,12 @@
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">status</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="fee.status"
-                            name="status"
-                            placeholder="Enter status">
+                        <select class="form-select" [(ngModel)]="fee.status" name="activestatus">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option >Paid</option>
+                            <option >Pending</option>
+                            <option >Conflict</option>
+                        </select>
                     </div>
                 </div>
             </div>

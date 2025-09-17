@@ -43,7 +43,7 @@ export class UserComponent implements OnInit {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/users')) {
+        if (this.router.url.includes('/dashboard')) {
           this.load();
         }
       });

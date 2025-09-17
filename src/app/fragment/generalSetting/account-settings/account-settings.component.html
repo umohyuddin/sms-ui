@@ -1,0 +1,71 @@
+<div class="card shadow-sm">
+    <!-- Header -->
+    <div class="card-header d-flex justify-content-between align-items-center" >
+        <h5 >Account Settings</h5>
+    </div>
+    
+    <div class="row g-0">
+    <!-- Left Side: Form -->
+    <div class="col-md-7 p-5">
+        <form>
+        <div class="mb-3">
+            <label for="username" class="form-label text-muted">Username<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="username" placeholder="mr.usman@gmail.com" disabled>
+        </div>
+        
+        <div class="mb-3">
+            <label for="password" class="form-label text-muted">Password<span class="text-danger">*</span></label>
+            <div class="input-group">
+            <input type="password" class="form-control" id="password" placeholder="enter password">
+            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                <i class="far fa-eye-slash"></i>
+            </button>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <label for="timezone" class="form-label text-muted">Time Zone<span class="text-danger">*</span></label>
+            <select id="timezone" class="form-select">
+            <option>Asia/Karachi</option>
+            </select>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-8 mb-3">
+            <label for="currency" class="form-label text-muted">Currency<span class="text-danger">*</span></label>
+            <select id="currency" class="form-select">
+                <option>Dollars (USD)</option>
+            </select>
+            </div>
+            <div class="col-md-4 mb-3">
+            <label for="symbol" class="form-label text-muted">Symbol<span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="symbol" placeholder="$">
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-center mt-4">
+            <button type="submit" class="btn btn-info px-4 rounded-pill" style="color: #fff; background-color: #3b82f6; border: none;">
+            <i class="fas fa-sync-alt me-2"></i>Update Settings
+            </button>
+        </div>
+        </form>
+    </div>
+    
+    <!-- Right Side: Account Details -->
+    <div class="col-md-5 d-flex align-items-center justify-content-center p-4 text-white" style="background: linear-gradient(135deg, #4f46e5, #3b82f6); border-radius: 0 1rem 1rem 0;">
+        <div class="text-center">
+        <i class="fas fa-lock fa-3x mb-3"></i>
+        <h4 class="mb-4">Account details</h4>
+        <div class="text-start">
+            <p class="mb-2"><span class="fw-bold">Username:</span> mr.usman76&#64;gmail.com</p>
+            <p class="mb-2"><span class="fw-bold">Password:</span> •••••</p>
+            <p class="mb-2"><span class="fw-bold">Subscription:</span> <span class="badge bg-success">FREE</span></p>
+            <p class="mb-2"><span class="fw-bold">Expiry:</span> Never</p>
+        </div>
+        <button class="btn btn-danger px-4 mt-4 rounded-pill">
+            <i class="fas fa-trash-alt me-2"></i>Delete Account
+        </button>
+        </div>
+    </div>
+    </div>
+</div>

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { Salary } from '../../models/employee/salary.modelinterface';
+import { Salary } from '../../models/employee/salary.model';
 import { SalaryService } from '../../services/employee/salary.service';
 import { AddEditSalaryDialogComponent } from '../../dialog/employee/add-edit-salary-dialog/add-edit-salary-dialog.component';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component'
@@ -43,7 +43,7 @@ export class SalaryComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/salary')) {
+        if (this.router.url.includes('/dashboard/salary')) {
           this.load();
         }
       });

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { EmployeeAttendance } from '../../models/employee/employee-attendance.modelinterface';
+import { EmployeeAttendance } from '../../models/employee/employee-attendance.model';
 import { EmployeeAttendanceService } from '../../services/employee/employee-attendance.service';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component'
 import { AddEditEmployeeAttendanceDialogComponent } from '../../dialog/employee/add-edit-employee-attendance-dialog/add-edit-employee-attendance-dialog.component';
@@ -44,7 +44,7 @@ export class EmploeeAttendanceComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/userRole')) {
+        if (this.router.url.includes('/dashboard/employeeAttendance')) {
           this.load();
         }
       });

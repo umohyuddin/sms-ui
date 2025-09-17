@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Department } from '../../models/institute/department.modelinterface'
+import { Department } from '../../models/institute/department.model'
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -44,7 +44,7 @@ export class DepartmentComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/userRole')) {
+        if (this.router.url.includes('/dashboard/department')) {
           this.load();
         }
       });

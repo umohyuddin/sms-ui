@@ -1,0 +1,20 @@
+<div class="unauth-container d-flex flex-column justify-content-center align-items-center vh-100 bg-light">
+  <!-- Big animated "Oh No!" -->
+  <div class="ohno-text mb-4">
+    <span>😮‍💨</span>
+    <span class="ohno">Oh&nbsp;No!</span>
+  </div>
+
+  <h3 class="fw-bold text-danger mb-3">You are not authorized to view this page.</h3>
+  <p class="text-muted mb-4">It seems you don’t have the correct permissions.</p>
+
+  <!-- Chart.js canvas for a fun broken ring -->
+  <div style="width:200px;height:200px;">
+    <canvas id="unauthChart"></canvas>
+  </div>
+
+  <button  class="btn btn-primary mt-4 px-4 rounded-pill" (click)="goHome()">
+    <i class="bi bi-house-door"></i> Go Home
+  </button>
+</div>
+

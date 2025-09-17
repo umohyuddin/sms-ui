@@ -12,7 +12,7 @@ import { UserRoleService} from '../../../services/user/user-role.service';
   styleUrl: './add-edit-user-role-dialog.component.scss'
 })
 export class AddEditUserRoleDialogComponent {
-userRole: UserRole = {};
+userRole: UserRole = new UserRole();
 isSaved: boolean = true;
 
   constructor(
@@ -31,14 +31,14 @@ isSaved: boolean = true;
   save() {
     if(this.isSaved)
     {
-      this.userRoleService.updateUserRole(this.userRole).subscribe({
+      this.userRoleService.update(this.userRole).subscribe({
         next: (res) => console.log('Role updated:', res),
         error: (err) => console.error(err)
       });
 
     }else{
 
-      this.userRoleService.createUserRole(this.userRole).subscribe({
+      this.userRoleService.create(this.userRole).subscribe({
         next: (res) => console.log('Role created:', res),
         error: (err) => console.error(err)
       });

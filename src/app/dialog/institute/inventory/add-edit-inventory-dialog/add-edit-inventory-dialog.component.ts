@@ -2,9 +2,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Inventory } from '../../../../models/institute/inventory.modelinterface';
+import { Inventory } from '../../../../models/institute/inventory.model';
 import { InventoryService } from '../../../../services/institute/inventory.service';
-import { Campus } from '../../../../models/institute/campus.modelinterface';
+import { Campus } from '../../../../models/institute/campus.model';
 import { CampusService } from '../../../../services/institute/campus.service';
 @Component({
   selector: 'app-add-edit-inventory-dialog',
@@ -15,7 +15,7 @@ import { CampusService } from '../../../../services/institute/campus.service';
 })
 export class AddEditInventoryDialogComponent implements  OnInit{
   isSaved: boolean = true;
-  inventory: Inventory ={};
+  inventory: Inventory =new Inventory();
   campus: Campus[] = [];
 
   constructor(

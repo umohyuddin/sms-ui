@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { isPlatformBrowser } from '@angular/common';
 import { ApiConfig } from '../../config/api.config';
-import { Campus } from '../../models/institute/campus.modelinterface';
+import { Campus } from '../../models/institute/campus.model';
 import { ApiResponse } from '../../models/api-response/api-response.model';
 import { createPayload } from '../../models/api-payload/create-payload.model';
 
@@ -32,6 +32,20 @@ export class CampusService {
           this.authService.logout();
         }
         return throwError(() => new Error(error.error?.message || 'Failed to fetch Campuses'));
+      })
+    );
+  }
+  getCampusById(id: number): Observable<Campus> {
+    if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
+      return throwError(() => new Error('User is not authenticated'));
+    }
+    return this.http.get<ApiResponse<Campus>>(`${ApiConfig.getCampusById}/${id}`).pipe(
+      map((res) => res.data[0].attributes),
+      catchError((error) => {
+        if (error.status === 401 && isPlatformBrowser(this.platformId)) {
+          this.authService.logout();
+        }
+        return throwError(() => new Error(error.error?.message || 'Failed to fetch Campuse'));
       })
     );
   }

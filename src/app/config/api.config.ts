@@ -3,11 +3,22 @@ export const ApiConfig = {
 
   get generateToken() { return `${this.baseUrl}/api/auth/generateToken`; },
 
+
+
+  // theme table
+  get updateTheme() { return `${this.baseUrl}/api/user/theme/update`; },
+  get createTheme() { return `${this.baseUrl}/api/user/theme/create`; },
+  get getAllTheme() { return `${this.baseUrl}/api/user/theme/getall`; },
+  get getThemeById() { return `${this.baseUrl}/api/user/theme/get`; },
+  get deleteTheme() { return `${this.baseUrl}/api/user/theme/delete`; },
+  get getThemeByUserId() { return `${this.baseUrl}/api/user/theme/getbyuser`; },
+
   // User Table
   get updateUser() { return `${this.baseUrl}/api/user/update`; },
   get createUser() { return `${this.baseUrl}/api/user/create`; },
   get getUsers() { return `${this.baseUrl}/api/user/getall`; },
   get getUserById() { return `${this.baseUrl}/api/user/get`; },
+  get getUserByUsername() { return `${this.baseUrl}/api/user/getbyusername`; },
   get deleteUser() { return `${this.baseUrl}/api/user/delete`; },
 
   //Student Table
@@ -36,6 +47,14 @@ export const ApiConfig = {
   get getAllStudentAttendance() { return `${this.baseUrl}/api/student/attendance/getall`; },
   get getStudentAttendanceById() { return `${this.baseUrl}/api/student/attendance/get`; },
 
+   // Student FeeParticulars
+  get updateFeeParticulars() { return `${this.baseUrl}/api/student/feeparticulars/update`; },
+  get deleteFeeParticulars() { return `${this.baseUrl}/api/student/feeparticulars/delete`; },
+  get craeteFeeParticulars() { return `${this.baseUrl}/api/student/feeparticulars/create`; },
+  get getFeeParticularsByInstitute() { return `${this.baseUrl}/api/student/feeparticulars/getbyinstitute`; },
+  get getAllFeeParticulars() { return `${this.baseUrl}/api/student/feeparticulars/getall`; },
+  get getFeeParticularsById() { return `${this.baseUrl}/api/student/feeparticulars/get`; },
+
   // User Role
   get updateUserRole() { return `${this.baseUrl}/api/user/user-role/update`; },
   get deleteUserRole() { return `${this.baseUrl}/api/user/user-role/delete`; },
@@ -53,11 +72,45 @@ export const ApiConfig = {
   get getInventoryById() { return `${this.baseUrl}/api/schools/inventory/get`; },
 
   // Institute
-  get updateIstitute() { return `${this.baseUrl}/api/schools/institute/update`; },
-  get deleteIstitute() { return `${this.baseUrl}/api/schools/institute/delete`; },
-  get createIstitute() { return `${this.baseUrl}/api/schools/institute/create`; },
-  get getAllIstitutes() { return `${this.baseUrl}/api/schools/institute/getall`; },
-  get getIstituteById() { return `${this.baseUrl}/api/schools/institute/get`; },
+  get updateInstitute() { return `${this.baseUrl}/api/schools/institute/update`; },
+  get deleteInstitute() { return `${this.baseUrl}/api/schools/institute/delete`; },
+  get createInstitute() { return `${this.baseUrl}/api/schools/institute/create`; },
+  get getAllInstitutes() { return `${this.baseUrl}/api/schools/institute/getall`; },
+  get getInstituteById() { return `${this.baseUrl}/api/schools/institute/get`; },
+
+  // bank 
+  get updateBank() { return `${this.baseUrl}/api/schools/bank/update`; },
+  get deleteBank() { return `${this.baseUrl}/api/schools/bank/delete`; },
+  get createBank() { return `${this.baseUrl}/api/schools/bank/create`; },
+  get getAllBank() { return `${this.baseUrl}/api/schools/bank/getall`; },
+  get getBankById() { return `${this.baseUrl}/api/schools/bank/get`; },
+  get getBankByInstitute() { return `${this.baseUrl}/api/schools/bank/getbyinstitute`; },
+
+    // Rules 
+  get updateRules() { return `${this.baseUrl}/api/schools/rules/update`; },
+  get deleteRules() { return `${this.baseUrl}/api/schools/rules/delete`; },
+  get createRules() { return `${this.baseUrl}/api/schools/rules/create`; },
+  get getRulesByInstitute() { return `${this.baseUrl}/api/schools/rules/getbyinstitute`; },
+
+    // marks 
+  get updateMarks() { return `${this.baseUrl}/api/schools/marks/update`; },
+  get deleteMarks() { return `${this.baseUrl}/api/schools/marks/delete`; },
+  get createMarks() { return `${this.baseUrl}/api/schools/marks/create`; },
+  get getAllMarks() { return `${this.baseUrl}/api/schools/marks/getall`; },
+  get getMarksById() { return `${this.baseUrl}/api/schools/marks/get`; },
+  get getMarksByInstitute() { return `${this.baseUrl}/api/schools/marks/getbyinstitute`; },
+
+  // FailCriteria 
+  get updateFailCriteria() { return `${this.baseUrl}/api/schools/failcriteria/update`; },
+  get deleteFailCriteria() { return `${this.baseUrl}/api/schools/failcriteria/delete`; },
+  get createFailCriteria() { return `${this.baseUrl}/api/schools/failcriteria/create`; },
+  get getAllFailCriteria() { return `${this.baseUrl}/api/schools/failcriteria/getall`; },
+  get getFailCriteriaById() { return `${this.baseUrl}/api/schools/failcriteria/get`; },
+  get getFailCriteriaByInstitute() { return `${this.baseUrl}/api/schools/failcriteria/getbyinstitute`; },
+
+  // dashbord
+  get getDashBoard() { return `${this.baseUrl}/api/schools/dashboard/getdashboard`; },
+
 
   // Department
   get updateDeparment() { return `${this.baseUrl}/api/schools/department/update`; },

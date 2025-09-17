@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { EmployeeRole } from '../../models/employee/employee-role.modelinterface';
+import { EmployeeRole } from '../../models/employee/employee-role.model';
 import { EmployeeRoleService } from '../../services/employee/employee-role.service';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component'
 import { AddEditEmployeeRoleDialogComponent } from '../../dialog/employee/add-edit-employee-role-dialog/add-edit-employee-role-dialog.component';
@@ -43,7 +43,7 @@ export class EmploeeRoleComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/userRole')) {
+        if (this.router.url.includes('/dashboard/employeeRole')) {
           this.load();
         }
       });

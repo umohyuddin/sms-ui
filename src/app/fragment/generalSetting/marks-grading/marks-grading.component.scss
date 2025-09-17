@@ -1,0 +1,20 @@
+.font-sans {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Custom styles for the active tab indicator */
+    .tab-button.active {
+      border-bottom: 2px solid var(--orange-500);
+      color: var(--gray-900);
+    }
+    
+    /* Input placeholder styling */
+    input::placeholder {
+      color: #9ca3af; /* A gray shade for placeholders */
+      opacity: 1; /* Make sure it's not transparent */
+    }
+
+    /* Styles for the "Update" button */
+    button {
+      transition: background-color 0.2s, box-shadow 0.2s;
+    }

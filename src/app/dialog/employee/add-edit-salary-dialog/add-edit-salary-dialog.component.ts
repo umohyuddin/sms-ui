@@ -2,9 +2,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Salary } from '../../../models/employee/salary.modelinterface';
+import { Salary } from '../../../models/employee/salary.model';
 import { SalaryService } from '../../../services/employee/salary.service';
-import { Employee } from '../../../models/employee/employee.modelinterface';
+import { Employee } from '../../../models/employee/employee.model';
 import { EmployeeService } from '../../../services/employee/employee.service';
 
 @Component({
@@ -16,7 +16,7 @@ import { EmployeeService } from '../../../services/employee/employee.service';
 })
 export class AddEditSalaryDialogComponent implements OnInit {
 
-  salary: Salary = {};
+  salary: Salary = new Salary();
   employee: Employee[] = [];
   isSaved: boolean = true;
 

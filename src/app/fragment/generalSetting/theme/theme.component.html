@@ -1,0 +1,125 @@
+<div class="card shadow-sm">
+      <!-- Page Header -->
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Genral Settings | Theme Settings</h5>
+    </div>
+
+    <div class="container mt-4">
+    <p class="text-muted">Update Theme styling</p>
+    <!-- Theme Selection -->
+    <div class="mb-3">
+      <label class="form-label fw-bold">Select Theme</label>
+      <select class="form-select" [(ngModel)]="theme.name" (ngModelChange)="changeTheme($event)">
+        <option value="light">Light</option>
+        <option value="dark" class="bg-dark text-white">Dark</option>
+        <option value="custom">Custom</option>
+      </select>
+    </div>
+
+    <!-- Custom Theme Settings -->
+    <div *ngIf="theme.name === 'custom'">
+        <div class="row">
+            <!-- Header Background -->
+            <div class="col mb-3">
+                <label class="form-label fw-bold">Header Background</label>
+                <select class="form-select" [(ngModel)]="theme.headerBg" (ngModelChange)="applyTheme()"
+                        [ngClass]="['bg-' + theme.headerBg, theme.headerBg === 'light' ? 'text-dark' : 'text-white']">
+                    <option *ngFor="let bg of ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark']" 
+                                    [value]="bg" [ngClass]="[ 'bg-' + bg, bg === 'light' ? 'text-dark' : 'text-white']">
+                        {{ bg }}
+                    </option>
+                </select>
+            </div>
+            <!-- Header text -->
+            <div class="col mb-3">
+                <label class="form-label fw-bold">Header Text</label>
+                <select class="form-select" [(ngModel)]="theme.headerText" (ngModelChange)="applyTheme()"
+                        [ngClass]="['bg-' + theme.headerText, theme.headerText === 'light' ? 'text-dark' : 'text-white']">
+                    <option *ngFor="let bg of ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark']" 
+                                    [value]="bg" [ngClass]="[ 'bg-' + bg, bg === 'light' ? 'text-dark' : 'text-white']">
+                        {{ bg }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Sidebar Background -->
+            <div class="col mb-3">
+                <label class="form-label fw-bold">Sidebar Background*</label>
+                <select class="form-select" [(ngModel)]="theme.sidebarBg" (ngModelChange)="applyTheme()"
+                        [ngClass]="['bg-' + theme.sidebarBg, theme.sidebarBg === 'light' ? 'text-dark' : 'text-white']">
+                    <option *ngFor="let bg of ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark']" 
+                                    [value]="bg" [ngClass]="[ 'bg-' + bg, bg === 'light' ? 'text-dark' : 'text-white']">
+                        {{ bg }}
+                    </option>
+                </select>
+            </div>
+            <!-- Sidebar Text -->
+            <div class="col mb-3">
+                <label class="form-label fw-bold">Sidebar Text*</label>
+                <select class="form-select" [(ngModel)]="theme.sidebarText" (ngModelChange)="applyTheme()"
+                        [ngClass]="['bg-' + theme.sidebarText, theme.sidebarText === 'light' ? 'text-dark' : 'text-white']">
+                    <option *ngFor="let bg of ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark']" 
+                                    [value]="bg" [ngClass]="[ 'bg-' + bg, bg === 'light' ? 'text-dark' : 'text-white']">
+                        {{ bg }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Body Background -->
+            <div class="col mb-3">
+                <label class="form-label fw-bold">Body Background</label>
+                <select class="form-select" [(ngModel)]="theme.bodyBg" (ngModelChange)="applyTheme()"
+                        [ngClass]="['bg-' + theme.bodyBg, theme.bodyBg === 'light' ? 'text-dark' : 'text-white']">
+                    <option *ngFor="let bg of ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark']" 
+                                    [value]="bg" [ngClass]="[ 'bg-' + bg, bg === 'light' ? 'text-dark' : 'text-white']">
+                        {{ bg }}
+                    </option>
+                </select>
+            </div>
+            <!-- Body text -->
+            <div class="col mb-3">
+                <label class="form-label fw-bold">Body Text</label>
+                <select class="form-select" [(ngModel)]="theme.bodyText" (ngModelChange)="applyTheme()"
+                        [ngClass]="['bg-' + theme.bodyText, theme.bodyText === 'light' ? 'text-dark' : 'text-white']">
+                    <option *ngFor="let bg of ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark']" 
+                                    [value]="bg" [ngClass]="[ 'bg-' + bg, bg === 'light' ? 'text-dark' : 'text-white']">
+                        {{ bg }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Active Item Background -->
+            <div class="col mb-3">
+                <label class="form-label fw-bold">Active Item Background</label>
+                <select class="form-select" [(ngModel)]="theme.activeItemBg" (ngModelChange)="applyTheme()"
+                        [ngClass]="['bg-' + theme.activeItemBg, theme.activeItemBg === 'light' ? 'text-dark' : 'text-white']">
+                    <option *ngFor="let bg of ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark']" 
+                                    [value]="bg" [ngClass]="[ 'bg-' + bg, bg === 'light' ? 'text-dark' : 'text-white']">
+                        {{ bg }}
+                    </option>
+                </select>
+            </div>
+             <!-- Active Item Text -->
+            <div class="col mb-3">
+                <label class="form-label fw-bold">Active Item Text</label>
+                <select class="form-select" [(ngModel)]="theme.activeItemText" (ngModelChange)="applyTheme()"
+                        [ngClass]="['bg-' + theme.activeItemText, theme.activeItemText === 'light' ? 'text-dark' : 'text-white']">
+                    <option *ngFor="let bg of ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark']" 
+                                    [value]="bg" [ngClass]="[ 'bg-' + bg, bg === 'light' ? 'text-dark' : 'text-white']">
+                        {{ bg }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+    <!-- Buttons -->
+    <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-warning" (click)="saveSettings()"> Save Settings</button> or, 
+        <a href="javascript:void(0)" class="text-decoration-underline" (click)="resetDefault()">reset to default</a>
+    </div>
+    </div>
+</div>

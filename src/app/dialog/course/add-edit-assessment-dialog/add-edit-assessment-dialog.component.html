@@ -45,12 +45,15 @@
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Grade</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]=" asessment.grade"
-                            name="grade"
-                            placeholder="Enter Grade">
+                        <select class="form-select" [(ngModel)]="asessment.grade" name="grade">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option >A</option>
+                            <option >B</option>
+                            <option >C</option>
+                            <option >D</option>
+                            <option >E</option>
+                            <option >F</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
@@ -65,12 +68,12 @@
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Status</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]=" asessment.status"
-                            name="status"
-                            placeholder="Enter Status">
+                        <select class="form-select" [(ngModel)]="asessment.status" name="status">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option >P</option>
+                            <option >L</option>
+                            <option >A</option>
+                        </select>
                     </div>
                 </div>
             </div>

@@ -1,9 +1,11 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { EmployeeAttendance } from '../../../models/employee/employee-attendance.modelinterface';
+import { EmployeeAttendance } from '../../../models/employee/employee-attendance.model';
 import { EmployeeAttendanceService } from '../../../services/employee/employee-attendance.service';
+import { Employee } from '../../../models/employee/employee.model';
+import { EmployeeService } from '../../../services/employee/employee.service';
 @Component({
   selector: 'app-add-edit-employee-attendance-dialog',
   standalone: true,
@@ -11,13 +13,15 @@ import { EmployeeAttendanceService } from '../../../services/employee/employee-a
   templateUrl: './add-edit-employee-attendance-dialog.component.html',
   styleUrl: './add-edit-employee-attendance-dialog.component.scss'
 })
-export class AddEditEmployeeAttendanceDialogComponent {
-  employeeAttendance: EmployeeAttendance = {};
+export class AddEditEmployeeAttendanceDialogComponent implements OnInit {
+  employeeAttendance: EmployeeAttendance = new EmployeeAttendance();
+  employee: Employee[] = [];
   isSaved: boolean = true;
 
   constructor(
     private dialogRef: MatDialogRef<AddEditEmployeeAttendanceDialogComponent>,
     private employeeAttendanceService: EmployeeAttendanceService,
+    private employeeService: EmployeeService,
     @Inject(MAT_DIALOG_DATA) public data: EmployeeAttendance | null
   ) {
     if (data) {
@@ -27,7 +31,19 @@ export class AddEditEmployeeAttendanceDialogComponent {
       this.isSaved = false;
     }
   }
-
+  ngOnInit(): void {
+    this.loadEmployee();
+  }
+  loadEmployee(){
+    this.employeeService.getAllEmployee().subscribe({
+      next: res=>{
+        this.employee = res;
+      },
+      error: err=>{
+          console.error("Failed to fetch Employee");
+      }
+    });
+  }
   save() {
     if(this.isSaved)
     {

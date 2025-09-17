@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { Assessment } from '../../models/course/assessment.modelinterface';
+import { Assessment } from '../../models/course/assessment.model';
 import { AssessmentService } from '../../services/course/assessment.service';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -42,7 +42,7 @@ export class AssessmentComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/assessment')) {
+        if (this.router.url.includes('/dashboard/assessment')) {
           this.load();
         }
       });

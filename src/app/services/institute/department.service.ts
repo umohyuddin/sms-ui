@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { isPlatformBrowser } from '@angular/common';
 import { ApiConfig } from '../../config/api.config';
-import { Department} from '../../models/institute/department.modelinterface';
+import { Department} from '../../models/institute/department.model';
 import { ApiResponse } from '../../models/api-response/api-response.model';
 import { createPayload } from '../../models/api-payload/create-payload.model';
 

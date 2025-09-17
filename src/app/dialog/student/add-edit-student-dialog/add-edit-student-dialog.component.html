@@ -48,21 +48,17 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Campus</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="student.campusId"
-                            name="campusId"
-                            placeholder="Enter Campus ID">
+                        <select class="form-select" [(ngModel)]="student.campusId" name="campus">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let c of campuses" [value]="c.campusId">{{ c.name }}</option>
+                        </select>
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Department</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="student.departmentId"
-                            name="department"
-                            placeholder="Enter Department">
+                        <select class="form-select" [(ngModel)]="student.departmentId" name="department">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let d of departments" [value]="d.departmentId">{{ d.departmentName }}</option>
+                        </select>
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Class</label>
@@ -106,12 +102,11 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Active Status</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="student.isActive"
-                            name="active"
-                            placeholder="Enter Active">
+                        <select class="form-select" [(ngModel)]="student.isActive" name="activestatus">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option [ngValue]=true>YES</option>
+                            <option [ngValue]=false>NO</option>
+                        </select>
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Enrollment Date</label>

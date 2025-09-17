@@ -1,0 +1,123 @@
+
+<div class="card shadow-sm">
+      <!-- Page Header -->
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Genral Settings | Change Fee Particulars</h5>
+    </div>
+    <div class="text-center mb-1">
+        <h2>Change Fee Particulars</h2>
+        <span class="me-2 text-primary fw-semibold fw-bold">Required*</span>
+        <span class="text-muted">Optional</span>
+    </div>
+    <div class=" d-flex align-items-center justify-content-left p-3">
+        <div class="row">
+            <div class="col">
+                <label class="form-label">Fee Particulars For*</label>
+                <select class="form-select" [(ngModel)]="feeParticular.name" (ngModelChange)="onfeeParticularChange()" name="feeParticulars" required>
+                    <option>--Add New--</option>
+                    <option *ngFor="let p of feeParticulars" [value]="p.name" >
+                        {{ p.name }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="col" *ngIf="feeParticular.name =='--Add New--'">
+                <label class="form-label">Name*</label>
+                <input 
+                    type="text" 
+                    class="form-control"
+                    [(ngModel)]="name"
+                    name="inputname"
+                    placeholder="Enter name"/>
+            </div>
+
+        </div>
+    </div>
+    <form (ngSubmit)="update()">
+        <div class="container text-left">
+            <div class="row">
+                <div class="col mb-3">
+                    <label class="form-label">Tuition Fee*</label>
+                    <input 
+                        type="number" 
+                        class="form-control"
+                        [(ngModel)]="feeParticular.tuitionFee"
+                        name="tuitionFee"
+                        placeholder="Enter Amount">
+                </div>
+                <div class="col mb-3">
+                    <label class="form-label">Stationery</label>
+                    <input 
+                        type="number" 
+                        class="form-control"
+                        [(ngModel)]="feeParticular.stationery"
+                        name="stationery"
+                        placeholder="Enter Amount">
+                </div>
+                <div class="col mb-3">
+                    <label class="form-label">sports Fee</label>
+                    <input 
+                        type="number" 
+                        class="form-control"
+                        [(ngModel)]="feeParticular.sports"
+                        name="sports"
+                        placeholder="Enter Amount">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col mb-3">
+                    <label class="form-label">Annual Fee</label>
+                    <input 
+                        type="number" 
+                        class="form-control"
+                        [(ngModel)]="feeParticular.annualFee"
+                        name="annualFee"
+                        placeholder="Enter Amount">
+                </div>
+                <div class="col mb-3">
+                    <label class="form-label">Electricity Fee</label>
+                    <input 
+                        type="number" 
+                        class="form-control"
+                        [(ngModel)]="feeParticular.electricity"
+                        name="electricity"
+                        placeholder="Enter Amount">
+                </div>
+                <div class="col mb-3">
+                    <label class="form-label">Maintenance</label>
+                    <input 
+                        type="number" 
+                        class="form-control"
+                        [(ngModel)]="feeParticular.maintenance"
+                        name="Maintenance"
+                        placeholder="Enter Amount">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col mb-3">
+                    <label class="form-label">Miscellaneous</label>
+                    <input 
+                        type="number" 
+                        class="form-control"
+                        [(ngModel)]="feeParticular.miscellaneous"
+                        name="miscellaneous"
+                        placeholder="Enter Amount">
+                </div>
+
+                <div class="col mb-3">
+                </div>
+                <div class="col mb-3">
+                </div>
+                
+            </div>
+        </div>
+        <!-- Submit -->
+        <div class="d-flex  p-3 justify-content-center align-items-center ">
+        <button type="submit" class="btn btn-warning px-4 justify-content-center align-items-center ">
+            <i class="bi bi-arrow-repeat"></i> Update Fee Particulars
+        </button>
+        </div>
+    </form>
+</div>
+
+

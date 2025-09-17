@@ -16,32 +16,32 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Course</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="sclass.courseId"
-                            name="courseId"
-                            placeholder="Enter Course">
+                        <select class="form-select" [(ngModel)]="sclass.classId" name="course">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let c of courses" [value]="c.courseId">{{ c.courseName }}</option>
+                        </select>
                     </div>
                     <div class="col">
                         <label class="form-label">Teacher</label>
-                        <input 
-                            type="email" 
-                            class="form-control"
-                            [(ngModel)]="sclass.teacherId"
-                            name="teacherId"
-                            placeholder="Enter Teacher">
+                        <select class="form-select" [(ngModel)]="sclass.teacherId" name="teacher">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let t of teachers" [value]="t.id">{{ t.firstName }} {{ t.lastName }}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Day</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="sclass.dayOfWeek"
-                            name="dayOfWeek"
-                            placeholder="Enter Day">
+                        <select class="form-select" [(ngModel)]="sclass.dayOfWeek" name="day">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option >Mon</option>
+                            <option >Tue</option>
+                            <option >Wed</option>
+                            <option >Thu</option>
+                            <option >Fri</option>
+                            <option >Sat</option>
+                            <option >Sun</option>
+                        </select>
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Room</label>

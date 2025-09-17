@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Institute } from '../../../../models/institute/institute.modelinterface';
+import { Institute } from '../../../../models/institute/institute.model';
 import { InstituteService } from '../../../../services/institute/institute.service';
 @Component({
   selector: 'app-add-edit-institute-dialog',
@@ -13,7 +13,7 @@ import { InstituteService } from '../../../../services/institute/institute.servi
 })
 export class AddEditInstituteDialogComponent {
   isSaved: boolean = true;
-  institute: Institute ={};
+  institute: Institute =new Institute();
 
   constructor(
       private dialogRef: MatDialogRef<AddEditInstituteDialogComponent>,

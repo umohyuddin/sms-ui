@@ -1,8 +1,8 @@
-export interface User {
-  id?: number;
-  roleId?: number;
-  empId?: number;
-  cmpId?: number;
+export class User {
+  id?: number ;
+  roleId?: number ;
+  empId?: number ;
+  cmpId?: number ;
   accountNonExpired?: boolean;
   accountNonLocked?: boolean;
   credentialsNonExpired?: boolean;

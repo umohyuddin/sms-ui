@@ -1,14 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import * as jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { Fee } from '../../models/student/fee.modelinterface';
+import { Fee } from '../../models/student/fee.model';
 import { FeeService } from '../../services/student/fee.service';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AddEditStudentFeeDialogComponent } from '../../dialog/student/add-edit-student-fee-dialog/add-edit-student-fee-dialog.component';
+import { GlobalService } from '../../services/global/global.service';
+import { Institute } from '../../models/institute/institute.model';
 @Component({
   selector: 'app-fee',
   standalone: true,
@@ -19,6 +23,8 @@ import { AddEditStudentFeeDialogComponent } from '../../dialog/student/add-edit-
 export class FeeComponent {
   feelist: Fee[] = [];
   filteredlist: Fee[] = [];
+  fee: Fee = new Fee();
+  institute: Institute = new Institute();
   searchTerm = '';
   sortColumn: keyof Fee | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
@@ -27,8 +33,11 @@ export class FeeComponent {
     private feeService: FeeService,
     private authService: AuthService,
     private router: Router,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    private globalService: GlobalService
+  ) {
+    this.institute = this.globalService.getInstitute();
+  }
 
   ngOnInit(): void {
     if (!this.authService.isAuthenticated()) {
@@ -42,7 +51,7 @@ export class FeeComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/fee')) {
+        if (this.router.url.includes('/dashboard/fee')) {
           this.load();
         }
       });
@@ -123,6 +132,18 @@ export class FeeComponent {
             error: err => console.error('Failed to delete Fee', err)
           });
       }
+    });
+  }
+  exportPDF() {
+    const data = document.getElementById('pdf');
+    html2canvas(data!).then(canvas => {
+        const imgWidth = 208;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        const contentDataURL = canvas.toDataURL('image/png');
+        const pdf = new jsPDF.jsPDF('l', 'mm', 'a4'); // A4 size page of PDF
+        const position = 0;
+        pdf.addImage(contentDataURL, 'PNG', 0, 0, imgWidth, imgHeight);
+        pdf.save('exported-file.pdf'); // Save the generated PDF
     });
   }
 

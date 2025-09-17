@@ -1,5 +1,5 @@
 <div class="card shadow-sm">
-  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+  <div class="card-header d-flex justify-content-between align-items-center">
     <h5 class="mb-0">Students Fee</h5>
     <input 
       type="text" 
@@ -42,6 +42,7 @@
           <td>{{ fee.month }}</td>
           <td>{{ fee.status }}</td>
           <td>
+            <button class="btn btn-sm  me-2" (click)="exportPDF()"><i class="bi bi-arrow-down-circle-fill"></i></button>
             <button class="btn btn-sm btn-warning me-2" (click)="onEdit(fee, i)">Edit</button>
             <button class="btn btn-sm btn-danger" (click)="onDelete(fee, i)">Delete</button>
           </td>
@@ -49,4 +50,65 @@
       </tbody>
     </table>
   </div>
+
+  <!-- PDF class="pdf-container" -->
+   <div id="pdf" >
+    <!-- Header: School name & logo -->
+    <div class="row align-items-center mb-4">
+      <div class="col-auto">
+        <img [src]="'data:image/jpeg;base64,'+institute.logo"  alt="School Logo" class="rounded-circle  border d-flex align-items-center justify-content-center text-center" style="max-height:80px; max-width: 80px;  object-fit: cover;">
+      </div>
+      <div class="col text-center">
+        <h2 class="mb-0 fw-bold">{{institute.name}}</h2>
+        <small class="text-muted">Fee Challan / Voucher</small>
+      </div>
+    </div>
+
+    <!-- Student Details -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <p class="mb-1"><strong>Student Name:</strong> Ali</p>
+        <p class="mb-1"><strong>Roll No:</strong> 24</p>
+        <p class="mb-1"><strong>Class:</strong> 8th</p>
+      </div>
+      <div class="col-md-6">
+        <p class="mb-1"><strong>Challan No:</strong> 3456</p>
+        <p class="mb-1"><strong>Issue Date:</strong> 26/09/2025</p>
+        <p class="mb-1"><strong>Due Date:</strong> 26/09/2025</p>
+      </div>
+    </div>
+
+    <!-- Fee Details Table -->
+    <div class="table-responsive mb-4">
+      <table class="table table-bordered align-middle">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Particulars</th>
+            <th scope="col" class="text-end">Amount (PKR)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let fee of [1,2,3,4,6]">
+            <td>{{fee}}</td>
+            <td class="text-end">{{fee | currency:'PKR'}}</td>
+          </tr>
+          <tr class="fw-bold">
+            <td>Total</td>
+            <td class="text-end">{{80 | currency:'PKR'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer: Signature / Instructions -->
+    <div class="row">
+      <div class="col-md-6">
+        <p class="mb-0"><strong>Authorized Signature</strong></p>
+        <div class="border-top mt-5"></div>
+      </div>
+      <div class="col-md-6 text-end">
+        <small class="text-muted">Please pay before due date to avoid late fees.</small>
+      </div>
+    </div>
+   </div>
 </div>

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { Course } from '../../models/course/course.modelinterface';
+import { Course } from '../../models/course/course.model';
 import { CourseService } from '../../services/course/course.service';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -44,7 +44,7 @@ export class CourseComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/course')) {
+        if (this.router.url.includes('/dashboard/course')) {
           this.load();
         }
       });

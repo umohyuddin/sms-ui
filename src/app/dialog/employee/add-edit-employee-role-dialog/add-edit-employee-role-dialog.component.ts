@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { EmployeeRole } from '../../../models/employee/employee-role.modelinterface';
+import { EmployeeRole } from '../../../models/employee/employee-role.model';
 import { EmployeeRoleService } from '../../../services/employee/employee-role.service';
 @Component({
   selector: 'app-add-edit-employee-role-dialog',
@@ -12,7 +12,7 @@ import { EmployeeRoleService } from '../../../services/employee/employee-role.se
   styleUrl: './add-edit-employee-role-dialog.component.scss'
 })
 export class AddEditEmployeeRoleDialogComponent {
-  employeeRole: EmployeeRole = {};
+  employeeRole: EmployeeRole = new EmployeeRole();
   isSaved: boolean = true;
 
   constructor(

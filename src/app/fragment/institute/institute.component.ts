@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InstituteService} from '../../services/institute/institute.service';
-import { Institute } from '../../models/institute/institute.modelinterface';
+import { Institute } from '../../models/institute/institute.model';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -45,7 +45,7 @@ export class InstituteComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/institute')) {
+        if (this.router.url.includes('/dashboard/institute')) {
           this.load();
         }
       });

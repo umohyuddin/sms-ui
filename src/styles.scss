@@ -1,4 +1,83 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
+/* Make the root elements fill the full viewport height */
+html, body {
+  height: 101%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;     /* ⛔ no scrollbars on the outer page */
+}
+
+/* Let your Angular app manage its own scrolling */
+app-root {
+  display: block;
+  height: 100%;
+  overflow: auto;       /* ✅ scroll only inside the app if content is taller */
+}
+
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+:root {
+  --sidebar-bg: #f8f9fa;
+  --sidebar-text: #333;
+  --body-bg: #f8f9fa;
+  --body-text: #333;
+  --header-bg: #f8f9fa;
+  --header-text: #333;
+  --active-item-bg: #5b7ea1;
+  --active-item-text: #333;
+  --button-border-color: #333;
+}
+
+.dark-theme{
+  --sidebar-bg: #333;
+  --sidebar-text: #f8f9fa;
+  --body-bg: #333;
+  --body-text: #f8f9fa;
+  --header-bg: #333;
+  --header-text: #f8f9fa;
+  --active-item-bg: #e6b30c;
+  --active-item-text: #333;
+  --button-border-color: #e6b30c;
+}
+
+.light-theme{
+  --sidebar-bg: #f8f9fa;
+  --sidebar-text: #333;
+  --body-bg: #f8f9fa;
+  --body-text: #333;
+  --header-bg: #f8f9fa;
+  --header-text: #333;
+  --active-item-bg: #3a7abb;
+  --active-item-text: #333;
+  --button-border-color: #333;
+}
+
+body {
+  background-color: var(--body-bg);
+  color: var(--body-text);
+}
+
+/* Apply header background to any header elements */
+.header, .card-header {
+  background-color: var(--header-bg) !important;
+  color: var(--header-text) !important;
+}
+
+/* Apply active item background to active elements */
+.active {
+  background-color: var(--active-item-bg) !important;
+  color: var(--active-item-text) !important;
+}
+/* Ensure text readability */
+.bg-light, .bg-dark {
+  color: var(--body-text);
+}
+
+/* Override btn-outline-light border color */
+.btn-outline-light {
+  --bs-btn-border-color: var(--button-border-color);
+  --bs-btn-hover-border-color: var(--button-border-color);
+  --bs-btn-active-border-color: var(--button-border-color);
+  --bs-btn-disabled-border-color: var(--button-border-color);
+}

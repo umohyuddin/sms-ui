@@ -1,0 +1,6 @@
+.pdf-container {
+  position: absolute;
+  left: -9999px;  /* move far off-screen */
+  top: 0;
+  width: 800px;   /* set a fixed width to control layout */
+}

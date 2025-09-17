@@ -24,8 +24,11 @@
     "@angular/ssr": "^19.2.15",
     "@ng-select/ng-select": "^15.0.0",
     "bootstrap": "^5.3.7",
+    "chart.js": "^4.5.0",
     "express": "^4.18.2",
+    "html2canvas": "^1.4.1",
     "jquery": "^3.7.1",
+    "jspdf": "^3.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
@@ -44,5 +47,19 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.7.2"
-  }
+  },
+  "description": "This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.15.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mohsin847/sms_frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Mohsin847/sms_frontend/issues"
+  },
+  "homepage": "https://github.com/Mohsin847/sms_frontend#readme"
 }

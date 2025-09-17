@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { Inventory } from '../../models/institute/inventory.modelinterface';
+import { Inventory } from '../../models/institute/inventory.model';
 import { InventoryService } from '../../services/institute/inventory.service';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component'
 import { AddEditInventoryDialogComponent } from '../../dialog/institute/inventory/add-edit-inventory-dialog/add-edit-inventory-dialog.component';
@@ -45,7 +45,7 @@ export class InventoryComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/inventory')) {
+        if (this.router.url.includes('/dashboard/inventory')) {
           this.load();
         }
       });

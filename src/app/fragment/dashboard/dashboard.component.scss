@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.sidebar-gradient {
+  background: linear-gradient(180deg, #1f2937, #374151);
+}
+
+.nav-link {
+  color: #d1d5db;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+  background-color: #4b5563;
+  color: #fff;
+}
+
+.nav-link.active {
+  background-color: #3b82f6 !important;
+  color: #fff !important;
+}
+
+.dashboard-card {
+  border-radius: 1rem;
+  border: none;
+}
+.canvas-height{
+  height: 377px !important;
+}

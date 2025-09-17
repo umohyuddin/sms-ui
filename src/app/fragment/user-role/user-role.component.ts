@@ -44,14 +44,14 @@ export class UserRoleComponent implements OnInit {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/userRole')) {
+        if (this.router.url.includes('/dashboard/userRole')) {
           this.load();
         }
       });
   }
 
   load(): void {
-    this.userRoleService.getUserRole().subscribe({
+    this.userRoleService.getAll().subscribe({
       next: res => {
         this.userRoles = res;
         this.filteredUserRoles = [...this.userRoles];
@@ -117,7 +117,7 @@ export class UserRoleComponent implements OnInit {
   
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.userRoleService.deleteUserRole(role).subscribe({
+          this.userRoleService.delete(role).subscribe({
               next: res => console.log('Role Deleted:', res),
               error: err => console.error('Failed to delete user role', err)
             });

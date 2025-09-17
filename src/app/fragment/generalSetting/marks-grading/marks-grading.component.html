@@ -1,0 +1,120 @@
+
+<div class="card shadow-sm">
+      <!-- Page Header -->
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Genral Settings | Exam Grading</h5>
+        <button *ngIf="activeTab() === 'marks'" type="button" class="btn btn-sm btn-success me-2" (click)="onAddGrade()">ADD</button>
+    </div>
+    <!-- Tab Navigation -->
+    <div class="d-flex justify-content-center border-bottom">
+        <ul class="nav nav-tabs border-0 mt-3" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button 
+            class="nav-link" 
+            [class.active]="activeTab() === 'marks'"
+            (click)="activeTab.set('marks')"
+            type="button" 
+            role="tab">
+            Marks Grading
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button 
+            class="nav-link" 
+            [class.active]="activeTab() === 'fail'"
+            (click)="activeTab.set('fail')"
+            type="button" 
+            role="tab">
+            Fail Criteria
+            </button>
+        </li>
+        </ul>
+    </div>
+    @if (activeTab() === 'fail') {
+        <div class="d-flex align-items-center justify-content-center ">
+            <h2>Fail Criteria</h2>
+        </div>
+        <form (ngSubmit)="updateFailCriteria()">
+            <div class="container text-left">
+                <div class="row  align-items-end">
+                    <div class="col mb-3">
+                        <p>Student will be marked as FAILED in the exams if he or she obtains an overall percentage score equal to or below</p>
+                        <label class="form-label">Overall%</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]="failCriteria.percentage"
+                            name="overallpercentage"
+                            placeholder="Example 40">
+                    </div>
+                    <div class="col mb-3">
+                        <p>OR he or she obtains a Subject percentage score equal to or below</p>
+                        <label class="form-label">Subject</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]="failCriteria.subjectMarks"
+                            name="subject"
+                            placeholder="Example 33">
+                    </div>
+                    <div class="col mb-3">
+                        <p>at least in Subjects</p>
+                        <label class="form-label">No Of Subjects</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]="failCriteria.noOfSubjects"
+                            name="noofsubjects"
+                            placeholder="Example 1">
+                    </div>
+                </div>
+            </div>
+            <!-- Submit -->
+            <div class="d-flex  p-3 justify-content-center align-items-center ">
+            <button type="submit" class="btn btn-warning px-4 justify-content-center align-items-center ">
+                <i class="bi bi-arrow-repeat"></i> Update
+            </button>
+            </div>
+        </form>
+    }
+    <!-- Marks tab -->
+    @if (activeTab() === 'marks') {
+        <div class="d-flex align-items-center justify-content-center ">
+            <h2>Grading</h2>
+        </div>
+        <form>
+            <div class="container text-left">
+                <table class="table table-bordered table-striped text-center">
+                    <thead class="bg-primary text-white" style="background: linear-gradient(90deg, #4f46e5, #3b82f6) !important;">
+                        <tr>
+                            <th>Grade</th>
+                            <th>Marks</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let grd of gradingList; let i = index">
+                            <td>{{ grd.name }}</td>
+                            <td><input type="number" class="form-control" id="grading-marks" 
+                                        name="grading-marks+{{i}}" [(ngModel)]="grd.marks" 
+                                        placeholder="enter marks" required>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-warning me-2" (click)="onEdite(grd, i)">Update</button>
+                                <button class="btn btn-sm btn-danger" (click)="onDelete(grd, i)" >Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Submit -->
+            <div class="d-flex  p-3 justify-content-center align-items-center ">
+            <button *ngIf="false" type="submit" class="btn btn-warning px-4 justify-content-center align-items-center ">
+                <i class="bi bi-arrow-repeat"></i> Update
+            </button>
+            </div>
+        </form>
+    }
+</div>
+
+

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { Student } from '../../models/student/student.modelinterface';
+import { Student } from '../../models/student/student.model';
 import { StudentService } from '../../services/student/student.service';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -44,7 +44,7 @@ export class StudentComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/home/student')) {
+        if (this.router.url.includes('/dashboard/student')) {
           this.load();
         }
       });

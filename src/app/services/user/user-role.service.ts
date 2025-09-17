@@ -21,7 +21,7 @@ export class UserRoleService {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
-  getUserRole(): Observable<UserRole[]> {
+  getAll(): Observable<UserRole[]> {
     if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
       return throwError(() => new Error('User is not authenticated'));
     }
@@ -31,12 +31,26 @@ export class UserRoleService {
         if (error.status === 401 && isPlatformBrowser(this.platformId)) {
           this.authService.logout();
         }
-        return throwError(() => new Error(error.error?.message || 'Failed to fetch users'));
+        return throwError(() => new Error(error.error?.message || 'Failed to fetch user role'));
+      })
+    );
+  }
+  getById(id: number): Observable<UserRole> {
+    if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
+      return throwError(() => new Error('User is not authenticated'));
+    }
+    return this.http.get<ApiResponse<UserRole>>(`${ApiConfig.getUserRoleById}/${id}`).pipe(
+      map((res) => res.data[0].attributes),
+      catchError((error) => {
+        if (error.status === 401 && isPlatformBrowser(this.platformId)) {
+          this.authService.logout();
+        }
+        return throwError(() => new Error(error.error?.message || 'Failed to fetch user role'));
       })
     );
   }
 
-  createUserRole(role: UserRole): Observable<string> {
+  create(role: UserRole): Observable<string> {
     if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
       return throwError(() => new Error('User is not authenticated'));
     }
@@ -53,7 +67,7 @@ export class UserRoleService {
     );
   }
 
-  updateUserRole(role: UserRole): Observable<string> {
+  update(role: UserRole): Observable<string> {
     if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
       return throwError(() => new Error('User is not authenticated'));
     }
@@ -70,7 +84,7 @@ export class UserRoleService {
     );
   }
 
-  deleteUserRole(role: UserRole): Observable<string> {
+  delete(role: UserRole): Observable<string> {
     if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
       return throwError(() => new Error('User is not authenticated'));
     }

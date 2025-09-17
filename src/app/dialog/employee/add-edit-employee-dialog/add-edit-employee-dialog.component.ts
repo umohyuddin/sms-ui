@@ -2,13 +2,13 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Employee } from '../../../models/employee/employee.modelinterface';
+import { Employee } from '../../../models/employee/employee.model';
 import { EmployeeService} from '../../../services/employee/employee.service';
-import { Campus } from '../../../models/institute/campus.modelinterface';
+import { Campus } from '../../../models/institute/campus.model';
 import { CampusService } from '../../../services/institute/campus.service';
-import { EmployeeRole } from '../../../models/employee/employee-role.modelinterface';
+import { EmployeeRole } from '../../../models/employee/employee-role.model';
 import { EmployeeRoleService } from '../../../services/employee/employee-role.service';
-import { Department } from '../../../models/institute/department.modelinterface';
+import { Department } from '../../../models/institute/department.model';
 import { DepartmentService } from '../../../services/institute/department.service';
 @Component({
   selector: 'app-add-edit-employee-dialog',
@@ -18,7 +18,7 @@ import { DepartmentService } from '../../../services/institute/department.servic
   styleUrl: './add-edit-employee-dialog.component.scss'
 })
 export class AddEditEmployeeDialogComponent implements OnInit{
-  employee: Employee = {};
+  employee: Employee = new Employee();
   campus: Campus[] = [];
   employeeRole: EmployeeRole[] = [];
   department: Department[] = [];

@@ -1,0 +1,31 @@
+  .editor-toolbar {
+    border: 1px solid #ced4da;
+    border-bottom: none;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background-color: #f8f9fa;
+    padding: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  .editor-toolbar .btn {
+    border-radius: 0.25rem;
+    margin-right: 0.25rem;
+    color: #495057;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+  }
+  
+  .editor-toolbar .btn:hover {
+    background-color: #dee2e6;
+  }
+  
+  .editor-content {
+    border: 1px solid #ced4da;
+    border-top: none;
+    border-radius: 0 0 0.5rem 0.5rem;
+    padding: 1rem;
+    min-height: 350px;
+    outline: none;
+  }
