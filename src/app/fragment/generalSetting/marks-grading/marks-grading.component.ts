@@ -31,12 +31,12 @@ export class MarksGradingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.failCriteriaService.getByInstitute(this.globalService.getInstitute().instituteId??-1).subscribe({
+    this.failCriteriaService.getByInstitute(this.globalService.getInstitute().id??-1).subscribe({
       next: (res) => { this.failCriteria = res; },
       error: (err) => { console.error("Failed to fetch failCriteria.");}
     });
 
-    this.marksAndGradingService.getByInstitute(this.globalService.getInstitute().instituteId??-1).subscribe({
+    this.marksAndGradingService.getByInstitute(this.globalService.getInstitute().id??-1).subscribe({
       next: (res) => { this.gradingList = res; },
       error: (err) => { console.error("Failed to fetch grades.");}
     })
@@ -92,7 +92,7 @@ export class MarksGradingComponent implements OnInit {
   updateFailCriteria(){
     if(this.failCriteria.id?false:true)
     {
-      this.failCriteria.instituteId = this.globalService.getInstitute().instituteId??-1;
+      this.failCriteria.instituteId = this.globalService.getInstitute().id??-1;
       this.failCriteriaService.create(this.failCriteria).subscribe({
         next: (res) =>{
           console.log(res);

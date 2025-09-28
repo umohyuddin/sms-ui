@@ -1,5 +1,5 @@
 export class Student {
-    studentId?: number;
+    id?: number;
     campusId?: number;
     departmentId?: number;
     grade?: number;

@@ -63,7 +63,7 @@ export class ClassComponent {
   applyFilter(): void {
     const term = this.searchTerm.toLowerCase();
     this.filteredList = this.classList.filter(
-      u => u.classId?.toString().toLowerCase().includes(term)
+      u => u.id?.toString().toLowerCase().includes(term)
     );
     this.sortData(this.sortColumn, true);
   }

@@ -33,7 +33,7 @@ export class AddEditMarksAndGradingDialogComponent implements OnInit {
   }
 
   save() {
-    this.grade.instituteId = this.globalService.getInstitute().instituteId??-1;
+    this.grade.instituteId = this.globalService.getInstitute().id??-1;
     this.marksAndGradingService.create(this.grade).subscribe({
       next: (res) => console.log( res),
       error: (err) => console.error(err)

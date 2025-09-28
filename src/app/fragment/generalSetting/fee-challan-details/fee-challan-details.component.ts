@@ -31,7 +31,7 @@ export class FeeChallanDetailsComponent implements OnInit{
   }
 
   loadBanks(){
-    this.bankService.getByInstitute(this.globalService.getInstitute().instituteId??-1).subscribe({
+    this.bankService.getByInstitute(this.globalService.getInstitute().id??-1).subscribe({
       next:(res) => {this.banks = res; },
       error:(err) => {console.error("Failed to load banks");}
     })
@@ -40,7 +40,7 @@ export class FeeChallanDetailsComponent implements OnInit{
   onAdd(){
     console.log(this.bank.id);
     if(this.bank.id?false:true){
-      this.bank.instituteId = this.globalService.getInstitute().instituteId;
+      this.bank.instituteId = this.globalService.getInstitute().id;
       this.bankService.create(this.bank).subscribe({
         next:(res) => {
           this.banks.push({...this.bank})

@@ -1,5 +1,5 @@
 export class Assessment {
-    assessmentId?: number;
+    id?: number;
     enrollmentId?: number;
     name?: string;
     assessmentDate?: string;

@@ -1,5 +1,5 @@
 ;export class Attendance {
-    attendanceId?: number;
+    id?: number;
     studentId?: number;
     courseId?: number;
     attendanceDate?: string;

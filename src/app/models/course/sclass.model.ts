@@ -1,5 +1,5 @@
 export class Sclass {
-    classId?: number;
+    id?: number;
     courseId?: number;
     teacherId?: number;
     classroom?: string;

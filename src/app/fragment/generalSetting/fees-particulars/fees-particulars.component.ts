@@ -26,7 +26,7 @@ export class FeesParticularsComponent implements OnInit {
   }
 
   loadFeesParticulars(){
-    this.feesParticularService.getByInstitute(this.globalService.getInstitute().instituteId??-1).subscribe({
+    this.feesParticularService.getByInstitute(this.globalService.getInstitute().id??-1).subscribe({
       next: (res) =>{
         this.feeParticulars = res;
         this.feeParticular = this.feeParticulars[0]? {... this.feeParticulars[0] }: new FeeParticulars();
@@ -42,6 +42,7 @@ export class FeesParticularsComponent implements OnInit {
     if(this.feeParticular.name === '--Add New--')
     {
       this.feeParticular = new FeeParticulars();
+      this.feeParticular.name = "--Add New--";
     }else{
       this.feeParticular = {...this.feeParticulars.filter(fp => fp.name === this.feeParticular.name)[0]};
     }
@@ -52,11 +53,11 @@ export class FeesParticularsComponent implements OnInit {
     {
       this.feeParticular.name = this.name;
       this.feeParticular.id = 0;
-      this.feeParticular.instituteId = this.globalService.getInstitute().instituteId??-1;
+      this.feeParticular.instituteId = this.globalService.getInstitute().id??-1;
       this.feesParticularService.craeteFeeParticulars(this.feeParticular).subscribe({
         next: (res)=>{
           console.log(res);
-          this.feeParticulars.push(this.feeParticular);
+          this.feeParticulars.push({...this.feeParticular});
         },
         error: (err) =>{
           console.error("failed to create fees particulars");

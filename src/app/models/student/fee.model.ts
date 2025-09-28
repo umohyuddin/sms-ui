@@ -1,5 +1,5 @@
 export class Fee {
-    feeId?: number ;
+    id?: number ;
     studentId?: number ;
     tuitionFee?: number;
     stationery?: number;

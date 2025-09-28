@@ -19,22 +19,25 @@ export class DashboardComponent implements OnInit, AfterViewInit{
   dashboardPayload: DashboardPayload = new DashboardPayload();
   constructor(private dashboardService: DashboardService,
               private globalService: GlobalService
-  ) {
-    this.dashboardPayload.id = globalService.getInstitute().instituteId;
-    this.dashboardPayload.category = 'institute';
-    this.dashboardPayload.type = 'monthly';
-    this.dashboardPayload.year = new Date().getFullYear();
-    this.dashboardPayload.month = new Date().getMonth() + 1;
-  }
+  ) {}
 
   ngOnInit(): void {
+    this.setPayLoad();
     this.loadDashboard();
   }
   ngAfterViewInit(): void {
     // this.createChart();
   }
-
+  setPayLoad(){
+    console.log(this.globalService.getInstitute());
+    this.dashboardPayload.id = this.globalService.getInstitute().id;
+    this.dashboardPayload.category = 'institute';
+    this.dashboardPayload.type = 'monthly';
+    this.dashboardPayload.year = new Date().getFullYear();
+    this.dashboardPayload.month = new Date().getMonth() + 1;
+  }
   loadDashboard(){
+    console.log(this.dashboardPayload);
     this.dashboardService.getDashBoard(this.dashboardPayload).subscribe({
       next: (res) => {
         this.dashboard = res;

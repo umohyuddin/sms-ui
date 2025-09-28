@@ -1,5 +1,5 @@
 export class Inventory {
-    inventoryId?: number;
+    id?: number;
     campusId?: number;
     itemName?: string;
     quantity?: number;

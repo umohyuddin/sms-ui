@@ -1,5 +1,5 @@
 export class Campus {
-    campusId?: number;
+    id?: number;
     instituteId?:number;
     name?: string;
     contactNumber?: string;

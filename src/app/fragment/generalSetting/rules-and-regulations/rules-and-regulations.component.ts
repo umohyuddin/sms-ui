@@ -25,7 +25,7 @@ export class RulesAndRegulationsComponent implements OnInit {
   }
 
   loadRules(){
-    this.rulesService.getByInstitute(this.globalservice.getInstitute().instituteId??-1).subscribe({
+    this.rulesService.getByInstitute(this.globalservice.getInstitute().id??-1).subscribe({
       next:(res) => {
         if(res != null){this.rules = res;}
         this.ngAfterViewInit();
@@ -47,7 +47,7 @@ export class RulesAndRegulationsComponent implements OnInit {
   }
 
   onSave() {
-    this.rules.instituteId = this.globalservice.getInstitute().instituteId??-1;
+    this.rules.instituteId = this.globalservice.getInstitute().id??-1;
     this.rules.rules = this.editor.nativeElement.innerHTML;
     if(this.rules.id?false:true)
     {

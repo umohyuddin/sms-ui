@@ -1,5 +1,5 @@
 export class Enrollment {
-    enrollmentId?: number;
+    id?: number;
     studentId?: number;
     courseId?: number;
     enrollmentDate?: string;

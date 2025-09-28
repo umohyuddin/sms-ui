@@ -26,7 +26,7 @@ export class InstituteProfileComponent implements OnInit {
   }
 
   loadInstitute(){
-    this.instituteservice.getIstituteById(this.globalService.getInstitute().instituteId??-1).subscribe({
+    this.instituteservice.getIstituteById(this.globalService.getInstitute().id??-1).subscribe({
       next: (res)=> {this.institute = res;},
       error: (err)=> {console.log("failed to fetch institute");}
     })

@@ -72,7 +72,7 @@ export class FeeService {
     if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
       return throwError(() => new Error('User is not authenticated'));
     }
-    return this.http.delete<ApiResponse<{ message: string }>>(`${ApiConfig.deleteFee }/${pFee.feeId}`).pipe(
+    return this.http.delete<ApiResponse<{ message: string }>>(`${ApiConfig.deleteFee }/${pFee.id}`).pipe(
         map((res) => res.data[0].attributes.message ),
       catchError((error) => {
         if (error.status === 401 && isPlatformBrowser(this.platformId)) {

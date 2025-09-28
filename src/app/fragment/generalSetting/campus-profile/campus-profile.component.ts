@@ -42,7 +42,7 @@ export class CampusProfileComponent {
   }
 
   loadInstitute(){
-    this.instituteservice.getIstituteById(this.globalService.getCampus().campusId??-1).subscribe({
+    this.instituteservice.getIstituteById(this.globalService.getCampus().id??-1).subscribe({
       next: (res)=> {this.institute = res;},
       error: (err)=> {console.log("failed to fetch institute");}
     })
