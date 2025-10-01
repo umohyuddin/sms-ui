@@ -45,7 +45,7 @@
                         <label class="form-label">Campus</label>
                         <select class="form-select" [(ngModel)]="employee.campusId" name="campus">
                             <option [ngValue]="undefined">-- Select --</option>
-                            <option *ngFor="let c of campus" [ngValue]="c.campusId">{{ c.name }}</option>
+                            <option *ngFor="let c of campus" [ngValue]="c.id">{{ c.name }}</option>
                         </select>
                     </div>
                     <div class="col mb-3">
@@ -61,7 +61,7 @@
                         <label class="form-label">Department ID</label>
                         <select class="form-select" [(ngModel)]="employee.departmentId" name="departmentid">
                             <option [ngValue]="null">-- Select --</option>
-                            <option *ngFor="let d of department" [value]="d.departmentId">{{ d.departmentName }}</option>
+                            <option *ngFor="let d of department" [value]="d.id">{{ d.departmentName }}</option>
                         </select>
                     </div>
                 </div>

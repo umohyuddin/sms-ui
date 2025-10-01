@@ -1,5 +1,5 @@
 export const ApiConfig = {
-  baseUrl: 'http://localhost:8081',
+  baseUrl: 'http://localhost:8080',
 
   get generateToken() { return `${this.baseUrl}/api/auth/generateToken`; },
 
@@ -126,6 +126,15 @@ export const ApiConfig = {
   get getAllCampus() { return `${this.baseUrl}/api/schools/campus/getall`; },
   get getCampusById() { return `${this.baseUrl}/api/schools/campus/get`; },
 
+  // Expenses
+  get updateExpenses() { return `${this.baseUrl}/api/schools/expenses/update`; },
+  get deleteExpenses() { return `${this.baseUrl}/api/schools/expenses/delete`; },
+  get createExpenses() { return `${this.baseUrl}/api/schools/expenses/create`; },
+  get getAllExpenses() { return `${this.baseUrl}/api/schools/expenses/getall`; },
+  get getExpensesById() { return `${this.baseUrl}/api/schools/expenses/get`; },
+  get getExpensesByCampusId() { return `${this.baseUrl}/api/schools/expenses/getbycampus`; },
+  get getExpensesByInstituteId() { return `${this.baseUrl}/api/schools/expenses/getbyinstitute`; },
+
   // Employee
   get updateEmployee() { return `${this.baseUrl}/api/employee/update`; },
   get deleteEmployee() { return `${this.baseUrl}/api/employee/delete`; },
@@ -158,43 +167,54 @@ export const ApiConfig = {
   get getEmployeeAttendanceById() { return `${this.baseUrl}/api/employee/attendance/get`; },
   get getEmployeeAttendanceByEmployeeId() { return `${this.baseUrl}/api/employee/attendance/get/emp`; },
 
-  // Course
-  get updateCourse() { return `${this.baseUrl}/api/course/update`; },
-  get deleteCourse() { return `${this.baseUrl}/api/course/delete`; },
-  get createCourse() { return `${this.baseUrl}/api/course/create`; },
-  get getCoursesByTeacherId() { return `${this.baseUrl}/api/course/getbyteacherid`; },
-  get getCourseById() { return `${this.baseUrl}/api/course/get`; },
-  get getAllCourse() { return `${this.baseUrl}/api/course/getall`; },
-  get getCourseByDeparmentId() { return `${this.baseUrl}/api/course/getbydepartmentid`; },
+  // subject
+  get updateCourse() { return `${this.baseUrl}/api/class/subject/update`; },
+  get deleteCourse() { return `${this.baseUrl}/api/class/subject/delete`; },
+  get createCourse() { return `${this.baseUrl}/api/class/subject/create`; },
+  get getCoursesByTeacherId() { return `${this.baseUrl}/api/class/subject/getbyteacherid`; },
+  get getCourseById() { return `${this.baseUrl}/api/class/subject/get`; },
+  get getAllCourse() { return `${this.baseUrl}/api/class/subject/getall`; },
+  get getCourseByDeparmentId() { return `${this.baseUrl}/api/class/subject/getbyclassid`; },
 
   // Class
-  get updateClass() { return `${this.baseUrl}/api/course/sclass/update`; },
-  get deleteClass() { return `${this.baseUrl}/api/course/sclass/delete`; },
-  get createClass() { return `${this.baseUrl}/api/course/sclass/create`; },
-  get getClassById() { return `${this.baseUrl}/api/course/sclass/get`; },
-  get getClassByCourseId() { return `${this.baseUrl}/api/course/sclass/getbycourseid`; },
-  get getAllClasses() { return `${this.baseUrl}/api/course/sclass/getall`; },
-  get getClassByTeacherId() { return `${this.baseUrl}/api/course/sclass/getbyteacherid`; },
+  get updateClass() { return `${this.baseUrl}/api/class/class/update`; },
+  get deleteClass() { return `${this.baseUrl}/api/class/class/delete`; },
+  get createClass() { return `${this.baseUrl}/api/class/class/create`; },
+  get getClassById() { return `${this.baseUrl}/api/class/class/get`; },
+  get getClassByStudentId() { return `${this.baseUrl}/api/class/class/getbystudentid`; },
+  get getClassByCourseId() { return `${this.baseUrl}/api/class/class/getbycourseid`; },
+  get getAllClasses() { return `${this.baseUrl}/api/class/class/getall`; },
+  get getClassByTeacherId() { return `${this.baseUrl}/api/class/class/getbyteacherid`; },
 
-  // Enrollment
-  get updateEnrollement() { return `${this.baseUrl}/api/course/enrollment/update`; },
-  get deleteEnrollement() { return `${this.baseUrl}api/course/enrollment/delete`; },
-  get createEnrollement() { return `${this.baseUrl}/api/course/enrollment/create`; },
-  get getEnrollementByTeacherId() { return `${this.baseUrl}/api/course/enrollment/getbyteacherid`; },
-  get getEnrollementByStudentId() { return `${this.baseUrl}/api/course/enrollment/getbystudentid`; },
-  get getEnrollementByCourseId() { return `${this.baseUrl}/api/course/enrollment/getbycourseid`; },
-  get getAllEnrollement() { return `${this.baseUrl}/api/course/enrollment/getall`; },
-  get getEnrollementById() { return `${this.baseUrl}/api/course/enrollment/get`; },
+  // Result
+  get updateResult() { return `${this.baseUrl}/api/class/result/update`; },
+  get deleteResult() { return `${this.baseUrl}api/class/result/delete`; },
+  get createResult() { return `${this.baseUrl}/api/class/result/create`; },
+  get getResultBySubjectId() { return `${this.baseUrl}/api/class/result/getbysubjectid`; },
+  get getResultByStudentId() { return `${this.baseUrl}/api/class/result/getbystudentid`; },
+  get getResultByClassId() { return `${this.baseUrl}/api/class/result/getbyclassid`; },
+  get getAllResult() { return `${this.baseUrl}/api/class/result/getall`; },
+  get getResultById() { return `${this.baseUrl}/api/class/result/get`; },
 
   // Assessment
-  get updateAssessment() { return `${this.baseUrl}/api/course/assessment/update`; },
-  get deleteAssessment() { return `${this.baseUrl}/api/course/assessment/delete`; },
-  get createAssessment() { return `${this.baseUrl}/api/course/assessment/create`; },
-  get getAssessmentofStudentWithinCourse() { return `${this.baseUrl}/api/course/assessment/getstudentwithincourse`; },
-  get getAssessmentByStudentId() { return `${this.baseUrl}/api/course/assessment/getbystudentid`; },
-  get getAssessmentByCourseId() { return `${this.baseUrl}/api/course/assessment/getbycourseid`; },
-  get getAssessmentById() { return `${this.baseUrl}/api/course/assessment/get`; },
-  get getAllAssessment() { return `${this.baseUrl}/api/course/assessment/getall`; },
+  get updateAssessment() { return `${this.baseUrl}/api/class/assessment/update`; },
+  get deleteAssessment() { return `${this.baseUrl}/api/class/assessment/delete`; },
+  get createAssessment() { return `${this.baseUrl}/api/class/assessment/create`; },
+  get getAssessmentofStudentWithinCourse() { return `${this.baseUrl}/api/class/assessment/getstudentwithincourse`; },
+  get getAssessmentByStudentId() { return `${this.baseUrl}/api/class/assessment/getbystudentid`; },
+  get getAssessmentByCourseId() { return `${this.baseUrl}/api/class/assessment/getbycourseid`; },
+  get getAssessmentById() { return `${this.baseUrl}/api/class/assessment/get`; },
+  get getAllAssessment() { return `${this.baseUrl}/api/class/assessment/getall`; },
+
+  // TimeTable
+  get updateTimeTable() { return `${this.baseUrl}/api/class/timetable/update`; },
+  get deleteTimeTable() { return `${this.baseUrl}/api/class/timetable/delete`; },
+  get createTimeTable() { return `${this.baseUrl}/api/class/timetable/create`; },
+  get getTimeTableByTeacherId() { return `${this.baseUrl}/api/class/timetable/getbyteacherid`; },
+  get getTimeTableByClassId() { return `${this.baseUrl}/api/class/timetable/getbyclassid`; },
+  get getTimeTableById() { return `${this.baseUrl}/api/class/timetable/get`; },
+  get getAllTimeTable() { return `${this.baseUrl}/api/class/timetable/getall`; },
+
 
   
 };

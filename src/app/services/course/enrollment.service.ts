@@ -25,7 +25,7 @@ export class EnrollmentService {
     if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
       return throwError(() => new Error('User is not authenticated'));
     }
-    return this.http.get<ApiResponse<Enrollment>>(ApiConfig.getAllEnrollement).pipe(
+    return this.http.get<ApiResponse<Enrollment>>(ApiConfig.getAllClasses).pipe(
       map((res) => res.data.map((item) => item.attributes)),
       catchError((error) => {
         if (error.status === 401 && isPlatformBrowser(this.platformId)) {
@@ -41,7 +41,7 @@ export class EnrollmentService {
       return throwError(() => new Error('User is not authenticated'));
     }
     const payLoad = createPayload(pEnrollment);
-    return this.http.post<ApiResponse<{ message: string }>>(ApiConfig.createEnrollement, payLoad).pipe(
+    return this.http.post<ApiResponse<{ message: string }>>(ApiConfig.createClass, payLoad).pipe(
         map((res) => res.data[0].attributes.message ),
       catchError((error) => {
         if (error.status === 401 && isPlatformBrowser(this.platformId)) {
@@ -57,7 +57,7 @@ export class EnrollmentService {
       return throwError(() => new Error('User is not authenticated'));
     }
     const payLoad = createPayload(pEnrollment);
-    return this.http.put<ApiResponse<{ message: string }>>(ApiConfig.updateEnrollement, payLoad).pipe(
+    return this.http.put<ApiResponse<{ message: string }>>(ApiConfig.updateClass, payLoad).pipe(
         map((res) => res.data[0].attributes.message ),
       catchError((error) => {
         if (error.status === 401 && isPlatformBrowser(this.platformId)) {
@@ -72,7 +72,7 @@ export class EnrollmentService {
     if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
       return throwError(() => new Error('User is not authenticated'));
     }
-    return this.http.delete<ApiResponse<{ message: string }>>(`${ApiConfig.deleteEnrollement }/${pEnrollment.id}`).pipe(
+    return this.http.delete<ApiResponse<{ message: string }>>(`${ApiConfig.deleteClass }/${pEnrollment.id}`).pipe(
         map((res) => res.data[0].attributes.message ),
       catchError((error) => {
         if (error.status === 401 && isPlatformBrowser(this.platformId)) {
