@@ -1,5 +1,5 @@
 export const ApiConfig = {
-  baseUrl: 'http://localhost:8080',
+  baseUrl: 'http://localhost:8081',
 
   get generateToken() { return `${this.baseUrl}/api/auth/generateToken`; },
 

@@ -4,28 +4,29 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { Sclass } from '../../models/class/sclass.model';
-import { SclassService } from '../../services/class/sclass.service';
+import { Subject } from '../../models/class/subject.model';
+import { CourseService } from '../../services/class/course.service';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { AddEditClassDialogComponent } from '../../dialog/class/add-edit-class-dialog/add-edit-class-dialog.component';
+import { AddEditSubjectDialogComponent } from '../../dialog/class/add-edit-subject-dialog/add-edit-subject-dialog.component';
+
 @Component({
-  selector: 'app-class',
+  selector: 'app-subject',
   standalone: true,
   imports: [CommonModule, FormsModule, MatDialogModule],
-  templateUrl: './class.component.html',
-  styleUrl: './class.component.scss'
+  templateUrl: './subject.component.html',
+  styleUrl: './subject.component.scss'
 })
-export class ClassComponent {
+export class SubjectComponent {
 
-  classList: Sclass[] = [];
-  filteredList: Sclass[] = [];
+  subjectList: Subject[] = [];
+  filteredList: Subject[] = [];
   searchTerm = '';
-  sortColumn: keyof Sclass | '' = '';
+  sortColumn: keyof Subject | '' = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(
-    private sclassService: SclassService,
+    private courseService: CourseService,
     private authService: AuthService,
     private router: Router,
     private dialog: MatDialog
@@ -43,32 +44,31 @@ export class ClassComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        if (this.router.url.includes('/dashboard/class')) {
+        if (this.router.url.includes('/dashboard/course')) {
           this.load();
         }
       });
   }
 
   load(): void {
-
-    this.sclassService.getAllClasses().subscribe({
+    this.courseService.getAllCourse().subscribe({
       next: res => {
-        this.classList = res;
-        this.filteredList = [...this.classList];
+        this.subjectList = res;
+        this.filteredList = [...this.subjectList];
       },
-      error: err => console.error('Failed to load Sclass', err)
+      error: err => console.error('Failed to load Subject', err)
     });
   }
 
   applyFilter(): void {
     const term = this.searchTerm.toLowerCase();
-    this.filteredList = this.classList.filter(
-      u => u.id?.toString().toLowerCase().includes(term)
+    this.filteredList = this.subjectList.filter(
+      u => u.name?.toLowerCase().includes(term)
     );
     this.sortData(this.sortColumn, true);
   }
 
-  sortData(column: keyof Sclass | '', keepDirection = false): void {
+  sortData(column: keyof Subject | '', keepDirection = false): void {
     if (!column) return;
     if (!keepDirection) {
       this.sortDirection = this.sortColumn === column && this.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -82,47 +82,47 @@ export class ClassComponent {
     });
   }
   onAdd() {
-    const dialogRef = this.dialog.open(AddEditClassDialogComponent, {
+    const dialogRef = this.dialog.open(AddEditSubjectDialogComponent, {
       width: '400px',
       data: null
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.classList.push(result);
-        this.filteredList = [...this.classList];
+        this.subjectList.push(result);
+        this.filteredList = [...this.subjectList];
       }
     });
   }
 
-  onEdit(pSclass: Sclass, index: number) {
-    const dialogRef = this.dialog.open(AddEditClassDialogComponent, {
+  onEdit(pSubject: Subject, index: number) {
+    const dialogRef = this.dialog.open(AddEditSubjectDialogComponent, {
       width: '400px',
-      data: pSclass
+      data: pSubject
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.classList[index] = result;
-        this.filteredList = [...this.classList];
+        this.subjectList[index] = result;
+        this.filteredList = [...this.subjectList];
       }
     });
   }
-  onDelete(pSclass: Sclass, index: number) {
+  onDelete(pSubject: Subject, index: number) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
-      data: pSclass
+      data: pSubject
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.sclassService.deleteClass(pSclass).subscribe({
+        this.courseService.deleteCourse(pSubject).subscribe({
             next: res => {
-              console.log('Sclass Deleted:', res);
-              this.classList.splice(index,1);
-              this.filteredList = [...this.classList];
+              console.log('Subject Deleted:', res);
+              this.subjectList.splice(index,1);
+              this.filteredList = [...this.subjectList];
             },
-            error: err => console.error('Failed to delete Sclass', err)
+            error: err => console.error('Failed to delete Subject', err)
           });
       }
     });

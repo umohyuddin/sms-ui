@@ -18,8 +18,8 @@
           <th scope="col" (click)="sortData('departmentName')" style="cursor: pointer">
             Name <span *ngIf="sortColumn === 'departmentName'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
           </th>
-          <th scope="col" (click)="sortData('departmentId')" style="cursor: pointer">
-            ID <span *ngIf="sortColumn === 'departmentId'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          <th scope="col" (click)="sortData('id')" style="cursor: pointer">
+            ID <span *ngIf="sortColumn === 'id'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
           </th>
           <th scope="col" >Actions</th>
         </tr>
@@ -28,7 +28,7 @@
         <tr *ngFor="let dept of filteredDepartments; let i = index">
           <th scope="row">{{i+1}}</th>
           <td>{{ dept.departmentName }}</td>
-          <td>{{ dept.departmentId }}</td>
+          <td>{{ dept.id }}</td>
           <td>
             <button class="btn btn-sm btn-warning me-2" (click)="onEdit(dept, i)">Edit</button>
             <button class="btn btn-sm btn-danger" (click)="onDelete(dept, i)">Delete</button>

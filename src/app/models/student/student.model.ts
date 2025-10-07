@@ -1,8 +1,7 @@
 export class Student {
     id?: number;
     campusId?: number;
-    departmentId?: number;
-    grade?: number;
+    classId?: number;
     firstName?: string;
     lastName?: string;
     dateOfBirth?: string;

@@ -59,7 +59,7 @@
                     </div>
                     <div class="col mb-3">
                         <label class="form-label">Department ID</label>
-                        <select class="form-select" [(ngModel)]="employee.departmentId" name="departmentid">
+                        <select class="form-select" [(ngModel)]="employee.id" name="departmentid">
                             <option [ngValue]="null">-- Select --</option>
                             <option *ngFor="let d of department" [value]="d.id">{{ d.departmentName }}</option>
                         </select>

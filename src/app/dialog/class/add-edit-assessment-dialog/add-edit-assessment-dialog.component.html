@@ -1,10 +1,10 @@
 <div class="modal fade show d-block" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-l modal-dialog-centered modal-dialog-scrollable">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content rounded-3 shadow">
       <!-- Header -->
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title container text-center">
-          {{  institute.id ? 'Edit Institute' : 'Add New Institute' }}
+          {{ asessment.id ? 'Edit Assessment' : 'Add New Assessment' }}
         </h5>
         <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
       </div>
@@ -15,53 +15,53 @@
             <div class="container text-left">
                 <div class="row">
                     <div class="col mb-3">
-                        <label class="form-label">Name</label>
+                        <label class="form-label">Enrollment</label>
                         <input 
                             type="text" 
                             class="form-control"
-                            [(ngModel)]="institute.name"
-                            name="name"
+                            [(ngModel)]=" asessment.id"
+                            name="enrollmentId"
+                            placeholder="Enter Enrollment">
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Name</label>
+                        <input 
+                            type="email" 
+                            class="form-control"
+                            [(ngModel)]="asessment.name"
+                            name="Name"
                             placeholder="Enter Name">
                     </div>
+                </div>
+                <div class="row">
                     <div class="col mb-3">
-                        <label class="form-label">Established Date</label>
+                        <label class="form-label">Marks</label>
+                        <input 
+                            type="number" 
+                            class="form-control"
+                            [(ngModel)]=" asessment.marks"
+                            name="marks"
+                            placeholder="Enter Marks">
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Assessment Date</label>
                         <input 
                             type="date" 
                             class="form-control"
-                            [(ngModel)]="institute.establishedDate"
-                            name="establishedDate"
+                            [(ngModel)]="asessment.assessmentDate"
+                            name="assessmentDate"
                             placeholder="Enter Date">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col mb-3">
-                        <label class="form-label">Contact#</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="institute.contactNumber"
-                            name="contactNumber"
-                            placeholder="Enter Contact Number">
-                    </div>
-                    <div class="col mb-3">
-                        <label class="form-label">Email</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="institute.email"
-                            name="email"
-                            placeholder="Enter Email">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col mb-3">
-                        <label class="form-label">Address</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="institute.address"
-                            name="address"
-                            placeholder="Enter Address">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" [(ngModel)]="asessment.status" name="status">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option >P</option>
+                            <option >L</option>
+                            <option >A</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
         <button type="button" class="btn btn-success" (click)="save()">
-          {{ institute.id ? 'Update' : 'Save' }}
+          {{ asessment.id ? 'Update' : 'Save' }}
         </button>
       </div>
     </div>

@@ -73,7 +73,7 @@ export class SidebarComponent implements OnInit {
       children: [
         { label: 'Institute', path: 'institute', icon:'fa fa-building me-2', perm:true },
         { label: 'Campus', path: 'campus', icon:'fa fa-hospital me-2', perm:true },
-        { label: 'Department', path: 'department', icon:'fa fa-building me-2', perm:true },
+        // { label: 'Department', path: 'department', icon:'fa fa-building me-2', perm:true },
         { label: 'Inventory', path: 'inventory', icon:'fa fa-suitcase me-2', perm:true }
       ]
     },
@@ -113,9 +113,9 @@ export class SidebarComponent implements OnInit {
       perm:true,
       isExpandable: true,
       children: [
-        { label: 'Course', path: 'course', icon:'fas fa-book me-2', perm:true },
+        { label: 'Subject', path: 'subject', icon:'fas fa-book me-2', perm:true },
         { label: 'Class', path: 'class', icon:'fas fa-users me-2', perm:true },
-        { label: 'Enrollment', path: 'enrollment', icon:'fa fa-sitemap me-2', perm:true },
+        // { label: 'Enrollment', path: 'enrollment', icon:'fa fa-sitemap me-2', perm:true },
         { label: 'Assessment', path: 'assessment', icon:'fa fa-check-square me-2', perm:true }
       ]
     }

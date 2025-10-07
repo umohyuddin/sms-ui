@@ -4,11 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { Assessment } from '../../models/course/assessment.model';
-import { AssessmentService } from '../../services/course/assessment.service';
+import { Assessment } from '../../models/class/assessment.model';
+import { AssessmentService } from '../../services/class/assessment.service';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { AddEditAssessmentDialogComponent } from '../../dialog/course/add-edit-assessment-dialog/add-edit-assessment-dialog.component';
+import { AddEditAssessmentDialogComponent } from '../../dialog/class/add-edit-assessment-dialog/add-edit-assessment-dialog.component';
 @Component({
   selector: 'app-assessment',
   standalone: true,

@@ -57,7 +57,7 @@
                         <label class="form-label">Campus</label>
                         <select class="form-select" [(ngModel)]="user.cmpId" name="campus">
                             <option [ngValue]="undefined">-- Select --</option>
-                            <option *ngFor="let c of campus" [ngValue]="c.campusId">{{ c.name }}</option>
+                            <option *ngFor="let c of campus" [ngValue]="c.id">{{ c.name }}</option>
                         </select>
                     </div>
                     <div class="col mb-3">

@@ -5,7 +5,7 @@ import { UserComponent } from './fragment/user/user.component'
 import { UserRoleComponent } from './fragment/user-role/user-role.component'
 import { CampusComponent } from './fragment/campus/campus.component'
 import { InstituteComponent } from './fragment/institute/institute.component'
-import { DepartmentComponent } from './fragment/department/department.component';
+// import { DepartmentComponent } from './fragment/department/department.component';
 import { InventoryComponent } from './fragment/inventory/inventory.component';
 import { EmployeeComponent } from './fragment/employee/employee.component';
 import { EmploeeRoleComponent } from './fragment/employee-role/employee-role.component';
@@ -15,9 +15,9 @@ import { TeacherComponent } from './fragment/teacher/teacher/teacher.component';
 import { StudentComponent } from './fragment/student/student.component';
 import { FeeComponent } from './fragment/fee/fee.component';
 import { AttendanceComponent } from './fragment/attendance/attendance.component';
-import { CourseComponent } from './fragment/course/course.component';
+import { SubjectComponent } from './fragment/subject/subject.component';
 import { ClassComponent } from './fragment/class/class.component';
-import { EnrollmentComponent } from './fragment/enrollment/enrollment.component';
+// import { EnrollmentComponent } from './fragment/enrollment/enrollment.component';
 import { AssessmentComponent } from './fragment/assessment/assessment.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { InstituteProfileComponent } from './fragment/generalSetting/institute-profile/institute-profile.component';
@@ -72,7 +72,7 @@ export const routes: Routes = [
         children: [
           { path: 'campus', component: CampusComponent },
           { path: 'institute', component: InstituteComponent },
-          { path: 'department', component: DepartmentComponent },
+          // { path: 'department', component: DepartmentComponent },
           {path: 'inventory', component: InventoryComponent }
         ]
       },
@@ -97,9 +97,9 @@ export const routes: Routes = [
       {
         path:'c',
         children:[
-          {path: 'course', component: CourseComponent },
+          {path: 'subject', component: SubjectComponent },
           {path: 'class', component: ClassComponent },
-          {path: 'enrollment', component: EnrollmentComponent },
+          // {path: 'enrollment', component: EnrollmentComponent },
           {path: 'assessment', component: AssessmentComponent }
         ]
       }

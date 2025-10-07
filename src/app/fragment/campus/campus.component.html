@@ -18,8 +18,8 @@
           <th scope="col" (click)="sortData('name')" style="cursor: pointer">
             Name <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
           </th>
-          <th scope="col" (click)="sortData('campusId')" style="cursor: pointer">
-            ID <span *ngIf="sortColumn === 'campusId'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          <th scope="col" (click)="sortData('id')" style="cursor: pointer">
+            ID <span *ngIf="sortColumn === 'id'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
           </th>
           <th scope="col" >Address</th>
           <th scope="col" >city</th>
@@ -30,7 +30,7 @@
         <tr *ngFor="let campus of filteredCampus; let i = index">
           <th scope="row">{{i+1}}</th>
           <td>{{ campus.name }}</td>
-          <td>{{ campus.campusId }}</td>
+          <td>{{ campus.id }}</td>
           <td>{{ campus.address }}</td>
           <td>{{ campus.city }}</td>
           <td>

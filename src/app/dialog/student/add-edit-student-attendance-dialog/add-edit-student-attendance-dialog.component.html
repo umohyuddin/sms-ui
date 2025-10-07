@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title container text-center">
-          {{ attendance.attendanceId ? 'Edit Student Attendance' : 'Add New Student Attendance' }}
+          {{ attendance.id ? 'Edit Student Attendance' : 'Add New Student Attendance' }}
         </h5>
         <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
       </div>
@@ -16,16 +16,9 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Student</label>
-                        <select class="form-select" [(ngModel)]="attendance.studentId" name="student">
+                        <select class="form-select" [(ngModel)]="attendance.id" name="student">
                             <option [ngValue]="undefined">-- Select --</option>
-                            <option *ngFor="let s of students" [value]="s.studentId">{{ s.firstName }} {{ s.lastName }}</option>
-                        </select>
-                    </div>
-                    <div class="col">
-                        <label class="form-label">Course</label>
-                        <select class="form-select" [(ngModel)]="attendance.courseId" name="course">
-                            <option [ngValue]="undefined">-- Select --</option>
-                            <option *ngFor="let c of courses" [value]="c.courseId">{{ c.courseName }}</option>
+                            <option *ngFor="let s of students" [value]="s.id">{{ s.firstName }} {{ s.lastName }}</option>
                         </select>
                     </div>
                 </div>
@@ -57,7 +50,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
         <button type="button" class="btn btn-success" (click)="save()">
-          {{ attendance.attendanceId ? 'Update' : 'Save' }}
+          {{ attendance.id ? 'Update' : 'Save' }}
         </button>
       </div>
     </div>

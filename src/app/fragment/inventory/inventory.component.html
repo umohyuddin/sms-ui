@@ -18,8 +18,8 @@
           <th scope="col" (click)="sortData('itemName')" style="cursor: pointer">
             Role <span *ngIf="sortColumn === 'itemName'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
           </th>
-          <th scope="col" (click)="sortData('inventoryId')" style="cursor: pointer">
-            ID <span *ngIf="sortColumn === 'inventoryId'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          <th scope="col" (click)="sortData('id')" style="cursor: pointer">
+            ID <span *ngIf="sortColumn === 'id'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
           </th>
           <th scope="col" >Quantity</th>
           <th scope="col" >Status</th>
@@ -30,7 +30,7 @@
         <tr *ngFor="let inv of filteredInventory; let i = index">
           <th scope="row">{{i+1}}</th>
           <td>{{ inv.itemName }}</td>
-          <td>{{ inv.inventoryId}}</td>
+          <td>{{ inv.id}}</td>
           <td>{{ inv.quantity}}</td>
           <td>{{ inv.status}}</td>
           <td>

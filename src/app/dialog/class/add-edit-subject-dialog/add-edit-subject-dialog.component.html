@@ -1,10 +1,10 @@
 <div class="modal fade show d-block" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-l modal-dialog-centered modal-dialog-scrollable">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content rounded-3 shadow">
       <!-- Header -->
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title container text-center">
-          {{  campus.id ? 'Edit Campus' : 'Add new Campus' }}
+          {{ subject.id ? 'Edit Course' : 'Add New Course' }}
         </h5>
         <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
       </div>
@@ -15,42 +15,39 @@
             <div class="container text-left">
                 <div class="row">
                     <div class="col mb-3">
-                        <label class="form-label">Institute</label>
+                        <label class="form-label">Class</label>
                         <input 
                             type="text" 
                             class="form-control"
-                            [(ngModel)]="campus.instituteId"
-                            name="instituteId"
-                            placeholder="Enter Institute Id">
+                            [(ngModel)]="subject.classId"
+                            name="courseCode"
+                            placeholder="Enter Code">
                     </div>
-                    <div class="col mb-3">
+                    <div class="col">
                         <label class="form-label">Name</label>
                         <input 
                             type="text" 
                             class="form-control"
-                            [(ngModel)]="campus.name"
-                            name="name"
+                            [(ngModel)]="subject.name"
+                            name="courseName"
                             placeholder="Enter Name">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col mb-3">
-                        <label class="form-label">City</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="campus.city"
-                            name="city"
-                            placeholder="Enter city">
+                        <label class="form-label">Teacher</label>
+                        <select class="form-select" [(ngModel)]="subject.teacherId" name="teacher">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option *ngFor="let t of theachers" [value]="t.id">{{ t.firstName }} {{ t.lastName }}</option>
+                        </select>
                     </div>
                     <div class="col mb-3">
-                        <label class="form-label">Address</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="campus.address"
-                            name="address"
-                            placeholder="Enter Address">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" [(ngModel)]="subject.isActive" name="activestatus">
+                            <option [ngValue]="undefined">-- Select --</option>
+                            <option [value]=true>YES</option>
+                            <option [value]=false>No</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -61,7 +58,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
         <button type="button" class="btn btn-success" (click)="save()">
-          {{ campus.id ? 'Update' : 'Save' }}
+          {{ subject.id ? 'Update' : 'Save' }}
         </button>
       </div>
     </div>

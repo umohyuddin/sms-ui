@@ -6,8 +6,8 @@ import { Attendance } from '../../../models/student/attendance.model';
 import { AttendanceService } from '../../../services/student/attendance.service';
 import { Student } from '../../../models/student/student.model';
 import { StudentService } from '../../../services/student/student.service';
-import { Course } from '../../../models/course/course.model';
-import { CourseService } from '../../../services/course/course.service';
+import { Subject } from '../../../models/class/subject.model';
+import { CourseService } from '../../../services/class/course.service';
 @Component({
   selector: 'app-add-edit-student-attendance-dialog',
   standalone: true,
@@ -19,7 +19,7 @@ export class AddEditStudentAttendanceDialogComponent implements OnInit {
   
   attendance: Attendance = new Attendance();
   students: Student[] = [];
-  courses: Course[] = [];
+  subjects: Subject[] = [];
   isSaved: boolean = true;
 
   constructor(
@@ -38,7 +38,7 @@ export class AddEditStudentAttendanceDialogComponent implements OnInit {
   }
   ngOnInit(): void {
     this.loadStudents();
-    this.loadCourses();
+    this.loadSubjects();
   }
   loadStudents(){
     this.studentServuce.getAllStudent().subscribe({
@@ -46,9 +46,9 @@ export class AddEditStudentAttendanceDialogComponent implements OnInit {
       error: (err) => {console.log("Failed to fetch students");}
     })
   }
-  loadCourses(){
+  loadSubjects(){
     this.coursesService.getAllCourse().subscribe({
-      next: (res) => { this.courses = res; },
+      next: (res) => { this.subjects = res; },
       error: (err) => { console.log("Failed to fetcg courses");}
     })
   }

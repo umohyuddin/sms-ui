@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title container text-center">
-          {{  inventory.inventoryId ? 'Edit Inventory' : 'Add New Inventory' }}
+          {{  inventory.id ? 'Edit Inventory' : 'Add New Inventory' }}
         </h5>
         <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
       </div>
@@ -27,7 +27,7 @@
                         <label class="form-label">Campus</label>
                         <select class="form-select" [(ngModel)]="inventory.campusId" name="campus">
                             <option [ngValue]="undefined">-- Select --</option>
-                            <option *ngFor="let c of campus" [ngValue]="c.campusId">{{ c.name }}</option>
+                            <option *ngFor="let c of campus" [ngValue]="c.id">{{ c.name }}</option>
                         </select>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
         <button type="button" class="btn btn-success" (click)="save()">
-          {{ inventory.inventoryId ? 'Update' : 'Save' }}
+          {{ inventory.id ? 'Update' : 'Save' }}
         </button>
       </div>
     </div>

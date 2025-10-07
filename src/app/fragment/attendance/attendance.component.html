@@ -19,7 +19,6 @@
           <th scope="col" (click)="sortData('studentId')" style="cursor: pointer">
             Student ID <span *ngIf="sortColumn === 'studentId'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
           </th>
-          <th scope="col">Course ID</th>
           <th scope="col" (click)="sortData('attendanceDate')" style="cursor: pointer">
             Date <span *ngIf="sortColumn === 'attendanceDate'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
           </th>
@@ -30,9 +29,8 @@
       <tbody>
         <tr *ngFor="let atn of filteredList; let i = index">
           <th scope="row">{{i+1}}</th>
-          <td>{{ atn.attendanceId }}</td>
+          <td>{{ atn.id }}</td>
           <td>{{ atn.studentId }}</td>
-          <td>{{ atn.courseId }}</td> 
           <td>{{ atn.attendanceDate }}</td>
           <td>{{ atn.status }}</td>
           <td>

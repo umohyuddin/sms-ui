@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title container text-center">
-          {{  department.id ? 'Edit Department' : 'Add New Department' }}
+          {{ sclass.id ? 'Edit Class' : 'Add New Class' }}
         </h5>
         <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
       </div>
@@ -16,30 +16,21 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Campus</label>
-                        <select class="form-select" [(ngModel)]="department.campusId" name="campus">
+                        <select class="form-select" [(ngModel)]="sclass.id" name="campus">
                             <option [ngValue]="undefined">-- Select --</option>
-                            <option *ngFor="let c of campus" [ngValue]="c.id">{{ c.name }}</option>
+                            <option *ngFor="let c of subjects" [value]="c.id">{{ c.name }}</option>
                         </select>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Name</label>
                         <input 
                             type="text" 
                             class="form-control"
-                            [(ngModel)]="department.departmentName"
-                            name="departmentName"
+                            [(ngModel)]="sclass.name"
+                            name="name"
                             placeholder="Enter Name">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col mb-3">
-                        <label class="form-label">Department Head</label>
-                        <input 
-                            type="text" 
-                            class="form-control"
-                            [(ngModel)]="department.departmentHeadId"
-                            name="department"
-                            placeholder="Enter Department Head">
                     </div>
                 </div>
             </div>
@@ -50,7 +41,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
         <button type="button" class="btn btn-success" (click)="save()">
-          {{ department.id  ? 'Update' : 'Save' }}
+          {{ sclass.id ? 'Update' : 'Save' }}
         </button>
       </div>
     </div>

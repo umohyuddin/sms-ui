@@ -1,6 +1,6 @@
 <div class="card shadow-sm">
   <div class="card-header d-flex justify-content-between align-items-center">
-    <h5 class="mb-0">Classes / Lectures</h5>
+    <h5 class="mb-0">Course</h5>
     <input 
       type="text" 
       class="form-control w-25" 
@@ -16,23 +16,28 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">ID</th>
-          <th scope="col" (click)="sortData('campusId')" style="cursor: pointer">
-            Campus <span *ngIf="sortColumn === 'campusId'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
-          </th>
           <th scope="col" (click)="sortData('name')" style="cursor: pointer">
             Name <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
           </th>
+          <th scope="col" (click)="sortData('classId')" style="cursor: pointer">
+            Class <span *ngIf="sortColumn === 'classId'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          </th>
+          <th scope="col">Teacher</th>
+          <th scope="col">Status</th>
+          <th scope="col" >Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let class of filteredList; let i = index">
+        <tr *ngFor="let course of filteredList; let i = index">
           <th scope="row">{{i+1}}</th>
-          <td>{{ class.id }}</td>
-          <td>{{ class.campusId }}</td>
-          <td>{{ class.name }}</td>
+          <td>{{ course.id }}</td>
+          <td>{{ course.name }}</td>
+          <td>{{ course.classId }}</td>
+          <td>{{ course.teacherId }}</td>
+          <td>{{ course.isActive }}</td>
           <td>
-            <button class="btn btn-sm btn-warning me-2" (click)="onEdit(class, i)">Edit</button>
-            <button class="btn btn-sm btn-danger" (click)="onDelete(class, i)">Delete</button>
+            <button class="btn btn-sm btn-warning me-2" (click)="onEdit(course, i)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="onDelete(course, i)">Delete</button>
           </td>
         </tr>
       </tbody>
