@@ -34,6 +34,30 @@ export class SidebarComponent implements OnInit {
       isExpandable: false,
     },
     {
+      id: 'expense',
+      label: 'Expenses',
+      icon:'fas fa-th-large me-2',
+      path: 'expenses',
+      perm:true,
+      isExpandable: false,
+    },
+    {
+      id: 'result',
+      label: 'Result',
+      icon:'fas fa-th-large me-2',
+      path: 'result',
+      perm:true,
+      isExpandable: false,
+    },
+    {
+      id: 'mcq',
+      label: 'Question Bank',
+      icon:'fas fa-th-large me-2',
+      path: 'mcq',
+      perm:true,
+      isExpandable: false,
+    },
+    {
       id: 'settings',
       label: 'Settings',
       icon: 'fas fa-cog me-2',
@@ -51,6 +75,7 @@ export class SidebarComponent implements OnInit {
         { label: 'Theme Settings', path: 'theme', icon:'fas fa-language me-2' , perm:true }
       ]
     },
+    
     {
       id: 'users',
       label: 'User',
@@ -106,13 +131,14 @@ export class SidebarComponent implements OnInit {
       ]
     },
     {
-      id: 'course',
-      label: 'Course',
+      id: 'class',
+      label: 'Class & Subject',
       icon:'fas fa-book me-2',
       path: 'c',
       perm:true,
       isExpandable: true,
       children: [
+        { label: 'Time Table', path: 'time-table', icon:'fas fa-book me-2', perm:true },
         { label: 'Subject', path: 'subject', icon:'fas fa-book me-2', perm:true },
         { label: 'Class', path: 'class', icon:'fas fa-users me-2', perm:true },
         // { label: 'Enrollment', path: 'enrollment', icon:'fa fa-sitemap me-2', perm:true },

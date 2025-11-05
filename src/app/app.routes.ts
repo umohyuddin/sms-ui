@@ -32,26 +32,34 @@ import { FeeChallanDetailsComponent } from './fragment/generalSetting/fee-challa
 import { DashboardComponent } from './fragment/dashboard/dashboard.component';
 import { CampusProfileComponent } from './fragment/generalSetting/campus-profile/campus-profile.component';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
+import { ExpensesComponent } from './fragment/expenses/expenses.component';
+import { ResultComponent } from './fragment/result/result.component';
+import { TimeTableComponent } from './fragment/time-table/time-table.component';
+import { McqComponent } from './fragment/mcq/mcq.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'sigup', component: SignupComponent },
   { path: 'page/404', component: UnauthorizedComponent },
-
+  
   {
     path: 'dashboard',
     component: MainLayoutComponent,
-    canActivate: [authGuard],
+    canActivate: [authGuard, RoleGuard],
+    data: { roles: ['Admin', 'User'] },
     children: [
       // { path: '', redirectTo: 'users', pathMatch: 'full' },
       { path: '', component: DashboardComponent },
+      { path: 'expenses', component: ExpensesComponent },
+      { path: 'result', component: ResultComponent },
+      { path: 'mcq', component: McqComponent },
       {
         path: 'gs',
         children: [
           {path: '', component: InstituteProfileComponent},
           { path: 'accountSettings', component: AccountSettingsComponent },
-          { path: 'instituteProfile', component: InstituteProfileComponent, canActivate: [RoleGuard], data: { roles: ['Admin'] } },
+          { path: 'instituteProfile', component: InstituteProfileComponent },
           { path: 'campusProfile', component: CampusProfileComponent},
           { path: 'rulesAndRegulations', component: RulesAndRegulationsComponent },
           { path: 'feesParticulars', component: FeesParticularsComponent },
@@ -99,6 +107,7 @@ export const routes: Routes = [
         children:[
           {path: 'subject', component: SubjectComponent },
           {path: 'class', component: ClassComponent },
+          {path: 'time-table', component: TimeTableComponent },
           // {path: 'enrollment', component: EnrollmentComponent },
           {path: 'assessment', component: AssessmentComponent }
         ]

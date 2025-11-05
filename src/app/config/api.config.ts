@@ -1,9 +1,9 @@
+import { get } from "node:http";
+
 export const ApiConfig = {
   baseUrl: 'http://localhost:8081',
 
   get generateToken() { return `${this.baseUrl}/api/auth/generateToken`; },
-
-
 
   // theme table
   get updateTheme() { return `${this.baseUrl}/api/user/theme/update`; },
@@ -215,7 +215,14 @@ export const ApiConfig = {
   get getTimeTableById() { return `${this.baseUrl}/api/class/timetable/get`; },
   get getAllTimeTable() { return `${this.baseUrl}/api/class/timetable/getall`; },
 
-
+  // MCQ Table
+  get updateMCQ() { return `${this.baseUrl}/api/class/mcq/update`; },
+  get deleteMCQ() { return `${this.baseUrl}/api/class/mcq/delete`; },
+  get createMCQ() { return `${this.baseUrl}/api/class/mcq/create`; },
+  get getMCQBySubjectId() { return `${this.baseUrl}/api/class/mcq/getbysubjectid`; },
+  get getMCQByChappter() { return `${this.baseUrl}/api/class/mcq/getbychapter`; },
+  get getMCQById() { return `${this.baseUrl}/api/class/mcq/get`; },
+  get getAllMCQ() { return `${this.baseUrl}/api/class/mcq/getall`; }
   
 };
 
