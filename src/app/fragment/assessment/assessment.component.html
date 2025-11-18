@@ -15,9 +15,10 @@
       <thead class="table-light">
         <tr>
           <th scope="col">#</th>
-          <th scope="col" (click)="sortData('id')" style="cursor: pointer">
-            ID <span *ngIf="sortColumn === 'id'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          <th scope="col" (click)="sortData('studentId')" style="cursor: pointer">
+            Student <span *ngIf="sortColumn === 'studentId'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
           </th>
+          <th scope="col">Subject</th>
           <th scope="col" (click)="sortData('name')" style="cursor: pointer">
             Name <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
           </th>
@@ -30,7 +31,8 @@
       <tbody>
         <tr *ngFor="let asm of filteredList; let i = index">
           <th scope="row">{{i+1}}</th>
-          <td>{{ asm.id }}</td>
+          <td>{{ asm.studentId }}</td>
+          <td>{{ asm.subjectId }}</td>
           <td>{{ asm.name }}</td>
           <td>{{ asm.marks }}</td>
           <td>{{ asm.status }}</td>

@@ -6,7 +6,6 @@ import { Student } from '../../../models/student/student.model';
 import { StudentService } from '../../../services/student/student.service';
 import { Campus } from '../../../models/institute/campus.model';
 import { CampusService } from '../../../services/institute/campus.service';
-import { Department } from '../../../models/institute/department.model';
 import { DepartmentService } from '../../../services/institute/department.service';
 
 @Component({
@@ -20,7 +19,6 @@ export class AddEditStudentDialogComponent implements OnInit {
 
   student: Student = new Student();
   campuses: Campus[] = [];
-  departments: Department[] = [];
   isSaved: boolean = true;
 
   constructor(
@@ -40,7 +38,6 @@ export class AddEditStudentDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCampuses();
-    this.loadDeparments();
   }
 
   loadCampuses(){
@@ -50,12 +47,6 @@ export class AddEditStudentDialogComponent implements OnInit {
     })
   }
 
-  loadDeparments(){
-    this.departmentService.getAllDeparments().subscribe({
-      next: (res) => { this.departments = res; },
-      error: (err) => { console.log("failed to fetch departments");}
-    })
-  }
   
   save() {
     if(this.isSaved)

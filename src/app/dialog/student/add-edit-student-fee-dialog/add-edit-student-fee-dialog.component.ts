@@ -6,6 +6,7 @@ import { Fee } from '../../../models/student/fee.model';
 import { FeeService } from '../../../services/student/fee.service';
 import { Student } from '../../../models/student/student.model';
 import { StudentService } from '../../../services/student/student.service';
+import { GlobalService } from '../../../services/global/global.service';
 @Component({
   selector: 'app-add-edit-student-fee-dialog',
   standalone: true,
@@ -37,6 +38,7 @@ export class AddEditStudentFeeDialogComponent implements OnInit {
   selectedYear: number = new Date().getFullYear();
 
   constructor(
+    private globalService: GlobalService,
     private dialogRef: MatDialogRef<AddEditStudentFeeDialogComponent>,
     private feeService: FeeService,
     private studentService: StudentService,
@@ -57,7 +59,7 @@ export class AddEditStudentFeeDialogComponent implements OnInit {
 
   }
   loadStudents(){
-    this.studentService.getAllStudent().subscribe({
+    this.studentService.getStudentByCampus(this.globalService.getCampus().id??-1).subscribe({
       next: (res) => { this.students = res; },
       error: (err) => { console.log("Failed to fetch students");}
     })

@@ -10,6 +10,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { GlobalService } from '../../services/global/global.service';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component';
+import { AddEditExpensesComponent } from '../../dialog/expenses/add-edit-expenses/add-edit-expenses.component';
 
 @Component({
   selector: 'app-expenses',
@@ -86,31 +87,31 @@ export class ExpensesComponent implements OnInit {
     });
   }
   onAdd() {
-    // const dialogRef = this.dialog.open(AddEditStudentFeeDialogComponent, {
-    //   width: '400px',
-    //   data: null
-    // });
+    const dialogRef = this.dialog.open(AddEditExpensesComponent, {
+      width: '400px',
+      data: null
+    });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.feelist.push(result);
-    //     this.filteredlist = [...this.feelist];
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.expensesList.push(result);
+        this.filteredlist = [...this.expensesList];
+      }
+    });
   }
 
   onEdit(pExpenses: Expenses, index: number) {
-    // const dialogRef = this.dialog.open(AddEditStudentFeeDialogComponent, {
-    //   width: '400px',
-    //   data: pExpenses
-    // });
+    const dialogRef = this.dialog.open(AddEditExpensesComponent, {
+      width: '400px',
+      data: pExpenses
+    });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.expensesList[index] = result;
-    //     this.filteredlist = [...this.expensesList];
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.expensesList[index] = result;
+        this.filteredlist = [...this.expensesList];
+      }
+    });
   }
   onDelete(pExpenses: Expenses, index: number) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {

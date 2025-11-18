@@ -16,7 +16,7 @@
                 <div class="row">
                     <div class="col mb-3">
                         <label class="form-label">Student</label>
-                        <select class="form-select" [(ngModel)]="fee.id" name="student">
+                        <select class="form-select" [(ngModel)]="fee.studentId" name="student">
                             <option [ngValue]="undefined">-- Select --</option>
                             <option *ngFor="let s of students" [value]="s.id">{{ s.firstName }} {{ s.lastName }}</option>
                         </select>

@@ -36,6 +36,21 @@ export class StudentService {
     );
   }
 
+  getStudentByCampus(campusId: number): Observable<Student[]> {
+    if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
+      return throwError(() => new Error('User is not authenticated'));
+    }
+    return this.http.get<ApiResponse<Student>>(`${ApiConfig.getStudentsByCampus}/${campusId}`).pipe(
+      map((res) => res.data.map((item) => item.attributes)),
+      catchError((error) => {
+        if (error.status === 401 && isPlatformBrowser(this.platformId)) {
+          this.authService.logout();
+        }
+        return throwError(() => new Error(error.error?.message || 'Failed to fetch Student'));
+      })
+    );
+  }
+
   craeteStudent(pStudent: Student): Observable<String> {
     if (!this.authService.isAuthenticated() && isPlatformBrowser(this.platformId)) {
       return throwError(() => new Error('User is not authenticated'));

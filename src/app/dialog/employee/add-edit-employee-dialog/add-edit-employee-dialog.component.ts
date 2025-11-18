@@ -8,7 +8,6 @@ import { Campus } from '../../../models/institute/campus.model';
 import { CampusService } from '../../../services/institute/campus.service';
 import { EmployeeRole } from '../../../models/employee/employee-role.model';
 import { EmployeeRoleService } from '../../../services/employee/employee-role.service';
-import { Department } from '../../../models/institute/department.model';
 import { DepartmentService } from '../../../services/institute/department.service';
 @Component({
   selector: 'app-add-edit-employee-dialog',
@@ -21,7 +20,6 @@ export class AddEditEmployeeDialogComponent implements OnInit{
   employee: Employee = new Employee();
   campus: Campus[] = [];
   employeeRole: EmployeeRole[] = [];
-  department: Department[] = [];
   isSaved: boolean = true;
 
   constructor(
@@ -41,7 +39,6 @@ export class AddEditEmployeeDialogComponent implements OnInit{
   }
   ngOnInit(){
     this.loadCampus();
-    this.loadDepartment();
     this.loadEmployeeRoles();
 
   }
@@ -55,16 +52,7 @@ export class AddEditEmployeeDialogComponent implements OnInit{
       }
     });
   }
-  loadDepartment(){
-    this.departmentService.getAllDeparments().subscribe({
-      next: (res) =>{
-          this.department = res;
-      },
-      error: (err) =>{
-        console.error('Failed to load department');
-      }
-    });
-  }
+
   loadCampus() {
     this.campusService.getAllCampus().subscribe({
       next: (res) => {

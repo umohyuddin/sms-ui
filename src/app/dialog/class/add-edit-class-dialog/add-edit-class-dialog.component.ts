@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Sclass } from '../../../models/class/sclass.model';
 import { SclassService } from '../../../services/class/sclass.service';
-import { Subject } from '../../../models/class/subject.model';
-import { CourseService } from '../../../services/class/course.service';
+import { Campus } from '../../../models/institute/campus.model';
+import { CampusService } from '../../../services/institute/campus.service';
 import { Employee } from '../../../models/employee/employee.model';
 import { EmployeeService } from '../../../services/employee/employee.service';
+import { GlobalService } from '../../../services/global/global.service';
 @Component({
   selector: 'app-add-edit-class-dialog',
   standalone: true,
@@ -18,14 +19,15 @@ import { EmployeeService } from '../../../services/employee/employee.service';
 export class AddEditClassDialogComponent implements OnInit{
 
   sclass: Sclass = new Sclass();
-  subjects: Subject[] = [];
+  campus: Campus[] = [];
   teachers: Employee[] = [];
   isSaved: boolean = true;
 
   constructor(
+    private globalService: GlobalService,
     private dialogRef: MatDialogRef<AddEditClassDialogComponent>,
     private sclassService: SclassService,
-    private courseService: CourseService,
+    private campusService: CampusService,
     private employeeService: EmployeeService,
     @Inject(MAT_DIALOG_DATA) public data: Sclass | null
   ) {
@@ -38,7 +40,7 @@ export class AddEditClassDialogComponent implements OnInit{
   }
   
   ngOnInit(): void {
-    this.loadCourses();
+    this.loadCampus();
     this.loadTeachers();
   }
 
@@ -49,10 +51,10 @@ export class AddEditClassDialogComponent implements OnInit{
     })
   }
 
-  loadCourses(){
-    this.courseService.getAllCourse().subscribe({
-      next: (res) => { this.subjects = res; },
-      error: (err) => { console.log("Failed to fetch courses list"); }
+  loadCampus(){
+    this.campusService.getAllCampus().subscribe({
+      next: (res) => { this.campus = res; },
+      error: (err) => { console.log("Failed to fetch campus list"); }
     })
   }
 
@@ -65,7 +67,7 @@ export class AddEditClassDialogComponent implements OnInit{
       });
 
     }else{
-
+      this.sclass.campusId = this.globalService.getCampus().id??-1;
       this.sclassService.createClass(this.sclass).subscribe({
         next: (res) => console.log('Sclass created:', res),
         error: (err) => console.error(err)

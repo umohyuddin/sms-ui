@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title container text-center">
-          {{ sclass.id ? 'Edit Class' : 'Add New Class' }}
+          {{ expense.id ? 'Edit Expense' : 'Add New Expense' }}
         </h5>
         <button type="button" class="btn-close btn-close-white" (click)="close()"></button>
       </div>
@@ -15,24 +15,27 @@
             <div class="container text-left">
                 <div class="row">
                     <div class="col mb-3">
-                        <label class="form-label">Campus</label>
-                        <select class="form-select" [(ngModel)]="sclass.id" name="campus">
-                            <option [ngValue]="undefined">-- Select --</option>
-                            <option *ngFor="let c of campus" [value]="c.id">{{ c.name }}</option>
-                        </select>
+                        <label class="form-label">Details</label>
+                        <input 
+                            type="text" 
+                            class="form-control"
+                            [(ngModel)]="expense.details"
+                            name="details"
+                            placeholder="Enter details">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col mb-3">
-                        <label class="form-label">Name</label>
+                        <label class="form-label">Amount</label>
                         <input 
-                            type="text" 
+                            type="number" 
                             class="form-control"
-                            [(ngModel)]="sclass.name"
-                            name="name"
-                            placeholder="Enter Name">
+                            [(ngModel)]="expense.amount"
+                            name="amount"
+                            placeholder="Enter amount">
                     </div>
                 </div>
+               
             </div>
         </form>
       </div>

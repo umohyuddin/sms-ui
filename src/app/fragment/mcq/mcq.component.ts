@@ -10,6 +10,7 @@ import { GlobalService } from '../../services/global/global.service';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component';
 import { Mcq } from '../../models/question/mcq.model';
 import { McqService } from '../../services/question/mcq.service';
+import { AddEditMcqComponent } from '../../dialog/question/add-edit-mcq/add-edit-mcq.component';
 
 @Component({
   selector: 'app-mcq',
@@ -86,31 +87,31 @@ export class McqComponent implements OnInit {
     });
   }
   onAdd() {
-    // const dialogRef = this.dialog.open(AddEditStudentFeeDialogComponent, {
-    //   width: '400px',
-    //   data: null
-    // });
+    const dialogRef = this.dialog.open(AddEditMcqComponent, {
+      width: '400px',
+      data: null
+    });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.feelist.push(result);
-    //     this.filteredlist = [...this.feelist];
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.mcqList.push(result);
+        this.filteredlist = [...this.mcqList];
+      }
+    });
   }
 
   onEdit(pMcq: Mcq, index: number) {
-    // const dialogRef = this.dialog.open(AddEditStudentFeeDialogComponent, {
-    //   width: '400px',
-    //   data: pMcq 
-    // });
+    const dialogRef = this.dialog.open(AddEditMcqComponent, {
+      width: '400px',
+      data: pMcq 
+    });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.mcqList[index] = result;
-    //     this.filteredlist = [...this.mcqList];
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.mcqList[index] = result;
+        this.filteredlist = [...this.mcqList];
+      }
+    });
   }
   onDelete(pMcq: Mcq, index: number) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {

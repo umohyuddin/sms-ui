@@ -10,6 +10,7 @@ import { Institute } from '../../models/institute/institute.model';
 import { ResultService } from '../../services/result/result.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { GlobalService } from '../../services/global/global.service';
+import { AddEditResultComponent } from '../../dialog/result/add-edit-result/add-edit-result.component';
 
 @Component({
   selector: 'app-result',
@@ -86,31 +87,31 @@ export class ResultComponent implements OnInit {
     });
   }
   onAdd() {
-    // const dialogRef = this.dialog.open(AddEditStudentFeeDialogComponent, {
-    //   width: '400px',
-    //   data: null
-    // });
+    const dialogRef = this.dialog.open(AddEditResultComponent, {
+      width: '400px',
+      data: null
+    });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.feelist.push(result);
-    //     this.filteredlist = [...this.feelist];
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.resultList.push(result);
+        this.filteredlist = [...this.resultList];
+      }
+    });
   }
 
   onEdit(pResult: Result, index: number) {
-    // const dialogRef = this.dialog.open(AddEditStudentFeeDialogComponent, {
-    //   width: '400px',
-    //   data: pResult
-    // });
+    const dialogRef = this.dialog.open(AddEditResultComponent, {
+      width: '400px',
+      data: pResult
+    });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.resultList[index] = result;
-    //     this.filteredlist = [...this.resultList];
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.resultList[index] = result;
+        this.filteredlist = [...this.resultList];
+      }
+    });
   }
   onDelete(pResult: Result, index: number) {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {

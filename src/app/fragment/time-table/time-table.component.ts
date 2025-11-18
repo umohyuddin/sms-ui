@@ -6,7 +6,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { TimeTable } from '../../models/class/time-table.model';
 import { TimeTableService } from '../../services/class/time-table.service';
-import { AddEditSalaryDialogComponent } from '../../dialog/employee/add-edit-salary-dialog/add-edit-salary-dialog.component';
+import { AddEditTimeTableComponent } from '../../dialog/timeTable/add-edit-time-table/add-edit-time-table.component';
 import { ConfirmationDialogComponent } from '../../dialog/confirmation-dialog/confirmation-dialog.component'
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
@@ -82,7 +82,7 @@ export class TimeTableComponent {
     });
   }
   onAdd() {
-    const dialogRef = this.dialog.open(AddEditSalaryDialogComponent, {
+    const dialogRef = this.dialog.open(AddEditTimeTableComponent, {
       width: '400px',
       data: null
     });
@@ -96,7 +96,7 @@ export class TimeTableComponent {
   }
 
   onEdit(pTimeTable: TimeTable, index: number) {
-    const dialogRef = this.dialog.open(AddEditSalaryDialogComponent, {
+    const dialogRef = this.dialog.open(AddEditTimeTableComponent, {
       width: '400px',
       data: pTimeTable
     });
