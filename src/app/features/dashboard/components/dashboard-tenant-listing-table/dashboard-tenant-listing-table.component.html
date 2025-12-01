@@ -1,0 +1,58 @@
+<div class="table-wrapper">
+    <div class="header-bar">
+        <h2>Upcoming Expiries</h2>
+        <div class="custom-dropdown">
+            <select [(ngModel)]="selectedRange" (ngModelChange)="filterData()">
+                <option>This month</option>
+                <option>Last month</option>
+                <option>This year</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div class="table-wrapper">
+        <div class="header-bar">
+            <div class="custom-dropdown">
+            </div>
+        </div>
+
+        <table class="expiries-table">
+            <thead>
+                <tr>
+                    <th *ngFor="let column of columns">
+                        <span class="grip"></span>
+                        <span class="label">{{ column.label }}</span>
+                        <!-- <span class="sort" *ngIf="column.sortable"></span> -->
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody *ngIf="filteredTenants && filteredTenants.length > 0; else noData">
+                <tr *ngFor="let tenant of tenantData">
+                    <!-- <td>{{ tenant._id }}</td> -->
+                    <td>{{ tenant.tenantName }}</td>
+                    <td [ngClass]="tenant.status === 'Active' ? 'active' : 'inactive'">
+                        {{ tenant.status }}
+                    </td>
+                    <td>{{ tenant.createdBy }}</td>
+                    <td>{{ tenant.updatedBy }}</td>
+                    <td>{{ tenant.updatedAt | date:'MMM d, y, h:mm a' }}</td>
+                    <td>--</td>
+
+                </tr>
+            </tbody>
+            <ng-template #noData>
+                <tbody>
+                    <tr>
+                        <td [attr.colspan]="columns.length" class="no-data-cell">
+                            No data to display
+                        </td>
+                    </tr>
+                </tbody>
+            </ng-template>
+
+        </table>
+    </div>
+
+</div>

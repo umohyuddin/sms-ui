@@ -1,0 +1,39 @@
+
+/* Ensure page fills viewport and footer stays at the bottom */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.kt-grid--root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.kt-page,
+.kt-grid__item--fluid.kt-grid {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+#kt_wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.kt-content {
+  flex: 1 1 auto; /* main content expands */
+}
+
+.kt-footer {
+  flex-shrink: 0; /* footer does not shrink, sits at bottom */
+  margin-top: 0;
+}
+
+/* Optional: remove unexpected bottom padding from containers */
+.kt-container--fluid {
+  padding-bottom: 0;
+}

@@ -1,0 +1,31 @@
+.right-section {
+  background-color: rgba(29, 154, 192, 0.9);
+  color: #fff;
+  position: relative;
+  display: flex;
+  align-items: center; /* vertical center */
+  justify-content: flex-start; /* left align */
+  padding-left: 30px; /* add space from left edge */
+  flex: 1; /* 👈 IMPORTANT to keep equal width with left section */
+  height: 100vh; /* 👈 ensure same height as container */
+}
+
+.right-section .overlay-content {
+  text-align: left;
+}
+
+.right-section .overlay-content .brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.right-section .overlay-content h2 {
+  font-size: 36px;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.right-section .brand-logo {
+  max-width: 120px; /* adjust logo size */
+}

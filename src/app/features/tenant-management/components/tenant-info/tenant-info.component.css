@@ -1,0 +1,140 @@
+.tenant-details-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px 60px;
+  font-family: Arial, sans-serif;
+  padding: 10px;
+  background: white !important;
+}
+
+.grid-item {
+  display: flex;
+  flex-direction: column;
+}
+.label {
+  color: #1a73e8; /* Blue */
+  font-weight: 500;
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+.value {
+  color: #202124;
+  font-size: 12px;
+}
+
+
+
+
+.tenant-details-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.section-block {
+  background-color: #fff;
+  padding: 10px;
+}
+
+.section-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: #202124;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 4px;
+}
+
+
+mat-accordion {
+  display: block;
+  /* border-radius: 8px; */
+}
+
+mat-expansion-panel {
+  background: #F4F6FA !important; /* light sky */
+  margin-bottom: 8px;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+}
+
+
+mat-expansion-panel-header {
+  background-color: #f3f7fc !important;
+  color: #1a4f8b !important;
+  border-radius: 8px !important;
+  height: 46px !important;
+  border-radius: 2px !important;
+}
+.mat-title-panel-title {
+  color: #1B50A2 !important;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+.panel-content {
+  padding: 16px;
+  background: #fff;
+  /* border-radius: 6px; */
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+
+
+
+/* 💻 Medium screens (Tablets, <= 1024px) */
+@media (max-width: 1024px) {
+  .tenant-details-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 40px;
+    padding: 10px;
+  }
+
+  .label,
+  .value {
+    font-size: 13px;
+  }
+
+  mat-expansion-panel-header {
+    height: 44px !important;
+  }
+}
+
+/* 📱 Small screens (Mobile, <= 600px) */
+@media (max-width: 600px) {
+  .tenant-details-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 8px;
+  }
+
+  .label {
+    font-size: 13px;
+  }
+
+  .value {
+    font-size: 13px;
+    word-break: break-word;
+  }
+
+  mat-expansion-panel-header {
+    height: 42px !important;
+    font-size: 13px !important;
+  }
+
+  .section-heading {
+    font-size: 13px;
+  }
+}

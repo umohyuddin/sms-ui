@@ -1,0 +1,15 @@
+.loading-area {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background: rgba(247, 247, 247, 0.52);
+  z-index: 999;
+  top: 0;
+  left: 0;
+}
+
+.loading-area mat-spinner {
+  margin: 15% auto;
+  color: #1976d2; /* Material blue or your preferred color */
+}

@@ -1,0 +1,39 @@
+/*sub header start*/
+.tenant-container {
+  background-color: #f0f7ff;
+  padding: 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tenant-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tenant-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #1a4f8b;
+  font-size: 14px;
+}
+
+.arrow {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.arrow.open {
+  transform: rotate(90deg);
+}
+
+
+.tenant-right {
+  display: flex;
+  align-items: center;
+}

@@ -1,0 +1,51 @@
+<div class="kt-portlet">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-label">
+      <h3 class="kt-portlet__head-title">
+        Add New Academic Year
+      </h3>
+    </div>
+  </div>
+
+  <!--begin::Form-->
+  <form class="kt-form kt-form--label-right" [formGroup]="academicYearForm" (ngSubmit)="onSubmit()">
+    <div class="kt-portlet__body">
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Start Date:</label>
+        <div class="col-lg-3">
+          <input class="form-control" type="date" id="example-date-input" formControlName="startDate">
+        </div>
+        <label class="col-lg-1 col-form-label">Email:</label>
+        <div class="col-lg-3">
+          <input class="form-control" type="date" id="example-date-input" formControlName="endDate">
+        </div>
+        <label class="col-lg-1 col-form-label">Status:</label>
+        <div class="col-lg-3">
+          <div class="form-group row">
+            <div class="col-9">
+              <div class="kt-checkbox-inline">
+                <label class="kt-checkbox kt-checkbox kt-checkbox--solid kt-checkbox--brand" cheched="">
+                  <input type="checkbox" formControlName="isCurrent"> Is Current
+                  <span></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions">
+        <div class="row">
+          <div class="col-lg-5"></div>
+          <div class="col-lg-7">
+            <button type="submit" class="btn btn-dark mr-2">Submit</button>
+            <button type="reset" class="btn btn-secondary">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!--end::Form-->
+</div>

@@ -1,0 +1,67 @@
+/* Center entire section */
+.dashboard-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0;
+}
+
+/* Container for the two boxes */
+.stats-container {
+  display: flex;
+  gap: 12px;
+}
+
+/* Each card */
+.stat-card {
+  background: #edf2f9;
+  /* light blue-gray like in image */
+  border-radius: 6px;
+  padding: 10px 16px;
+  width: 200px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Card header */
+.stat-header {
+  font-weight: 600;
+  font-size: 13px;
+  color: #5f6368;
+  margin-bottom: 10px;
+}
+
+/* Card body */
+.stat-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-body h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  color: #212121;
+}
+
+/* Dropdown inside card */
+.dropdown-wrapper select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-size: 12px;
+  color: #444;
+  padding: 3px 20px 3px 6px;
+  border: none;
+  border-radius: 4px;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='10' viewBox='0 0 8 10'><path fill='%23999' d='M4 0l3 3H1L4 0zm0 10l-3-3h6l-3 3z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  background-size: 8px 10px;
+  cursor: pointer;
+}
+
+.dropdown-wrapper select:focus {
+  outline: none;
+}

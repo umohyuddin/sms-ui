@@ -3,13 +3,9 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "sms_frontend": {
+    "multi-tenant-manager": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -17,34 +13,36 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/sms_frontend",
+            "outputPath": "dist/multi-tenant-manager",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.scss"
+              "src/styles.css",
+              "src/assets/vendors/general/perfect-scrollbar/css/perfect-scrollbar.css"
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+              "src/assets/vendors/general/jquery/dist/jquery.js",
+              "src/assets/vendors/general/sticky-js/dist/sticky.min.js",
+              "src/assets/vendors/general/popper.js/dist/umd/popper.js",
+              "src/assets/vendors/general/bootstrap/dist/js/bootstrap.min.js",
+              "src/assets/vendors/general/js-cookie/src/js.cookie.js",
+              "src/assets/vendors/general/perfect-scrollbar/dist/perfect-scrollbar.js",
+              "src/assets/vendors/general/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js",
+              "src/assets//vendors/general/select2/dist/js/select2.full.js",
+              "src/assets/vendors/general/sweetalert2/dist/sweetalert2.min.js",
+              "src/assets/js/kt-app-options.js",
+              "src/assets/js/demo1/scripts.bundle.js"
+      
+            ]
           },
           "configurations": {
             "production": {
@@ -52,16 +50,17 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "5MB"
+                  "maximumError": "1MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "500kB"
+                  "maximumWarning": "20kB",
+                  "maximumError": "20kB"
                 }
               ],
               "outputHashing": "all"
             },
+            
             "development": {
               "optimization": false,
               "extractLicenses": false,
@@ -74,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "sms_frontend:build:production"
+              "buildTarget": "multi-tenant-manager:build:production"
             },
             "development": {
-              "buildTarget": "sms_frontend:build:development"
+              "buildTarget": "multi-tenant-manager:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -93,25 +92,18 @@
               "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/styles.scss"
+              "src/styles.css"
             ],
             "scripts": []
           }
         }
       }
     }
-  },
-  "cli": {
-    "analytics": false
   }
 }

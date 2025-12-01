@@ -1,0 +1,8 @@
+{
+    "TENANT_SERVICE_BASE_URL": "http://localhost:8085",
+     "ENABLE_DUMMAY_DATA": true,
+    "ROOT_DOMAIN":"expertflow.com",
+    "redisPassword": "redisExpertflow@464",
+    "mongoPassword": "mongoExpertflow@464",
+    "campaigns_url":"http://{tenantId}-campaign-studio-svc.{tenantId}.svc:1880"
+}

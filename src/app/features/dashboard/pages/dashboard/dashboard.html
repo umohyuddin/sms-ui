@@ -1,0 +1,103 @@
+<app-loader [show]="spinner"></app-loader>
+<div class="tenant-container">
+  <div class="tenant-header">
+    <div class="tenant-left">
+      <span class="arrow">&#9654;</span> <!-- Right-pointing arrow -->
+      <span class="tenant-title">Dashboard</span>
+    </div>
+  </div>
+</div>
+
+<app-dashboard-header-stats></app-dashboard-header-stats>
+<div class="dashboard-container">
+  <mat-card class="dashboard-card">
+    <!-- Header -->
+    <div class="card-header">
+      <div class="left-section">
+        <h3>Total Tenants</h3>
+      </div>
+
+      <div class="right-section">
+        <div class="custom-dropdown">
+          <select [(ngModel)]="selectedRange">
+            <option>This month</option>
+            <option>Last month</option>
+            <option>This year</option>
+            <option>Custom range</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart + Legend section -->
+    <div class="chart-section" style="display: flex; align-items: center; justify-content: space-between;">
+      <!-- Donut Chart -->
+      <div class="donut-wrapper" style="flex: 1; display: flex; justify-content: center;">
+        <ngx-charts-pie-chart [explodeSlices]="true" [view]="[230, 230]" [scheme]="colorScheme" [results]="totalTenants"
+          [legend]="false" [doughnut]="true" [arcWidth]="0.40" [labels]="false" [animations]="true"
+          [explodeSlices]="false" [gradient]="true">
+        </ngx-charts-pie-chart>
+
+        <div class="center-text">
+          <h2>{{tenants.length}}</h2>
+          <p>Total Tenant</p>
+        </div>
+      </div>
+
+      <!-- Legend (Right Side) -->
+      <div class="legend" style="flex: 1; margin-left: 30px;">
+        <div class="legend-item" *ngFor="let item of totalTenants; let i = index">
+          <div class="legend-left">
+            <span class="dot" [style.background]="colorScheme.domain[i]"></span>
+            <span class="label">{{ item.name }}</span>
+          </div>
+          <span class="percentage">{{ item.value }}%</span>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- New Tenants Card -->
+  <mat-card class="dashboard-card">
+  <div class="card-header">
+    <div class="left-section">
+       <div class="tabs">
+        <button [class.active]="selectedTab === 'new'" (click)="onTabChange('new')">New Tenants</button>
+        <button [class.active]="selectedTab === 'left'" (click)="onTabChange('left')">Left Tenants</button>
+      </div>
+    </div>
+
+    <div class="right-section">
+      <div class="custom-dropdown">
+        <select [(ngModel)]="selectedRange">
+          <option>This month</option>
+          <option>Last month</option>
+          <option>This year</option>
+          <option>Custom range</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <ngx-charts-bar-vertical
+  [scheme]="barColorScheme"
+  [results]="chartData"
+  [xAxis]="true"
+  [yAxis]="true"
+  [legend]="false"
+  [showGridLines]="false"
+  [roundEdges]="true"
+  [animations]="true"
+  [yScaleMax]="20"               
+  [yAxisTickFormatting]="formatYAxis">
+</ngx-charts-bar-vertical>
+  </div>
+</mat-card>
+
+</div>
+
+
+
+  <app-dashboard-tenant-listing-table [tenantData]="tenants"></app-dashboard-tenant-listing-table>
+

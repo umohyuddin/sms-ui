@@ -1,15 +1,27 @@
-import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom  } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient,withInterceptors, withFetch } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http'
 import { routes } from './app.routes';
-import { authInterceptor } from './services/auth/auth.interceptor';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { responseInterceptor } from './core/interceptors/response/response.interceptor';
+import { AppConfigService } from './core/services/app-config.service';
+
+
+export function initializeApp(appConfig: AppConfigService) {
+  return () => appConfig.loadConfig();
+}
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-              provideZoneChangeDetection({ eventCoalescing: true }),
-              provideRouter(routes),
-              provideClientHydration(withEventReplay()),
-              provideHttpClient(withInterceptors([authInterceptor]),withFetch()),
-            ]
+  providers: [AppConfigService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [AppConfigService],
+      multi: true,
+    },
+    provideZoneChangeDetection({ eventCoalescing: true }),
+     provideRouter(routes),
+      provideAnimationsAsync(),
+      provideHttpClient(withInterceptors([responseInterceptor]))
+    ]
 };
