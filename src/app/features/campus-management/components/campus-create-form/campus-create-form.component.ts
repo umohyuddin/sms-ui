@@ -13,6 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
 
 @Component({
@@ -316,5 +317,8 @@ export class CampusCreateFormComponent {
     };
 
     this.createCampusForm.patchValue(dummyPayload);
+  }
+  goToCampusListing(){
+    this.router.navigate([ROUTES.CAMPUS.LIST])
   }
 }
