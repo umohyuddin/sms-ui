@@ -9,6 +9,7 @@ import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
+import { Pagination } from '../../../../core/pagar/pagination';
 @Component({
   selector: 'app-campus-listing-table',
   standalone: true,
@@ -18,6 +19,7 @@ import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } fro
   styleUrls: ['./Campus-listing-table.component.css']
 })
 export class CampusListingTableComponent {
+pagination: Pagination<any> = new Pagination([], 10);
   searchControl = new FormControl('');
   campuses: any[] = [];
   URL = '';
@@ -43,6 +45,7 @@ export class CampusListingTableComponent {
       .subscribe({
         next: (response) => {
           this.campuses = response.body;
+          this.pagination = new Pagination(this.campuses, 10);
         },
         error: (error) => {
           console.error('Search error:', error);
@@ -58,6 +61,7 @@ export class CampusListingTableComponent {
           console.log('✅ Success Status:', response.status);
           console.log('📦 Response Body:', response.body);
           this.campuses = response.body;
+          this.pagination = new Pagination(this.campuses, 10);
 
           //this.router.navigate(['/tenants']);
         },
@@ -138,5 +142,10 @@ export class CampusListingTableComponent {
 
     }
 
+  }
+
+ onPageSizeChange(event: any) {
+    const newSize = +event.target.value;
+    this.pagination.changePageSize(newSize);
   }
 }

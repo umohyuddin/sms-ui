@@ -2,7 +2,7 @@
   <div class="kt-portlet__head kt-portlet__head--lg">
     <div class="kt-portlet__head-label">
       <span class="kt-portlet__head-icon">
-        <i class="kt-font-brand flaticon2-line-chart"></i>
+        <i class="kt-font-dark flaticon-squares"></i>
       </span>
       <h3 class="kt-portlet__head-title">
         Campuese Listing
@@ -67,13 +67,15 @@
     <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
       <div class="row">
         <div class="col-sm-12 col-md-6">
-          <div class="dataTables_length" id="kt_table_1_length"><label>Show <select name="kt_table_1_length"
-                aria-controls="kt_table_1" class="custom-select custom-select-sm form-control form-control-sm">
+          <div class="dataTables_length" id="kt_table_1_length">
+            <label>Show <select (change)="onPageSizeChange($event)" name="kt_table_1_length" aria-controls="kt_table_1"
+                class="custom-select custom-select-sm form-control form-control-sm">
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
-              </select> entries</label></div>
+              </select> entries</label>
+          </div>
         </div>
         <div class="col-sm-12 col-md-6">
           <div id="kt_table_1_filter" class="dataTables_filter">
@@ -97,7 +99,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr role="row" class="odd" *ngFor="let campus of campuses">
+
+              <tr role="row" class="odd" *ngFor="let campus of pagination.paginatedItems">
                 <td>{{ campus.campusName }}</td>
                 <td>{{ campus.campusCode }}</td>
                 <td>{{ campus.contactNumber }}</td>
@@ -116,7 +119,8 @@
                       <i class="la la-ellipsis-h"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item" href="#"(click)="editCampusDetails(campus,$event)"><i class="la la-edit"></i> Edit Details</a>
+                      <a class="dropdown-item" href="#" (click)="editCampusDetails(campus,$event)"><i
+                          class="la la-edit"></i> Edit Details</a>
                       <a class="dropdown-item" href="#" (click)="viewCampusDetails(campus,$event)">
                         <i class="la la-eye"></i> View Details</a>
                       <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
@@ -141,33 +145,64 @@
       </div>
       <div class="row">
         <div class="col-sm-12 col-md-5">
-          <div class="dataTables_info" id="kt_table_1_info" role="status" aria-live="polite">Showing 1 to 10 of 50
-            entries</div>
+          <div class="dataTables_info" id="kt_table_1_info" role="status" aria-live="polite">Showing {{
+            pagination.startItem }} to {{ pagination.endItem }} of {{ pagination.totalItems }} entries</div>
         </div>
         <div class="col-sm-12 col-md-7">
           <div class="dataTables_paginate paging_full_numbers" id="kt_table_1_paginate">
             <ul class="pagination">
-              <li class="paginate_button page-item first disabled" id="kt_table_1_first"><a href="#"
-                  aria-controls="kt_table_1" data-dt-idx="0" tabindex="0" class="page-link"><i
-                    class="la la-angle-double-left"></i></a></li>
-              <li class="paginate_button page-item previous disabled" id="kt_table_1_previous"><a href="#"
-                  aria-controls="kt_table_1" data-dt-idx="1" tabindex="0" class="page-link"><i
-                    class="la la-angle-left"></i></a></li>
-              <li class="paginate_button page-item active"><a href="#" aria-controls="kt_table_1" data-dt-idx="2"
-                  tabindex="0" class="page-link">1</a></li>
-              <li class="paginate_button page-item "><a href="#" aria-controls="kt_table_1" data-dt-idx="3" tabindex="0"
-                  class="page-link">2</a></li>
-              <li class="paginate_button page-item "><a href="#" aria-controls="kt_table_1" data-dt-idx="4" tabindex="0"
-                  class="page-link">3</a></li>
-              <li class="paginate_button page-item "><a href="#" aria-controls="kt_table_1" data-dt-idx="5" tabindex="0"
-                  class="page-link">4</a></li>
-              <li class="paginate_button page-item "><a href="#" aria-controls="kt_table_1" data-dt-idx="6" tabindex="0"
-                  class="page-link">5</a></li>
-              <li class="paginate_button page-item next" id="kt_table_1_next"><a href="#" aria-controls="kt_table_1"
-                  data-dt-idx="7" tabindex="0" class="page-link"><i class="la la-angle-right"></i></a></li>
-              <li class="paginate_button page-item last" id="kt_table_1_last"><a href="#" aria-controls="kt_table_1"
-                  data-dt-idx="8" tabindex="0" class="page-link"><i class="la la-angle-double-right"></i></a></li>
+
+              <!-- FIRST -->
+              <li class="paginate_button page-item first" [class.disabled]="pagination.pageIndex === 0">
+                <a class="page-link" (click)="pagination.first()">
+                  <i class="la la-angle-double-left"></i>
+                </a>
+              </li>
+
+              <!-- PREVIOUS -->
+              <li class="paginate_button page-item previous" [class.disabled]="pagination.pageIndex === 0">
+                <a class="page-link" (click)="pagination.prev()">
+                  <i class="la la-angle-left"></i>
+                </a>
+              </li>
+
+              <!-- LEFT ELLIPSIS -->
+              <li class="paginate_button page-item disabled" *ngIf="pagination.showLeftEllipsis">
+                <a class="page-link">...</a>
+              </li>
+
+              <!-- PAGE NUMBERS -->
+              <li class="paginate_button page-item" *ngFor="let page of pagination.visiblePages"
+                [class.active]="pagination.pageIndex === page">
+
+                <a class="page-link" (click)="pagination.goToPage(page)">
+                  {{ page + 1 }}
+                </a>
+              </li>
+
+              <!-- RIGHT ELLIPSIS -->
+              <li class="paginate_button page-item disabled" *ngIf="pagination.showRightEllipsis">
+                <a class="page-link">...</a>
+              </li>
+
+              <!-- NEXT -->
+              <li class="paginate_button page-item next"
+                [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
+                <a class="page-link" (click)="pagination.next()">
+                  <i class="la la-angle-right"></i>
+                </a>
+              </li>
+
+              <!-- LAST -->
+              <li class="paginate_button page-item last"
+                [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
+                <a class="page-link" (click)="pagination.last()">
+                  <i class="la la-angle-double-right"></i>
+                </a>
+              </li>
+
             </ul>
+
           </div>
         </div>
       </div>
