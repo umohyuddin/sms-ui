@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { Router } from '@angular/router';
 import { StandardListingTableComponent } from '../../components/standard-listing-table/standard-listing-table.component';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
 @Component({
   selector: 'app-standard-listing',
@@ -25,7 +26,7 @@ export class StandardListing implements OnInit {
 
 
   goToCreatestandard(): void {
-    this.router.navigate(['/standardes/standard-create']);
+    this.router.navigate(ROUTES.CAMPUS.STANDARD.CREATE);
   }
 }
 

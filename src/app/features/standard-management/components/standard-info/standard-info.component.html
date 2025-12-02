@@ -1,1 +1,64 @@
-<h3>works</h3>
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-dark flaticon-squares"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                Campus Details
+            </h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+
+            </div>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <div class="kt-widget kt-widget--user-profile-3">
+            <div class="kt-widget__top">
+                <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-bolder kt-font-light">
+                    JM
+                </div>
+                <div class="kt-widget__content">
+                    <div class="kt-widget__head">
+                        <div class="kt-widget__user">
+                            <a href="#" class="kt-widget__username">
+                                {{standardData?.standardName}}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="kt-widget__subhead row">
+                        <div class="col-4">
+                            <a> <b>Standard Code :</b> {{standardData?.standardCode}}</a>
+                        </div>
+
+                        <div class="col-4">
+                            <a><b>Campus Name : </b>{{standardData?.campus?.campusName}}</a>
+                        </div>
+
+                        <div class="col-4">
+                            <a> <b> Campus Code:</b> {{standardData?.campus?.campusCode}}</a>
+                        </div>
+                    </div>
+                    <div class="kt-widget__subhead row">
+                        <div class="col-4">
+                            <a> <b>Campus Province: </b> {{standardData?.campus?.province?.name}}</a>
+                        </div>
+
+                        <div class="col-4">
+                            <a> <b>Campus City </b> {{standardData?.campus?.city?.name}}</a>
+                        </div>
+                    </div>
+
+                    <div class="kt-widget__info">
+                        <div class="kt-widget__desc"><i style="font-size: 1.5rem !important;"
+                                class="flaticon-placeholder-3 mr-2"></i>
+                            <b>{{standardData?.campus?.address}}</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

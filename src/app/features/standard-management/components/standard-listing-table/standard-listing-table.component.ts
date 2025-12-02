@@ -93,7 +93,7 @@ export class StandardListingTableComponent {
   viewStandardDetails(standard: StandardResponse, event: Event): void {
     console.log('Viewing details for Standard ID:', standard.id);
     event.preventDefault();  // prevents anchor default behavior
-    this.router.navigate(ROUTES.CAMPUS.STANDARD.LIST);
+    this.router.navigate(ROUTES.CAMPUS.STANDARD.DETAILS(standard.id.toString()));
   }
 
   editStandardDetails(campus: StandardResponse, event: Event): void {

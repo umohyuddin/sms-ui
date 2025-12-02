@@ -21,6 +21,14 @@ export class StandardManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.GET_ALL}`, { observeResponse: true });
   }
 
+  getStandardById(id: string): Observable<any> {
+  return this.http.request(
+    HTTP_METHOD.GET,
+    `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.GET_BY_ID(id)}`,
+    { observeResponse: true }
+  );
+}
+
   searchStandards(params: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET,
       `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.SEARCH}`,
