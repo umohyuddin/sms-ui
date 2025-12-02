@@ -1,90 +1,28 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { OnInit, ViewChild } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
+import { OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { MatSelectModule } from '@angular/material/select';
 
-import { HttpClientService } from '../../../../core/services/http-client.service';
-import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
-import { HttpResponse } from '@angular/common/http';
-import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { Router } from '@angular/router';
-import { AppConfigService } from '../../../../core/services/app-config.service';
-import { Standard } from '../../models/standard';
+import { StandardListingTableComponent } from '../../components/standard-listing-table/standard-listing-table.component';
 
 @Component({
   selector: 'app-standard-listing',
   imports: [
-
     CommonModule,
-    MatCardModule,
-    MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatIconModule,
-    MatButtonModule,
     FormsModule,
-    NgxChartsModule, MatSelectModule,
-  ],
+    StandardListingTableComponent
+],
   templateUrl: './standard-listing.html',
   styleUrls: ['./standard-listing.css'],
   standalone: true,
 })
 export class StandardListing implements OnInit {
-  standards: Standard[] = [];
-  spinner = true;
-  selectedRange = 'This month';
-  selectedPeriod = 'This month';
-  selectedTab: string = 'new';
-
-
-
-
-  @ViewChild(MatSort) sort!: MatSort;
-
-
   URL = '';
-  constructor(private httpClientService: HttpClientService,
-    private cdr: ChangeDetectorRef,
-    private router: Router,
-    private appConfig: AppConfigService
-  ) { }
+  constructor(private router: Router) { }
 
-  ngOnInit(): void {
-    console.log('API Base URL:', this.appConfig.apiBaseUrl);
-    this.URL = this.appConfig.apiBaseUrl;
+  ngOnInit(): void { }
 
-    //this.standardListing();
-  }
-
-  private standardListing() {
-    this.httpClientService
-      .request<any>(HTTP_METHOD.GET, this.URL, { observeResponse: true })
-      .subscribe({
-        next: (response: HttpResponse<any>) => {
-          console.log('✅ Status:', response.status);
-          console.log('📦 Body:', response.body);
-          this.standards = response.body || [];
-          console.log('standards List:', this.standards);
-        },
-        error: (error) => {
-          console.error('❌ Error Status:', error.status);
-          console.error('Message:', error.message);
-          this.spinner = false;
-        }, complete: () => {
-          console.log('🔚 Complete');
-          this.spinner = false;
-        }
-      });
-  }
 
   goToCreatestandard(): void {
     this.router.navigate(['/standardes/standard-create']);

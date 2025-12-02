@@ -18,12 +18,18 @@
             <option value="" disabled>Select School</option>
           </select>
           <span class="form-text text-muted">Please select School</span>
+
         </div>
 
         <label class="col-lg-1 col-form-label">Campus Name:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="Campus name" formControlName="campusName">
+          <input type="text" class="form-control" placeholder="Campus name" formControlName="campusName"
+            [class.is-invalid]="campusName?.invalid && (campusName?.touched || campusName?.dirty)"
+            [class.is-valid]="campusName?.valid && (campusName?.touched || campusName?.dirty)">
           <span class="form-text text-muted">Please enter your Campus name</span>
+          <span class="invalid-feedback" *ngIf="campusName?.errors?.['required']">
+            Campus name is required
+          </span>
         </div>
         <label class="col-lg-1 col-form-label">Campus Code:</label>
         <div class="col-lg-3">
@@ -47,16 +53,29 @@
 
         <label class="col-lg-1 col-form-label">Contact:</label>
         <div class="col-lg-3">
-          <input type="tel" class="form-control" placeholder="Enter contact number" formControlName="contactNumber">
+          <input type="tel" class="form-control" placeholder="Enter contact number" formControlName="contactNumber"
+            [class.is-invalid]="contactNumber?.invalid && (contactNumber?.touched || contactNumber?.dirty)"
+            [class.is-valid]="contactNumber?.valid && (contactNumber?.touched || contactNumber?.dirty)">
           <span class="form-text text-muted">Please enter your contact</span>
+          <span class="invalid-feedback" *ngIf="contactNumber?.errors?.['required']">
+            Contact Number is required
+          </span>
         </div>
         <label class="col-lg-1 col-form-label">Email:</label>
         <div class="col-lg-3">
           <div class="kt-input-icon">
-            <input type="email" class="form-control" placeholder="Email" formControlName="email">
+            <input type="email" class="form-control" placeholder="Email" formControlName="email"
+              [class.is-invalid]="email?.invalid && (email?.touched || email?.dirty)"
+              [class.is-valid]="email?.valid && (email?.touched || email?.dirty)">
 
           </div>
           <span class="form-text text-muted">Please enter your Email</span>
+          <span class="invalid-feedback" *ngIf="email?.errors?.['email']">
+            Please enter a valid email address.
+          </span>
+          <span class="invalid-feedback" *ngIf="email?.errors?.['required']">
+            Email is required.
+          </span>
         </div>
         <label class="col-lg-1 col-form-label">Website:</label>
         <div class="col-lg-3">
@@ -71,23 +90,33 @@
       <div class="form-group row">
         <label class="col-lg-1 col-form-label">Province:</label>
         <div class="col-lg-3">
-          <select class="form-control" formControlName="provinceId">
+          <select class="form-control" formControlName="provinceId" 
+           [class.is-invalid]="provinceId?.invalid && (provinceId?.touched || provinceId?.dirty)"
+              [class.is-valid]="provinceId?.valid && (provinceId?.touched || provinceId?.dirty)">
             <option value='' selected>Select Province</option>
             @for (p of provinces; track p.id) {
             <option [value]="p.id">{{ p.name }}</option>
             }
           </select>
-          <span class="form-text text-muted">Please enter your Porvince</span>
+          <span class="form-text text-muted">Please select your Porvince</span>
+            <span class="invalid-feedback" *ngIf="provinceId?.errors?.['required']">
+            Province is required.
+          </span>
         </div>
         <label class="col-lg-1 col-form-label">City:</label>
         <div class="col-lg-3">
-          <select class="form-control" formControlName="cityId">
+          <select class="form-control" formControlName="cityId"
+           [class.is-invalid]="cityId?.invalid && (cityId?.touched || cityId?.dirty)"
+              [class.is-valid]="cityId?.valid && (cityId?.touched || cityId?.dirty)">
             <option value=''>Select City</option>
             @for (c of cities; track c.id) {
             <option [value]="c.id">{{ c.name }}</option>
             }
           </select>
           <span class="form-text text-muted">Please Select your City</span>
+           <span class="invalid-feedback" *ngIf="cityId?.errors?.['required']">
+            City is required.
+          </span>
         </div>
       </div>
       <div class="form-group row">

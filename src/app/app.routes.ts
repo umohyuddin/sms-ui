@@ -4,19 +4,19 @@ import { authGuard } from './core/guards/auth-guard';
 export const routes: Routes = [
   // 🔓 Public routes (no guard)
   {
-  path: 'auth',
-  loadComponent: () =>
-    import('./layouts/auth-layout/auth-layout.component')
-      .then(m => m.AuthLayoutComponent),
-  children: [
-    {
-      path: '',
-      loadChildren: () =>
-        import('./features/auth/auth-module')
-          .then(m => m.AuthModule)
-    }
-  ]
-},
+    path: 'auth',
+    loadComponent: () =>
+      import('./layouts/auth-layout/auth-layout.component')
+        .then(m => m.AuthLayoutComponent),
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/auth/auth-module')
+            .then(m => m.AuthModule)
+      }
+    ]
+  },
 
 
   // 🔒 Protected routes (require authentication)
@@ -54,8 +54,8 @@ export const routes: Routes = [
       }
     ]
   },
-    {
-    path: 'standards',
+  {
+    path: 'campuses/standards',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
     children: [

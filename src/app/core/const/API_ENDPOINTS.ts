@@ -12,9 +12,17 @@ export const API_ENDPOINTS = {
             CREATE: '/api/institute/campuses',
             UPDATE: '/api/institute/campuses',
             GET_ALL: '/api/institute/campuses',
-            SEARCH:(keyword: string) => `/api/institute/campuses/search/${keyword}`,
+            SEARCH: (keyword: string) => `/api/institute/campuses/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/institute/campuses/${id}`
+        },
+        STANDARDS: {
+            CREATE: '/api/institute/campuses/standards',
+            UPDATE: '/api/institute/campuses/standards',
+            GET_ALL: '/api/institute/campuses/standards',
+            SEARCH: '/api/institute/campuses/standards/search',
+            GET_BY_ID: (id: string) => `/api/institute/campuses/standards/${id}`
         }
+
     },
 
 

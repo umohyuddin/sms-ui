@@ -5,8 +5,9 @@ import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { AppConfigService } from '../../../../core/services/app-config.service';
-import { Standard } from '../../models/standard';
+
 import { StandardInfoComponent } from '../../components/standard-info/standard-info.component';
+import { StandardResponse } from '../../models/standardResponse';
 
 @Component({
   selector: 'app-standard-details',
@@ -17,7 +18,7 @@ import { StandardInfoComponent } from '../../components/standard-info/standard-i
 })
 export class StandardDetails {
   spinner = true;
-  standardData?: Standard;
+  standardData?: StandardResponse;
   standardId!: string;
   isActive = true;
   URL = '';

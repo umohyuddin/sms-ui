@@ -83,12 +83,10 @@ export class CampusCreateFormComponent {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.provinces = response.body;
-        //this.router.navigate(['/Campuss']);
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
-        //this.router.navigate(['/Campuses']);
       },
       complete: () => {
         console.log('🔚 Request Complete');
@@ -101,13 +99,13 @@ export class CampusCreateFormComponent {
       instituteId: [1, Validators.required],
       provinceId: ['', Validators.required],
       cityId: ['', Validators.required],
-      campusName: ['', [Validators.required, Validators.maxLength(50)]],
+      campusName: ['', [Validators.required]],
       campusCode: ['', Validators.maxLength(20)],
       isActive: [true],
-      contactNumber: ['', Validators.maxLength(15)],
-      email: ['', [Validators.email, Validators.maxLength(100)]],
-      website: ['', Validators.maxLength(100)],
-      address: ['', Validators.maxLength(200)]
+      contactNumber: ['', [Validators.required,Validators.maxLength(15)]],
+      email: ['', [Validators.required,Validators.email]],
+      website: [''],
+      address: ['']
     });
   }
 
@@ -159,13 +157,10 @@ export class CampusCreateFormComponent {
       console.warn('❌ Form is invalid');
       return;
     }
-
-
-
     let requestMethod: string;
     let requestUrl: string;
 
-  if (this.isEditMode && this.campusId) {
+    if (this.isEditMode && this.campusId) {
       requestMethod = HTTP_METHOD.PATCH;
       requestUrl = `${this.URL}${API_ENDPOINTS.INSTITUTE.CAMPUSES.UPDATE}/${this.campusId}`; // or a dedicated UPDATE endpoint
     } else {
@@ -195,92 +190,9 @@ export class CampusCreateFormComponent {
   }
 
 
-  //Campus getters
-  get CampusName() {
-    return this.createCampusForm.get('CampusName');
-  }
-  get CampusId() {
-    return this.createCampusForm.get('CampusId');
-  }
-  get CampusCode() {
-    return this.createCampusForm.get('CampusCode');
-  }
-
-  //keyCloak getters
-  get realm() {
-    return this.createCampusForm.get('CampusSettings.keyCloak.realm');
-  }
-
-  get authServerUrl() {
-    return this.createCampusForm.get('CampusSettings.keyCloak.auth-server-url');
-  }
-
-  get efServerUrl() {
-    return this.createCampusForm.get('CampusSettings.keyCloak.ef-server-url');
-  }
 
 
-  //Mongo getters
-  get mongoUserName() {
-    return this.createCampusForm.get('CampusSettings.mongo.userName');
-  }
-  get mongoPassword() {
-    return this.createCampusForm.get('CampusSettings.mongo.password');
-  }
 
-  //Radis getters
-  get userName() {
-    return this.createCampusForm.get('CampusSettings.mongo.userName');
-  }
-  get password() {
-    return this.createCampusForm.get('CampusSettings.mongo.password');
-  }
-
-  //Dialer getters
-  get maxConcurrentCalls() {
-    return this.createCampusForm.get('CampusSettings.dialer.maxConcurrentCalls');
-  }
-
-  get maxCallTime() {
-    return this.createCampusForm.get('CampusSettings.dialer.maxCallTime');
-  }
-
-  get callsPerSecond() {
-    return this.createCampusForm.get('CampusSettings.dialer.callsPerSecond');
-  }
-
-  get serviceIdentifier() {
-    return this.createCampusForm.get('CampusSettings.dialer.serviceIdentifier');
-  }
-
-
-  //mediaServer getter
-  get wssUrl() {
-    return this.createCampusForm.get('CampusSettings.mediaServer.wssUrl');
-  }
-
-  get domain() {
-    return this.createCampusForm.get('CampusSettings.mediaServer.domain');
-  }
-
-
-  //campaigns getter
-  get domainUserName() {
-    return this.createCampusForm.get('CampusSettings.campaigns.username');
-  }
-  get domainPassword() {
-    return this.createCampusForm.get('CampusSettings.campaigns.password');
-  }
-  get domainUrl() {
-    return this.createCampusForm.get('CampusSettings.campaigns.url');
-  }
-
-
-  toggleStatus(event: any) {
-    const isActive = event.target.checked;
-    console.log("isActive", isActive)
-    this.createCampusForm.get('CampusSettings.mongo.isManaged')?.setValue(isActive);
-  }
 
   getCampusDetails(campusId: string): void {
     const url = `${this.URL}${API_ENDPOINTS.INSTITUTE.CAMPUSES.GET_BY_ID(campusId)}`;
@@ -318,7 +230,27 @@ export class CampusCreateFormComponent {
 
     this.createCampusForm.patchValue(dummyPayload);
   }
-  goToCampusListing(){
-    this.router.navigate([ROUTES.CAMPUS.LIST])
+  goToCampusListing() {
+    this.router.navigate(ROUTES.CAMPUS.LIST)
+  }
+
+
+  //getters
+  get campusName() {
+    return this.createCampusForm.get('campusName');
+  }
+
+  get contactNumber() {
+    return this.createCampusForm.get('contactNumber');
+  }
+  get email() {
+    return this.createCampusForm.get('email');
+  }
+
+  get provinceId() {
+    return this.createCampusForm.get('provinceId');
+  }
+  get cityId() {
+    return this.createCampusForm.get('cityId');
   }
 }

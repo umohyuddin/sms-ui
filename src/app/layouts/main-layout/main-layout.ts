@@ -9,6 +9,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { MenuUtils } from '../../shared/utils/menuUtil';
+import { ROUTES } from '../../core/const/APP_ROUTES';
 
 @Component({
   selector: 'app-main-layout',
@@ -18,19 +19,22 @@ import { MenuUtils } from '../../shared/utils/menuUtil';
     MatButtonModule,
     MatToolbarModule,
     RouterLink,
-    RouterLinkActive,
     MatMenuModule,
     MatTooltipModule,
     MatSidenavModule,
     MatListModule,
     CommonModule
-  ],
+],
   standalone: true,
   templateUrl: './main-layout.html',
   styleUrls: ['./main-layout.css'],
 })
 export class MainLayout {
   menuOpen = false;
+ routes = ROUTES;
+constructor(){
+  
+}
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;

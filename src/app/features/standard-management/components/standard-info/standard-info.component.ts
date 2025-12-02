@@ -2,8 +2,6 @@ import { Component, Input } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { Standard } from '../../models/standard';
-
 
 @Component({
   selector: 'app-standard-info',
@@ -13,5 +11,5 @@ import { Standard } from '../../models/standard';
   styleUrls: ['./standard-info.component.css']
 })
 export class StandardInfoComponent {
- @Input() standardData: Standard | undefined;
+
 }
