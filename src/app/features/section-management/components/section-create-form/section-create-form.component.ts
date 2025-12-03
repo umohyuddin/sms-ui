@@ -142,7 +142,7 @@ export class SectionCreateFormComponent {
   }
 
   goToSectionsList(): void {
-    this.router.navigate(ROUTES.CAMPUS.STANDARD.LIST);
+    this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
   }
   onSubmit(): void {
     console.log('✅ Create standard Form Data:', this.createSectionForm.getRawValue());
