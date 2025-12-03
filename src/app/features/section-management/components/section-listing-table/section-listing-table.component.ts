@@ -16,11 +16,12 @@ import { SectionResponse } from '../../models/SectionResponse';
   standalone: true,
   imports: [CommonModule,
     RouterModule,
-    ReactiveFormsModule],
+    ReactiveFormsModule
+  ],
   templateUrl: './section-listing-table.component.html',
   styleUrls: ['./section-listing-table.component.css']
 })
-export class StandardListingTableComponent {
+export class SectionListingTableComponent {
   pagination: Pagination<SectionResponse> = new Pagination([], 10);
   sectionsResponse: SectionResponse[] = [];
   standardsResponse: StandardResponse[] = [];
@@ -38,6 +39,8 @@ export class StandardListingTableComponent {
   ) { }
 
   columns = [
+    { key: 'sectionName', label: 'Section Name', sortable: true },
+    { key: 'sectionCode', label: 'Section Code', sortable: true },
     { key: 'standardName', label: 'Standard Name', sortable: true },
     { key: 'standardCode', label: 'Standard Code', sortable: true },
     { key: 'campusName', label: 'Campus Name', sortable: true },
@@ -81,8 +84,7 @@ export class StandardListingTableComponent {
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.standardsResponse = response.body;
-        this.pagination = new Pagination(this.standardsResponse, 10);
+        this.sectionsResponse = response.body;
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);

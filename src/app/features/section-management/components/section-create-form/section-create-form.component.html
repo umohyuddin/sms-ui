@@ -11,9 +11,9 @@
   <!--begin::Form-->
   <form class="kt-form kt-form--label-right" [formGroup]="createSectionForm" (ngSubmit)="onSubmit()">
     <div class="kt-portlet__body">
-      <h4>Section Information</h4>
-      
-        <div class="form-group row form-group-marginless kt-margin-t-20">
+      <h4>Campus Information</h4>
+
+      <div class="form-group row form-group-marginless kt-margin-t-20">
         <label class="col-lg-1 col-form-label">Campus:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="campusId"
@@ -25,26 +25,46 @@
             }
           </select>
           <span class="form-text text-muted">Please select campus</span>
-           <span class="invalid-feedback" *ngIf="campusId?.errors?.['required']">
+          <span class="invalid-feedback" *ngIf="campusId?.errors?.['required']">
             Campus is required
           </span>
         </div>
-         <label class="col-lg-1 col-form-label">Standard Name:</label>
+
+        <label class="col-lg-1 col-form-label">Standard:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="" formControlName="standardName"
-            [class.is-invalid]="standardName?.invalid && (standardName?.touched || standardName?.dirty)"
-            [class.is-valid]="standardName?.valid && (standardName?.touched || standardName?.dirty)">
-          <span class="form-text text-muted">Please enter your Standard name</span>
-          <span class="invalid-feedback" *ngIf="standardName?.errors?.['required']">
-            Standard Name is required
+          <select class="form-control" formControlName="standardId"
+            [class.is-invalid]="standardId?.invalid && (standardId?.touched || standardId?.dirty)"
+            [class.is-valid]="standardId?.valid && (standardId?.touched || standardId?.dirty)">
+            <option value='' selected>Select Standard</option>
+            @for (p of standardData; track p.id) {
+            <option [value]="p.id">{{ p.standardName }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select campus</span>
+          <span class="invalid-feedback" *ngIf="campusId?.errors?.['required']">
+            Campus is required
           </span>
         </div>
-         <label class="col-lg-1 col-form-label">Standard Code</label>
+
+        <label class="col-lg-1 col-form-label">Section Name:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="" formControlName="sectionName"
+            [class.is-invalid]="sectionName?.invalid && (sectionName?.touched || sectionName?.dirty)"
+            [class.is-valid]="sectionName?.valid && (sectionName?.touched || sectionName?.dirty)">
+          <span class="form-text text-muted">Please enter your Section name</span>
+          <span class="invalid-feedback" *ngIf="sectionName?.errors?.['required']">
+            Section Name is required
+          </span>
+        </div>
+      </div>
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+
+        <label class="col-lg-1 col-form-label">Section Code</label>
         <div class="col-lg-3">
           <div class="kt-input-icon">
-            <input type="text" class="form-control" placeholder="" formControlName="standardCode">
+            <input type="text" class="form-control" placeholder="" formControlName="sectionCode">
           </div>
-          <span class="form-text text-muted">Please enter Standard Code</span>
+          <span class="form-text text-muted">Please enter Section Code</span>
         </div>
       </div>
 
@@ -62,7 +82,8 @@
         <div class="row">
           <div class="col-lg-5"></div>
           <div class="col-lg-7">
-            <button type="submit" class="btn btn-dark mr-2">{{isEditMode===true? 'Update Standard Details': "Add New Standard"}}</button>
+            <button type="submit" class="btn btn-dark mr-2">{{isEditMode===true? 'Update Standard Details': "Add New
+              Standard"}}</button>
             <button type="button" class="btn btn-secondary" (click)="goToSectionsList()">Cancel</button>
           </div>
         </div>

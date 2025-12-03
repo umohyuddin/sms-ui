@@ -20,17 +20,16 @@ export const API_ENDPOINTS = {
             UPDATE: (id: string) => `/api/institute/campuses/standards${id}`,
             GET_ALL: '/api/institute/campuses/standards',
             SEARCH: '/api/institute/campuses/standards/search',
-            GET_BY_ID: (id: string) => `/api/institute/campuses/standards/${id}`
+            GET_BY_ID: (id: string) => `/api/institute/campuses/standards/${id}`,
+            GET_BY_CAMPUS_ID: (id: string) => `/api/institute/campuses/standards/campus/${id}`
         },
         SECTIONS: {
-            CREATE: '/api/institute/campuses/standards/section',
-            UPDATE: (id: string) => `/api/institute/campuses/standards/sections${id}`,
+            CREATE: '/api/institute/campuses/standards/sections',
+            UPDATE: (id: string) => `/api/institute/campuses/standards/sections/${id}`,
             GET_ALL: '/api/institute/campuses/standards/sections',
-            SEARCH: '/api/institute/campuses/standards/search',
-            GET_BY_ID: (id: string) => `/api/institute/campuses/standards/section${id}`
+            SEARCH: '/api/institute/campuses/standards/sections/search',
+            GET_BY_ID: (id: string) => `/api/institute/campuses/standards/sections/${id}`
         }
-
-
     },
 
 

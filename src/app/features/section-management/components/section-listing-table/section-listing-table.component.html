@@ -114,7 +114,7 @@
     <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
       <div class="row">
         <div class="col-sm-12">
-          @if(standardsResponse && standardsResponse.length > 0){
+          @if(sectionsResponse && sectionsResponse.length > 0){
           <table class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
             id="kt_table_1" role="grid" aria-describedby="kt_table_1_info" style="width: 1162px;">
             <thead>
@@ -127,11 +127,12 @@
             <tbody>
 
               <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
-                <td>{{ item.standardName }}</td>
-                <td>{{ item.standardCode }}</td>
-                <td>{{ item.campus?.campusName }}</td>
-                <td>{{ item.campus?.campusCode }}</td>
-
+                <td>{{ item.sectionName }}</td>
+                <td>{{ item.sectionCode }}</td>
+                <td>{{ item.standard.standardName }}</td>
+                <td>{{ item.standard.standardCode }}</td>
+                <td>{{ item.standard.campus.campusName }}</td>
+                <td>{{ item.standard.campus.campusCode }}</td>
                 <td nowrap="">
                   <span class="dropdown">
                     <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown"

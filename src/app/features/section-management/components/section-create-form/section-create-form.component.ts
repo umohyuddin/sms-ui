@@ -30,13 +30,12 @@ export class SectionCreateFormComponent {
   routeSectionId?: string;
   URL = '';
   mode = '';
-  standardData?: StandardResponse;
-    sectionData?: SectionResponse;
+  standardData: StandardResponse[]=[];
+  sectionData?: SectionResponse;
   campuses: CampusResponse[] = [];
   cities: any[] = [];
-  standardId: string | null = null;
-  isEditMode: boolean = false;
   sectionId: string | null = null;
+  isEditMode: boolean = false;
 
   constructor(
     private campusManagementService: CampusManagementService,
@@ -61,8 +60,34 @@ export class SectionCreateFormComponent {
     } else {
       console.log('Create Mode Activated');
     }
+    this.onCampusChange();
   }
 
+  onCampusChange() {
+    this.createSectionForm.get('campusId')?.valueChanges.subscribe(campusId => {
+      console.log("Campus changed:", campusId);
+
+      // Example: Load cities based on province
+      this.loadStandardByCampusId(campusId);
+    });
+  }
+  loadStandardByCampusId(campusId: any) {
+    this.standardManagemenetService.getCampusById(campusId).subscribe({
+      next: (response) => {
+        console.log('✅ Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.standardData = response.body;
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+        //this.router.navigate(['/Campuses']);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    });
+  }
   getSectionDetails(sectionId: string): void {
     this.sectionManagementService.getSectionById(sectionId)
       .subscribe({
@@ -72,10 +97,10 @@ export class SectionCreateFormComponent {
           this.sectionData = response.body;
           console.log('📦 Standard data :', this.sectionData);
           this.createSectionForm.patchValue({
-            standardName: this.sectionData?.standardName,
-            standardCode: this.sectionData?.standardCode,
-            description: this.sectionData?.description,
-            campusId: this.sectionData?.campus?.id
+            // standardName: this.sectionData?.standardName,
+            // standardCode: this.sectionData?.standardCode,
+            // description: this.sectionData?.description,
+            // campusId: this.sectionData?.campus?.id
           });
         },
         error: (error) => {
@@ -107,14 +132,15 @@ export class SectionCreateFormComponent {
 
   private initializeForm() {
     this.createSectionForm = this.fb.group({
-      standardName: ['', Validators.required],
-      standardCode: [''],
+      sectionName: ['', Validators.required],
+      campusId: ['', Validators.required],
+      standardId: ['', Validators.required],
+      sectionCode: [''],
       description: [''],
-      campusId: ['', Validators.required]
     });
   }
 
-  goTostandardList(): void {
+  goToSectionsList(): void {
     this.router.navigate(ROUTES.CAMPUS.STANDARD.LIST);
   }
   onSubmit(): void {
@@ -125,7 +151,7 @@ export class SectionCreateFormComponent {
       return;
     }
 
-    this.sectionManagementService.saveSection(this.standardId, this.createSectionForm.getRawValue()).subscribe({
+    this.sectionManagementService.saveSection(this.sectionId, this.createSectionForm.getRawValue()).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
@@ -142,19 +168,23 @@ export class SectionCreateFormComponent {
   }
 
   //getters
-  get standardName() {
-    return this.createSectionForm.get('standardName');
-  }
-
-  get standardCode() {
-    return this.createSectionForm.get('standardCode');
-  }
-
-  get description() {
-    return this.createSectionForm.get('description');
+  get sectionName() {
+    return this.createSectionForm.get('sectionName');
   }
 
   get campusId() {
     return this.createSectionForm.get('campusId');
+  }
+
+  get standardId() {
+    return this.createSectionForm.get('standardId');
+  }
+
+  get sectionCode() {
+    return this.createSectionForm.get('sectionCode');
+  }
+
+  get description() {
+    return this.createSectionForm.get('description');
   }
 }

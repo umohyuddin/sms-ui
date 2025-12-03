@@ -65,6 +65,17 @@ export const routes: Routes = [
       }
     ]
   },
+  {
+    path: 'campuses/standards/sections',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/section-management/section-management-module').then(m => m.SectionManagementModule)
+      }
+    ]
+  },
 
   // Default redirect
   {

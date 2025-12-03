@@ -6,7 +6,7 @@ import { SectionResponse } from '../../models/SectionResponse';
 import { SectionManagementService } from '../../services/section-management.service';
 
 @Component({
-  selector: 'app-standard-info',
+  selector: 'app-section-info',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './section-info.component.html',
@@ -23,7 +23,7 @@ export class SectionInfoComponent {
 
   ngOnInit(): void {
     this.sectionId = this.route.snapshot.paramMap.get('id') ?? '';
-    console.log('Campus ID from route:', this.sectionId);
+    console.log('Section ID from route:', this.sectionId);
     this.getSectionDetails(this.sectionId);
   }
 

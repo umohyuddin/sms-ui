@@ -43,6 +43,13 @@ export class StandardManagementService {
     { observeResponse: true }
   );
 }
+ getCampusById(id: string): Observable<any> {
+  return this.http.request(
+    HTTP_METHOD.GET,
+    `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.GET_BY_CAMPUS_ID(id)}`,
+    { observeResponse: true }
+  );
+}
 
   searchStandards(params: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET,

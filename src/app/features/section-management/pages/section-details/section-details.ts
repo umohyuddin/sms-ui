@@ -3,11 +3,14 @@ import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { SectionManagementService } from '../../services/section-management.service';
+import { StandardResponse } from '../../../standard-management/models/standardResponse';
+import { SectionInfoComponent } from '../../components/section-info/section-info.component';
 
 
 @Component({
   selector: 'app-section-details',
-  imports: [],
+  imports: [SectionInfoComponent
+  ],
   templateUrl: './section-details.html',
   styleUrls: ['./section-details.css'],
   standalone: true,
@@ -37,19 +40,19 @@ export class SectionDetails {
 
   getSectionDetails(sectionId: string): void {
     this.sectionManagementService.getSectionById(sectionId).subscribe({
-        next: (response: HttpResponse<any>) => {
-          console.log('✅ Status:', response.status);
-          console.log('📦 Body:', response.body);
-          this.sectionData = response.body;
-          console.log('standard Details:', this.sectionData);
-        },
-        error: (error) => {
-          console.error('❌ Error Status:', error.status);
-          console.error('Message:', error.message);
-        },
-        complete: () => {
-        }
-      });
+      next: (response: HttpResponse<any>) => {
+        console.log('✅ Status:', response.status);
+        console.log('📦 Body:', response.body);
+        this.sectionData = response.body;
+        console.log('standard Details:', this.sectionData);
+      },
+      error: (error) => {
+        console.error('❌ Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+      }
+    });
   }
 }
 

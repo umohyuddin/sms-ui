@@ -24,37 +24,39 @@
                     <div class="kt-widget__head">
                         <div class="kt-widget__user">
                             <a href="#" class="kt-widget__username">
-                                {{sectionData?.standardName}}
+                             Section Name: {{sectionData?.sectionName}}
                             </a>
                         </div>
                     </div>
                     <div class="kt-widget__subhead row">
                         <div class="col-4">
-                            <a> <b>Standard Code :</b> {{sectionData?.standardCode}}</a>
+                            <a> <b>Section Code:</b> {{sectionData?.sectionCode}}</a>
                         </div>
 
                         <div class="col-4">
-                            <a><b>Campus Name : </b>{{sectionData?.campus?.campusName}}</a>
+                            <a><b>Standard Name: </b>{{sectionData?.standard?.standardName}}</a>
                         </div>
 
                         <div class="col-4">
-                            <a> <b> Campus Code:</b> {{sectionData?.campus?.campusCode}}</a>
+                            <a> <b> Standard Code:</b> {{sectionData?.sectionCode}}</a>
                         </div>
                     </div>
                     <div class="kt-widget__subhead row">
                         <div class="col-4">
-                            <a> <b>Campus Province: </b> {{sectionData?.campus?.province?.name}}</a>
+                            <a> <b>Campus Name: </b> {{sectionData?.standard?.campus?.campusName}}</a>
                         </div>
 
                         <div class="col-4">
-                            <a> <b>Campus City </b> {{sectionData?.campus?.city?.name}}</a>
+                            <a> <b>Campus Code: </b> {{sectionData?.standard?.campus?.campusCode}}</a>
+                        </div>
+                        <div class="col-4">
+                            <a> <b>Campus Contact: </b> {{sectionData?.standard?.campus?.contactNumber}}</a>
                         </div>
                     </div>
-
                     <div class="kt-widget__info">
                         <div class="kt-widget__desc"><i style="font-size: 1.5rem !important;"
                                 class="flaticon-placeholder-3 mr-2"></i>
-                            <b>{{sectionData?.campus?.address}}</b>
+                            <b>{{sectionData?.standard?.campus?.address}}</b>
                         </div>
                     </div>
                 </div>
