@@ -97,10 +97,11 @@ export class SectionCreateFormComponent {
           this.sectionData = response.body;
           console.log('📦 Standard data :', this.sectionData);
           this.createSectionForm.patchValue({
-            // standardName: this.sectionData?.standardName,
-            // standardCode: this.sectionData?.standardCode,
-            // description: this.sectionData?.description,
-            // campusId: this.sectionData?.campus?.id
+            sectionName: this.sectionData?.sectionName,
+            sectionCode: this.sectionData?.sectionCode,
+            description: this.sectionData?.description,
+            campusId: this.sectionData?.standard.campus.id,
+            standardId : this.sectionData?.standard.id
           });
         },
         error: (error) => {

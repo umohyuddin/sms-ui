@@ -52,6 +52,7 @@ export interface SectionResponse {
   id: number;
   sectionName: string;
   sectionCode: string | null;
+  description: string | null;
   standard: Standard;
   deleted: boolean;
   deletedAt: string | null;

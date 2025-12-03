@@ -105,7 +105,7 @@ export class CampusCreateFormComponent {
       this.loadCitiesByProvince(provinceId);
     });
   }
-  loadCitiesByProvince(provinceId: any) {
+    loadCitiesByProvince(provinceId: any) {
     this.httpClientService.request<any>(HTTP_METHOD.GET, this.URL + API_ENDPOINTS.LOOKUP.CITIY.GET_BY_PROVINCE_ID(provinceId), {
       observeResponse: true
     }).subscribe({

@@ -32,7 +32,6 @@ export const API_ENDPOINTS = {
         }
     },
 
-
     LOOKUP: {
         PROVINCE: {
             GET_ALL: '/api/lookup/provinces'
