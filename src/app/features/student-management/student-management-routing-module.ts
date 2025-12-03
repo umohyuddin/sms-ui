@@ -8,9 +8,9 @@ import { RouterModule, Routes } from '@angular/router';
 
 
 const routes: Routes = [
-  { path: '', component: SectionListing },
-  { path: 'section-details/:id', component: SectionDetails },
-  { path: 'section-create', component: SectionCreate }
+  { path: '', component: StudentListing },
+  { path: 'student-details/:id', component: StudentDetails },
+  { path: 'student-create', component: StudentCreate }
 
 ];
 
@@ -20,7 +20,7 @@ const routes: Routes = [
     CommonModule
   ]
 })
-export class SectionManagementRoutingModule { }
+export class StudentManagementRoutingModule { }
 
 
 

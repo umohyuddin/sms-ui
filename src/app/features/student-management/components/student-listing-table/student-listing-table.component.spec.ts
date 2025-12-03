@@ -1,1 +1,1 @@
-describe('SectionListingTableComponent', () => {});
+describe('StudentListingTableComponent', () => {});

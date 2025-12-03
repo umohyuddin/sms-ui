@@ -8,7 +8,7 @@ import { API_ENDPOINTS } from '../../../core/const/API_ENDPOINTS';
 @Injectable({
   providedIn: 'root'
 })
-export class SectionManagementService {
+export class StudentManagementService {
 
   private baseUrl = '';
 
@@ -18,14 +18,14 @@ export class SectionManagementService {
   }
 
 
-  saveSection(id: string | null, payload: any): Observable<any> {
+  saveStudent(id: string | null, payload: any): Observable<any> {
     const isUpdate = !!id;
 
     const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
 
     const url = isUpdate
-      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.UPDATE(id)}`
-      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.CREATE}`;
+      ? `${this.baseUrl}${API_ENDPOINTS.STUDENTS.UPDATE(id)}`
+      : `${this.baseUrl}${API_ENDPOINTS.STUDENTS.CREATE}`;
 
     return this.http.request(method, url, {
       observeResponse: true,
@@ -33,21 +33,21 @@ export class SectionManagementService {
     });
   }
 
-  getAllSection(): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.GET_ALL}`, { observeResponse: true });
+  getAllStudents(): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.STUDENTS.GET_ALL}`, { observeResponse: true });
   }
 
-  getSectionById(id: string): Observable<any> {
+  getStudentById(id: string): Observable<any> {
     return this.http.request(
       HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.GET_BY_ID(id)}`,
+      `${this.baseUrl}${API_ENDPOINTS.STUDENTS.GET_BY_ID(id)}`,
       { observeResponse: true }
     );
   }
 
-  searchSections(params: any): Observable<any> {
+  searchStudents(params: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.SEARCH}`,
+      `${this.baseUrl}${API_ENDPOINTS.STUDENTS.SEARCH}`,
       {
         observeResponse: true,
         params: params

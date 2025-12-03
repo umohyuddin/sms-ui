@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { SectionListing } from './pages/section-listing/section-listing';
-import { SectionDetails } from './pages/section-details/section-details';
-import { SectionCreate } from './pages/section-create/section-create';
+import { StudentListing } from './pages/student-listing/student-listing';
+import { StudentDetails } from './pages/student-details/student-details';
+import { StudentCreate } from './pages/student-create/student-create';
+
 
 const routes: Routes = [
-  { path: '', component: SectionListing },
-  { path: 'section-details/:id', component: SectionDetails },
-  { path: 'section-edit/:id', component: SectionCreate },
-  { path: 'section-create', component: SectionCreate }
+  { path: '', component: StudentListing },
+  { path: 'student-details/:id', component: StudentDetails },
+  { path: 'student-edit/:id', component: StudentCreate },
+  { path: 'student-create', component: StudentCreate }
 ];
 
 
@@ -20,4 +21,4 @@ const routes: Routes = [
     CommonModule, RouterModule.forChild(routes)
   ]
 })
-export class SectionManagementModule { }
+export class StudentManagementModule { }

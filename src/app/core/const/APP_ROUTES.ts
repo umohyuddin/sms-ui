@@ -16,5 +16,12 @@ export const ROUTES = {
       EDIT: (id: string) => ['campuses/standards/sections', 'section-edit', id],
       DETAILS: (id: string) => ['campuses/standards/sections', 'section-details', id],
     }
-  }
+  },
+  STUDENT: {
+      LIST: ['students'],
+      CREATE: ['students', 'student-create'],
+      EDIT: (id: string) => ['students', 'student-edit', id],
+      DETAILS: (id: string) => ['students', 'student-details', id],
+    }
+
 };

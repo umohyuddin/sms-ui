@@ -1,3 +1,50 @@
+export interface StudentResponse {
+  id: number;
+  firstName: string;
+  fullName: string;
+  lastName: string;
+  studentCode: string;
+  dateOfBirth: string;
+  gender: string;
+  email: string;
+  phone: string;
+  address: string;
+  isActive: boolean;
+  deleted: boolean;
+  deletedAt: string | null;
+  status: string;
+  enrollmentDate: string;
+  createdAt: string;
+  updatedAt: string;
+  campus: Campus;
+  standard: Standard;
+  section: Section;
+  campusId: number;
+  standardId: number;
+  sectionId: number;
+}
+
+/* ---------------------- CAMPUS ---------------------- */
+export interface Campus {
+  id: number;
+  instituteId: number;
+  campusName: string;
+  campusCode: string | null;
+  contactNumber: string;
+  email: string;
+  website: string;
+  address: string;
+  logo: string | null;
+  createdAt: string;
+  updatedAt: string;
+  deleted: boolean;
+  provinceId: number;
+  cityId: number;
+  province: Province;
+  city: City;
+  active: boolean;
+}
+
 export interface Province {
   id: number;
   code: string | null;
@@ -15,26 +62,7 @@ export interface City {
   deleted: boolean | null;
 }
 
-export interface Campus {
-  id: number;
-  instituteId: number;
-  campusName: string;
-  campusCode: string | null;
-  contactNumber: string | null;
-  email: string | null;
-  website: string | null;
-  address: string | null;
-  logo: string | null;
-  createdAt: string;
-  updatedAt: string;
-  deleted: boolean;
-  provinceId: number;
-  cityId: number;
-  province: Province;
-  city: City;
-  active: boolean;
-}
-
+/* ---------------------- STANDARD ---------------------- */
 export interface Standard {
   id: number;
   standardName: string;
@@ -48,11 +76,11 @@ export interface Standard {
   campus: Campus;
 }
 
-export interface SectionResponse {
+/* ---------------------- SECTION ---------------------- */
+export interface Section {
   id: number;
   sectionName: string;
   sectionCode: string | null;
-  description: string | null;
   standard: Standard;
   deleted: boolean;
   deletedAt: string | null;

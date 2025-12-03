@@ -5,7 +5,7 @@
         <i class="kt-font-dark flaticon-squares"></i>
       </span>
       <h3 class="kt-portlet__head-title">
-        Sections Listing
+        Student Listing
       </h3>
     </div>
     <div class="kt-portlet__head-toolbar">
@@ -61,7 +61,7 @@
   </div>
   <div class="kt-portlet__body">
     <!--begin: Search-->
-    <form class="kt-form kt-form--fit kt-margin-b-20" [formGroup]="sectionsSearchForm" (ngSubmit)="onSubmitSearch()">
+    <form class="kt-form kt-form--fit kt-margin-b-20" [formGroup]="studentSearchForm" (ngSubmit)="onSubmitSearch()">
       <div class="row kt-margin-b-20">
 
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
@@ -99,7 +99,7 @@
             </span>
           </button>
           &nbsp;&nbsp;
-          <button class="btn btn-secondary btn-secondary--icon" id="kt_reset" (click)="getSections()">
+          <button class="btn btn-secondary btn-secondary--icon" id="kt_reset" (click)="getAllStudents()">
             <span>
               <i class="la la-close"></i>
               <span>Reset</span>
@@ -114,54 +114,76 @@
     <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
       <div class="row">
         <div class="col-sm-12">
-          @if(sectionsResponse && sectionsResponse.length > 0){
-          <table class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
-            id="kt_table_1" role="grid" aria-describedby="kt_table_1_info" style="width: 1162px;">
-            <thead>
-              <tr role="row">
-                <th tabindex="0" aria-controls="kt_table_1" rowspan="1" colspan="1" aria-sort="ascending"
-                  aria-label="Record ID: activate to sort column descending" *ngFor="let col of columns">{{ col.label }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
+          @if(studentsResponse && studentsResponse.length > 0){
 
-              <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
-                <td>{{ item.sectionName }}</td>
-                <td>{{ item.sectionCode }}</td>
-                <td>{{ item.standard.standardName }}</td>
-                <td>{{ item.standard.standardCode }}</td>
-                <td>{{ item.standard.campus.campusName }}</td>
-                <td>{{ item.standard.campus.campusCode }}</td>
-                <td nowrap="">
-                  <span class="dropdown">
-                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown"
-                      aria-expanded="true">
-                      <i class="la la-ellipsis-h"></i>
+          <div class="table-responsive-custom">
+            <table
+              class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
+              id="kt_table_1" role="grid" aria-describedby="kt_table_1_info">
+              <thead>
+                <tr role="row">
+                  <th tabindex="0" aria-controls="kt_table_1" rowspan="1" colspan="1" aria-sort="ascending"
+                    aria-label="Record ID: activate to sort column descending" *ngFor="let col of columns">{{ col.label
+                    }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+
+
+                <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
+                  <td>1254</td>
+                  <td>{{item.studentCode}}</td>
+                  <td>{{ item.fullName }}</td>
+                  <td>{{ item.firstName }}</td>
+                  <td>{{ item.lastName }}</td>
+                  <td>{{item.phone}}</td>
+                  <td>{{item.gender}}</td>
+                  <td>{{item.dateOfBirth}}</td>
+                  <td>3310427306979</td>
+                  <td>cnic</td>
+                  <td>
+                    <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
+                      [ngClass]="item.isActive ? 'kt-badge--brand' : 'kt-badge--danger'">
+                      {{item.isActive===true ? 'Active' : 'Inactive'}}
+                    </span>
+
+                  </td>
+                  <td>{{ item.enrollmentDate }}</td>
+                  <td>{{ item.standard.standardName }}</td>
+                  <td>{{ item.standard.standardCode }}</td>
+                  <td>{{ item.standard.campus.campusName }}</td>
+                  <td>{{ item.standard.campus.campusCode }}</td>
+                  <td nowrap="">
+                    <span class="dropdown">
+                      <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown"
+                        aria-expanded="true">
+                        <i class="la la-ellipsis-h"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#" (click)="editStudentDetails(item,$event)"><i
+                            class="la la-edit"></i> Edit Details</a>
+                        <a class="dropdown-item" href="#" (click)="viewStudentDetails(item,$event)">
+                          <i class="la la-eye"></i> View Details</a>
+                        <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
+                      </div>
+                    </span>
+                    <a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View"
+                      (click)="viewStudentDetails(item,$event)">
+                      <i class="la la-eye"></i>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item" href="#" (click)="editSectionDetails(item,$event)"><i
-                          class="la la-edit"></i> Edit Details</a>
-                      <a class="dropdown-item" href="#" (click)="viewSectionDetails(item,$event)">
-                        <i class="la la-eye"></i> View Details</a>
-                      <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
-                    </div>
-                  </span>
-                  <a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View"
-                    (click)="viewSectionDetails(item,$event)">
-                    <i class="la la-eye"></i>
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           }
           @else{
           <div class="alert alert-dark" role="alert">
             <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
             <div class="alert-text">
               <div class="alert-text">
-                Looks like there are no Section yet in the system.
+                Looks like there are no Students yet in the system.
               </div>
             </div>
           </div>

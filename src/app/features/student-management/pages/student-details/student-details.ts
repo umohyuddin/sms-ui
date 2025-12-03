@@ -1,50 +1,41 @@
 import { Component } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { AppConfigService } from '../../../../core/services/app-config.service';
-import { SectionManagementService } from '../../services/section-management.service';
-import { StandardResponse } from '../../../standard-management/models/standardResponse';
-import { SectionInfoComponent } from '../../components/section-info/section-info.component';
+import { StudentManagementService } from '../../services/student-management.service';
+import { StudentResponse } from '../../models/StudentResponse';
 
 
 @Component({
-  selector: 'app-section-details',
-  imports: [SectionInfoComponent
+  selector: 'app-student-details',
+  imports: [
   ],
-  templateUrl: './section-details.html',
-  styleUrls: ['./section-details.css'],
+  templateUrl: './student-details.html',
+  styleUrls: ['./student-details.css'],
   standalone: true,
 })
-export class SectionDetails {
-  sectionData?: StandardResponse;
-  sectionId!: string;
+export class StudentDetails {
+  studentData?: StudentResponse;
+  studentId!: string;
   isActive = true;
   URL = '';
-  toggleStatus() {
 
-    this.isActive = !this.isActive;
-  }
-  constructor(private sectionManagementService: SectionManagementService
-    , private route: ActivatedRoute,
-    private appConfig: AppConfigService
+  constructor(private studentManagementService: StudentManagementService,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
-    console.log('API Base URL:', this.appConfig.apiBaseUrl);
-    this.URL = this.appConfig.apiBaseUrl;
-
-    this.sectionId = this.route.snapshot.paramMap.get('id') ?? '';
-    console.log('standard ID from route:', this.sectionId);
-    this.getSectionDetails(this.sectionId);
+    this.studentId = this.route.snapshot.paramMap.get('id') ?? '';
+    console.log('Student ID from route:', this.studentId);
+    this.getStudentDetails(this.studentId);
   }
 
-  getSectionDetails(sectionId: string): void {
-    this.sectionManagementService.getSectionById(sectionId).subscribe({
+  getStudentDetails(studentId: string): void {
+    this.studentManagementService.getStudentById(studentId).subscribe({
       next: (response: HttpResponse<any>) => {
         console.log('✅ Status:', response.status);
         console.log('📦 Body:', response.body);
-        this.sectionData = response.body;
-        console.log('standard Details:', this.sectionData);
+        this.studentData = response.body;
+        console.log('standard Details:', this.studentData);
       },
       error: (error) => {
         console.error('❌ Error Status:', error.status);

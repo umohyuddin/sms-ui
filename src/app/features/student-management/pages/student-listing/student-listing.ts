@@ -5,28 +5,29 @@ import { FormsModule } from '@angular/forms';
 
 import { Router } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-import { SectionListingTableComponent } from '../../components/section-listing-table/section-listing-table.component';
+import { StudentListingTableComponent } from '../../components/student-listing-table/student-listing-table.component';
+
 
 @Component({
   selector: 'app-section-listing',
   imports: [
     CommonModule,
     FormsModule,
-    SectionListingTableComponent
+    StudentListingTableComponent
 ],
-  templateUrl: './section-listing.html',
-  styleUrls: ['./section-listing.css'],
+  templateUrl: './student-listing.html',
+  styleUrls: ['./student-listing.css'],
   standalone: true,
 })
-export class SectionListing implements OnInit {
+export class StudentListing implements OnInit {
   URL = '';
   constructor(private router: Router) { }
 
   ngOnInit(): void { }
 
 
-  goToCreateSection(): void {
-    this.router.navigate(ROUTES.CAMPUS.SECTION.CREATE);
+  goToCreateStudent(): void {
+    this.router.navigate(ROUTES.STUDENT.CREATE);
   }
 }
 

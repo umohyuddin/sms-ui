@@ -5,8 +5,14 @@ export const API_ENDPOINTS = {
         CREATE: '/users/create',
         UPDATE: (id: number) => `/users/update/${id}`,
         DELETE: (id: number) => `/users/delete/${id}`
-    }
-    ,
+    },
+    STUDENTS: {
+        CREATE: '/api/institute/students',
+        UPDATE: (id: string) => `/api/institute/students/${id}`,
+        GET_ALL: '/api/institute/students',
+        SEARCH: (keyword: string) => `/api/institute/students/search/${keyword}`,
+        GET_BY_ID: (id: string) => `/api/institute/students/${id}`
+    },
     INSTITUTE: {
         CAMPUSES: {
             CREATE: '/api/institute/campuses',

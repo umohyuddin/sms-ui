@@ -76,6 +76,17 @@ export const routes: Routes = [
       }
     ]
   },
+  {
+    path: 'students',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/student-management/student-management-module').then(m => m.StudentManagementModule)
+      }
+    ]
+  },
 
   // Default redirect
   {
