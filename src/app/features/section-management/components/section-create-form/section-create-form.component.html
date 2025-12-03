@@ -1,0 +1,74 @@
+<div class="kt-portlet">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-label">
+      <h3 class="kt-portlet__head-title">
+        {{isEditMode===true? 'Update Standard Details': "Add New Standard"}}
+      </h3>
+    </div>
+  </div>
+
+
+  <!--begin::Form-->
+  <form class="kt-form kt-form--label-right" [formGroup]="createStandardForm" (ngSubmit)="onSubmit()">
+    <div class="kt-portlet__body">
+      <h4>Standard Information</h4>
+      
+        <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Campus:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="campusId"
+            [class.is-invalid]="campusId?.invalid && (campusId?.touched || campusId?.dirty)"
+            [class.is-valid]="campusId?.valid && (campusId?.touched || campusId?.dirty)">
+            <option value='' selected>Select Campus</option>
+            @for (p of campuses; track p.id) {
+            <option [value]="p.id">{{ p.campusName }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select campus</span>
+           <span class="invalid-feedback" *ngIf="campusId?.errors?.['required']">
+            Campus is required
+          </span>
+        </div>
+         <label class="col-lg-1 col-form-label">Standard Name:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="" formControlName="standardName"
+            [class.is-invalid]="standardName?.invalid && (standardName?.touched || standardName?.dirty)"
+            [class.is-valid]="standardName?.valid && (standardName?.touched || standardName?.dirty)">
+          <span class="form-text text-muted">Please enter your Standard name</span>
+          <span class="invalid-feedback" *ngIf="standardName?.errors?.['required']">
+            Standard Name is required
+          </span>
+        </div>
+         <label class="col-lg-1 col-form-label">Standard Code</label>
+        <div class="col-lg-3">
+          <div class="kt-input-icon">
+            <input type="text" class="form-control" placeholder="" formControlName="standardCode">
+          </div>
+          <span class="form-text text-muted">Please enter Standard Code</span>
+        </div>
+      </div>
+
+      <div class="form-group row kt-margin-t-40">
+        <label class="col-lg-1 col-form-label">Description:</label>
+        <div class="col-lg-11">
+          <div class="kt-input-icon">
+            <textarea class="form-control" id="exampleTextarea" rows="3" formControlName="description"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions">
+        <div class="row">
+          <div class="col-lg-5"></div>
+          <div class="col-lg-7">
+            <button type="submit" class="btn btn-dark mr-2">{{isEditMode===true? 'Update Standard Details': "Add New Standard"}}</button>
+            <button type="button" class="btn btn-secondary" (click)="goTostandardList()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!--end::Form-->
+</div>
