@@ -1,0 +1,47 @@
+.kt-widget__item {
+  cursor: pointer;
+  padding: 12px;
+  display: block;
+}
+
+.kt-widget__item.active {
+  background: #f0f0f0;
+  font-weight: bold;
+  border-left: 3px solid #5867dd;
+}
+
+
+
+
+
+
+
+.full-width-tab {
+  width: 100% !important;
+  display: block;
+}
+
+.full-width-tab .kt-portlet {
+  width: 100% !important;
+}
+
+.full-width-tab .kt-portlet__body,
+.full-width-tab .kt-portlet__body--fit {
+  width: 100% !important;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.full-width-tab .kt-grid__item {
+  width: 100% !important;
+}
+
+.full-width-tab .kt-app__content {
+  width: 100% !important;
+}
+
+
+
+
+
+

@@ -3,11 +3,13 @@ import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { StudentManagementService } from '../../services/student-management.service';
 import { StudentResponse } from '../../models/StudentResponse';
+import { StudentInfoComponent } from '../../components/student-info/student-info.component';
 
 
 @Component({
   selector: 'app-student-details',
   imports: [
+    StudentInfoComponent
   ],
   templateUrl: './student-details.html',
   styleUrls: ['./student-details.css'],
@@ -16,8 +18,7 @@ import { StudentResponse } from '../../models/StudentResponse';
 export class StudentDetails {
   studentData?: StudentResponse;
   studentId!: string;
-  isActive = true;
-  URL = '';
+
 
   constructor(private studentManagementService: StudentManagementService,
     private route: ActivatedRoute,

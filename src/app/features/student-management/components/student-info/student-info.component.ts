@@ -2,38 +2,44 @@ import { Component, Input } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { SectionResponse } from '../../models/SectionResponse';
-import { SectionManagementService } from '../../services/section-management.service';
+import { StudentResponse } from '../../models/StudentResponse';
+import { StudentManagementService } from '../../services/student-management.service';
+
 
 @Component({
-  selector: 'app-section-info',
+  selector: 'app-student-info',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './section-info.component.html',
-  styleUrls: ['./section-info.component.css']
+  templateUrl: './student-info.component.html',
+  styleUrls: ['./student-info.component.css']
 })
-export class SectionInfoComponent {
-  sectionData?: SectionResponse;
-  sectionId!: string;
-  URL = '';
+export class StudentInfoComponent {
+  studentData?: StudentResponse;
+  studentId!: string;
+  activeTab: string = 'overview';
+
   constructor(
-    private sectionManagementService: SectionManagementService,
+    private studentManagementService: StudentManagementService,
     private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.sectionId = this.route.snapshot.paramMap.get('id') ?? '';
-    console.log('Section ID from route:', this.sectionId);
-    this.getSectionDetails(this.sectionId);
+    this.studentId = this.route.snapshot.paramMap.get('id') ?? '';
+    console.log('Student ID from route:', this.studentId);
+    this.getStudentDetails(this.studentId);
   }
 
-  getSectionDetails(sectionId: string): void {
-    this.sectionManagementService.getSectionById(sectionId).subscribe({
+  setActiveTab(tab: string) {
+    this.activeTab = tab;
+  }
+
+  getStudentDetails(studentId: string): void {
+    this.studentManagementService.getStudentById(studentId).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.sectionData = response.body;
-        console.log('📦 Standard data :', this.sectionData);
+        this.studentData = response.body;
+        console.log('📦 Standard data :', this.studentData);
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
