@@ -1,9 +1,4 @@
 import { Component } from '@angular/core';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -13,39 +8,41 @@ import { AppConfigService } from '../../../../core/services/app-config.service';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
 import { CampusResponse } from '../../../campus-management/models/campusResponse';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-import { StandardManagementService } from '../../services/standard-management.service';
-import { StandardResponse } from '../../models/standardResponse';
+import { StandardResponse } from '../../../standard-management/models/standardResponse';
+import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
+import { SectionManagementModule } from '../../section-management-module';
+import { SectionManagementService } from '../../services/section-management.service';
+import { SectionResponse } from '../../models/SectionResponse';
+
 
 
 @Component({
-  selector: 'app-standard-create-form',
+  selector: 'app-section-create-form',
   standalone: true,
-  imports: [MatExpansionModule,
-    MatSlideToggleModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
+  imports: [
     ReactiveFormsModule,
     CommonModule],
-  templateUrl: './standard-create-form.component.html',
-  styleUrls: ['./standard-create-form.component.css']
+  templateUrl: './section-create-form.component.html',
+  styleUrls: ['./section-create-form.component.css']
 })
-export class StandardCreateFormComponent {
-  createStandardForm!: FormGroup;
-  routestandardId?: string;
+export class SectionCreateFormComponent {
+  createSectionForm!: FormGroup;
+  routeSectionId?: string;
   URL = '';
   mode = '';
   standardData?: StandardResponse;
+    sectionData?: SectionResponse;
   campuses: CampusResponse[] = [];
   cities: any[] = [];
   standardId: string | null = null;
   isEditMode: boolean = false;
+  sectionId: string | null = null;
 
   constructor(
     private campusManagementService: CampusManagementService,
     private standardManagemenetService: StandardManagementService,
+    private sectionManagementService: SectionManagementService,
     private fb: FormBuilder,
-    private httpClientService: HttpClientService,
     private route: ActivatedRoute,
     private router: Router,
     private appConfig: AppConfigService
@@ -55,30 +52,30 @@ export class StandardCreateFormComponent {
 
     this.getCampuses();
     this.initializeForm();
-    this.standardId = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = !!this.standardId;
+    this.sectionId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.sectionId;
 
     if (this.isEditMode) {
-      console.log('Edit Mode Activated - Load data for:', this.standardId);
-      this.getStandardDetails(this.standardId!);
+      console.log('Edit Mode Activated - Load data for:', this.sectionId);
+      this.getSectionDetails(this.sectionId!);
     } else {
       console.log('Create Mode Activated');
     }
   }
 
-  getStandardDetails(standardId: string): void {
-    this.standardManagemenetService.getStandardById(standardId)
+  getSectionDetails(sectionId: string): void {
+    this.sectionManagementService.getSectionById(sectionId)
       .subscribe({
         next: (response) => {
           console.log('✅ Request Success Status:', response.status);
           console.log('📦 Response Body:', response.body);
-          this.standardData = response.body;
-          console.log('📦 Standard data :', this.standardData);
-          this.createStandardForm.patchValue({
-            standardName: this.standardData?.standardName,
-            standardCode: this.standardData?.standardCode,
-            description: this.standardData?.description,
-            campusId: this.standardData?.campus?.id
+          this.sectionData = response.body;
+          console.log('📦 Standard data :', this.sectionData);
+          this.createSectionForm.patchValue({
+            standardName: this.sectionData?.standardName,
+            standardCode: this.sectionData?.standardCode,
+            description: this.sectionData?.description,
+            campusId: this.sectionData?.campus?.id
           });
         },
         error: (error) => {
@@ -109,7 +106,7 @@ export class StandardCreateFormComponent {
   }
 
   private initializeForm() {
-    this.createStandardForm = this.fb.group({
+    this.createSectionForm = this.fb.group({
       standardName: ['', Validators.required],
       standardCode: [''],
       description: [''],
@@ -121,23 +118,22 @@ export class StandardCreateFormComponent {
     this.router.navigate(ROUTES.CAMPUS.STANDARD.LIST);
   }
   onSubmit(): void {
-    console.log('✅ Create standard Form Data:', this.createStandardForm.getRawValue());
-    if (this.createStandardForm.invalid) {
-      this.createStandardForm.markAllAsTouched();
+    console.log('✅ Create standard Form Data:', this.createSectionForm.getRawValue());
+    if (this.createSectionForm.invalid) {
+      this.createSectionForm.markAllAsTouched();
       console.warn('❌ Form is invalid');
       return;
     }
-    
-    this.standardManagemenetService.saveStandard(this.standardId,this.createStandardForm.getRawValue()).subscribe({
+
+    this.sectionManagementService.saveSection(this.standardId, this.createSectionForm.getRawValue()).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.router.navigate(ROUTES.CAMPUS.STANDARD.LIST                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      );
+        this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
       },
       error: (error) => {
         console.error('❌ Post Error Status:', error.status);
         console.error('Message:', error.message);
-        this.router.navigate(['/standards']);
       },
       complete: () => {
         console.log('🔚 Post Complete');
@@ -147,18 +143,18 @@ export class StandardCreateFormComponent {
 
   //getters
   get standardName() {
-    return this.createStandardForm.get('standardName');
+    return this.createSectionForm.get('standardName');
   }
 
   get standardCode() {
-    return this.createStandardForm.get('standardCode');
+    return this.createSectionForm.get('standardCode');
   }
 
   get description() {
-    return this.createStandardForm.get('description');
+    return this.createSectionForm.get('description');
   }
 
   get campusId() {
-    return this.createStandardForm.get('campusId');
+    return this.createSectionForm.get('campusId');
   }
 }

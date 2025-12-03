@@ -9,6 +9,12 @@ export const ROUTES = {
       CREATE: ['campuses/standards', 'standard-create'],
       EDIT: (id: string) => ['campuses/standards', 'standard-edit', id],
       DETAILS: (id: string) => ['campuses/standards', 'standard-details', id],
+    },
+    SECTION: {
+      LIST: ['campuses/standards/sections'],
+      CREATE: ['campuses/standards/sections', 'sections-create'],
+      EDIT: (id: string) => ['campuses/standards/sections', 'sections-edit', id],
+      DETAILS: (id: string) => ['campuses/standards/sections', 'sections-details', id],
     }
   }
 };

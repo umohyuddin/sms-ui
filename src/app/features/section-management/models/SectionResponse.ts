@@ -35,7 +35,7 @@ export interface Campus {
   active: boolean;
 }
 
-export interface StandardResponse {
+export interface SectionResponse {
   id: number;
   standardName: string;
   standardCode?: string | null;

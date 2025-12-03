@@ -8,7 +8,7 @@ import { API_ENDPOINTS } from '../../../core/const/API_ENDPOINTS';
 @Injectable({
   providedIn: 'root'
 })
-export class StandardManagementService {
+export class SectionManagementService {
 
   private baseUrl = '';
 
@@ -18,33 +18,34 @@ export class StandardManagementService {
   }
 
 
-  saveStandard(id: string | null, payload: any): Observable<any> {
-  const isUpdate = !!id;
+  saveSection(id: string | null, payload: any): Observable<any> {
+    const isUpdate = !!id;
 
-  const method = isUpdate ? HTTP_METHOD.PATCH : HTTP_METHOD.POST;
+    const method = isUpdate ? HTTP_METHOD.PATCH : HTTP_METHOD.POST;
 
-  const url = isUpdate
-    ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.UPDATE(id)}`
-    : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.CREATE}`;
+    const url = isUpdate
+      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.UPDATE(id)}`
+      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.CREATE}`;
 
-  return this.http.request(method, url, {
-    observeResponse: true,
-    body: payload
-  });
-}
-  getAllStandards(): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.GET_ALL}`, { observeResponse: true });
+    return this.http.request(method, url, {
+      observeResponse: true,
+      body: payload
+    });
   }
 
-  getStandardById(id: string): Observable<any> {
-  return this.http.request(
-    HTTP_METHOD.GET,
-    `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.GET_BY_ID(id)}`,
-    { observeResponse: true }
-  );
-}
+  getAllSection(): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.GET_ALL}`, { observeResponse: true });
+  }
 
-  searchStandards(params: any): Observable<any> {
+  getSectionById(id: string): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.GET_BY_ID(id)}`,
+      { observeResponse: true }
+    );
+  }
+
+  searchSections(params: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET,
       `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.SEARCH}`,
       {
@@ -54,8 +55,8 @@ export class StandardManagementService {
     );
   }
 
-  deleteCampus(id: number): Observable<any> {
-    return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}/${id}`, { observeResponse: true });
-  }
+  // deleteCampus(id: number): Observable<any> {
+  //   return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}/${id}`, { observeResponse: true });
+  // }
 
 }

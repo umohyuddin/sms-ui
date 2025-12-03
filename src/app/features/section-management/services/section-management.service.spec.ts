@@ -1,3 +1,3 @@
 
 
-describe('StandardManagementService', () => {});
+describe('SectionManagementService', () => {});

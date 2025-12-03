@@ -5,7 +5,7 @@
         <i class="kt-font-dark flaticon-squares"></i>
       </span>
       <h3 class="kt-portlet__head-title">
-        Standards Listing
+        Sections Listing
       </h3>
     </div>
     <div class="kt-portlet__head-toolbar">
@@ -61,9 +61,9 @@
   </div>
   <div class="kt-portlet__body">
     <!--begin: Search-->
-    <form class="kt-form kt-form--fit kt-margin-b-20" [formGroup]="standardSearchForm" (ngSubmit)="onSubmit()">
+    <form class="kt-form kt-form--fit kt-margin-b-20" [formGroup]="sectionsSearchForm" (ngSubmit)="onSubmitSearch()">
       <div class="row kt-margin-b-20">
-        
+
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
           <label>Campus:</label>
           <select class="form-control kt-input" data-col-index="2" formControlName="campusId">
@@ -74,8 +74,18 @@
           </select>
         </div>
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-          <label>Standard Name:</label>
-          <input type="text" class="form-control kt-input" placeholder="E.g: 1st grade" data-col-index="0" formControlName="keyword">
+          <label>Standard:</label>
+          <select class="form-control kt-input" data-col-index="2" formControlName="standardId">
+            <option value='' selected>Select Standard</option>
+            @for (s of standardsResponse; track s.id) {
+            <option [value]="s.id">{{ s.standardName }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+          <label>Section Name:</label>
+          <input type="text" class="form-control kt-input" placeholder="E.g: 1st grade" data-col-index="0"
+            formControlName="keyword">
         </div>
 
       </div>
@@ -89,7 +99,7 @@
             </span>
           </button>
           &nbsp;&nbsp;
-          <button class="btn btn-secondary btn-secondary--icon" id="kt_reset" (click)="getStandards()">
+          <button class="btn btn-secondary btn-secondary--icon" id="kt_reset" (click)="getSections()">
             <span>
               <i class="la la-close"></i>
               <span>Reset</span>
@@ -129,15 +139,15 @@
                       <i class="la la-ellipsis-h"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item" href="#" (click)="editStandardDetails(item,$event)"><i
+                      <a class="dropdown-item" href="#" (click)="editSectionDetails(item,$event)"><i
                           class="la la-edit"></i> Edit Details</a>
-                      <a class="dropdown-item" href="#" (click)="viewStandardDetails(item,$event)">
+                      <a class="dropdown-item" href="#" (click)="viewSectionDetails(item,$event)">
                         <i class="la la-eye"></i> View Details</a>
                       <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
                     </div>
                   </span>
                   <a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View"
-                    (click)="viewStandardDetails(item,$event)">
+                    (click)="viewSectionDetails(item,$event)">
                     <i class="la la-eye"></i>
                   </a>
                 </td>
@@ -150,11 +160,8 @@
             <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
             <div class="alert-text">
               <div class="alert-text">
-                Looks like there are no standards yet.
-                <br> You can create a standard and link it to an existing campus, or first add a new campus and then
-                create your standard.
+                Looks like there are no Section yet in the system.
               </div>
-
             </div>
           </div>
           }

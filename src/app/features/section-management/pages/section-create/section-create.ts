@@ -5,7 +5,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { StandardCreateFormComponent } from '../../components/standard-create-form/standard-create-form.component';
+
 
 
 
@@ -16,13 +16,12 @@ import { StandardCreateFormComponent } from '../../components/standard-create-fo
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    StandardCreateFormComponent,
   ],
-  templateUrl: './standard-create.html',
-  styleUrls: ['./standard-create.css'],
+  templateUrl: './section-create.html',
+  styleUrls: ['./section-create.css'],
   standalone: true,
 })
-export class StandardCreate {
+export class SectionCreate {
    constructor() { }
  
 }

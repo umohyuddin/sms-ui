@@ -3,16 +3,14 @@ import { CommonModule } from '@angular/common';
 
 
 import { RouterModule, Routes } from '@angular/router';
-import { StandardListing } from './pages/standard-listing/standard-listing';
-import { StandardDetails } from './pages/standard-details/standard-details';
-import { StandardCreate } from './pages/standard-create/standard-create';
+
 
 
 
 const routes: Routes = [
-  { path: '', component: StandardListing },
-  { path: 'standard-details/:id', component: StandardDetails },
-  { path: 'standard-create', component: StandardCreate }
+  { path: '', component: SectionListing },
+  { path: 'section-details/:id', component: SectionDetails },
+  { path: 'section-create', component: SectionCreate }
 
 ];
 
@@ -22,7 +20,7 @@ const routes: Routes = [
     CommonModule
   ]
 })
-export class StandardManagementRoutingModule { }
+export class SectionManagementRoutingModule { }
 
 
 

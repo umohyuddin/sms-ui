@@ -21,7 +21,15 @@ export const API_ENDPOINTS = {
             GET_ALL: '/api/institute/campuses/standards',
             SEARCH: '/api/institute/campuses/standards/search',
             GET_BY_ID: (id: string) => `/api/institute/campuses/standards/${id}`
+        },
+        SECTIONS: {
+            CREATE: '/api/institute/campuses/standards/section',
+            UPDATE: (id: string) => `/api/institute/campuses/standards/sections${id}`,
+            GET_ALL: '/api/institute/campuses/standards/sections',
+            SEARCH: '/api/institute/campuses/standards/search',
+            GET_BY_ID: (id: string) => `/api/institute/campuses/standards/section${id}`
         }
+
 
     },
 

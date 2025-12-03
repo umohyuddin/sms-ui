@@ -2,16 +2,16 @@
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
       <h3 class="kt-portlet__head-title">
-        {{isEditMode===true? 'Update Standard Details': "Add New Standard"}}
+        {{isEditMode===true? 'Update Section Details': "Add New Section"}}
       </h3>
     </div>
   </div>
 
 
   <!--begin::Form-->
-  <form class="kt-form kt-form--label-right" [formGroup]="createStandardForm" (ngSubmit)="onSubmit()">
+  <form class="kt-form kt-form--label-right" [formGroup]="createSectionForm" (ngSubmit)="onSubmit()">
     <div class="kt-portlet__body">
-      <h4>Standard Information</h4>
+      <h4>Section Information</h4>
       
         <div class="form-group row form-group-marginless kt-margin-t-20">
         <label class="col-lg-1 col-form-label">Campus:</label>
@@ -63,7 +63,7 @@
           <div class="col-lg-5"></div>
           <div class="col-lg-7">
             <button type="submit" class="btn btn-dark mr-2">{{isEditMode===true? 'Update Standard Details': "Add New Standard"}}</button>
-            <button type="button" class="btn btn-secondary" (click)="goTostandardList()">Cancel</button>
+            <button type="button" class="btn btn-secondary" (click)="goToSectionsList()">Cancel</button>
           </div>
         </div>
       </div>

@@ -4,29 +4,27 @@ import { OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Router } from '@angular/router';
-import { StandardListingTableComponent } from '../../components/standard-listing-table/standard-listing-table.component';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
 @Component({
-  selector: 'app-standard-listing',
+  selector: 'app-section-listing',
   imports: [
     CommonModule,
     FormsModule,
-    StandardListingTableComponent
 ],
-  templateUrl: './standard-listing.html',
-  styleUrls: ['./standard-listing.css'],
+  templateUrl: './section-listing.html',
+  styleUrls: ['./section-listing.css'],
   standalone: true,
 })
-export class StandardListing implements OnInit {
+export class SectionListing implements OnInit {
   URL = '';
   constructor(private router: Router) { }
 
   ngOnInit(): void { }
 
 
-  goToCreatestandard(): void {
-    this.router.navigate(ROUTES.CAMPUS.STANDARD.CREATE);
+  goToCreateSection(): void {
+    this.router.navigate(ROUTES.CAMPUS.SECTION.CREATE);
   }
 }
 

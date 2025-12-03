@@ -1,40 +1,39 @@
 import { Component, Input } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { StandardResponse } from '../../models/standardResponse';
 import { ActivatedRoute } from '@angular/router';
-import { StandardManagementService } from '../../services/standard-management.service';
+import { SectionResponse } from '../../models/SectionResponse';
+import { SectionManagementService } from '../../services/section-management.service';
 
 @Component({
   selector: 'app-standard-info',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule],
-  templateUrl: './standard-info.component.html',
-  styleUrls: ['./standard-info.component.css']
+  imports: [CommonModule],
+  templateUrl: './section-info.component.html',
+  styleUrls: ['./section-info.component.css']
 })
-export class StandardInfoComponent {
-  standardData?: StandardResponse;
-  standardId!: string;
+export class SectionInfoComponent {
+  sectionData?: SectionResponse;
+  sectionId!: string;
   URL = '';
   constructor(
-    private standardManagementService: StandardManagementService,
+    private sectionManagementService: SectionManagementService,
     private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.standardId = this.route.snapshot.paramMap.get('id') ?? '';
-    console.log('Campus ID from route:', this.standardId);
-    this.getStandardDetails(this.standardId);
+    this.sectionId = this.route.snapshot.paramMap.get('id') ?? '';
+    console.log('Campus ID from route:', this.sectionId);
+    this.getSectionDetails(this.sectionId);
   }
 
-  getStandardDetails(standardId: string): void {
-    this.standardManagementService.getStandardById(standardId).subscribe({
+  getSectionDetails(sectionId: string): void {
+    this.sectionManagementService.getSectionById(sectionId).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.standardData = response.body;
-        console.log('📦 Standard data :', this.standardData);
+        this.sectionData = response.body;
+        console.log('📦 Standard data :', this.sectionData);
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
