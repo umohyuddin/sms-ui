@@ -1,16 +1,10 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientService } from '../../../../core/services/http-client.service';
 import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpResponse } from '@angular/common/http';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
@@ -19,15 +13,11 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
 @Component({
   selector: 'app-campus-create-form',
   standalone: true,
-  imports: [MatExpansionModule,
-    MatSlideToggleModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
+  imports: [
     ReactiveFormsModule,
     CommonModule],
-  templateUrl: './Campus-create-form.component.html',
-  styleUrls: ['./Campus-create-form.component.css']
+  templateUrl: './campus-create-form.component.html',
+  styleUrls: ['./campus-create-form.component.css']
 })
 export class CampusCreateFormComponent {
   createCampusForm!: FormGroup;
@@ -72,9 +62,6 @@ export class CampusCreateFormComponent {
 
   }
 
-
-
-
   private getProvinces() {
     this.httpClientService.request<any>(HTTP_METHOD.GET, this.URL + API_ENDPOINTS.LOOKUP.PROVINCE.GET_ALL, {
       observeResponse: true
@@ -102,8 +89,8 @@ export class CampusCreateFormComponent {
       campusName: ['', [Validators.required]],
       campusCode: ['', Validators.maxLength(20)],
       isActive: [true],
-      contactNumber: ['', [Validators.required,Validators.maxLength(15)]],
-      email: ['', [Validators.required,Validators.email]],
+      contactNumber: ['', [Validators.required, Validators.maxLength(15)]],
+      email: ['', [Validators.required, Validators.email]],
       website: [''],
       address: ['']
     });
@@ -144,10 +131,7 @@ export class CampusCreateFormComponent {
   // }
 
   goToCampusList(): void {
-
-    // Navigate to the create Campus page
     this.router.navigate(['/Campuss']);
-    //window.location.href = '/Campuss'; // Adjust the URL as needed
   }
   onSubmit(): void {
     console.log('✅ Campus Form Data:', this.createCampusForm.getRawValue());
@@ -188,10 +172,6 @@ export class CampusCreateFormComponent {
       }
     })
   }
-
-
-
-
 
 
   getCampusDetails(campusId: string): void {

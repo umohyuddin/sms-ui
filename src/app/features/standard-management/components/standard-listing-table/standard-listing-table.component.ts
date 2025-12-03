@@ -96,10 +96,10 @@ export class StandardListingTableComponent {
     this.router.navigate(ROUTES.CAMPUS.STANDARD.DETAILS(standard.id.toString()));
   }
 
-  editStandardDetails(campus: StandardResponse, event: Event): void {
+  editStandardDetails(standard: StandardResponse, event: Event): void {
     event.preventDefault();  // prevents anchor default behavior
-    console.log('Editing Campus ID:', campus.id);
-    this.router.navigate(['/campuses/campus-edit', campus.id]);
+    console.log('Editing Standard ID:', standard.id);
+    this.router.navigate(ROUTES.CAMPUS.STANDARD.EDIT(standard.id.toString()));
   }
 
   deleteStandard(standardId: any, event: Event): void {

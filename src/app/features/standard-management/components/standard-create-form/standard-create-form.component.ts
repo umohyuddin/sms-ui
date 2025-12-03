@@ -15,6 +15,9 @@ import { AppConfigService } from '../../../../core/services/app-config.service';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
 import { CampusResponse } from '../../../campus-management/models/campusResponse';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { StandardManagementService } from '../../services/standard-management.service';
+import { StandardResponse } from '../../models/standardResponse';
 
 
 @Component({
@@ -35,12 +38,15 @@ export class StandardCreateFormComponent {
   routestandardId?: string;
   URL = '';
   mode = '';
-  standardData: any;
+  standardData?: StandardResponse;
   campuses: CampusResponse[] = [];
   cities: any[] = [];
+  standardId: string | null = null;
+  isEditMode: boolean = false;
 
   constructor(
     private campusManagementService: CampusManagementService,
+    private standardManagemenetService: StandardManagementService,
     private fb: FormBuilder,
     private httpClientService: HttpClientService,
     private route: ActivatedRoute,
@@ -52,8 +58,41 @@ export class StandardCreateFormComponent {
 
     this.getCampuses();
     this.initializeForm();
+    this.standardId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.standardId;
+
+    if (this.isEditMode) {
+      console.log('Edit Mode Activated - Load data for:', this.standardId);
+      this.getStandardDetails(this.standardId!);
+    } else {
+      console.log('Create Mode Activated');
+    }
   }
 
+  getStandardDetails(standardId: string): void {
+    this.standardManagemenetService.getStandardById(standardId)
+      .subscribe({
+        next: (response) => {
+          console.log('✅ Request Success Status:', response.status);
+          console.log('📦 Response Body:', response.body);
+          this.standardData = response.body;
+          console.log('📦 Standard data :', this.standardData);
+          this.createStandardForm.patchValue({
+            standardName: this.standardData?.standardName,
+            standardCode: this.standardData?.standardCode,
+            description: this.standardData?.description,
+            campusId: this.standardData?.campus?.id
+          });
+        },
+        error: (error) => {
+          console.error('❌ Request Error Status:', error.status);
+          console.error('Message:', error.message);
+        },
+        complete: () => {
+          console.log('🔚 Request Complete');
+        }
+      })
+  }
 
   private getCampuses() {
     this.campusManagementService.getAllCampuses().subscribe({
@@ -82,41 +121,21 @@ export class StandardCreateFormComponent {
   }
 
   goTostandardList(): void {
-
-    // Navigate to the create standard page
-    this.router.navigate(['/standards']);
-    //window.location.href = '/standards'; // Adjust the URL as needed
+    this.router.navigate(ROUTES.CAMPUS.STANDARD.LIST);
   }
   onSubmit(): void {
-    console.log('✅ standard Form Data:', this.createStandardForm.getRawValue());
+    console.log('✅ Create standard Form Data:', this.createStandardForm.getRawValue());
     if (this.createStandardForm.invalid) {
-      // Mark all controls as touched to show validation errors
       this.createStandardForm.markAllAsTouched();
       console.warn('❌ Form is invalid');
       return;
     }
-
-    let requestMethod: string;
-    let requestUrl: string;
-
-    if (this.mode === 'create') {
-      requestMethod = HTTP_METHOD.POST;
-      requestUrl = this.URL;
-    } else {
-      requestMethod = HTTP_METHOD.PATCH;
-      requestUrl = `${this.URL}/${this.routestandardId}`;
-    }
-
-
-    console.log('✅ standard Form Data:', this.createStandardForm.getRawValue());
-    this.httpClientService.request<any>(requestMethod, requestUrl, {
-      observeResponse: true,
-      body: this.createStandardForm.getRawValue()
-    }).subscribe({
+    
+    this.standardManagemenetService.saveStandard(this.standardId,this.createStandardForm.getRawValue()).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.router.navigate(['/standards']);
+        this.router.navigate(ROUTES.CAMPUS.STANDARD.LIST                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      );
       },
       error: (error) => {
         console.error('❌ Post Error Status:', error.status);
@@ -129,43 +148,20 @@ export class StandardCreateFormComponent {
     })
   }
 
-
-
-  getstandardDetails(standardId: string): void {
-
-    const url = `${this.URL}/${standardId}`;
-    this.httpClientService
-      .request<any>(HTTP_METHOD.GET, url, { observeResponse: true })
-      .subscribe({
-        next: (response: HttpResponse<any>) => {
-          console.log('✅ Status:', response.status);
-          console.log('📦 Body:', response.body);
-          this.standardData = response.body;
-          console.log('standard Details:', this.standardData);
-          this.createStandardForm.patchValue(this.standardData);
-        },
-        error: (error) => {
-          console.error('❌ Error Status:', error.status);
-          console.error('Message:', error.message);
-        }
-      });
-  }
-
-
   //getters
   get standardName() {
-  return this.createStandardForm.get('standardName');
-}
+    return this.createStandardForm.get('standardName');
+  }
 
-get standardCode() {
-  return this.createStandardForm.get('standardCode');
-}
+  get standardCode() {
+    return this.createStandardForm.get('standardCode');
+  }
 
-get description() {
-  return this.createStandardForm.get('description');
-}
+  get description() {
+    return this.createStandardForm.get('description');
+  }
 
-get campusId() {
-  return this.createStandardForm.get('campusId');
-}
+  get campusId() {
+    return this.createStandardForm.get('campusId');
+  }
 }

@@ -17,6 +17,21 @@ export class StandardManagementService {
     console.log('API Base URL:', this.appConfig.apiBaseUrl);
   }
 
+
+  saveStandard(id: string | null, payload: any): Observable<any> {
+  const isUpdate = !!id;
+
+  const method = isUpdate ? HTTP_METHOD.PATCH : HTTP_METHOD.POST;
+
+  const url = isUpdate
+    ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.UPDATE(id)}`
+    : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.CREATE}`;
+
+  return this.http.request(method, url, {
+    observeResponse: true,
+    body: payload
+  });
+}
   getAllStandards(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.GET_ALL}`, { observeResponse: true });
   }
@@ -37,13 +52,6 @@ export class StandardManagementService {
         params: params
       }
     );
-  }
-
-  searchCampuses(query: string): Observable<any> {
-    const url = query
-      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.SEARCH(query)}`
-      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.GET_ALL}`;
-    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
   }
 
   deleteCampus(id: number): Observable<any> {
