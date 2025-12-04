@@ -1,0 +1,95 @@
+<div class="kt-portlet">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-label">
+      <h3 class="kt-portlet__head-title">
+        {{isEditMode===true? 'Update Section Details': "Add New Section"}}
+      </h3>
+    </div>
+  </div>
+
+
+  <!--begin::Form-->
+  <form class="kt-form kt-form--label-right" [formGroup]="createSectionForm" (ngSubmit)="onSubmit()">
+    <div class="kt-portlet__body">
+      <h4>Section Information</h4>
+
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Campus:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="campusId"
+            [class.is-invalid]="campusId?.invalid && (campusId?.touched || campusId?.dirty)"
+            [class.is-valid]="campusId?.valid && (campusId?.touched || campusId?.dirty)">
+            <option value='' selected>Select Campus</option>
+            @for (p of campuses; track p.id) {
+            <option [value]="p.id">{{ p.campusName }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Campus</span>
+          <span class="invalid-feedback" *ngIf="campusId?.errors?.['required']">
+            Campus is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label">Standard:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="standardId"
+            [class.is-invalid]="standardId?.invalid && (standardId?.touched || standardId?.dirty)"
+            [class.is-valid]="standardId?.valid && (standardId?.touched || standardId?.dirty)">
+            <option value='' selected>Select Standard</option>
+            @for (p of standardData; track p.id) {
+            <option [value]="p.id">{{ p.standardName }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Standard</span>
+          <span class="invalid-feedback" *ngIf="campusId?.errors?.['required']">
+            Campus is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label">Section Name:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="" formControlName="sectionName"
+            [class.is-invalid]="sectionName?.invalid && (sectionName?.touched || sectionName?.dirty)"
+            [class.is-valid]="sectionName?.valid && (sectionName?.touched || sectionName?.dirty)">
+          <span class="form-text text-muted">Please enter your Section name</span>
+          <span class="invalid-feedback" *ngIf="sectionName?.errors?.['required']">
+            Section Name is required
+          </span>
+        </div>
+      </div>
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+
+        <label class="col-lg-1 col-form-label">Section Code</label>
+        <div class="col-lg-3">
+          <div class="kt-input-icon">
+            <input type="text" class="form-control" placeholder="" formControlName="sectionCode">
+          </div>
+          <span class="form-text text-muted">Please enter Section Code</span>
+        </div>
+      </div>
+
+      <div class="form-group row kt-margin-t-40">
+        <label class="col-lg-1 col-form-label">Description:</label>
+        <div class="col-lg-11">
+          <div class="kt-input-icon">
+            <textarea class="form-control" id="exampleTextarea" rows="3" formControlName="description"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions">
+        <div class="row">
+          <div class="col-lg-5"></div>
+          <div class="col-lg-7">
+            <button type="submit" class="btn btn-dark mr-2">{{isEditMode===true? 'Update Standard Details': "Add New
+              Standard"}}</button>
+            <button type="button" class="btn btn-secondary" (click)="goToSectionsList()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!--end::Form-->
+</div>
