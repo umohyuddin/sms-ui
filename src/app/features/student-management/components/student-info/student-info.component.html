@@ -51,6 +51,7 @@
                             </div>
                         </div>
                         <div class="kt-widget__items">
+
                             <a [class.active]="activeTab === 'overview'" (click)="setActiveTab('overview')"
                                 class="kt-widget__item kt-widget__item--active">
                                 <span class="kt-widget__section">
@@ -95,6 +96,28 @@
                                     </span>
                                 </span>
                             </a>
+                            <a [class.active]="activeTab === 'enrollment_administrative'"
+                                (click)="setActiveTab('enrollment_administrative')" class="kt-widget__item ">
+                                <span class="kt-widget__section">
+                                    <span class="kt-widget__icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                            viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+                                                <path
+                                                    d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z"
+                                                    id="Mask" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                                <path
+                                                    d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z"
+                                                    id="Mask-Copy" fill="#000000" fill-rule="nonzero"></path>
+                                            </g>
+                                        </svg> </span>
+                                    <span class="kt-widget__desc">
+                                        Enrollment & Administrative Information
+                                    </span>
+                                </span>
+                            </a>
                             <a [class.active]="activeTab === 'guardian'" (click)="setActiveTab('guardian')"
                                 class="kt-widget__item">
                                 <span class="kt-widget__section">
@@ -115,6 +138,90 @@
                                     <span class="kt-widget__desc">
                                         Gardian Details
                                     </span>
+
+                                </span></a>
+                            <a [class.active]="activeTab === 'previous_academic'" (click)="setActiveTab('previous_academic')"
+                                class="kt-widget__item">
+                                <span class="kt-widget__section">
+                                    <span class="kt-widget__icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                            viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <rect id="bound" x="0" y="0" width="24" height="24"></rect>
+                                                <path
+                                                    d="M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z"
+                                                    id="Combined-Shape" fill="#000000" opacity="0.3"></path>
+                                                <path
+                                                    d="M8.56066017,16.6819805 L10.6819805,14.5606602 C11.267767,13.9748737 12.2175144,13.9748737 12.8033009,14.5606602 L14.9246212,16.6819805 C15.5104076,17.267767 15.5104076,18.2175144 14.9246212,18.8033009 L12.8033009,20.9246212 C12.2175144,21.5104076 11.267767,21.5104076 10.6819805,20.9246212 L8.56066017,18.8033009 C7.97487373,18.2175144 7.97487373,17.267767 8.56066017,16.6819805 Z M8.56066017,4.68198052 L10.6819805,2.56066017 C11.267767,1.97487373 12.2175144,1.97487373 12.8033009,2.56066017 L14.9246212,4.68198052 C15.5104076,5.26776695 15.5104076,6.21751442 14.9246212,6.80330086 L12.8033009,8.9246212 C12.2175144,9.51040764 11.267767,9.51040764 10.6819805,8.9246212 L8.56066017,6.80330086 C7.97487373,6.21751442 7.97487373,5.26776695 8.56066017,4.68198052 Z"
+                                                    id="Combined-Shape" fill="#000000"></path>
+                                            </g>
+                                        </svg> </span>
+                                    <span class="kt-widget__desc">
+                                        Health & Medical Information </span>
+
+                                </span></a>
+                            <a [class.active]="activeTab === 'medical'" (click)="setActiveTab('medical')"
+                                class="kt-widget__item">
+                                <span class="kt-widget__section">
+                                    <span class="kt-widget__icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                            viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <rect id="bound" x="0" y="0" width="24" height="24"></rect>
+                                                <path
+                                                    d="M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z"
+                                                    id="Combined-Shape" fill="#000000" opacity="0.3"></path>
+                                                <path
+                                                    d="M8.56066017,16.6819805 L10.6819805,14.5606602 C11.267767,13.9748737 12.2175144,13.9748737 12.8033009,14.5606602 L14.9246212,16.6819805 C15.5104076,17.267767 15.5104076,18.2175144 14.9246212,18.8033009 L12.8033009,20.9246212 C12.2175144,21.5104076 11.267767,21.5104076 10.6819805,20.9246212 L8.56066017,18.8033009 C7.97487373,18.2175144 7.97487373,17.267767 8.56066017,16.6819805 Z M8.56066017,4.68198052 L10.6819805,2.56066017 C11.267767,1.97487373 12.2175144,1.97487373 12.8033009,2.56066017 L14.9246212,4.68198052 C15.5104076,5.26776695 15.5104076,6.21751442 14.9246212,6.80330086 L12.8033009,8.9246212 C12.2175144,9.51040764 11.267767,9.51040764 10.6819805,8.9246212 L8.56066017,6.80330086 C7.97487373,6.21751442 7.97487373,5.26776695 8.56066017,4.68198052 Z"
+                                                    id="Combined-Shape" fill="#000000"></path>
+                                            </g>
+                                        </svg> </span>
+                                    <span class="kt-widget__desc">
+                                        Previous Academic Information </span>
+
+                                </span></a>
+                            <a [class.active]="activeTab === 'system'" (click)="setActiveTab('system')"
+                                class="kt-widget__item">
+                                <span class="kt-widget__section">
+                                    <span class="kt-widget__icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                            viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <rect id="bound" x="0" y="0" width="24" height="24"></rect>
+                                                <path
+                                                    d="M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z"
+                                                    id="Combined-Shape" fill="#000000" opacity="0.3"></path>
+                                                <path
+                                                    d="M8.56066017,16.6819805 L10.6819805,14.5606602 C11.267767,13.9748737 12.2175144,13.9748737 12.8033009,14.5606602 L14.9246212,16.6819805 C15.5104076,17.267767 15.5104076,18.2175144 14.9246212,18.8033009 L12.8033009,20.9246212 C12.2175144,21.5104076 11.267767,21.5104076 10.6819805,20.9246212 L8.56066017,18.8033009 C7.97487373,18.2175144 7.97487373,17.267767 8.56066017,16.6819805 Z M8.56066017,4.68198052 L10.6819805,2.56066017 C11.267767,1.97487373 12.2175144,1.97487373 12.8033009,2.56066017 L14.9246212,4.68198052 C15.5104076,5.26776695 15.5104076,6.21751442 14.9246212,6.80330086 L12.8033009,8.9246212 C12.2175144,9.51040764 11.267767,9.51040764 10.6819805,8.9246212 L8.56066017,6.80330086 C7.97487373,6.21751442 7.97487373,5.26776695 8.56066017,4.68198052 Z"
+                                                    id="Combined-Shape" fill="#000000"></path>
+                                            </g>
+                                        </svg> </span>
+                                    <span class="kt-widget__desc">
+                                        System & Audit </span>
+
+                                </span></a>
+                                        <a [class.active]="activeTab === 'docs'" (click)="setActiveTab('docs')"
+                                class="kt-widget__item">
+                                <span class="kt-widget__section">
+                                    <span class="kt-widget__icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                            viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <rect id="bound" x="0" y="0" width="24" height="24"></rect>
+                                                <path
+                                                    d="M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z"
+                                                    id="Combined-Shape" fill="#000000" opacity="0.3"></path>
+                                                <path
+                                                    d="M8.56066017,16.6819805 L10.6819805,14.5606602 C11.267767,13.9748737 12.2175144,13.9748737 12.8033009,14.5606602 L14.9246212,16.6819805 C15.5104076,17.267767 15.5104076,18.2175144 14.9246212,18.8033009 L12.8033009,20.9246212 C12.2175144,21.5104076 11.267767,21.5104076 10.6819805,20.9246212 L8.56066017,18.8033009 C7.97487373,18.2175144 7.97487373,17.267767 8.56066017,16.6819805 Z M8.56066017,4.68198052 L10.6819805,2.56066017 C11.267767,1.97487373 12.2175144,1.97487373 12.8033009,2.56066017 L14.9246212,4.68198052 C15.5104076,5.26776695 15.5104076,6.21751442 14.9246212,6.80330086 L12.8033009,8.9246212 C12.2175144,9.51040764 11.267767,9.51040764 10.6819805,8.9246212 L8.56066017,6.80330086 C7.97487373,6.21751442 7.97487373,5.26776695 8.56066017,4.68198052 Z"
+                                                    id="Combined-Shape" fill="#000000"></path>
+                                            </g>
+                                        </svg> </span>
+                                    <span class="kt-widget__desc">
+                                        Document Attachments </span>
 
                                 </span></a>
 
@@ -334,6 +441,7 @@
                     </div>
                 </div>
                 <div class="kt-portlet__body">
+
                     <div class="form-group row kt-margin-t-10">
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
@@ -349,16 +457,483 @@
                     </div>
                     <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
                     </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Full Name :
+                            </span> {{studentData?.fullName}}
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">DOB :
+                            </span> {{studentData?.dateOfBirth}}
+                        </div>
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Gender :
+                            </span> {{studentData?.gender}}
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">CRC/CNIC :
+                            </span> 311042730691
+                        </div>
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Email :
+                            </span> {{studentData?.email}}
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Contact # :
+                            </span> {{studentData?.phone}}
+                        </div>
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Religion :
+                            </span> Islam
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Nationality :
+                            </span> Pakistan
+                        </div>
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Blood_Group :
+                            </span> O+
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Place Of Birth
+                                # :
+                            </span> {{studentData?.phone}}
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Guardian Details -->
-    <div *ngIf="activeTab === 'guardian'" class="tab-content">
-        <h3>Guardian Details</h3>
+    <div *ngIf="activeTab === 'guardian'" class="tab-content full-width-tab">
+
         <!-- Your guardian details content -->
+        <div class="kt-grid__item kt-grid__item--fluid kt-app__content">
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            Gardian Information
+                        </h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-actions">
+                            <div class="dropdown dropdown-inline">
+                                <a href="#" class="btn btn-outline-success btn-sm btn-icon btn-icon-md"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="flaticon2-add-1"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <ul class="kt-nav">
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                                                <span class="kt-nav__link-text">Reports</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-send"></i>
+                                                <span class="kt-nav__link-text">Messages</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
+                                                <span class="kt-nav__link-text">Charts</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-avatar"></i>
+                                                <span class="kt-nav__link-text">Members</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-settings"></i>
+                                                <span class="kt-nav__link-text">Settings</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>&nbsp;
+                            <div class="dropdown dropdown-inline">
+                                <a href="#" class="btn btn-default btn-pill btn-sm btn-icon btn-icon-md"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="flaticon2-soft-icons"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end"
+                                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(32px, 32px, 0px);">
+                                    <ul class="kt-nav">
+                                        <li class="kt-nav__section kt-nav__section--first">
+                                            <span class="kt-nav__section-text">Finance</span>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-graph-1"></i>
+                                                <span class="kt-nav__link-text">Statistics</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-calendar-4"></i>
+                                                <span class="kt-nav__link-text">Events</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-layers-1"></i>
+                                                <span class="kt-nav__link-text">Reports</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__section">
+                                            <span class="kt-nav__section-text">Customers</span>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-calendar-4"></i>
+                                                <span class="kt-nav__link-text">Notifications</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-file-1"></i>
+                                                <span class="kt-nav__link-text">Files</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body">
+
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Guardian Name :
+                            </span> {{studentData?.firstName}}
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Guardian
+                                Relation :
+                            </span> {{studentData?.lastName}}
+                        </div>
+
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Guardian CNIC :
+                            </span> {{studentData?.fullName}}
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Guardian Phone
+                                :
+                            </span> {{studentData?.dateOfBirth}}
+                        </div>
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Guardian Email
+                                :
+                            </span> {{studentData?.gender}}
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Father CNIC :
+                            </span> 311042730691
+                        </div>
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Email :
+                            </span> {{studentData?.email}}
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Contact # :
+                            </span> {{studentData?.phone}}
+                        </div>
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Religion :
+                            </span> Islam
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Nationality :
+                            </span> Pakistan
+                        </div>
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Blood_Group :
+                            </span> O+
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Place Of Birth
+                                # :
+                            </span> {{studentData?.phone}}
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
     </div>
+
+        <!-- enrollment_administrative -->
+    <div *ngIf="activeTab === 'enrollment_administrative'" class="tab-content full-width-tab">
+
+        <!-- Your guardian details content -->
+        <div class="kt-grid__item kt-grid__item--fluid kt-app__content">
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            Enrollment Administrative
+                        </h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-actions">
+                            <div class="dropdown dropdown-inline">
+                                <a href="#" class="btn btn-outline-success btn-sm btn-icon btn-icon-md"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="flaticon2-add-1"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <ul class="kt-nav">
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                                                <span class="kt-nav__link-text">Reports</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-send"></i>
+                                                <span class="kt-nav__link-text">Messages</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
+                                                <span class="kt-nav__link-text">Charts</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-avatar"></i>
+                                                <span class="kt-nav__link-text">Members</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-settings"></i>
+                                                <span class="kt-nav__link-text">Settings</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>&nbsp;
+                            <div class="dropdown dropdown-inline">
+                                <a href="#" class="btn btn-default btn-pill btn-sm btn-icon btn-icon-md"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="flaticon2-soft-icons"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end"
+                                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(32px, 32px, 0px);">
+                                    <ul class="kt-nav">
+                                        <li class="kt-nav__section kt-nav__section--first">
+                                            <span class="kt-nav__section-text">Finance</span>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-graph-1"></i>
+                                                <span class="kt-nav__link-text">Statistics</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-calendar-4"></i>
+                                                <span class="kt-nav__link-text">Events</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-layers-1"></i>
+                                                <span class="kt-nav__link-text">Reports</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__section">
+                                            <span class="kt-nav__section-text">Customers</span>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-calendar-4"></i>
+                                                <span class="kt-nav__link-text">Notifications</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a href="#" class="kt-nav__link">
+                                                <i class="kt-nav__link-icon flaticon2-file-1"></i>
+                                                <span class="kt-nav__link-text">Files</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body">
+
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Registration Date :
+                            </span> 10/10/2025
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Admission Type :
+                            </span> {{studentData?.lastName}}
+                        </div>
+
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Academic Year :
+                            </span> {{studentData?.fullName}}
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Class Section :
+                            </span> {{studentData?.dateOfBirth}}
+                        </div>
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Guardian Email
+                                :
+                            </span> {{studentData?.gender}}
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Father CNIC :
+                            </span> 311042730691
+                        </div>
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Email :
+                            </span> {{studentData?.email}}
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Contact # :
+                            </span> {{studentData?.phone}}
+                        </div>
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Religion :
+                            </span> Islam
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Nationality :
+                            </span> Pakistan
+                        </div>
+                    </div>
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row kt-margin-t-10">
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Blood_Group :
+                            </span> O+
+                        </div>
+                        <div class="col-6">
+                            <!-- <label class="col-form-label">Name:</label> -->
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Place Of Birth
+                                # :
+                            </span> {{studentData?.phone}}
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    
 
     <!--End:: App Content-->
 </div>
