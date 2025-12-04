@@ -18,10 +18,19 @@ export const ROUTES = {
     }
   },
   STUDENT: {
-      LIST: ['students'],
-      CREATE: ['students', 'student-create'],
-      EDIT: (id: string) => ['students', 'student-edit', id],
-      DETAILS: (id: string) => ['students', 'student-details', id],
-    }
+    LIST: ['students'],
+    CREATE: ['students', 'student-create'],
+    EDIT: (id: string) => ['students', 'student-edit', id],
+    DETAILS: (id: string) => ['students', 'student-details', id],
+  },
+  FEE: {
+    FEE_CATALOG: {
+      LIST: ['fee-catalog'],
+      CREATE: ['fee-catalog', 'fee-catalog-create'],
+      EDIT: (id: string) => ['fee-catalog', 'fee-catalog-edit', id],
+      DETAILS: (id: string) => ['fee-catalog', 'fee-catalog-details', id],
+
+    },
+  }
 
 };

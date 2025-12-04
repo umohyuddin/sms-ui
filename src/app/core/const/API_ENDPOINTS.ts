@@ -37,6 +37,15 @@ export const API_ENDPOINTS = {
             GET_BY_ID: (id: string) => `/api/institute/campuses/standards/sections/${id}`
         }
     },
+    FEE: {
+        FEE_CATALOG: {
+            CREATE: '/api/fee/catalogs',
+            UPDATE: '/api/fee/catalogs',
+            GET_ALL: '/api/fee/catalogs',
+            SEARCH: (keyword: string) => `/api/fee/catalog/search/${keyword}`,
+            GET_BY_ID: (id: string) => `/api/fee/catalog/${id}`
+        }
+    },
 
     LOOKUP: {
         PROVINCE: {
