@@ -44,6 +44,13 @@ export const API_ENDPOINTS = {
             GET_ALL: '/api/fee/catalogs',
             SEARCH: (keyword: string) => `/api/fee/catalog/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/fee/catalog/${id}`
+        },
+        FEE_CATALOG_COMPONENT: {
+            CREATE: '/api/fee/components',
+            UPDATE: (id: string) =>  `/api/fee/components/${id}`,
+            GET_ALL: '/api/fee/components',
+            SEARCH: (keyword: string) => `/api/fee/components/search/${keyword}`,
+            GET_BY_ID: (id: string) => `/api/fee/components/${id}`
         }
     },
 

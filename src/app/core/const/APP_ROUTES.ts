@@ -29,7 +29,12 @@ export const ROUTES = {
       CREATE: ['fee-catalog', 'fee-catalog-create'],
       EDIT: (id: string) => ['fee-catalog', 'fee-catalog-edit', id],
       DETAILS: (id: string) => ['fee-catalog', 'fee-catalog-details', id],
-
+    },
+    FEE_CATALOG_COMPONENT: {
+      LIST: ['fee-catalog-component'],
+      CREATE: ['fee-catalog-component', 'fee-catalog-component-create'],
+      EDIT: (id: string) => ['fee-catalog-component', 'fee-component-catalog-edit', id],
+      DETAILS: (id: string) => ['fee-catalog-component', 'fee-component-catalog-details', id],
     },
   }
 

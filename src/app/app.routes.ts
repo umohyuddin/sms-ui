@@ -98,6 +98,17 @@ export const routes: Routes = [
       }
     ]
   },
+  {
+    path: 'fee/catalog/component',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/fee-catalog-component-management/fee-catalog-component-management-module').then(m => m.FeeCatalogComponentManagementModule)
+      }
+    ]
+  },
 
   // Default redirect
   {

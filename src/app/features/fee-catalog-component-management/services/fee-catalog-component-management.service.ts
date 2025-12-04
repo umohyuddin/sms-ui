@@ -8,7 +8,7 @@ import { API_ENDPOINTS } from '../../../core/const/API_ENDPOINTS';
 @Injectable({
   providedIn: 'root'
 })
-export class SectionManagementService {
+export class FeeCatalogComponentManagementService {
 
   private baseUrl = '';
 
@@ -18,14 +18,14 @@ export class SectionManagementService {
   }
 
 
-  saveSection(id: string | null, payload: any): Observable<any> {
+  saveFeeCatalogComponent(id: string | null, payload: any): Observable<any> {
     const isUpdate = !!id;
 
     const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
 
     const url = isUpdate
-      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.UPDATE(id)}`
-      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.CREATE}`;
+      ? `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.UPDATE(id)}`
+      : `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.CREATE}`;
 
     return this.http.request(method, url, {
       observeResponse: true,
@@ -33,21 +33,21 @@ export class SectionManagementService {
     });
   }
 
-  getAllSection(): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.GET_ALL}`, { observeResponse: true });
+  getAllFeeCatalogComponents(): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.GET_ALL}`, { observeResponse: true });
   }
 
-  getSectionById(id: string): Observable<any> {
+  getFeeCatalogComponentsById(id: string): Observable<any> {
     return this.http.request(
       HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.GET_BY_ID(id)}`,
+      `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.GET_BY_ID(id)}`,
       { observeResponse: true }
     );
   }
 
-  searchSections(params: any): Observable<any> {
+  searchFeeCatalogComponents(params: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.SEARCH}`,
+      `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.SEARCH}`,
       {
         observeResponse: true,
         params: params

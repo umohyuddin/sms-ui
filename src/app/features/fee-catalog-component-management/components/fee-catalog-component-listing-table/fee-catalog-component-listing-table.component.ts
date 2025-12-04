@@ -5,25 +5,24 @@ import { Pagination } from '../../../../core/pagar/pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
-import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
-import { SectionManagementService } from '../../services/section-management.service';
 import { StandardResponse } from '../../../standard-management/models/standardResponse';
-import { SectionResponse } from '../../models/SectionResponse';
+import { FeeCatalogComponentManagementService } from '../../services/fee-catalog-component-management.service';
+import { FeeCatalogComponentResponse } from '../../models/FeeCatalogComponentResponse';
+import { FeeCatalogManagementService } from '../../../fee-catalog-management/services/fee-catalog-management.service';
 
 @Component({
-  selector: 'app-section-listing-table',
+  selector: 'app-fee-catalog-component-listing-table',
   standalone: true,
   imports: [CommonModule,
     RouterModule,
     ReactiveFormsModule
   ],
-  templateUrl: './section-listing-table.component.html',
-  styleUrls: ['./section-listing-table.component.css']
+  templateUrl: './fee-catalog-component-listing-table.component.html',
+  styleUrls: ['./fee-catalog-component-listing-table.component.css']
 })
-export class SectionListingTableComponent {
-  pagination: Pagination<SectionResponse> = new Pagination([], 10);
-  sectionsResponse: SectionResponse[] = [];
+export class FeeCatalogComponentListingTableComponent {
+  pagination: Pagination<FeeCatalogComponentResponse> = new Pagination([], 10);
+  feeCatalogComponentResponse: FeeCatalogComponentResponse[] = [];
   standardsResponse: StandardResponse[] = [];
 
   sectionsSearchForm !: FormGroup;
@@ -33,25 +32,25 @@ export class SectionListingTableComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private campusManagementService: CampusManagementService,
-    private standardManagementService: StandardManagementService,
-    private sectionManagementService: SectionManagementService
+    private feeCatalogManagementService: FeeCatalogManagementService,
+    private feeCatalogComponentManagementService: FeeCatalogComponentManagementService
   ) { }
 
   columns = [
-    { key: 'sectionName', label: 'Section Name', sortable: true },
-    { key: 'sectionCode', label: 'Section Code', sortable: true },
-    { key: 'standardName', label: 'Standard Name', sortable: true },
-    { key: 'standardCode', label: 'Standard Code', sortable: true },
-    { key: 'campusName', label: 'Campus Name', sortable: true },
-    { key: 'campusCode', label: 'Campus Code', sortable: true }
+    { key: 'componentName', label: 'Fee Component Name', sortable: true },
+    { key: 'componentCode', label: 'Fee Component Code', sortable: true },
+    { key: 'componentStatus', label: 'Fee Component Status', sortable: true },
+    { key: 'feeCatelogName', label: 'Fee Catalog Name', sortable: true },
+    { key: 'feeCatalogCode', label: 'Fee Catalog Code', sortable: true },
+    { key: 'actions', label: 'Actions', sortable: true }
   ];
 
   ngOnInit() {
     this.initializeForm();
-    this.getCampuses();
-    this.getStandards();
-    this.getSections();
+    this.getFeeCatalogComponents();
+    //this.getCampuses();
+    //this.getStandards();
+    //this.getSections();
   }
 
   private initializeForm() {
@@ -61,12 +60,15 @@ export class SectionListingTableComponent {
       keyword: ['']
     });
   }
-  private getCampuses() {
-    this.campusManagementService.getAllCampuses().subscribe({
+
+  getFeeCatalogComponents() {
+    this.feeCatalogComponentManagementService.getAllFeeCatalogComponents().subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.campusesResponse = response.body;
+        
+         this.feeCatalogComponentResponse = response.body;
+         this.pagination = new Pagination(this.feeCatalogComponentResponse, 10);
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
@@ -76,53 +78,69 @@ export class SectionListingTableComponent {
         console.log('🔚 Request Complete');
       }
     });
-
   }
+  // private getCampuses() {
+  //   this.campusManagementService.getAllCampuses().subscribe({
+  //     next: (response) => {
+  //       console.log('✅ Success Status:', response.status);
+  //       console.log('📦 Response Body:', response.body);
+  //       this.campusesResponse = response.body;
+  //     },
+  //     error: (error) => {
+  //       console.error('❌ Request Error Status:', error.status);
+  //       console.error('Message:', error.message);
+  //     },
+  //     complete: () => {
+  //       console.log('🔚 Request Complete');
+  //     }
+  //   });
 
-  getStandards() {
-    this.standardManagementService.getAllStandards().subscribe({
-      next: (response) => {
-        console.log('✅ Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.sectionsResponse = response.body;
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    })
-  }
 
-  getSections() {
-    this.sectionManagementService.getAllSection().subscribe({
-      next: (response) => {
-        console.log('✅ Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.sectionsResponse = response.body;
-        this.pagination = new Pagination(this.sectionsResponse, 10);
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    })
-  }
-  viewSectionDetails(section: SectionResponse, event: Event): void {
-    console.log('Viewing details for Section ID:', section.id);
+
+  // getStandards() {
+  //   this.standardManagementService.getAllStandards().subscribe({
+  //     next: (response) => {
+  //       console.log('✅ Success Status:', response.status);
+  //       console.log('📦 Response Body:', response.body);
+  //       this.sectionsResponse = response.body;
+  //     },
+  //     error: (error) => {
+  //       console.error('❌ Request Error Status:', error.status);
+  //       console.error('Message:', error.message);
+  //     },
+  //     complete: () => {
+  //       console.log('🔚 Request Complete');
+  //     }
+  //   })
+  // }
+
+  // getSections() {
+  //   this.sectionManagementService.getAllSection().subscribe({
+  //     next: (response) => {
+  //       console.log('✅ Success Status:', response.status);
+  //       console.log('📦 Response Body:', response.body);
+  //       this.sectionsResponse = response.body;
+  //       this.pagination = new Pagination(this.sectionsResponse, 10);
+  //     },
+  //     error: (error) => {
+  //       console.error('❌ Request Error Status:', error.status);
+  //       console.error('Message:', error.message);
+  //     },
+  //     complete: () => {
+  //       console.log('🔚 Request Complete');
+  //     }
+  //   })
+  // }
+  viewSectionDetails(feeCatalogComponent: FeeCatalogComponentResponse, event: Event): void {
+    console.log('Viewing details for Fee Catalog Component ID:', feeCatalogComponent.id);
     event.preventDefault();  // prevents anchor default behavior
-    this.router.navigate(ROUTES.CAMPUS.SECTION.DETAILS(section.id.toString()));
+    this.router.navigate(ROUTES.FEE.FEE_CATALOG_COMPONENT.DETAILS(feeCatalogComponent.id.toString()));
   }
 
-  editSectionDetails(section: SectionResponse, event: Event): void {
+  editSectionDetails(feeCatalogComponent: FeeCatalogComponentResponse, event: Event): void {
     event.preventDefault();  // prevents anchor default behavior
-    console.log('Editing Section ID:', section.id);
-    this.router.navigate(ROUTES.CAMPUS.SECTION.EDIT(section.id.toString()));
+    console.log('Editing Fee Catalog Component ID:', feeCatalogComponent.id);
+    this.router.navigate(ROUTES.FEE.FEE_CATALOG_COMPONENT.EDIT(feeCatalogComponent.id.toString()));
   }
 
   // deleteStandard(standardId: any, event: Event): void {
@@ -162,21 +180,21 @@ export class SectionListingTableComponent {
       keyword: formValues.keyword?.trim() || ''
     };
 
-    this.sectionManagementService.searchSections(params).subscribe({
-      next: (response) => {
-        console.log('✅ Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.sectionsResponse = response.body;
-        this.pagination = new Pagination(this.sectionsResponse, 10);
-      },
-      error: (error) => {
-        console.error('❌ Post Error Status:', error.status);
-        console.error('Message:', error.message);
-        this.router.navigate(['/Campuss']);
-      },
-      complete: () => {
-        console.log('🔚 Post Complete');
-      }
-    })
+    // this.sectionManagementService.searchSections(params).subscribe({
+    //   next: (response) => {
+    //     console.log('✅ Success Status:', response.status);
+    //     console.log('📦 Response Body:', response.body);
+    //     this.sectionsResponse = response.body;
+    //     this.pagination = new Pagination(this.sectionsResponse, 10);
+    //   },
+    //   error: (error) => {
+    //     console.error('❌ Post Error Status:', error.status);
+    //     console.error('Message:', error.message);
+    //     this.router.navigate(['/Campuss']);
+    //   },
+    //   complete: () => {
+    //     console.log('🔚 Post Complete');
+    //   }
+    // })
   }
 }

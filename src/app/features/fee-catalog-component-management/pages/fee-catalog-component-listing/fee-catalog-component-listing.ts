@@ -5,28 +5,29 @@ import { FormsModule } from '@angular/forms';
 
 import { Router } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-import { SectionListingTableComponent } from '../../components/section-listing-table/section-listing-table.component';
+import { FeeCatalogComponentListingTableComponent } from '../../components/fee-catalog-component-listing-table/fee-catalog-component-listing-table.component';
+
 
 @Component({
-  selector: 'app-section-listing',
+  selector: 'app-fee-catalog-component-listing',
   imports: [
     CommonModule,
     FormsModule,
-    SectionListingTableComponent
+    FeeCatalogComponentListingTableComponent
 ],
-  templateUrl: './section-listing.html',
-  styleUrls: ['./section-listing.css'],
+  templateUrl: './fee-catalog-component-listing.html',
+  styleUrls: ['./fee-catalog-component-listing.css'],
   standalone: true,
 })
-export class SectionListing implements OnInit {
+export class FeeCatalogComponentListing implements OnInit {
   URL = '';
   constructor(private router: Router) { }
 
   ngOnInit(): void { }
 
 
-  goToCreateSection(): void {
-    this.router.navigate(ROUTES.CAMPUS.SECTION.CREATE);
+  goToCreateFeeCatalogComponent(): void {
+    this.router.navigate(ROUTES.FEE.FEE_CATALOG_COMPONENT.CREATE);
   }
 }
 

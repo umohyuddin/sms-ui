@@ -1,5 +1,5 @@
 
 
-describe('SectionCreateFormComponent', () => {
+describe('FeeCatalogComponentCreateFormComponent', () => {
   
 });

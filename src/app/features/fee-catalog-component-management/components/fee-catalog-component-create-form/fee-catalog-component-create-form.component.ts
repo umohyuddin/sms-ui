@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientService } from '../../../../core/services/http-client.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
@@ -10,28 +9,28 @@ import { CampusResponse } from '../../../campus-management/models/campusResponse
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { StandardResponse } from '../../../standard-management/models/standardResponse';
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
-import { SectionManagementModule } from '../../section-management-module';
-import { SectionManagementService } from '../../services/section-management.service';
-import { SectionResponse } from '../../models/SectionResponse';
+import { SectionManagementService } from '../../services/fee-catalog-component-management.service';
+import { FeeCatalogComponentResponse } from '../../models/FeeCatalogComponentResponse';
+
 
 
 
 @Component({
-  selector: 'app-section-create-form',
+  selector: 'app-fee-catalog-component-create-form',
   standalone: true,
   imports: [
     ReactiveFormsModule,
     CommonModule],
-  templateUrl: './section-create-form.component.html',
-  styleUrls: ['./section-create-form.component.css']
+  templateUrl: './fee-catalog-component-create-form.component.html',
+  styleUrls: ['./fee-catalog-component-create-form.component.css']
 })
-export class SectionCreateFormComponent {
-  createSectionForm!: FormGroup;
+export class FeeCatalogComponentCreateFormComponent {
+  createFeeCatalogComponentForm!: FormGroup;
   routeSectionId?: string;
   URL = '';
   mode = '';
   standardData: StandardResponse[]=[];
-  sectionData?: SectionResponse;
+  feeCatalogComponentData?: FeeCatalogComponentResponse;
   campuses: CampusResponse[] = [];
   cities: any[] = [];
   sectionId: string | null = null;
@@ -64,7 +63,7 @@ export class SectionCreateFormComponent {
   }
 
   onCampusChange() {
-    this.createSectionForm.get('campusId')?.valueChanges.subscribe(campusId => {
+    this.createFeeCatalogComponentForm.get('campusId')?.valueChanges.subscribe(campusId => {
       console.log("Campus changed:", campusId);
 
       // Example: Load cities based on province
@@ -94,15 +93,15 @@ export class SectionCreateFormComponent {
         next: (response) => {
           console.log('✅ Request Success Status:', response.status);
           console.log('📦 Response Body:', response.body);
-          this.sectionData = response.body;
-          console.log('📦 Standard data :', this.sectionData);
-          this.createSectionForm.patchValue({
-            sectionName: this.sectionData?.sectionName,
-            sectionCode: this.sectionData?.sectionCode,
-            description: this.sectionData?.description,
-            campusId: this.sectionData?.standard.campus.id,
-            standardId : this.sectionData?.standard.id
-          });
+          this.feeCatalogComponentData = response.body;
+          console.log('📦 Standard data :', this.feeCatalogComponentData);
+          // this.createFeeCatalogComponentForm.patchValue({
+          //   sectionName: this.feeCatalogComponentData?.sectionName,
+          //   sectionCode: this.feeCatalogComponentData?.sectionCode,
+          //   description: this.feeCatalogComponentData?.description,
+          //   campusId: this.feeCatalogComponentData?.standard.campus.id,
+          //   standardId : this.feeCatalogComponentData?.standard.id
+          // });
         },
         error: (error) => {
           console.error('❌ Request Error Status:', error.status);
@@ -132,7 +131,7 @@ export class SectionCreateFormComponent {
   }
 
   private initializeForm() {
-    this.createSectionForm = this.fb.group({
+    this.createFeeCatalogComponentForm = this.fb.group({
       sectionName: ['', Validators.required],
       campusId: ['', Validators.required],
       standardId: ['', Validators.required],
@@ -145,14 +144,14 @@ export class SectionCreateFormComponent {
     this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
   }
   onSubmit(): void {
-    console.log('✅ Create standard Form Data:', this.createSectionForm.getRawValue());
-    if (this.createSectionForm.invalid) {
-      this.createSectionForm.markAllAsTouched();
+    console.log('✅ Create standard Form Data:', this.createFeeCatalogComponentForm.getRawValue());
+    if (this.createFeeCatalogComponentForm.invalid) {
+      this.createFeeCatalogComponentForm.markAllAsTouched();
       console.warn('❌ Form is invalid');
       return;
     }
 
-    this.sectionManagementService.saveSection(this.sectionId, this.createSectionForm.getRawValue()).subscribe({
+    this.sectionManagementService.saveSection(this.sectionId, this.createFeeCatalogComponentForm.getRawValue()).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
@@ -170,22 +169,22 @@ export class SectionCreateFormComponent {
 
   //getters
   get sectionName() {
-    return this.createSectionForm.get('sectionName');
+    return this.createFeeCatalogComponentForm.get('sectionName');
   }
 
   get campusId() {
-    return this.createSectionForm.get('campusId');
+    return this.createFeeCatalogComponentForm.get('campusId');
   }
 
   get standardId() {
-    return this.createSectionForm.get('standardId');
+    return this.createFeeCatalogComponentForm.get('standardId');
   }
 
   get sectionCode() {
-    return this.createSectionForm.get('sectionCode');
+    return this.createFeeCatalogComponentForm.get('sectionCode');
   }
 
   get description() {
-    return this.createSectionForm.get('description');
+    return this.createFeeCatalogComponentForm.get('description');
   }
 }

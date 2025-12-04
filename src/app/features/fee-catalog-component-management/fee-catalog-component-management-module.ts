@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { SectionListing } from './pages/section-listing/section-listing';
-import { SectionDetails } from './pages/section-details/section-details';
-import { SectionCreate } from './pages/section-create/section-create';
+import { FeeCatalogComponentListing } from './pages/fee-catalog-component-listing/fee-catalog-component-listing';
+import { FeeCatalogComponentDetails } from './pages/fee-catalog-component-details/fee-catalog-component-details';
+import { FeeCatalogComponentCreate } from './pages/fee-catalog-component-create/fee-catalog-component-create';
 
 const routes: Routes = [
-  { path: '', component: SectionListing },
-  { path: 'section-details/:id', component: SectionDetails },
-  { path: 'section-edit/:id', component: SectionCreate },
-  { path: 'section-create', component: SectionCreate }
+  { path: '', component: FeeCatalogComponentListing },
+  { path: 'fee-catalog-component-details/:id', component: FeeCatalogComponentDetails },
+  { path: 'fee-catalog-component-edit/:id', component: FeeCatalogComponentCreate },
+  { path: 'fee-catalog-component-create', component: FeeCatalogComponentCreate }
 ];
 
 
@@ -20,4 +20,4 @@ const routes: Routes = [
     CommonModule, RouterModule.forChild(routes)
   ]
 })
-export class SectionManagementModule { }
+export class FeeCatalogComponentManagementModule { }

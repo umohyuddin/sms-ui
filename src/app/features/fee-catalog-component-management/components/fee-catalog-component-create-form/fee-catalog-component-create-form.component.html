@@ -2,14 +2,14 @@
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
       <h3 class="kt-portlet__head-title">
-        {{isEditMode===true? 'Update Section Details': "Add New Section"}}
+        {{isEditMode===true? 'Update Section Details': "Add New Fee Catalog Component"}}
       </h3>
     </div>
   </div>
 
 
   <!--begin::Form-->
-  <form class="kt-form kt-form--label-right" [formGroup]="createSectionForm" (ngSubmit)="onSubmit()">
+  <form class="kt-form kt-form--label-right" [formGroup]="createFeeCatalogComponentForm" (ngSubmit)="onSubmit()">
     <div class="kt-portlet__body">
       <h4>Section Information</h4>
 
