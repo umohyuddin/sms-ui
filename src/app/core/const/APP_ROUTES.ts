@@ -36,6 +36,11 @@ export const ROUTES = {
       EDIT: (id: string) => ['fee-catalog-component', 'fee-component-catalog-edit', id],
       DETAILS: (id: string) => ['fee-catalog-component', 'fee-component-catalog-details', id],
     },
+    FEE_RATE: {
+      LIST: ['fee-rate'],
+      CREATE: ['fee-rate', 'fee-rate-create'],
+      EDIT: (id: string) => ['fee-rate', 'fee-rate-edit', id],
+      DETAILS: (id: string) => ['fee-rate', 'fee-rate-details', id],
+    },
   }
-
 };

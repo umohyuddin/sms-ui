@@ -47,10 +47,17 @@ export const API_ENDPOINTS = {
         },
         FEE_CATALOG_COMPONENT: {
             CREATE: '/api/fee/components',
-            UPDATE: (id: string) =>  `/api/fee/components/${id}`,
+            UPDATE: (id: string) => `/api/fee/components/${id}`,
             GET_ALL: '/api/fee/components',
             SEARCH: (keyword: string) => `/api/fee/components/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/fee/components/${id}`
+        },
+        FEE_RATES: {
+            CREATE: '/api/fee/rates',
+            UPDATE: (id: string) => `/api/fee/rates/${id}`,
+            GET_ALL: '/api/fee/rates',
+            SEARCH: (keyword: string) => `/api/fee/rates/search/${keyword}`,
+            GET_BY_ID: (id: string) => `/api/fee/rates/${id}`
         }
     },
 
