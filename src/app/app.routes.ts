@@ -109,6 +109,17 @@ export const routes: Routes = [
       }
     ]
   },
+  {
+    path: 'fee/catalog/component/rate',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/fee-rate-management/fee-rate-management-module').then(m => m.FeeRateManagementModule)
+      }
+    ]
+  },
 
   // Default redirect
   {

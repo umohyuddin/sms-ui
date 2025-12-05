@@ -5,7 +5,7 @@
         <i class="kt-font-dark flaticon-squares"></i>
       </span>
       <h3 class="kt-portlet__head-title">
-        Sections Listing
+        Fee Rate Directory
       </h3>
     </div>
     <div class="kt-portlet__head-toolbar">
@@ -126,17 +126,23 @@
             </thead>
             <tbody>
 
-              <!-- <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
-                <td>{{ item.componentName }}</td>
-                <td>{{ item.componentCode }}</td>
+              <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
+                <td>{{ item.feeComponent.componentName }}</td>
+                <td>{{ item.feeComponent.componentCode }}</td>
+
+                <td>{{ item.amount }}</td>
+                <td>{{ item.effectiveFrom }}</td>
+                <td>{{ item.effectiveTo }}</td>
                 <td>
                   <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
                     [ngClass]="item.active ? 'kt-badge--brand' : 'kt-badge--danger'">
                     {{item.active? 'Active':'Inactive'}}
                   </span>
                 </td>
-                <td>{{ item.feeCatalog.name }}</td>
-                <td>{{ item.feeCatalog.code }}</td>
+                <td>{{ item.campus.campusName }}</td>
+                <td>{{ item.standard.standardName }}</td>
+                <td>{{ item.feeComponent.feeCatalog.name }}</td>
+                <td>{{ item.academicYear.name}}</td>
                 <td nowrap="">
                   <span class="dropdown">
                     <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown"
@@ -144,18 +150,18 @@
                       <i class="la la-ellipsis-h"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item" href="#" (click)="editSectionDetails(item,$event)"><i
+                      <a class="dropdown-item" href="#" (click)="editFeeRateDetails(item,$event)"><i
                           class="la la-edit"></i> Edit Details</a>
-                      <a class="dropdown-item" href="#" (click)="viewSectionDetails(item,$event)">
+                      <a class="dropdown-item" href="#" (click)="viewFeeRateDetails(item,$event)">
                         <i class="la la-eye"></i> View Details</a>
                     </div>
                   </span>
                   <a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View"
-                    (click)="viewSectionDetails(item,$event)">
+                    (click)="viewFeeRateDetails(item,$event)">
                     <i class="la la-eye"></i>
                   </a>
                 </td>
-              </tr> -->
+              </tr>
             </tbody>
           </table>
           }

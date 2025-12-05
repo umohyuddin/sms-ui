@@ -3,40 +3,41 @@ import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { StandardResponse } from '../../../standard-management/models/standardResponse';
-import { FeeCatalogComponentInfoComponent } from '../../components/fee-catalog-component-info/fee-catalog-component-info.component';
-import { FeeCatalogComponentManagementService } from '../../services/fee-catalog-component-management.service';
+import { FeeRateInfoComponent } from '../../components/fee-rate-info/fee-rate-info.component';
+import { FeeRateManagementService } from '../../services/fee-rate-management.service';
+import { FeeRateResponse } from '../../models/FeeRateResponse';
 
 
 
 @Component({
-  selector: 'app-fee-catalog-component-details',
-  imports: [FeeCatalogComponentInfoComponent
+  selector: 'app-rate-details',
+  imports: [FeeRateInfoComponent
   ],
-  templateUrl: './fee-catalog-component-details.html',
-  styleUrls: ['./fee-catalog-component-details.css'],
+  templateUrl: './fee-rate-details.html',
+  styleUrls: ['./fee-rate-details.css'],
   standalone: true,
 })
-export class FeeCatalogComponentDetails {
-  sectionData?: StandardResponse;
-  feeCatalogComponentId!: string;
-  constructor(private feeCatalogComponentManagementService: FeeCatalogComponentManagementService
-    , private route: ActivatedRoute,
+export class FeeRateDetails {
+  feeRateData?: FeeRateResponse;
+  feeRateId!: string;
+  constructor(private feeRateManagementService: FeeRateManagementService,
+    private route: ActivatedRoute,
     private appConfig: AppConfigService
   ) { }
 
   ngOnInit(): void {
-    this.feeCatalogComponentId = this.route.snapshot.paramMap.get('id') ?? '';
-    console.log('Fee Catalog Component ID from route:', this.feeCatalogComponentId);
-    this.getSectionDetails(this.feeCatalogComponentId);
+    this.feeRateId = this.route.snapshot.paramMap.get('id') ?? '';
+    console.log('Fee Rate ID from route:', this.feeRateId);
+    this.getFeeRateDetails(this.feeRateId);
   }
 
-  getSectionDetails(sectionId: string): void {
-    this.feeCatalogComponentManagementService.getFeeCatalogComponentsById(sectionId).subscribe({
+  getFeeRateDetails(feeRateId: string): void {
+    this.feeRateManagementService.getFeeRateById(feeRateId).subscribe({
       next: (response: HttpResponse<any>) => {
         console.log('✅ Status:', response.status);
         console.log('📦 Body:', response.body);
-        this.sectionData = response.body;
-        console.log('standard Details:', this.sectionData);
+        this.feeRateData = response.body;
+        console.log('standard Details:', this.feeRateData);
       },
       error: (error) => {
         console.error('❌ Error Status:', error.status);

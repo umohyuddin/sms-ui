@@ -26,8 +26,8 @@ export class FeeRateListing implements OnInit {
   ngOnInit(): void { }
 
 
-  goToCreateFeeCatalogComponent(): void {
-    this.router.navigate(ROUTES.FEE.FEE_CATALOG_COMPONENT.CREATE);
+  goToCreateFeeRate(): void {
+    this.router.navigate(ROUTES.FEE.FEE_RATE.CREATE);
   }
 }
 

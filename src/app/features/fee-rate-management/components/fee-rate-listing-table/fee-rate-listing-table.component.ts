@@ -37,13 +37,8 @@ export class FeeRateListingTableComponent {
     { key: 'effectiveFrom', label: 'Effective From', sortable: true },
     { key: 'effectiveTo', label: 'Effective To', sortable: true },
     { key: 'status', label: 'Status', sortable: true },
-
     { key: 'campusName', label: 'Campus Name', sortable: true },
-
-    
     { key: 'standardName', label: 'Standard Name', sortable: true },
-    
-
     { key: 'feeCatalogName', label: 'Fee Catalog Name', sortable: true },
     { key: 'academicYear', label: 'Academic Year', sortable: true },
     { key: 'actions', label: 'Actions', sortable: true }
@@ -134,17 +129,17 @@ export class FeeRateListingTableComponent {
 //       }
 //     })
 //   }
-//   viewFeeRateDetails(feeRate: FeeRateResponse, event: Event): void {
-//     console.log('Viewing details for Fee Rate ID:', feeRate.id);
-//     event.preventDefault();  // prevents anchor default behavior
-//     this.router.navigate(ROUTES.FEE.FEE_RATE.DETAILS(feeRate.id.toString()));
-//   }
+  viewFeeRateDetails(feeRate: FeeRateResponse, event: Event): void {
+    console.log('Viewing details for Fee Rate ID:', feeRate.id);
+    event.preventDefault();  // prevents anchor default behavior
+    this.router.navigate(ROUTES.FEE.FEE_RATE.DETAILS(feeRate.id.toString()));
+  }
 
-//   editFeeRateDetails(feeRate: FeeRateResponse, event: Event): void {
-//     event.preventDefault();  // prevents anchor default behavior
-//     console.log('Editing Fee Rate ID:', feeRate.id);
-//     this.router.navigate(ROUTES.FEE.FEE_RATE.EDIT(feeRate.id.toString()));
-//   }
+  editFeeRateDetails(feeRate: FeeRateResponse, event: Event): void {
+    event.preventDefault();  // prevents anchor default behavior
+    console.log('Editing Fee Rate ID:', feeRate.id);
+    this.router.navigate(ROUTES.FEE.FEE_RATE.EDIT(feeRate.id.toString()));
+  }
 
 //   // deleteStandard(standardId: any, event: Event): void {
 //   //   event.stopPropagation();

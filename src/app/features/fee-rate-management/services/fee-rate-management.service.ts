@@ -37,7 +37,7 @@ export class FeeRateManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_RATES.GET_ALL}`, { observeResponse: true });
   }
 
-  getFeeCatalogComponentsById(id: string): Observable<any> {
+  getFeeRateById(id: string): Observable<any> {
     return this.http.request(
       HTTP_METHOD.GET,
       `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.GET_BY_ID(id)}`,

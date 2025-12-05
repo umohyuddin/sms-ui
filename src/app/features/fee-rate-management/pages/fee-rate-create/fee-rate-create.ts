@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-fee-catalog-component-create',
+  selector: 'app-fee-rate-create',
   imports: [],
-  templateUrl: './fee-catalog-component-create.html',
-  styleUrls: ['./fee-catalog-component-create.css'],
+  templateUrl: './fee-rate-create.html',
+  styleUrls: ['./fee-rate-create.css'],
   standalone: true,
 })
-export class FeeCatalogComponentCreate {
+export class FeeRateCreate {
   constructor() { }
 
 }
