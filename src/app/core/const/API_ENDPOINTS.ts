@@ -75,12 +75,12 @@ export const API_ENDPOINTS = {
             SEARCH: (keyword: string) => `/api/school/discounts/subtypes/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/school/discounts/subtypes/${id}`
         },
-        FEE_RATES: {
-            CREATE: '/api/fee/rates',
-            UPDATE: (id: string) => `/api/fee/rates/${id}`,
-            GET_ALL: '/api/fee/rates',
-            SEARCH: (keyword: string) => `/api/fee/rates/search/${keyword}`,
-            GET_BY_ID: (id: string) => `/api/fee/rates/${id}`
+        DISCOUNT_RATES: {
+            CREATE: '/api/school/discounts/rates',
+            UPDATE: (id: string) => `/api/school/discounts/rates/${id}`,
+            GET_ALL: '/api/school/discounts/rates',
+            SEARCH: (keyword: string) => `/api/school/discounts/rates/search/${keyword}`,
+            GET_BY_ID: (id: string) => `/api/school/discounts/rates/${id}`
         }
     },
 

@@ -142,6 +142,17 @@ export const routes: Routes = [
       }
     ]
   },
+  {
+    path: 'concession/catalog/component/rate',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/concession-rate-management/concession-rate-management-module').then(m => m.ConcessionRateManagementModule)
+      }
+    ]
+  },
 
   // Default redirect
   {
