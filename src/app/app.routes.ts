@@ -120,6 +120,17 @@ export const routes: Routes = [
       }
     ]
   },
+  {
+    path: 'concession/catalog',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/concession-management/concession-management-module').then(m => m.ConcessionManagementModule)
+      }
+    ]
+  },
 
   // Default redirect
   {

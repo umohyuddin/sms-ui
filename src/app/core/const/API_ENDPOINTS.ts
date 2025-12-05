@@ -60,6 +60,29 @@ export const API_ENDPOINTS = {
             GET_BY_ID: (id: string) => `/api/fee/rates/${id}`
         }
     },
+    DISCOUNT: {
+        DISCOUNT_TYPE: {
+            CREATE: '/api/school/discounts/types',
+            GET_ALL: '/api/school/discounts/types',
+            SEARCH: (keyword: string) => `/api/school/discounts/types/search/${keyword}`,
+            GET_BY_ID: (id: string) => `/api/school/discounts/types/${id}`,
+            UPDATE: (id: string) => `/api/school/discounts/types${id}`,
+        },
+        FEE_CATALOG_COMPONENT: {
+            CREATE: '/api/fee/components',
+            UPDATE: (id: string) => `/api/fee/components/${id}`,
+            GET_ALL: '/api/fee/components',
+            SEARCH: (keyword: string) => `/api/fee/components/search/${keyword}`,
+            GET_BY_ID: (id: string) => `/api/fee/components/${id}`
+        },
+        FEE_RATES: {
+            CREATE: '/api/fee/rates',
+            UPDATE: (id: string) => `/api/fee/rates/${id}`,
+            GET_ALL: '/api/fee/rates',
+            SEARCH: (keyword: string) => `/api/fee/rates/search/${keyword}`,
+            GET_BY_ID: (id: string) => `/api/fee/rates/${id}`
+        }
+    },
 
     LOOKUP: {
         PROVINCE: {

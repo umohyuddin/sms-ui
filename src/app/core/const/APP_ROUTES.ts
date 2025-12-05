@@ -42,5 +42,26 @@ export const ROUTES = {
       EDIT: (id: string) => ['fee-rate', 'fee-rate-edit', id],
       DETAILS: (id: string) => ['fee-rate', 'fee-rate-details', id],
     },
+  },
+  CONCESSION: {
+    CONCESSION_TYPE: {
+      LIST: ['concession-type'],
+      CREATE: ['concession-type', 'concession-type-create'],
+      EDIT: (id: string) => ['concession-type', 'concession-type-edit', id],
+      DETAILS: (id: string) => ['concession-type', 'concession-type-details', id],
+    },
+    CONCESSION__SUB_TYPE: {
+      LIST: ['concession-sub-type'],
+      CREATE: ['concession-sub-type', 'concession-sub-type-create'],
+      EDIT: (id: string) => ['concession-sub-type-component', 'concession-sub-type-edit', id],
+      DETAILS: (id: string) => ['concession-sub-type', 'concession-sub-type-details', id],
+    },
+    CONCESSION_RATE: {
+      LIST: ['concession-rate'],
+      CREATE: ['concession-rate', 'concession-rate-create'],
+      EDIT: (id: string) => ['concession-rate', 'concession-rate-edit', id],
+      DETAILS: (id: string) => ['concession-rate', 'concession-rate-details', id],
+    },
   }
 };
+
