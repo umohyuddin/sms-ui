@@ -2,128 +2,76 @@
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
       <h3 class="kt-portlet__head-title">
-        {{ isEditMode ==true ? 'Update Campus Details' : 'Add New Campus' }}
+        {{ isEditMode ==true ? 'Update Fee Catalog Type Details' : 'Add Fee Catalog Type' }}
       </h3>
     </div>
   </div>
 
   <!--begin::Form-->
-  <form class="kt-form kt-form--label-right" [formGroup]="createCampusForm" (ngSubmit)="onSubmit()">
+  <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
     <div class="kt-portlet__body">
-      <h4>Campus Information</h4>
+      <h4>Fee Catalog type Information</h4>
       <div class="form-group row form-group-marginless kt-margin-t-20">
-        <label class="col-lg-1 col-form-label">School:</label>
+        <label class="col-lg-1 col-form-label">Name:</label>
         <div class="col-lg-3">
-          <select class="form-control" formControlName="instituteId">
-            <option value="" disabled>Select School</option>
-          </select>
-          <span class="form-text text-muted">Please select School</span>
-
-        </div>
-
-        <label class="col-lg-1 col-form-label">Campus Name:</label>
-        <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="Campus name" formControlName="campusName"
-            [class.is-invalid]="campusName?.invalid && (campusName?.touched || campusName?.dirty)"
-            [class.is-valid]="campusName?.valid && (campusName?.touched || campusName?.dirty)">
-          <span class="form-text text-muted">Please enter your Campus name</span>
-          <span class="invalid-feedback" *ngIf="campusName?.errors?.['required']">
-            Campus name is required
+          <input type="text" class="form-control" placeholder="name" formControlName="name"
+            [class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
+            [class.is-valid]="name?.valid && (name?.touched || name?.dirty)">
+          <span class="form-text text-muted">Please enter your Fee Catalog Type name</span>
+          <span class="invalid-feedback" *ngIf="name?.errors?.['required']">
+            Fee catalog type name is required
           </span>
         </div>
-        <label class="col-lg-1 col-form-label">Campus Code:</label>
+        <label class="col-lg-1 col-form-label">Code:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="Campus Code" formControlName="campusCode">
+          <input type="text" class="form-control" placeholder="code" formControlName="code">
         </div>
-      </div>
-      <div class="form-group row form-group-marginless kt-margin-t-20">
         <label class="col-lg-1 col-form-label">Status:</label>
         <div class="col-lg-3">
           <label class="kt-checkbox kt-margin-t-10">
-            <input type="checkbox" formControlName="isActive"> Is Active
+            <input type="checkbox" formControlName="active"> Is Active
             <span></span>
           </label>
         </div>
 
       </div>
-      <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
-      <h4 class="kt-margin-b-20">Contact Information</h4>
-
-      <div class="form-group row form-group-marginless">
-
-        <label class="col-lg-1 col-form-label">Contact:</label>
+      <div class="form-group row kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Catalog Charge Type : </label>
         <div class="col-lg-3">
-          <input type="tel" class="form-control" placeholder="Enter contact number" formControlName="contactNumber"
-            [class.is-invalid]="contactNumber?.invalid && (contactNumber?.touched || contactNumber?.dirty)"
-            [class.is-valid]="contactNumber?.valid && (contactNumber?.touched || contactNumber?.dirty)">
-          <span class="form-text text-muted">Please enter your contact</span>
-          <span class="invalid-feedback" *ngIf="contactNumber?.errors?.['required']">
-            Contact Number is required
-          </span>
-        </div>
-        <label class="col-lg-1 col-form-label">Email:</label>
-        <div class="col-lg-3">
-          <div class="kt-input-icon">
-            <input type="email" class="form-control" placeholder="Email" formControlName="email"
-              [class.is-invalid]="email?.invalid && (email?.touched || email?.dirty)"
-              [class.is-valid]="email?.valid && (email?.touched || email?.dirty)">
-
-          </div>
-          <span class="form-text text-muted">Please enter your Email</span>
-          <span class="invalid-feedback" *ngIf="email?.errors?.['email']">
-            Please enter a valid email address.
-          </span>
-          <span class="invalid-feedback" *ngIf="email?.errors?.['required']">
-            Email is required.
-          </span>
-        </div>
-        <label class="col-lg-1 col-form-label">Website:</label>
-        <div class="col-lg-3">
-          <div class="kt-input-icon">
-            <input type="url" class="form-control" placeholder="Enter your Website" formControlName="website">
-          </div>
-          <span class="form-text text-muted">Please enter your Website</span>
-        </div>
-      </div>
-      <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
-      <h4 class="kt-margin-b-20">Address Information</h4>
-      <div class="form-group row">
-        <label class="col-lg-1 col-form-label">Province:</label>
-        <div class="col-lg-3">
-          <select class="form-control" formControlName="provinceId" 
-           [class.is-invalid]="provinceId?.invalid && (provinceId?.touched || provinceId?.dirty)"
-              [class.is-valid]="provinceId?.valid && (provinceId?.touched || provinceId?.dirty)">
-            <option value='' selected>Select Province</option>
-            @for (p of provinces; track p.id) {
-            <option [value]="p.id">{{ p.name }}</option>
+          <select class="form-control" formControlName="chargeType"
+            [class.is-invalid]="chargeType?.invalid && (chargeType?.touched || chargeType?.dirty)"
+            [class.is-valid]="chargeType?.valid && (chargeType?.touched || chargeType?.dirty)">
+            <option value='' selected>Select Charge Type</option>
+            @for (p of chargeTypeOptions; track p.key) {
+            <option [value]="p.key">{{ p.label }}</option>
             }
           </select>
-          <span class="form-text text-muted">Please select your Porvince</span>
-            <span class="invalid-feedback" *ngIf="provinceId?.errors?.['required']">
-            Province is required.
+          <span class="form-text text-muted">Please select your Charge Type</span>
+          <span class="invalid-feedback" *ngIf="chargeType?.errors?.['required']">
+            Charge Type is required.
           </span>
         </div>
-        <label class="col-lg-1 col-form-label">City:</label>
+        <label class="col-lg-1 col-form-label">Recurrence Rule:</label>
         <div class="col-lg-3">
-          <select class="form-control" formControlName="cityId"
-           [class.is-invalid]="cityId?.invalid && (cityId?.touched || cityId?.dirty)"
-              [class.is-valid]="cityId?.valid && (cityId?.touched || cityId?.dirty)">
-            <option value=''>Select City</option>
-            @for (c of cities; track c.id) {
-            <option [value]="c.id">{{ c.name }}</option>
+          <select class="form-control" formControlName="recurrenceRule"
+            [class.is-invalid]="recurrenceRule?.invalid && (recurrenceRule?.touched || recurrenceRule?.dirty)"
+            [class.is-valid]="recurrenceRule?.valid && (recurrenceRule?.touched || recurrenceRule?.dirty)">
+            <option value=''>Select Recurrence Rule</option>
+            @for (c of recurrenceRuleOptions; track c.key) {
+            <option [value]="c.key">{{ c.label }}</option>
             }
           </select>
-          <span class="form-text text-muted">Please Select your City</span>
-           <span class="invalid-feedback" *ngIf="cityId?.errors?.['required']">
-            City is required.
+          <span class="form-text text-muted">Please Select your Recurrence Rule</span>
+          <span class="invalid-feedback" *ngIf="recurrenceRule?.errors?.['required']">
+            Recurrence Rule is required.
           </span>
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-lg-1 col-form-label">Address:</label>
+        <label class="col-lg-1 col-form-label">Description:</label>
         <div class="col-lg-11">
           <div class="kt-input-icon">
-            <textarea class="form-control" id="exampleTextarea" rows="3" formControlName="address"></textarea>
+            <textarea class="form-control" id="exampleTextarea" rows="3" formControlName="description"></textarea>
           </div>
         </div>
       </div>
@@ -135,7 +83,7 @@
           <div class="col-lg-7">
             <button type="submit" class="btn btn-dark mr-2">
               {{ isEditMode ==true ? 'Update Campus Details' : 'Add New Campus' }}</button>
-            <button type="button" class="btn btn-danger" (click)="goToCampusListing()">Cancel</button>
+            <button type="button" class="btn btn-danger" (click)="goToFeeCatelogList()">Cancel</button>
           </div>
         </div>
       </div>

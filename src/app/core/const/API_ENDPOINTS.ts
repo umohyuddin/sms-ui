@@ -81,6 +81,7 @@ export const API_ENDPOINTS = {
     },
 
     LOOKUP: {
+        FEE_CATALOG_META: '/api/lookup/fee-catalog/metadata',
         PROVINCE: {
             GET_ALL: '/api/lookup/provinces'
         },

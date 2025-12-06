@@ -9,8 +9,8 @@ import { CampusResponse } from '../../../campus-management/models/campusResponse
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { StandardResponse } from '../../../standard-management/models/standardResponse';
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
-import { SectionManagementService } from '../../services/fee-catalog-component-management.service';
 import { FeeCatalogComponentResponse } from '../../models/FeeCatalogComponentResponse';
+import { SectionManagementService } from '../../../section-management/services/section-management.service';
 
 
 

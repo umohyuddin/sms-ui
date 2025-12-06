@@ -2,74 +2,65 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientService } from '../../../../core/services/http-client.service';
-import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AppConfigService } from '../../../../core/services/app-config.service';
-import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { FeeCatalogManagementService } from '../../services/fee-catalog-management.service';
+import { FeeConfig, KeyValueOption } from '../../models/feeConfig';
+import { FeeCatalogResponse } from '../../models/FeeCatalogResponse';
 
 
 @Component({
-  selector: 'app-campus-create-form',
+  selector: 'app-fee-catalog-create-form',
   standalone: true,
   imports: [
     ReactiveFormsModule,
     CommonModule],
-  templateUrl: './campus-create-form.component.html',
-  styleUrls: ['./campus-create-form.component.css']
+  templateUrl: './fee-catalog-create-form.component.html',
+  styleUrls: ['./fee-catalog-create-form.component.css']
 })
-export class CampusCreateFormComponent {
-  createCampusForm!: FormGroup;
-  routeCampusId?: string;
-  URL = '';
+export class FeeCatalogCreateFormComponent {
+  createForm!: FormGroup;
+  routedId: string | null = null
   isEditMode = false;
-  campusId: string | null = null;
-  campusData: any;
-  provinces: any[] = [];
-  cities: any[] = [];
+  resourceData: FeeCatalogResponse | null = null;
+ 
+  recurrenceRuleOptions: KeyValueOption[] = [];
+  chargeTypeOptions: KeyValueOption[]=  [];
 
-  constructor(private fb: FormBuilder,
-    private httpClientService: HttpClientService,
+  constructor(private feeCatalogManagementService: FeeCatalogManagementService,
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private appConfig: AppConfigService
   ) { }
 
   ngOnInit() {
-
-    console.log('Config:', this.appConfig);
-    this.URL = this.appConfig.apiBaseUrl;
-
-    this.getProvinces();
+    this.getFeeCatalogMeta();
     this.initializeForm();
 
-    this.campusId = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = !!this.campusId;
+    this.routedId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.routedId;
 
     if (this.isEditMode) {
-      console.log('Edit Mode Activated - Load data for:', this.campusId);
-      this.getCampusDetails(this.campusId!);
+      console.log('Edit Mode Activated - Load data for:', this.routedId);
+      this.getFeeCatalogDetails(this.routedId!);
     } else {
       console.log('Create Mode Activated');
     }
-
-
-    this.onProvinceChange();
-    if (this.appConfig.dummyDataEnablement) {
-      this.patchDummyData();
-    }
-
   }
 
-  private getProvinces() {
-    this.httpClientService.request<any>(HTTP_METHOD.GET, this.URL + API_ENDPOINTS.LOOKUP.PROVINCE.GET_ALL, {
-      observeResponse: true
-    }).subscribe({
+  private getFeeCatalogMeta() {
+    this.feeCatalogManagementService.getFeeCatalogMeta().subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.provinces = response.body;
+
+        this.recurrenceRuleOptions = Object.entries(response.body.recurrenceRules).map(
+          ([key, label]) => ({ key, label: label as string })
+        );
+
+        this.chargeTypeOptions = Object.entries(response.body.chargeTypes).map(
+          ([key, label]) => ({ key, label: label as string })
+        );
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
@@ -80,157 +71,90 @@ export class CampusCreateFormComponent {
       }
     });
   }
+
 
   private initializeForm() {
-    this.createCampusForm = this.fb.group({
-      instituteId: [1, Validators.required],
-      provinceId: ['', Validators.required],
-      cityId: ['', Validators.required],
-      campusName: ['', [Validators.required]],
-      campusCode: ['', Validators.maxLength(20)],
-      isActive: [true],
-      contactNumber: ['', [Validators.required, Validators.maxLength(15)]],
-      email: ['', [Validators.required, Validators.email]],
-      website: [''],
-      address: ['']
+    this.createForm = this.fb.group({
+      name: ['', [Validators.required]],
+      code: ['', Validators.maxLength(20)],
+      active: [true],
+      chargeType: ['', Validators.required],
+      recurrenceRule: ['', Validators.required],
+      description: ['']
     });
   }
 
 
-  onProvinceChange() {
-    this.createCampusForm.get('provinceId')?.valueChanges.subscribe(provinceId => {
-      console.log("Province changed:", provinceId);
-
-      // Example: Load cities based on province
-      this.loadCitiesByProvince(provinceId);
-    });
-  }
-    loadCitiesByProvince(provinceId: any) {
-    this.httpClientService.request<any>(HTTP_METHOD.GET, this.URL + API_ENDPOINTS.LOOKUP.CITIY.GET_BY_PROVINCE_ID(provinceId), {
-      observeResponse: true
-    }).subscribe({
-      next: (response) => {
-        console.log('✅ Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.cities = response.body;
-        //this.router.navigate(['/Campuss']);
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-        //this.router.navigate(['/Campuses']);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    });
-  }
-  // generateCampusCode() {
-  //   const timestampCode = Date.now().toString().slice(-6); // last 6 digits of current timestamp
-  //   this.createCampusForm.get('CampusCode')?.setValue(timestampCode);
-  // }
-
-  goToCampusList(): void {
-    this.router.navigate(['/Campuss']);
+  goToFeeCatelogList(): void {
+    this.router.navigate(ROUTES.FEE.FEE_CATALOG.LIST);
   }
   onSubmit(): void {
-    console.log('✅ Campus Form Data:', this.createCampusForm.getRawValue());
-    if (this.createCampusForm.invalid) {
+    console.log('✅ Form Data:', this.createForm.getRawValue());
+    if (this.createForm.invalid) {
       // Mark all controls as touched to show validation errors
-      this.createCampusForm.markAllAsTouched();
+      this.createForm.markAllAsTouched();
       console.warn('❌ Form is invalid');
       return;
     }
-    let requestMethod: string;
-    let requestUrl: string;
 
-    if (this.isEditMode && this.campusId) {
-      requestMethod = HTTP_METHOD.PATCH;
-      requestUrl = `${this.URL}${API_ENDPOINTS.INSTITUTE.CAMPUSES.UPDATE}/${this.campusId}`; // or a dedicated UPDATE endpoint
-    } else {
-      requestMethod = HTTP_METHOD.POST;
-      requestUrl = `${this.URL}${API_ENDPOINTS.INSTITUTE.CAMPUSES.CREATE}`;
-    }
-
-    console.log('✅ Campus Form Data:', this.createCampusForm.getRawValue());
-    this.httpClientService.request<any>(requestMethod, requestUrl, {
-      observeResponse: true,
-      body: this.createCampusForm.getRawValue()
-    }).subscribe({
+    this.feeCatalogManagementService.saveFeeCatalog(this.routedId, this.createForm.getRawValue()).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.router.navigate(['/Campuss']);
+        this.router.navigate(ROUTES.FEE.FEE_CATALOG.LIST);
       },
       error: (error) => {
-        console.error('❌ Post Error Status:', error.status);
+        console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
-        this.router.navigate(['/Campuss']);
       },
       complete: () => {
-        console.log('🔚 Post Complete');
+        console.log('🔚 Request Complete');
       }
     })
   }
 
 
-  getCampusDetails(campusId: string): void {
-    const url = `${this.URL}${API_ENDPOINTS.INSTITUTE.CAMPUSES.GET_BY_ID(campusId)}`;
-    this.httpClientService
-      .request<any>(HTTP_METHOD.GET, url, { observeResponse: true })
-      .subscribe({
-        next: (response) => {
-          console.log('✅ Success Status:', response.status);
-          console.log('📦 Response Body:', response.body);
-          this.campusData = response.body;
-          console.log('📦 Campus data :', this.campusData);
-          this.createCampusForm.patchValue(this.campusData);
-        },
-        error: (error) => {
-          console.error('❌ Request Error Status:', error.status);
-          console.error('Message:', error.message);
-        },
-        complete: () => {
-          console.log('🔚 Request Complete');
-        }
-      })
+  getFeeCatalogDetails(routedId: string): void {
+    this.feeCatalogManagementService.getFeeCatalogById(routedId).subscribe({
+      next: (response) => {
+        console.log('✅ Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.resourceData = response.body;
+        this.createForm.patchValue(this.resourceData ?? {});
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    })
   }
-  private patchDummyData() {
-    const dummyPayload = {
-      instituteId: 1,
-
-      campusName: 'Dummy Campus',
-      campusCode: 'D-002',
-      isActive: true,
-      contactNumber: '03001234567',
-      email: 'dummy@school.com',
-      website: 'https://dummy.com',
-      address: 'Dummy street, Karachi'
-    };
-
-    this.createCampusForm.patchValue(dummyPayload);
-  }
-  goToCampusListing() {
-    this.router.navigate(ROUTES.CAMPUS.LIST)
-  }
-
 
   //getters
-  get campusName() {
-    return this.createCampusForm.get('campusName');
+  get name() {
+    return this.createForm.get('name');
   }
 
-  get contactNumber() {
-    return this.createCampusForm.get('contactNumber');
-  }
-  get email() {
-    return this.createCampusForm.get('email');
+  get code() {
+    return this.createForm.get('code');
   }
 
-  get provinceId() {
-    return this.createCampusForm.get('provinceId');
+  get active() {
+    return this.createForm.get('active');
   }
-  get cityId() {
-    return this.createCampusForm.get('cityId');
+
+  get chargeType() {
+    return this.createForm.get('chargeType');
   }
+
+  get recurrenceRule() {
+    return this.createForm.get('recurrenceRule');
+  }
+
+  get description() {
+    return this.createForm.get('description');
+  }
+
 }

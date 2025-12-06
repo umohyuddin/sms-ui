@@ -17,6 +17,10 @@ export class FeeCatalogManagementService {
     console.log('API Base URL:', this.appConfig.apiBaseUrl);
   }
 
+
+  getFeeCatalogMeta():Observable<any>{
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.FEE_CATALOG_META}`, { observeResponse: true });   
+  }
   getAllFeeCatalogs(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG.GET_ALL}`, { observeResponse: true });
   }
