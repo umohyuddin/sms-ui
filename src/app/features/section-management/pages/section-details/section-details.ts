@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
-import { AppConfigService } from '../../../../core/services/app-config.service';
-import { SectionManagementService } from '../../services/section-management.service';
-import { StandardResponse } from '../../../standard-management/models/standardResponse';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SectionInfoComponent } from '../../components/section-info/section-info.component';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
 
 @Component({
@@ -16,44 +13,26 @@ import { SectionInfoComponent } from '../../components/section-info/section-info
   standalone: true,
 })
 export class SectionDetails {
-  sectionData?: StandardResponse;
-  sectionId!: string;
-  isActive = true;
-  URL = '';
-  toggleStatus() {
-
-    this.isActive = !this.isActive;
-  }
-  constructor(private sectionManagementService: SectionManagementService
-    , private route: ActivatedRoute,
-    private appConfig: AppConfigService
-  ) { }
-
-  ngOnInit(): void {
-    console.log('API Base URL:', this.appConfig.apiBaseUrl);
-    this.URL = this.appConfig.apiBaseUrl;
-
-    this.sectionId = this.route.snapshot.paramMap.get('id') ?? '';
-    console.log('standard ID from route:', this.sectionId);
-    this.getSectionDetails(this.sectionId);
-  }
-
-  getSectionDetails(sectionId: string): void {
-    this.sectionManagementService.getSectionById(sectionId).subscribe({
-      next: (response: HttpResponse<any>) => {
-        console.log('✅ Status:', response.status);
-        console.log('📦 Body:', response.body);
-        this.sectionData = response.body;
-        console.log('standard Details:', this.sectionData);
-      },
-      error: (error) => {
-        console.error('❌ Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
+  routedId: number | null = null;
+  
+    constructor(private route: ActivatedRoute,
+      private router: Router
+    ) { }
+  
+    ngOnInit() {
+      this.route.paramMap.subscribe(params => {
+        const id = params.get('id');
+        this.routedId = id ? +id : null; // convert string to number
+        console.log('Resource ID from URL:', this.routedId);
+      });
+    }
+    goToUpdatePage() {
+      if (this.routedId) {
+        this.router.navigate(ROUTES.CAMPUS.SECTION.EDIT(this.routedId.toString()));
+      } else {
+        console.log('Resource ID from URL Not Found:');
       }
-    });
-  }
+    }
 }
 
 

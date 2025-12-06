@@ -47,7 +47,7 @@ export class SectionManagementService {
 
   searchSections(params: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.SEARCH}`,
+      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.SEARCH}`,
       {
         observeResponse: true,
         params: params

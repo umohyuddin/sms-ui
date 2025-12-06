@@ -11,7 +11,7 @@
     <div class="kt-portlet__head-toolbar">
       <div class="kt-portlet__head-wrapper">
         <div class="kt-portlet__head-actions">
-          <div class="dropdown dropdown-inline">
+          <!-- <div class="dropdown dropdown-inline">
             <button type="button" class="btn btn-success btn-icon-sm dropdown-toggle" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
               <i class="la la-download"></i> Export
@@ -54,7 +54,7 @@
                 </li>
               </ul>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -68,7 +68,7 @@
           <label>Campus:</label>
           <select class="form-control kt-input" data-col-index="2" formControlName="campusId">
             <option value='' selected>Select Campus</option>
-            @for (c of campusesResponse; track c.id) {
+            @for (c of campusesResponseDD; track c.id) {
             <option [value]="c.id">{{ c.campusName }}</option>
             }
           </select>
@@ -77,7 +77,7 @@
           <label>Standard:</label>
           <select class="form-control kt-input" data-col-index="2" formControlName="standardId">
             <option value='' selected>Select Standard</option>
-            @for (s of standardsResponse; track s.id) {
+            @for (s of standardsResponseDD; track s.id) {
             <option [value]="s.id">{{ s.standardName }}</option>
             }
           </select>
@@ -99,7 +99,7 @@
             </span>
           </button>
           &nbsp;&nbsp;
-          <button class="btn btn-secondary btn-secondary--icon" id="kt_reset" (click)="getSections()">
+          <button class="btn btn-secondary btn-secondary--icon" id="kt_reset" (click)="resetForm()">
             <span>
               <i class="la la-close"></i>
               <span>Reset</span>
