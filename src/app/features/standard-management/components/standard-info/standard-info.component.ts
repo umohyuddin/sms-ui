@@ -5,6 +5,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { StandardResponse } from '../../models/standardResponse';
 import { ActivatedRoute } from '@angular/router';
 import { StandardManagementService } from '../../services/standard-management.service';
+import { SmsUtil } from '../../../../core/utils/smsUtil';
 
 @Component({
   selector: 'app-standard-info',
@@ -44,5 +45,8 @@ export class StandardInfoComponent {
         console.log('🔚 Request Complete');
       }
     })
+  }
+   getInitials(name?: string): string {
+    return SmsUtil.getInitials(name ?? '');
   }
 }

@@ -19,7 +19,7 @@ export const API_ENDPOINTS = {
         },
         STANDARDS: {
             CREATE: '/api/institute/campuses/standards',
-            UPDATE: (id: string) => `/api/institute/campuses/standards${id}`,
+            UPDATE: (id: string) => `/api/institute/campuses/standards/${id}`,
             GET_ALL: '/api/institute/campuses/standards',
             SEARCH: '/api/institute/campuses/standards/search',
             GET_BY_ID: (id: string) => `/api/institute/campuses/standards/${id}`,
