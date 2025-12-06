@@ -21,6 +21,29 @@ export class FeeCatalogManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG.GET_ALL}`, { observeResponse: true });
   }
 
+  getFeeCatalogById(id: string): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG.GET_BY_ID(id)}`,
+      { observeResponse: true }
+    );
+  }
+
+
+  saveFeeCatalog(id: string | null, payload: any): Observable<any> {
+    const isUpdate = !!id;
+
+    const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
+
+    const url = isUpdate
+      ? `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG.UPDATE(id)}`
+      : `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG.CREATE}`;
+
+    return this.http.request(method, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
   searchFeeCatalogs(query: string): Observable<any> {
     const url = query
       ? `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG.SEARCH(query)}`

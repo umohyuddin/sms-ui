@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { FeeCatalogInfoComponent } from '../../components/fee-catalog-info/fee-catalog-info.component';
 @Component({
   selector: 'app-fee-catalog-details',
-  imports: [],
+  imports: [FeeCatalogInfoComponent],
   templateUrl: './fee-catalog-details.html',
   styleUrls: ['./fee-catalog-details.css'],
   standalone: true,

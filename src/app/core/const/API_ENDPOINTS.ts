@@ -36,7 +36,7 @@ export const API_ENDPOINTS = {
     FEE: {
         FEE_CATALOG: {
             CREATE: '/api/fee/catalogs',
-            UPDATE: '/api/fee/catalogs',
+            UPDATE: (id: string) => `/api/fee/catalogs${id}`,
             GET_ALL: '/api/fee/catalogs',
             SEARCH: (keyword: string) => `/api/fee/catalogs/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/fee/catalogs/${id}`
