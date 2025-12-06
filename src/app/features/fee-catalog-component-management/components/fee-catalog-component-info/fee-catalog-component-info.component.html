@@ -14,53 +14,56 @@
             </div>
         </div>
     </div>
-    <!-- <div class="kt-portlet__body">
+    <div class="kt-portlet__body">
         <div class="kt-widget kt-widget--user-profile-3">
             <div class="kt-widget__top">
                 <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-bolder kt-font-light">
-                    JM
+                    {{getInitials(resourceData?.componentName)}}
                 </div>
                 <div class="kt-widget__content">
                     <div class="kt-widget__head">
                         <div class="kt-widget__user">
-                            <a href="#" class="kt-widget__username">
-                             Section Name: {{sectionData?.sectionName}}
+                            <a class="kt-widget__username">
+                                {{resourceData?.componentName}}
+                                <span class=" ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
+                                    [ngClass]="resourceData?.active ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">{{resourceData?.active
+                                    ? 'Active' : 'Inactive'}}</span>
                             </a>
                         </div>
                     </div>
                     <div class="kt-widget__subhead row">
                         <div class="col-4">
-                            <a> <b>Section Code:</b> {{sectionData?.sectionCode}}</a>
+                            <a> <b>Fee Component Code:</b> {{resourceData?.componentCode}}</a>
                         </div>
 
                         <div class="col-4">
-                            <a><b>Standard Name: </b>{{sectionData?.standard?.standardName}}</a>
+                            <a><b>Fee Catalog Name: </b>{{resourceData?.feeCatalog?.name}}</a>
                         </div>
 
                         <div class="col-4">
-                            <a> <b> Standard Code:</b> {{sectionData?.sectionCode}}</a>
+                            <a> <b> Fee Catalog Code:</b> {{resourceData?.feeCatalog?.code}}</a>
                         </div>
                     </div>
                     <div class="kt-widget__subhead row">
                         <div class="col-4">
-                            <a> <b>Campus Name: </b> {{sectionData?.standard?.campus?.campusName}}</a>
+                            <a> <b>Fee Catalog Charge Type:</b> {{resourceData?.feeCatalog?.chargeType}} </a>
                         </div>
 
                         <div class="col-4">
-                            <a> <b>Campus Code: </b> {{sectionData?.standard?.campus?.campusCode}}</a>
+                            <a><b>Fee Catalog Recurrence Rule: </b>{{resourceData?.feeCatalog?.recurrenceRule}}</a>
                         </div>
+
                         <div class="col-4">
-                            <a> <b>Campus Contact: </b> {{sectionData?.standard?.campus?.contactNumber}}</a>
+                            <a> <b> Fee Catalog Code:</b> {{resourceData?.feeCatalog?.code}}</a>
                         </div>
                     </div>
                     <div class="kt-widget__info">
-                        <div class="kt-widget__desc"><i style="font-size: 1.5rem !important;"
-                                class="flaticon-placeholder-3 mr-2"></i>
-                            <b>{{sectionData?.standard?.campus?.address}}</b>
+                        <div class="kt-widget__desc">
+                            <b>Description: {{resourceData?.feeCatalog?.description}}</b>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 </div>
