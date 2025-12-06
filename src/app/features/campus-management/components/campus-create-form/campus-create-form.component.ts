@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { routes } from '../../../../app.routes';
+import { CampusManagementService } from '../../services/campus-management.service';
 
 
 @Component({
@@ -33,7 +35,9 @@ export class CampusCreateFormComponent {
     private httpClientService: HttpClientService,
     private route: ActivatedRoute,
     private router: Router,
-    private appConfig: AppConfigService
+    private appConfig: AppConfigService,
+    private campusManagementService: CampusManagementService,
+    
   ) { }
 
   ngOnInit() {
@@ -105,7 +109,7 @@ export class CampusCreateFormComponent {
       this.loadCitiesByProvince(provinceId);
     });
   }
-    loadCitiesByProvince(provinceId: any) {
+  loadCitiesByProvince(provinceId: any) {
     this.httpClientService.request<any>(HTTP_METHOD.GET, this.URL + API_ENDPOINTS.LOOKUP.CITIY.GET_BY_PROVINCE_ID(provinceId), {
       observeResponse: true
     }).subscribe({
@@ -141,31 +145,16 @@ export class CampusCreateFormComponent {
       console.warn('❌ Form is invalid');
       return;
     }
-    let requestMethod: string;
-    let requestUrl: string;
 
-    if (this.isEditMode && this.campusId) {
-      requestMethod = HTTP_METHOD.PATCH;
-      requestUrl = `${this.URL}${API_ENDPOINTS.INSTITUTE.CAMPUSES.UPDATE}/${this.campusId}`; // or a dedicated UPDATE endpoint
-    } else {
-      requestMethod = HTTP_METHOD.POST;
-      requestUrl = `${this.URL}${API_ENDPOINTS.INSTITUTE.CAMPUSES.CREATE}`;
-    }
-
-    console.log('✅ Campus Form Data:', this.createCampusForm.getRawValue());
-    this.httpClientService.request<any>(requestMethod, requestUrl, {
-      observeResponse: true,
-      body: this.createCampusForm.getRawValue()
-    }).subscribe({
+    this.campusManagementService.saveCampuse(this.campusId, this.createCampusForm.getRawValue()).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.router.navigate(['/Campuss']);
+        this.router.navigate(ROUTES.CAMPUS.LIST);
       },
       error: (error) => {
         console.error('❌ Post Error Status:', error.status);
         console.error('Message:', error.message);
-        this.router.navigate(['/Campuss']);
       },
       complete: () => {
         console.log('🔚 Post Complete');

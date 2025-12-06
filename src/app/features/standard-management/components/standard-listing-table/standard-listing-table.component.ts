@@ -5,8 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { StandardResponse } from '../../models/standardResponse';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
 import { StandardManagementService } from '../../services/standard-management.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
@@ -26,7 +26,6 @@ export class StandardListingTableComponent {
   pagination: Pagination<StandardResponse> = new Pagination([], 10);
   standardsResponse: StandardResponse[] = [];
   standardSearchForm !: FormGroup;
-  private destroy$ = new Subject<void>();
   campusesResponse: any;
 
   constructor(
@@ -72,6 +71,15 @@ export class StandardListingTableComponent {
 
   }
 
+
+  resetForm() {
+    //this.standardSearchForm.reset();
+    this.standardSearchForm.reset({
+      campusId: '',  // reset to default values
+      keyword: ''
+    });
+    this.getStandards(); // reload all data
+  }
   getStandards() {
     this.standardManagementService.getAllStandards().subscribe({
       next: (response) => {

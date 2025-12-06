@@ -12,7 +12,7 @@ export const API_ENDPOINTS = {
     INSTITUTE: {
         CAMPUSES: {
             CREATE: '/api/institute/campuses',
-            UPDATE: '/api/institute/campuses',
+            UPDATE: (id: string) => `/api/institute/campuses/${id}`,
             GET_ALL: '/api/institute/campuses',
             SEARCH: (keyword: string) => `/api/institute/campuses/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/institute/campuses/${id}`
