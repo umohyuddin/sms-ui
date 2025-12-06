@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { SectionResponse } from '../../models/SectionResponse';
 import { SectionManagementService } from '../../services/section-management.service';
+import { SmsUtil } from '../../../../core/utils/smsUtil';
 
 @Component({
   selector: 'app-section-info',
@@ -44,4 +45,8 @@ export class SectionInfoComponent {
       }
     })
   }
+
+  getInitials(name?: string): string {
+      return SmsUtil.getInitials(name ?? '');
+    }
 }
