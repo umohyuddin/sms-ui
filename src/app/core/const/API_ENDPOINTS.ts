@@ -1,10 +1,6 @@
 export const API_ENDPOINTS = {
-    USERS: {
-        GET_ALL: '/users',
-        GET_BY_ID: (id: number) => `/users/${id}`,
-        CREATE: '/users/create',
-        UPDATE: (id: number) => `/users/update/${id}`,
-        DELETE: (id: number) => `/users/delete/${id}`
+    AUTH: {
+        CREATE: '/sms/auth',
     },
     STUDENTS: {
         CREATE: '/api/institute/students',

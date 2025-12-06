@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { responseInterceptor } from './core/interceptors/response/response.interceptor';
 import { AppConfigService } from './core/services/app-config.service';
+import { authInterceptor } from './core/interceptors/jwt/jwt.interceptor';
 
 
 export function initializeApp(appConfig: AppConfigService) {
@@ -22,6 +23,6 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
      provideRouter(routes),
       provideAnimationsAsync(),
-      provideHttpClient(withInterceptors([responseInterceptor]))
+      provideHttpClient(withInterceptors([responseInterceptor,authInterceptor]))
     ]
 };

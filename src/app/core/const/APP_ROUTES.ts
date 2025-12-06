@@ -1,4 +1,7 @@
 export const ROUTES = {
+  DASHBAORD:{
+    MAIN_DASHBOARD:['dashboard']
+  },
   CAMPUS: {
     LIST: ['campuses'],
     CREATE: ['campuses', 'campus-create'],
