@@ -24,7 +24,7 @@ export class FeeCatalogListingTableComponent {
   searchControl = new FormControl('');
   feeCatalogResponse: FeeCatalogResponse[] = [];
   RECURRENCE_RULE_CLASSES = RECURRENCE_RULE_CLASSES;
-CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
+  CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router,
@@ -32,7 +32,6 @@ CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
   ) { }
 
   columns = [
-    // { key: 'id', label: 'Id', sortable: true },
     { key: 'feeCatalogName', label: 'Fee Catalog Name', sortable: true },
     { key: 'feeCatalogCode', label: 'Fee Catalog Code', sortable: true },
     { key: 'chargeType', label: 'Charge Type', sortable: true },
@@ -83,41 +82,17 @@ CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
     })
   }
 
-  viewFeeCatalogDetails(feeCatelog: FeeCatalogResponse, event: Event): void {
-    console.log('Viewing details for FeeCatalog ID:', feeCatelog.id);
+  viewDetails(item: FeeCatalogResponse, event: Event): void {
+    console.log('Viewing details for Resoruce ID:', item.id);
     event.preventDefault();  // prevents anchor default behavior
-    this.router.navigate(ROUTES.FEE.FEE_CATALOG.DETAILS(feeCatelog.id.toString()));
+    this.router.navigate(ROUTES.FEE.FEE_CATALOG.DETAILS(item.id.toString()));
   }
 
-  editFeeCatalogDetails(feeCatalog: FeeCatalogResponse, event: Event): void {
+  editDetails(item: FeeCatalogResponse, event: Event): void {
     event.preventDefault();  // prevents anchor default behavior
-    console.log('Editing FeeCatalog ID:', feeCatalog.id);
-    this.router.navigate(ROUTES.FEE.FEE_CATALOG.EDIT(feeCatalog.id.toString()));
+    console.log('Editing Resoruce ID:', item.id);
+    this.router.navigate(ROUTES.FEE.FEE_CATALOG.EDIT(item.id.toString()));
   }
-
-  // deleteCampus(campusId: any, event: Event): void {
-  //   event.stopPropagation();
-
-  //   console.log('Deleting Campus:', campusId);
-  //   if (confirm('Are you sure you want to delete this Campus?')) {
-
-  //     this.feeCatalogManagementService.deleteCampus(campusId).subscribe({
-  //       next: (response) => {
-  //         console.log('✅ Delete Success Status:', response.status);
-  //         console.log('📦 Delete Response Body:', response.body);
-  //         // this.CampusData = this.CampusData.filter(t => t.CampusId !== CampusId);
-  //         console.log(`Campus ${campusId} deleted successfully`);
-  //       },
-  //       error: (error) => {
-  //         console.error('❌ Delete Error Status:', error.status);
-  //         console.error('Message:', error.message);
-  //       },
-  //       complete: () => {
-  //         console.log('🔚 Delete Complete');
-  //       }
-  //     })
-  //   }
-  // }
 
   onPageSizeChange(event: any) {
     const newSize = +event.target.value;

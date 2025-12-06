@@ -28,10 +28,10 @@ export const ROUTES = {
   },
   FEE: {
     FEE_CATALOG: {
-      LIST: ['fee-catalog'],
-      CREATE: ['fee-catalog', 'fee-catalog-create'],
-      EDIT: (id: string) => ['fee-catalog', 'fee-catalog-edit', id],
-      DETAILS: (id: string) => ['fee-catalog', 'fee-catalog-details', id],
+      LIST: ['fee/catalog'],
+      CREATE: ['fee/catalog', 'fee-catalog-create'],
+      EDIT: (id: string) => ['fee/catalog', 'fee-catalog-edit', id],
+      DETAILS: (id: string) => ['fee/catalog', 'fee-catalog-details', id],
     },
     FEE_CATALOG_COMPONENT: {
       LIST: ['fee-catalog-component'],

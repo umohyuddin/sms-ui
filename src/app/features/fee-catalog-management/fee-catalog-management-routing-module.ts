@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 
 
 import { RouterModule, Routes } from '@angular/router';
+import { FeeCatalogListing } from './pages/fee-catalog-listing/fee-catalog-listing';
+import { FeeCatalogDetails } from './pages/fee-catalog-details/fee-catalog-details';
+import { FeeCatalogCreate } from './pages/campus-create/fee-catalog-create';
 
 
 

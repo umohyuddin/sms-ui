@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { FeeCatalogDetails } from './pages/campus-details/fee-catalog-details';
+import { FeeCatalogDetails } from './pages/fee-catalog-details/fee-catalog-details';
 import { FeeCatalogCreate } from './pages/campus-create/fee-catalog-create';
-import { FeeCatalogListing } from './pages/campus-listing/fee-catalog-listing';
+import { FeeCatalogListing } from './pages/fee-catalog-listing/fee-catalog-listing';
 
 
 

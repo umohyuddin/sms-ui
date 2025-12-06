@@ -23,8 +23,8 @@ export class FeeCatalogManagementService {
 
   searchFeeCatalogs(query: string): Observable<any> {
     const url = query
-      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.SEARCH(query)}`
-      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.GET_ALL}`;
+      ? `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG.SEARCH(query)}`
+      : `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG.GET_ALL}`;
     return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
   }
 
