@@ -3,14 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AppConfigService } from '../../../../core/services/app-config.service';
-import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
-import { CampusResponse } from '../../../campus-management/models/campusResponse';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-import { StandardResponse } from '../../../standard-management/models/standardResponse';
-import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
 import { FeeCatalogComponentResponse } from '../../models/FeeCatalogComponentResponse';
-import { SectionManagementService } from '../../../section-management/services/section-management.service';
+import { FeeCatalogResponse } from '../../../fee-catalog-management/models/FeeCatalogResponse';
+import { FeeCatalogComponentManagementService } from '../../services/fee-catalog-component-management.service';
+import { FeeCatalogManagementService } from '../../../fee-catalog-management/services/fee-catalog-management.service';
 
 
 
@@ -25,83 +22,49 @@ import { SectionManagementService } from '../../../section-management/services/s
   styleUrls: ['./fee-catalog-component-create-form.component.css']
 })
 export class FeeCatalogComponentCreateFormComponent {
-  createFeeCatalogComponentForm!: FormGroup;
-  routeSectionId?: string;
-  URL = '';
-  mode = '';
-  standardData: StandardResponse[]=[];
+  createForm!: FormGroup;
+  routedId: string | null = null;
+  feeCatalogDD: FeeCatalogResponse[] = [];
   feeCatalogComponentData?: FeeCatalogComponentResponse;
-  campuses: CampusResponse[] = [];
-  cities: any[] = [];
-  sectionId: string | null = null;
   isEditMode: boolean = false;
 
   constructor(
-    private campusManagementService: CampusManagementService,
-    private standardManagemenetService: StandardManagementService,
-    private sectionManagementService: SectionManagementService,
+    private feeCatalogManagementService: FeeCatalogManagementService,
+    private feeCatalogComponentManagementService: FeeCatalogComponentManagementService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
-    private appConfig: AppConfigService
-  ) { }
+    private router: Router) { }
 
   ngOnInit() {
 
-    this.getCampuses();
+    this.getFeeCatalogs();
     this.initializeForm();
-    this.sectionId = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = !!this.sectionId;
+    this.routedId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.routedId;
 
     if (this.isEditMode) {
-      console.log('Edit Mode Activated - Load data for:', this.sectionId);
-      this.getSectionDetails(this.sectionId!);
+      console.log('Edit Mode Activated - Load data for:', this.routedId);
+      this.getFeeComponentDetails(this.routedId!);
     } else {
       console.log('Create Mode Activated');
     }
-    this.onCampusChange();
   }
 
-  onCampusChange() {
-    this.createFeeCatalogComponentForm.get('campusId')?.valueChanges.subscribe(campusId => {
-      console.log("Campus changed:", campusId);
-
-      // Example: Load cities based on province
-      this.loadStandardByCampusId(campusId);
-    });
-  }
-  loadStandardByCampusId(campusId: any) {
-    this.standardManagemenetService.getCampusById(campusId).subscribe({
-      next: (response) => {
-        console.log('✅ Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.standardData = response.body;
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-        //this.router.navigate(['/Campuses']);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    });
-  }
-  getSectionDetails(sectionId: string): void {
-    this.sectionManagementService.getSectionById(sectionId)
+  getFeeComponentDetails(routedId: string): void {
+    this.feeCatalogComponentManagementService.getFeeCatalogComponentsById(routedId)
       .subscribe({
         next: (response) => {
           console.log('✅ Request Success Status:', response.status);
           console.log('📦 Response Body:', response.body);
           this.feeCatalogComponentData = response.body;
-          console.log('📦 Standard data :', this.feeCatalogComponentData);
-          // this.createFeeCatalogComponentForm.patchValue({
-          //   sectionName: this.feeCatalogComponentData?.sectionName,
-          //   sectionCode: this.feeCatalogComponentData?.sectionCode,
-          //   description: this.feeCatalogComponentData?.description,
-          //   campusId: this.feeCatalogComponentData?.standard.campus.id,
-          //   standardId : this.feeCatalogComponentData?.standard.id
-          // });
+          console.log('📦 Request data :', this.feeCatalogComponentData);
+          this.createForm.patchValue({
+            feeCatalogId: this.feeCatalogComponentData?.feeCatalog.id,
+            componentName: this.feeCatalogComponentData?.componentName,
+            componentCode: this.feeCatalogComponentData?.componentCode,
+            description: '',
+            active : this.feeCatalogComponentData?.active
+          });
         },
         error: (error) => {
           console.error('❌ Request Error Status:', error.status);
@@ -113,12 +76,12 @@ export class FeeCatalogComponentCreateFormComponent {
       })
   }
 
-  private getCampuses() {
-    this.campusManagementService.getAllCampuses().subscribe({
+  private getFeeCatalogs() {
+    this.feeCatalogManagementService.getAllFeeCatalogs().subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.campuses = response.body;
+        this.feeCatalogDD = response.body;
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
@@ -131,31 +94,31 @@ export class FeeCatalogComponentCreateFormComponent {
   }
 
   private initializeForm() {
-    this.createFeeCatalogComponentForm = this.fb.group({
-      sectionName: ['', Validators.required],
-      campusId: ['', Validators.required],
-      standardId: ['', Validators.required],
-      sectionCode: [''],
+    this.createForm = this.fb.group({
+      feeCatalogId: ['', Validators.required],
+      componentName: ['', Validators.required],
+      componentCode: [''],
       description: [''],
+      active:[true]
     });
   }
 
   goToSectionsList(): void {
-    this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
+    this.router.navigate(ROUTES.FEE.FEE_CATALOG_COMPONENT.LIST);
   }
   onSubmit(): void {
-    console.log('✅ Create standard Form Data:', this.createFeeCatalogComponentForm.getRawValue());
-    if (this.createFeeCatalogComponentForm.invalid) {
-      this.createFeeCatalogComponentForm.markAllAsTouched();
+    console.log('✅ Create standard Form Data:', this.createForm.getRawValue());
+    if (this.createForm.invalid) {
+      this.createForm.markAllAsTouched();
       console.warn('❌ Form is invalid');
       return;
     }
 
-    this.sectionManagementService.saveSection(this.sectionId, this.createFeeCatalogComponentForm.getRawValue()).subscribe({
+    this.feeCatalogComponentManagementService.saveFeeCatalogComponent(this.routedId, this.createForm.getRawValue()).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
+        this.router.navigate(ROUTES.FEE.FEE_CATALOG_COMPONENT.LIST);
       },
       error: (error) => {
         console.error('❌ Post Error Status:', error.status);
@@ -167,24 +130,25 @@ export class FeeCatalogComponentCreateFormComponent {
     })
   }
 
-  //getters
-  get sectionName() {
-    return this.createFeeCatalogComponentForm.get('sectionName');
-  }
 
-  get campusId() {
-    return this.createFeeCatalogComponentForm.get('campusId');
-  }
+  // Getters
+get feeCatalogId() {
+  return this.createForm.get('feeCatalogId');
+}
 
-  get standardId() {
-    return this.createFeeCatalogComponentForm.get('standardId');
-  }
+get componentName() {
+  return this.createForm.get('componentName');
+}
 
-  get sectionCode() {
-    return this.createFeeCatalogComponentForm.get('sectionCode');
-  }
+get componentCode() {
+  return this.createForm.get('componentCode');
+}
+
+get active() {
+  return this.createForm.get('active');
+}
 
   get description() {
-    return this.createFeeCatalogComponentForm.get('description');
+    return this.createForm.get('description');
   }
 }
