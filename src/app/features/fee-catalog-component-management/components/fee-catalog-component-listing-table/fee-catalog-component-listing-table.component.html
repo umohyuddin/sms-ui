@@ -5,13 +5,13 @@
         <i class="kt-font-dark flaticon-squares"></i>
       </span>
       <h3 class="kt-portlet__head-title">
-        Sections Listing
+        Fee Catalog Component Listing
       </h3>
     </div>
     <div class="kt-portlet__head-toolbar">
       <div class="kt-portlet__head-wrapper">
         <div class="kt-portlet__head-actions">
-          <div class="dropdown dropdown-inline">
+          <!-- <div class="dropdown dropdown-inline">
             <button type="button" class="btn btn-success btn-icon-sm dropdown-toggle" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
               <i class="la la-download"></i> Export
@@ -54,36 +54,27 @@
                 </li>
               </ul>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
   </div>
   <div class="kt-portlet__body">
     <!--begin: Search-->
-    <form class="kt-form kt-form--fit kt-margin-b-20" [formGroup]="sectionsSearchForm" (ngSubmit)="onSubmitSearch()">
+    <form class="kt-form kt-form--fit kt-margin-b-20" [formGroup]="searchForm" (ngSubmit)="onSubmitSearch()">
       <div class="row kt-margin-b-20">
 
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-          <label>Campus:</label>
-          <select class="form-control kt-input" data-col-index="2" formControlName="campusId">
-            <option value='' selected>Select Campus</option>
-            @for (c of campusesResponse; track c.id) {
-            <option [value]="c.id">{{ c.campusName }}</option>
+          <label>Fee Catalog:</label>
+          <select class="form-control kt-input" data-col-index="2" formControlName="feeCatalogId">
+            <option value='' selected>Select Fee Catalog</option>
+            @for (c of feeCatalogResponseDD; track c.id) {
+            <option [value]="c.id">{{ c.name }}</option>
             }
           </select>
         </div>
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-          <label>Standard:</label>
-          <select class="form-control kt-input" data-col-index="2" formControlName="standardId">
-            <option value='' selected>Select Standard</option>
-            @for (s of standardsResponse; track s.id) {
-            <option [value]="s.id">{{ s.standardName }}</option>
-            }
-          </select>
-        </div>
-        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-          <label>Section Name:</label>
+          <label>Fee Catalog Component Name:</label>
           <input type="text" class="form-control kt-input" placeholder="E.g: 1st grade" data-col-index="0"
             formControlName="keyword">
         </div>

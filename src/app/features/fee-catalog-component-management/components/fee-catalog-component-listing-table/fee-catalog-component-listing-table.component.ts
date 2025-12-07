@@ -9,6 +9,7 @@ import { StandardResponse } from '../../../standard-management/models/standardRe
 import { FeeCatalogComponentManagementService } from '../../services/fee-catalog-component-management.service';
 import { FeeCatalogComponentResponse } from '../../models/FeeCatalogComponentResponse';
 import { FeeCatalogManagementService } from '../../../fee-catalog-management/services/fee-catalog-management.service';
+import { FeeCatalogResponse } from '../../../fee-catalog-management/models/FeeCatalogResponse';
 
 @Component({
   selector: 'app-fee-catalog-component-listing-table',
@@ -23,10 +24,9 @@ import { FeeCatalogManagementService } from '../../../fee-catalog-management/ser
 export class FeeCatalogComponentListingTableComponent {
   pagination: Pagination<FeeCatalogComponentResponse> = new Pagination([], 10);
   feeCatalogComponentResponse: FeeCatalogComponentResponse[] = [];
-  standardsResponse: StandardResponse[] = [];
+  feeCatalogResponseDD: FeeCatalogResponse[] = [];
 
-  sectionsSearchForm !: FormGroup;
-  private destroy$ = new Subject<void>();
+  searchForm !: FormGroup;
   campusesResponse: any;
 
   constructor(
@@ -46,17 +46,31 @@ export class FeeCatalogComponentListingTableComponent {
   ];
 
   ngOnInit() {
+    this.getFeeCatalog()
     this.initializeForm();
     this.getFeeCatalogComponents();
-    //this.getCampuses();
-    //this.getStandards();
-    //this.getSections();
+  }
+  getFeeCatalog() {
+    this.feeCatalogManagementService.getAllFeeCatalogs().subscribe({
+      next: (response) => {
+        console.log('✅ Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.feeCatalogResponseDD = response.body;
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    });
+
   }
 
   private initializeForm() {
-    this.sectionsSearchForm = this.fb.group({
-      campusId: [''],
-      standardId: [''],
+    this.searchForm = this.fb.group({
+      feeCatalogId: [''],
       keyword: ['']
     });
   }
@@ -66,9 +80,9 @@ export class FeeCatalogComponentListingTableComponent {
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        
-         this.feeCatalogComponentResponse = response.body;
-         this.pagination = new Pagination(this.feeCatalogComponentResponse, 10);
+
+        this.feeCatalogComponentResponse = response.body;
+        this.pagination = new Pagination(this.feeCatalogComponentResponse, 10);
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
@@ -79,58 +93,6 @@ export class FeeCatalogComponentListingTableComponent {
       }
     });
   }
-  // private getCampuses() {
-  //   this.campusManagementService.getAllCampuses().subscribe({
-  //     next: (response) => {
-  //       console.log('✅ Success Status:', response.status);
-  //       console.log('📦 Response Body:', response.body);
-  //       this.campusesResponse = response.body;
-  //     },
-  //     error: (error) => {
-  //       console.error('❌ Request Error Status:', error.status);
-  //       console.error('Message:', error.message);
-  //     },
-  //     complete: () => {
-  //       console.log('🔚 Request Complete');
-  //     }
-  //   });
-
-
-
-  // getStandards() {
-  //   this.standardManagementService.getAllStandards().subscribe({
-  //     next: (response) => {
-  //       console.log('✅ Success Status:', response.status);
-  //       console.log('📦 Response Body:', response.body);
-  //       this.sectionsResponse = response.body;
-  //     },
-  //     error: (error) => {
-  //       console.error('❌ Request Error Status:', error.status);
-  //       console.error('Message:', error.message);
-  //     },
-  //     complete: () => {
-  //       console.log('🔚 Request Complete');
-  //     }
-  //   })
-  // }
-
-  // getSections() {
-  //   this.sectionManagementService.getAllSection().subscribe({
-  //     next: (response) => {
-  //       console.log('✅ Success Status:', response.status);
-  //       console.log('📦 Response Body:', response.body);
-  //       this.sectionsResponse = response.body;
-  //       this.pagination = new Pagination(this.sectionsResponse, 10);
-  //     },
-  //     error: (error) => {
-  //       console.error('❌ Request Error Status:', error.status);
-  //       console.error('Message:', error.message);
-  //     },
-  //     complete: () => {
-  //       console.log('🔚 Request Complete');
-  //     }
-  //   })
-  // }
   viewSectionDetails(feeCatalogComponent: FeeCatalogComponentResponse, event: Event): void {
     console.log('Viewing details for Fee Catalog Component ID:', feeCatalogComponent.id);
     event.preventDefault();  // prevents anchor default behavior
@@ -172,29 +134,21 @@ export class FeeCatalogComponentListingTableComponent {
     this.pagination.changePageSize(newSize);
   }
   onSubmitSearch(): void {
-    console.log('✅ Standard Search Form Data:', this.sectionsSearchForm.getRawValue());
-    let formValues = this.sectionsSearchForm.value;
+    console.log('✅ Standard Search Form Data:', this.searchForm.getRawValue());
+    let formValues = this.searchForm.value;
     let params = {
       campusId: formValues.campusId,
       standardId: formValues.standardId,
       keyword: formValues.keyword?.trim() || ''
     };
 
-    // this.sectionManagementService.searchSections(params).subscribe({
-    //   next: (response) => {
-    //     console.log('✅ Success Status:', response.status);
-    //     console.log('📦 Response Body:', response.body);
-    //     this.sectionsResponse = response.body;
-    //     this.pagination = new Pagination(this.sectionsResponse, 10);
-    //   },
-    //   error: (error) => {
-    //     console.error('❌ Post Error Status:', error.status);
-    //     console.error('Message:', error.message);
-    //     this.router.navigate(['/Campuss']);
-    //   },
-    //   complete: () => {
-    //     console.log('🔚 Post Complete');
-    //   }
-    // })
+  }
+
+  resetForm() {
+    this.searchForm.reset({
+      feeCatalogId: '',
+      keyword: ''
+    });
+    this.getFeeCatalogComponents(); // reload all data
   }
 }
