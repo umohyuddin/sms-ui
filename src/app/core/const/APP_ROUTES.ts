@@ -1,6 +1,6 @@
 export const ROUTES = {
-  DASHBAORD:{
-    MAIN_DASHBOARD:['dashboard']
+  DASHBAORD: {
+    MAIN_DASHBOARD: ['dashboard']
   },
   CAMPUS: {
     LIST: ['campuses'],
@@ -40,10 +40,10 @@ export const ROUTES = {
       DETAILS: (id: string) => ['fee/catalog/component', 'fee-catalog-component-details', id],
     },
     FEE_RATE: {
-      LIST: ['fee-rate'],
-      CREATE: ['fee-rate', 'fee-rate-create'],
-      EDIT: (id: string) => ['fee-rate', 'fee-rate-edit', id],
-      DETAILS: (id: string) => ['fee-rate', 'fee-rate-details', id],
+      LIST: ['fee/catalog/component/rate'],
+      CREATE: ['fee/catalog/component/rate', 'fee-rate-create'],
+      EDIT: (id: string) => ['fee/catalog/component/rate', 'fee-rate-edit', id],
+      DETAILS: (id: string) => ['fee/catalog/component/rate', 'fee-rate-details', id],
     },
   },
   CONCESSION: {
