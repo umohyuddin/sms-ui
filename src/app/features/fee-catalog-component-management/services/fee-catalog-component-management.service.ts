@@ -45,6 +45,14 @@ export class FeeCatalogComponentManagementService {
     );
   }
 
+    getByFeeCatalogId(id: string): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.GET_BY_FEE_CATALOG(id)}`,
+      { observeResponse: true }
+    );
+  }
+
   searchFeeCatalogComponents(params: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET,
       `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.SEARCH}`,

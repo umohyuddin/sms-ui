@@ -61,3 +61,5 @@ export interface AcademicYear {
   isCurrent: boolean;
   totalMonths: number;
 }
+
+

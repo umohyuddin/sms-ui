@@ -33,7 +33,7 @@ export class FeeRateDetails {
   }
   goToUpdatePage() {
     if (this.routedId) {
-      this.router.navigate(ROUTES.CAMPUS.STANDARD.EDIT(this.routedId.toString()));
+      this.router.navigate(ROUTES.FEE.FEE_RATE.EDIT(this.routedId.toString()));
     } else {
       console.log('Resource ID from URL Not Found:');
     }

@@ -2,18 +2,35 @@
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
       <h3 class="kt-portlet__head-title">
-        <!-- {{isEditMode===true? 'Update Section Details': "Add New Fee Catalog Component"}} -->
+        {{isEditMode===true? 'Update Fee Rate & Metrix Details': "Add New Fee Rate & Metrix Component"}}
       </h3>
     </div>
   </div>
 
 
   <!--begin::Form-->
-  <!-- <form class="kt-form kt-form--label-right" [formGroup]="createFeeCatalogComponentForm" (ngSubmit)="onSubmit()">
+  <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
     <div class="kt-portlet__body">
       <h4>Section Information</h4>
 
       <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Academic Year:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="academicYearId"
+            [class.is-invalid]="academicYearId?.invalid && (academicYearId?.touched || academicYearId?.dirty)"
+            [class.is-valid]="academicYearId?.valid && (academicYearId?.touched || academicYearId?.dirty)">
+            <option value='' selected>Academic Year</option>
+            @for (p of academicYear; track p.id) {
+            <option [value]="p.id">{{ p.name }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Campus</span>
+          <span class="invalid-feedback" *ngIf="academicYearId?.errors?.['required']">
+            Academic Year is required
+          </span>
+        </div>
+
+
         <label class="col-lg-1 col-form-label">Campus:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="campusId"
@@ -46,7 +63,7 @@
           </span>
         </div>
 
-        <label class="col-lg-1 col-form-label">Section Name:</label>
+        <!-- <label class="col-lg-1 col-form-label">Section Name:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="" formControlName="sectionName"
             [class.is-invalid]="sectionName?.invalid && (sectionName?.touched || sectionName?.dirty)"
@@ -55,26 +72,51 @@
           <span class="invalid-feedback" *ngIf="sectionName?.errors?.['required']">
             Section Name is required
           </span>
-        </div>
+        </div> -->
       </div>
+      
       <div class="form-group row form-group-marginless kt-margin-t-20">
-
-        <label class="col-lg-1 col-form-label">Section Code</label>
+        <label class="col-lg-1 col-form-label">Fee Catalog:</label>
         <div class="col-lg-3">
-          <div class="kt-input-icon">
-            <input type="text" class="form-control" placeholder="" formControlName="sectionCode">
-          </div>
-          <span class="form-text text-muted">Please enter Section Code</span>
+          <select class="form-control" formControlName="feeCatalogId"
+            [class.is-invalid]="feeCatalogId?.invalid && (feeCatalogId?.touched || feeCatalogId?.dirty)"
+            [class.is-valid]="feeCatalogId?.valid && (feeCatalogId?.touched || feeCatalogId?.dirty)">
+            <option value='' selected>Select Fee Catalog</option>
+            @for (p of feeCatalogDD; track p.id) {
+            <option [value]="p.id">{{ p.name }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Fee Catalog</span>
+          <span class="invalid-feedback" *ngIf="feeCatalogId?.errors?.['required']">
+            Academic Year is required
+          </span>
         </div>
+
+         <label class="col-lg-1 col-form-label">Fee Catalog Component:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="feeCatalogComponentId"
+            [class.is-invalid]="feeCatalogComponentId?.invalid && (feeCatalogComponentId?.touched || feeCatalogComponentId?.dirty)"
+            [class.is-valid]="feeCatalogComponentId?.valid && (feeCatalogComponentId?.touched || feeCatalogComponentId?.dirty)">
+            <option value='' selected>Select Fee Catalog</option>
+            @for (p of feeCompnentDD; track p.id) {
+            <option [value]="p.id">{{ p.componentName }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Fee Catalog</span>
+          <span class="invalid-feedback" *ngIf="feeCatalogComponentId?.errors?.['required']">
+            Fee Component  is is required
+          </span>
+        </div>
+
       </div>
 
       <div class="form-group row kt-margin-t-40">
-        <label class="col-lg-1 col-form-label">Description:</label>
+        <!-- <label class="col-lg-1 col-form-label">Description:</label>
         <div class="col-lg-11">
           <div class="kt-input-icon">
             <textarea class="form-control" id="exampleTextarea" rows="3" formControlName="description"></textarea>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="kt-portlet__foot">
@@ -84,12 +126,12 @@
           <div class="col-lg-7">
             <button type="submit" class="btn btn-dark mr-2">{{isEditMode===true? 'Update Standard Details': "Add New
               Standard"}}</button>
-            <button type="button" class="btn btn-secondary" (click)="goToSectionsList()">Cancel</button>
+            <button type="button" class="btn btn-secondary" (click)="goToFeeRateListing()">Cancel</button>
           </div>
         </div>
       </div>
     </div>
-  </form> -->
+  </form>
 
   <!--end::Form-->
 </div>

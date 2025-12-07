@@ -10,6 +10,10 @@ export const API_ENDPOINTS = {
         GET_BY_ID: (id: string) => `/api/institute/students/${id}`
     },
     INSTITUTE: {
+        ACADEMIC_YEAR: {
+            GET_BY_ID: (id: string) => `/api/school/academic/${id}`,
+            GET_ALL: '/api/school/academic'
+        },
         CAMPUSES: {
             CREATE: '/api/institute/campuses',
             UPDATE: (id: string) => `/api/institute/campuses/${id}`,
@@ -46,7 +50,8 @@ export const API_ENDPOINTS = {
             UPDATE: (id: string) => `/api/fee/components/${id}`,
             GET_ALL: '/api/fee/components',
             SEARCH: `/api/fee/components/search`,
-            GET_BY_ID: (id: string) => `/api/fee/components/${id}`
+            GET_BY_ID: (id: string) => `/api/fee/components/${id}`,
+            GET_BY_FEE_CATALOG: (id: string) => `/api/fee/components/catalog/${id}`
         },
         FEE_RATES: {
             CREATE: '/api/fee/rates',
