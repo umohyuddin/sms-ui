@@ -3,9 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-import { StandardResponse } from '../../../standard-management/models/standardResponse';
 import { FeeCatalogComponentManagementService } from '../../services/fee-catalog-component-management.service';
 import { FeeCatalogComponentResponse } from '../../models/FeeCatalogComponentResponse';
 import { FeeCatalogManagementService } from '../../../fee-catalog-management/services/fee-catalog-management.service';
@@ -137,11 +135,25 @@ export class FeeCatalogComponentListingTableComponent {
     console.log('✅ Standard Search Form Data:', this.searchForm.getRawValue());
     let formValues = this.searchForm.value;
     let params = {
-      campusId: formValues.campusId,
-      standardId: formValues.standardId,
+      feeCatalogId  : formValues.feeCatalogId,
       keyword: formValues.keyword?.trim() || ''
     };
 
+     this.feeCatalogComponentManagementService.searchFeeCatalogComponents(params).subscribe({
+      next: (response) => {
+        console.log('✅ Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.feeCatalogComponentResponse = response.body;
+        this.pagination = new Pagination(this.feeCatalogComponentResponse, 10);
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    })
   }
 
   resetForm() {

@@ -45,7 +45,7 @@ export const API_ENDPOINTS = {
             CREATE: '/api/fee/components',
             UPDATE: (id: string) => `/api/fee/components/${id}`,
             GET_ALL: '/api/fee/components',
-            SEARCH: (keyword: string) => `/api/fee/components/search/${keyword}`,
+            SEARCH: `/api/fee/components/search`,
             GET_BY_ID: (id: string) => `/api/fee/components/${id}`
         },
         FEE_RATES: {
