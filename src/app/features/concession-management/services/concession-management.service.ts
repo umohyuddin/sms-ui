@@ -15,7 +15,7 @@ export class ConcessionManagementService {
    saveConcession(id: string | null, payload: any): Observable<any> {
   const isUpdate = !!id;
 
-  const method = isUpdate ? HTTP_METHOD.PATCH : HTTP_METHOD.POST;
+  const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
 
   const url = isUpdate
     ? `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_TYPE.UPDATE(id)}`
@@ -30,7 +30,7 @@ export class ConcessionManagementService {
   getConcessionById(id: string): Observable<any> {
   return this.http.request(
     HTTP_METHOD.GET,
-    `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.GET_BY_ID(id)}`,
+    `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_TYPE.GET_BY_ID(id)}`,
     { observeResponse: true }
   );
 }

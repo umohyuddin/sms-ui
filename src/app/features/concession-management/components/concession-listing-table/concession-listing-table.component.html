@@ -118,8 +118,8 @@
                 </td>
                 <td>
                   <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                    [ngClass]="item.active ? 'kt-badge--brand' : 'kt-badge--danger'">
-                    {{item.active? 'Active':'Inactive'}}
+                    [ngClass]="item.isActive ? 'kt-badge--brand' : 'kt-badge--danger'">
+                    {{item.isActive? 'Active':'Inactive'}}
                   </span>
                 </td>
                 <td nowrap="">
@@ -129,15 +129,15 @@
                       <i class="la la-ellipsis-h"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item" href="#" (click)="editFeeCatalogDetails(item,$event)"><i
+                      <a class="dropdown-item" href="#" (click)="editDetails(item,$event)"><i
                           class="la la-edit"></i> Edit Details</a>
-                      <a class="dropdown-item" href="#" (click)="viewFeeCatalogDetails(item,$event)">
+                      <a class="dropdown-item" href="#" (click)="viewDetails(item,$event)">
                         <i class="la la-eye"></i> View Details</a>
                       <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
                     </div>
                   </span>
-                  <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
-                    <i class="la la-edit"></i>
+                  <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View" (click)="viewDetails(item,$event)">
+                    <i class="la la-eye"></i>
                   </a>
                 </td>
               </tr>

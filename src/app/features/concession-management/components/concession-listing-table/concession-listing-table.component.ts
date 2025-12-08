@@ -24,7 +24,7 @@ export class ConcessionListingTableComponent {
   searchControl = new FormControl('');
   feeCatalogResponse: ConcessionResponse[] = [];
   RECURRENCE_RULE_CLASSES = RECURRENCE_RULE_CLASSES;
-CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
+  CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router,
@@ -83,16 +83,16 @@ CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
     })
   }
 
-  viewFeeCatalogDetails(concession: ConcessionResponse, event: Event): void {
-    console.log('Viewing details for FeeCatalog ID:', concession.id);
+  viewDetails(concession: ConcessionResponse, event: Event): void {
+    console.log('Viewing details for Resource ID:', concession.id);
     event.preventDefault();  // prevents anchor default behavior
-    this.router.navigate(ROUTES.FEE.FEE_CATALOG.DETAILS(concession.id.toString()));
+    this.router.navigate(ROUTES.CONCESSION.CONCESSION_TYPE.DETAILS(concession.id.toString()));
   }
 
-  editFeeCatalogDetails(concession: ConcessionResponse, event: Event): void {
+  editDetails(concession: ConcessionResponse, event: Event): void {
     event.preventDefault();  // prevents anchor default behavior
-    console.log('Editing FeeCatalog ID:', concession.id);
-    this.router.navigate(ROUTES.FEE.FEE_CATALOG.EDIT(concession.id.toString()));
+    console.log('Editing Resource ID:', concession.id);
+    this.router.navigate(ROUTES.CONCESSION.CONCESSION_TYPE.EDIT(concession.id.toString()));
   }
 
   // deleteCampus(campusId: any, event: Event): void {

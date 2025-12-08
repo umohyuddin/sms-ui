@@ -67,7 +67,7 @@ export const API_ENDPOINTS = {
             GET_ALL: '/api/school/discounts/types',
             SEARCH: (keyword: string) => `/api/school/discounts/types/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/school/discounts/types/${id}`,
-            UPDATE: (id: string) => `/api/school/discounts/types${id}`,
+            UPDATE: (id: string) => `/api/school/discounts/types/${id}`,
         },
         DISCOUNT_SUB_TYPE: {
             CREATE: '/api/school/discounts/subtypes',
