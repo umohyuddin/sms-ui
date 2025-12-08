@@ -33,11 +33,13 @@ export class ConcessionListingTableComponent {
 
   columns = [
     // { key: 'id', label: 'Id', sortable: true },
-    { key: 'feeCatalogName', label: 'Fee Catalog Name', sortable: true },
-    { key: 'feeCatalogCode', label: 'Fee Catalog Code', sortable: true },
-    { key: 'chargeType', label: 'Charge Type', sortable: true },
-    { key: 'recurrenceRule', label: 'Recurrence Rule', sortable: false },
+    { key: 'concessionSubType', label: 'Concession Sub Type', sortable: true },
+    { key: 'concessionSubCode', label: 'Concession Sub Type Code', sortable: true },
     { key: 'status', label: 'Status', sortable: true },
+    { key: 'Concession Type', label: 'Concession Type', sortable: true },
+    // { key: 'chargeType', label: 'Charge Type', sortable: false },
+    // { key: 'recurrenceRule', label: 'Recurrence Rule', sortable: false },
+
     { key: 'actions', label: 'Actions', sortable: true }
   ];
 

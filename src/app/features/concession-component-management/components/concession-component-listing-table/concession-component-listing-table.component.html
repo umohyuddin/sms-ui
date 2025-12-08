@@ -11,7 +11,7 @@
     <div class="kt-portlet__head-toolbar">
       <div class="kt-portlet__head-wrapper">
         <div class="kt-portlet__head-actions">
-          <div class="dropdown dropdown-inline">
+          <!-- <div class="dropdown dropdown-inline">
             <button type="button" class="btn btn-success btn-icon-sm dropdown-toggle" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
               <i class="la la-download"></i> Export
@@ -54,7 +54,7 @@
                 </li>
               </ul>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -103,24 +103,26 @@
               <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
                 <td>{{ item.name }}</td>
                 <td>{{ item.code }}</td>
-               
-                <!-- <td>
-                  <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                  [ngClass]="CHARGE_TYPE_CLASSES[item.chargeType || 'NONE']">
-                  {{ item.chargeTypeLabel }}</span>
-                </td> -->
-
-                <!-- <td><span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                  [ngClass]="RECURRENCE_RULE_CLASSES[item.recurrenceRule || 'NONE']">
-                  {{ item.recurrenceRuleLabel }}
-                </span>
-                </td> -->
-                <td>
+                               <td>
                   <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
                     [ngClass]="item.isActive ? 'kt-badge--brand' : 'kt-badge--danger'">
                     {{item.isActive? 'Active':'Inactive'}}
                   </span>
                 </td>
+ 
+                <td>{{ item.discountType.name }}</td>
+<!--                
+                <td>
+                  <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
+                  [ngClass]="CHARGE_TYPE_CLASSES[item.discountType.chargeType]">
+                  {{ item.discountType.chargeTypeLabel }}</span>
+                </td> -->
+
+                <!-- <td><span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
+                  [ngClass]="RECURRENCE_RULE_CLASSES[item.discountType.recurrenceRule || 'NONE']">
+                  {{ item.discountType.recurrenceRuleLabel }}
+                </span>
+                </td> -->
                 <td nowrap="">
                   <span class="dropdown">
                     <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown"
@@ -135,8 +137,8 @@
                       <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
                     </div>
                   </span>
-                  <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
-                    <i class="la la-edit"></i>
+                  <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View" (click)="viewDetails(item,$event)">
+                    <i class="la la-eye"></i>
                   </a>
                 </td>
               </tr>
