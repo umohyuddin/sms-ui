@@ -8,12 +8,13 @@ import { CampusResponse } from '../../../campus-management/models/campusResponse
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { StandardResponse } from '../../../standard-management/models/standardResponse';
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
-import { AcademicYear, FeeComponent, FeeRateResponse as resoruceResponse } from '../../models/FeeRateResponse';
+import { AcademicYear, FeeComponent, FeeRateResponse, FeeRateResponse as resoruceResponse } from '../../models/FeeRateResponse';
 import { SectionManagementService } from '../../../section-management/services/section-management.service';
 import { AcademicYearManagementService } from '../../../tenant-management/services/academic-year-management.service';
 import { FeeCatalogManagementService } from '../../../fee-catalog-management/services/fee-catalog-management.service';
 import { FeeCatalogResponse } from '../../../fee-catalog-management/models/FeeCatalogResponse';
 import { FeeCatalogComponentManagementService } from '../../../fee-catalog-component-management/services/fee-catalog-component-management.service';
+import { FeeRateManagementService } from '../../services/fee-rate-management.service';
 
 
 
@@ -29,25 +30,24 @@ import { FeeCatalogComponentManagementService } from '../../../fee-catalog-compo
 })
 export class FeeRateCreateFormComponent {
   createForm!: FormGroup;
+  resourceData?: FeeRateResponse
   routedId?: string | null = null;
   mode = '';
   standardData: StandardResponse[] = [];
   feeCatalogComponentData?: resoruceResponse;
   campuses: CampusResponse[] = [];
-  cities: any[] = [];
-  sectionId: string | null = null;
   isEditMode: boolean = false;
   academicYear: AcademicYear[] = [];
   feeCatalogDD: FeeCatalogResponse[] = [];
-  feeCompnentDD: FeeComponent []= [];
+  feeCompnentDD: FeeComponent[] = [];
 
   constructor(
     private campusManagementService: CampusManagementService,
     private standardManagemenetService: StandardManagementService,
-    private sectionManagementService: SectionManagementService,
     private academicYearManagementService: AcademicYearManagementService,
     private feeCatalogManagementService: FeeCatalogManagementService,
     private feeComponentManageService: FeeCatalogComponentManagementService,
+    private feeRateManagementService: FeeRateManagementService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -59,11 +59,11 @@ export class FeeRateCreateFormComponent {
     this.getFeeCatalogs();
     this.initializeForm();
     this.routedId = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = !!this.sectionId;
+    this.isEditMode = !!this.routedId;
 
     if (this.isEditMode) {
-      console.log('Edit Mode Activated - Load data for:', this.sectionId);
-      //this.getFeeRateDetails(this.sectionId!);
+      console.log('Edit Mode Activated - Load data for:', this.routedId);
+      this.getFeeRateDetails(this.routedId!);
     } else {
       console.log('Create Mode Activated');
     }
@@ -79,7 +79,7 @@ export class FeeRateCreateFormComponent {
     });
   }
   loadFeeComponentByFeeCatalogId(feeCatalogId: any) {
- this.feeComponentManageService.getByFeeCatalogId(feeCatalogId).subscribe({
+    this.feeComponentManageService.getByFeeCatalogId(feeCatalogId).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
@@ -155,31 +155,50 @@ export class FeeRateCreateFormComponent {
       }
     });
   }
-  // getSectionDetails(sectionId: string): void {
-  //   this.sectionManagementService.getSectionById(sectionId)
-  //     .subscribe({
-  //       next: (response) => {
-  //         console.log('✅ Request Success Status:', response.status);
-  //         console.log('📦 Response Body:', response.body);
-  //         this.feeCatalogComponentData = response.body;
-  //         console.log('📦 Standard data :', this.feeCatalogComponentData);
-  //         // this.createFeeCatalogComponentForm.patchValue({
-  //         //   sectionName: this.feeCatalogComponentData?.sectionName,
-  //         //   sectionCode: this.feeCatalogComponentData?.sectionCode,
-  //         //   description: this.feeCatalogComponentData?.description,
-  //         //   campusId: this.feeCatalogComponentData?.standard.campus.id,
-  //         //   standardId : this.feeCatalogComponentData?.standard.id
-  //         // });
-  //       },
-  //       error: (error) => {
-  //         console.error('❌ Request Error Status:', error.status);
-  //         console.error('Message:', error.message);
-  //       },
-  //       complete: () => {
-  //         console.log('🔚 Request Complete');
-  //       }
-  //     })
-  // }
+
+  private initializeForm() {
+    this.createForm = this.fb.group({
+      academicYearId: ['', Validators.required],
+      campusId: ['', Validators.required],
+      standardId: ['', Validators.required],
+      feeCatalogId: ['', Validators.required],
+      feeComponentId: ['', Validators.required],
+      amount: [0, [Validators.required, Validators.min(0)]],
+      effectiveFrom: [null, Validators.required],
+      effectiveTo: [null, Validators.required],
+      active: [true]
+    });
+  }
+
+  getFeeRateDetails(routedId: string): void {
+    this.feeRateManagementService.getFeeRateById(routedId)
+      .subscribe({
+        next: (response) => {
+          console.log('Request Success Status:', response.status);
+          console.log('📦 Response Body:', response.body);
+          this.resourceData = response.body;
+          console.log('📦 Standard data :', this.resourceData);
+          this.createForm.patchValue({
+            academicYearId: this.resourceData?.academicYear.id,
+            campusId: this.resourceData?.campus.id,
+            standardId: this.resourceData?.standard.id,
+            feeCatalogId: this.resourceData?.feeComponent.feeCatalog.id,
+            feeComponentId: this.resourceData?.feeComponent.id,
+            amount: this.resourceData?.amount,
+            effectiveFrom: this.resourceData?.effectiveFrom,
+            effectiveTo: this.resourceData?.effectiveTo,
+            active: this.active
+          });
+        },
+        error: (error) => {
+          console.error('❌ Request Error Status:', error.status);
+          console.error('Message:', error.message);
+        },
+        complete: () => {
+          console.log('🔚 Request Complete');
+        }
+      })
+  }
 
   private getCampuses() {
     this.campusManagementService.getAllCampuses().subscribe({
@@ -198,15 +217,7 @@ export class FeeRateCreateFormComponent {
     });
   }
 
-  private initializeForm() {
-    this.createForm = this.fb.group({
-      academicYearId: ['', Validators.required],
-      campusId: ['', Validators.required],
-      standardId: ['', Validators.required],
-      feeCatalogId: ['', Validators.required],
-      feeCatalogComponentId: ['', Validators.required]
-    });
-  }
+
 
   goToFeeRateListing(): void {
     this.router.navigate(ROUTES.FEE.FEE_RATE.LIST);
@@ -219,7 +230,7 @@ export class FeeRateCreateFormComponent {
       return;
     }
 
-    this.sectionManagementService.saveSection(this.sectionId, this.createForm.getRawValue()).subscribe({
+    this.feeRateManagementService.saveFeeRate(this.routedId ?? null, this.createForm.getRawValue()).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
@@ -235,11 +246,10 @@ export class FeeRateCreateFormComponent {
     })
   }
 
-  // //getters
-  // get sectionName() {
-  //   return this.createFeeCatalogComponentForm.get('sectionName');
-  // }
 
+
+  minDate = new Date().toISOString().split('T')[0]; // Prevent past dates
+  //getters
   get academicYearId() {
     return this.createForm.get('academicYearId');
   }
@@ -255,14 +265,21 @@ export class FeeRateCreateFormComponent {
     return this.createForm.get('feeCatalogId');
   }
 
-  get feeCatalogComponentId(){
-    return this.createForm.get('feeCatalogComponentId');
+  get feeComponentId() {
+    return this.createForm.get('feeComponentId');
   }
-  // get sectionCode() {
-  //   return this.createFeeCatalogComponentForm.get('sectionCode');
-  // }
 
-  // get description() {
-  //   return this.createFeeCatalogComponentForm.get('description');
-  // }
+  get amount() {
+    return this.createForm.get('amount');
+  }
+  get effectiveFrom() {
+    return this.createForm.get('effectiveFrom');
+  }
+
+  get effectiveTo() {
+    return this.createForm.get('effectiveTo');
+  }
+  get active() {
+    return this.createForm.get('active');
+  }
 }
