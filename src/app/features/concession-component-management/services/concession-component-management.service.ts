@@ -15,7 +15,7 @@ export class ConcessionComponentManagementService {
   saveConcessionComponent(id: string | null, payload: any): Observable<any> {
     const isUpdate = !!id;
 
-    const method = isUpdate ? HTTP_METHOD.PATCH : HTTP_METHOD.POST;
+    const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
 
     const url = isUpdate
       ? `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_SUB_TYPE.UPDATE(id)}`
