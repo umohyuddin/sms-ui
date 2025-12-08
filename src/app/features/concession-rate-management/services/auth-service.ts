@@ -26,4 +26,15 @@ export class AuthService {
       body: payload
     });
   }
+ logout() {
+    // Remove JWT token
+    localStorage.removeItem('token');
+    
+    // Remove user info if saved
+    localStorage.removeItem('user');
+    localStorage.removeItem('permissions');
+    localStorage.removeItem('menus');
+
+  }
+  
 }

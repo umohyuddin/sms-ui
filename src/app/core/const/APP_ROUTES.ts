@@ -1,4 +1,7 @@
 export const ROUTES = {
+  AUTH:{
+    LOGIN:['auth/login']
+  },
   DASHBAORD: {
     MAIN_DASHBOARD: ['dashboard']
   },

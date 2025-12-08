@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -10,31 +10,28 @@ import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { MenuUtils } from '../../shared/utils/menuUtil';
 import { ROUTES } from '../../core/const/APP_ROUTES';
+import { AuthService } from '../../features/concession-rate-management/services/auth-service';
 
 @Component({
   selector: 'app-main-layout',
   imports: [
     RouterOutlet,
-    MatIconModule,
-    MatButtonModule,
-    MatToolbarModule,
     RouterLink,
-    MatMenuModule,
-    MatTooltipModule,
-    MatSidenavModule,
-    MatListModule,
     CommonModule
-],
+  ],
   standalone: true,
   templateUrl: './main-layout.html',
   styleUrls: ['./main-layout.css'],
 })
 export class MainLayout {
   menuOpen = false;
- routes = ROUTES;
-constructor(){
-  
-}
+  routes = ROUTES;
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {
+
+  }
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
@@ -58,7 +55,7 @@ constructor(){
   }
 
   handleSubmenuAccordion(event: Event) {
-    
+
     const li = (event.target as HTMLElement).closest('.kt-menu__item--submenu') as HTMLElement | null;
 
     const submenu = MenuUtils.child(li, '.kt-menu__submenu, .kt-menu__inner');
@@ -67,7 +64,7 @@ constructor(){
 
     event.preventDefault();
 
-  event.stopPropagation();
+    event.stopPropagation();
 
     const isOpen = MenuUtils.hasClass(li, 'kt-menu__item--open');
     const slideSpeed = 200;
@@ -107,5 +104,10 @@ constructor(){
       });
       MenuUtils.removeClass(li, 'kt-menu__item--open');
     }
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(ROUTES.AUTH.LOGIN)
   }
 }
