@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CHARGE_TYPE_CLASSES, RECURRENCE_RULE_CLASSES } from '../../../../core/const/COLOR_CONST';
-import { ConcessionComponentResponse } from '../../models/ConcessionComponentResponse';
+import { ConcessionComponentResponse, DiscountType } from '../../models/ConcessionComponentResponse';
 import { ConcessionComponentManagementService } from '../../services/concession-component-management.service';
+import { ConcessionManagementService } from '../../../concession-management/services/concession-management.service';
 
 @Component({
   selector: 'app-concession-component-listing-table',
@@ -26,9 +27,13 @@ export class ConcessionListingTableComponent {
   RECURRENCE_RULE_CLASSES = RECURRENCE_RULE_CLASSES;
   CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
   private destroy$ = new Subject<void>();
-
+  searchForm !: FormGroup;
+  discountTypesDD: DiscountType[] = [];
   constructor(private router: Router,
+
+    private fb: FormBuilder,
     private concessionComponentManagementService: ConcessionComponentManagementService,
+    private concessionManagementService: ConcessionManagementService
   ) { }
 
   columns = [
@@ -44,28 +49,54 @@ export class ConcessionListingTableComponent {
   ];
 
   ngOnInit() {
+    this.getAllDiscountTypes()
     this.getAllConcessionComponents();
-    this.SubscribeToSearch();
+    this.initializeForm();
+    //this.SubscribeToSearch();
   }
 
-  private SubscribeToSearch() {
-    this.searchControl.valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        switchMap(search => this.concessionComponentManagementService.searchConcessionComponents(search || '')),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: (response) => {
-          this.concessionComponentResponse = response.body;
-          this.pagination = new Pagination(this.concessionComponentResponse, 10);
-        },
-        error: (error) => {
-          console.error('Search error:', error);
-        }
-      });
+  private initializeForm() {
+    this.searchForm = this.fb.group({
+      discountTypeId: [''],
+      keyword: ['']
+    });
   }
+  getAllDiscountTypes() {
+    this.concessionManagementService.getAllConcessions().subscribe({
+      next: (response) => {
+        console.log('✅ Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.discountTypesDD = response.body;
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    });
+
+  }
+
+  // private SubscribeToSearch() {
+  //   this.searchControl.valueChanges
+  //     .pipe(
+  //       debounceTime(400),
+  //       distinctUntilChanged(),
+  //       switchMap(search => this.concessionComponentManagementService.searchConcessionComponents(search || '')),
+  //       takeUntil(this.destroy$)
+  //     )
+  //     .subscribe({
+  //       next: (response) => {
+  //         this.concessionComponentResponse = response.body;
+  //         this.pagination = new Pagination(this.concessionComponentResponse, 10);
+  //       },
+  //       error: (error) => {
+  //         console.error('Search error:', error);
+  //       }
+  //     });
+  // }
 
   getAllConcessionComponents() {
     this.concessionComponentManagementService.getAllConcessionComponent().subscribe({
@@ -88,7 +119,7 @@ export class ConcessionListingTableComponent {
   viewDetails(item: ConcessionComponentResponse, event: Event): void {
     console.log('Viewing details for item ID:', item.id);
     event.preventDefault();  // prevents anchor default behavior
-    this.router.navigate(ROUTES.CONCESSION.CONCESSION_TYPE.DETAILS(item.id.toString()));
+    this.router.navigate(ROUTES.CONCESSION.CONCESSION__SUB_TYPE.DETAILS(item.id.toString()));
   }
 
   editDetails(item: ConcessionComponentResponse, event: Event): void {
@@ -125,4 +156,37 @@ export class ConcessionListingTableComponent {
     const newSize = +event.target.value;
     this.pagination.changePageSize(newSize);
   }
+  resetForm() {
+    this.searchForm.reset({
+      discountTypeId: '',
+      keyword: ''
+    });
+    this.getAllConcessionComponents(); // reload all data
+  }
+
+  onSubmitSearch(): void {
+    console.log('✅ Standard Search Form Data:', this.searchForm.getRawValue());
+    let formValues = this.searchForm.value;
+    let params = {
+      discountTypeId: formValues.discountTypeId,
+      keyword: formValues.keyword?.trim() || ''
+    };
+
+    this.concessionComponentManagementService.searchConcessionComponents(params).subscribe({
+      next: (response) => {
+        console.log('✅ Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.concessionComponentResponse = response.body;
+        this.pagination = new Pagination(this.concessionComponentResponse, 10);
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    })
+  }
+
 }
