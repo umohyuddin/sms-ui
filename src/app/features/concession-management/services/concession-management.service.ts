@@ -43,10 +43,10 @@ export class ConcessionManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_TYPE.GET_ALL}`, { observeResponse: true });
   }
 
-  searchFeeCatalogs(query: string): Observable<any> {
+  searchDiscountTypes(query: string): Observable<any> {
     const url = query
-      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.SEARCH(query)}`
-      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.GET_ALL}`;
+      ? `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_TYPE.SEARCH(query)}`
+      : `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_TYPE.GET_ALL}`;
     return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
   }
 

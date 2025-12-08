@@ -51,7 +51,7 @@ export class ConcessionListingTableComponent {
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
-        switchMap(search => this.concessionManagementService.searchFeeCatalogs(search || '')),
+        switchMap(search => this.concessionManagementService.searchDiscountTypes(search || '')),
         takeUntil(this.destroy$)
       )
       .subscribe({
