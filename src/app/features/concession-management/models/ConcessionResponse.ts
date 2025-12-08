@@ -7,8 +7,7 @@ export interface ConcessionResponse {
   chargeTypeLabel:string
   recurrenceRule?: string;
   recurrenceRuleLabel?:string
-  active: boolean;
-  createdAt: string;
+ createdAt: string;
   updatedAt: string;
   deleted: boolean;
   deletedAt?: string;
