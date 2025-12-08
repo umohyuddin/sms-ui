@@ -48,10 +48,10 @@ export const ROUTES = {
   },
   CONCESSION: {
     CONCESSION_TYPE: {
-      LIST: ['concession-type'],
-      CREATE: ['concession-type', 'concession-type-create'],
-      EDIT: (id: string) => ['concession-type', 'concession-type-edit', id],
-      DETAILS: (id: string) => ['concession-type', 'concession-type-details', id],
+      LIST: ['concession/catalog'],
+      CREATE: ['concession/catalog', 'concession-create'],
+      EDIT: (id: string) => ['concession/catalog', 'concession-edit', id],
+      DETAILS: (id: string) => ['concession/catalog', 'concession-details', id],
     },
     CONCESSION__SUB_TYPE: {
       LIST: ['concession-sub-type'],
