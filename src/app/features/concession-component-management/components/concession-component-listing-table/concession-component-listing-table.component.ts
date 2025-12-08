@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CHARGE_TYPE_CLASSES, RECURRENCE_RULE_CLASSES } from '../../../../core/const/COLOR_CONST';
@@ -26,7 +25,6 @@ export class ConcessionListingTableComponent {
   concessionComponentResponse: ConcessionComponentResponse[] = [];
   RECURRENCE_RULE_CLASSES = RECURRENCE_RULE_CLASSES;
   CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
-  private destroy$ = new Subject<void>();
   searchForm !: FormGroup;
   discountTypesDD: DiscountType[] = [];
   constructor(private router: Router,
@@ -52,7 +50,6 @@ export class ConcessionListingTableComponent {
     this.getAllDiscountTypes()
     this.getAllConcessionComponents();
     this.initializeForm();
-    //this.SubscribeToSearch();
   }
 
   private initializeForm() {
@@ -78,25 +75,6 @@ export class ConcessionListingTableComponent {
     });
 
   }
-
-  // private SubscribeToSearch() {
-  //   this.searchControl.valueChanges
-  //     .pipe(
-  //       debounceTime(400),
-  //       distinctUntilChanged(),
-  //       switchMap(search => this.concessionComponentManagementService.searchConcessionComponents(search || '')),
-  //       takeUntil(this.destroy$)
-  //     )
-  //     .subscribe({
-  //       next: (response) => {
-  //         this.concessionComponentResponse = response.body;
-  //         this.pagination = new Pagination(this.concessionComponentResponse, 10);
-  //       },
-  //       error: (error) => {
-  //         console.error('Search error:', error);
-  //       }
-  //     });
-  // }
 
   getAllConcessionComponents() {
     this.concessionComponentManagementService.getAllConcessionComponent().subscribe({
