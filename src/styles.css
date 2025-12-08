@@ -2,3 +2,23 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* You can add global styles to this file, and also import other style files */
 
+/* Recurrence Rule Badges */
+.recurrence-one-time { background-color: #6b7280; color: white; }     /* gray */
+.recurrence-monthly { background-color: #3b82f6; color: white; }      /* blue */
+.recurrence-quarterly { background-color: #a855f7; color: white; }    /* purple */
+.recurrence-bi-monthly { background-color: #4f46e5; color: white; }   /* indigo */
+.recurrence-half-yearly { background-color: #eab308; color: black; }  /* yellow */
+.recurrence-yearly { background-color: #22c55e; color: white; }       /* green */
+.recurrence-term-wise { background-color: #ec4899; color: white; }    /* pink */
+.recurrence-semester-wise { background-color: #dc2626; color: white; }/* red */
+
+/* Charge Type Badges */
+.charge-fixed { background-color: #16a34a; color: white; }           /* green */
+.charge-percentage { background-color: #7e22ce; color: white; }      /* purple */
+.charge-per-credit { background-color: #2563eb; color: white; }      /* blue */
+.charge-per-subject { background-color: #ca8a04; color: white; }     /* yellow */
+.charge-variable { background-color: #4f46e5; color: white; }        /* indigo */
+.charge-slab-based { background-color: #db2777; color: white; }      /* pink */
+.charge-usage-based { background-color: #f97316; color: white; }     /* orange */
+.charge-discounted { background-color: #dc2626; color: white; }      /* red */
+

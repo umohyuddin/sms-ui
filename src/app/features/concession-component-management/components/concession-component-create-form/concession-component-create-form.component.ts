@@ -77,12 +77,11 @@ export class ConcessionComponentCreateFormComponent {
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.router.navigate(['/Campuss']);
+        this.router.navigate(ROUTES.CONCESSION.CONCESSION_TYPE.LIST);
       },
       error: (error) => {
         console.error('❌ Post Error Status:', error.status);
         console.error('Message:', error.message);
-        this.router.navigate(['/Campuss']);
       },
       complete: () => {
         console.log('🔚 Post Complete');
