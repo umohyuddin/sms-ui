@@ -18,7 +18,7 @@ export class StudentManagementService {
   }
 
 
-  saveStudent(id: string | null, payload: any): Observable<any> {
+  save(id: string | null, payload: any): Observable<any> {
     const isUpdate = !!id;
 
     const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
@@ -31,6 +31,19 @@ export class StudentManagementService {
       observeResponse: true,
       body: payload
     });
+  }
+
+  getCurrentAcademicYear(): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.GET_CURRENT}`, { observeResponse: true });
+  }
+
+    getAdmissionType(): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ADMISSION_TYPES.GET_ALL}`, { observeResponse: true });
+  }
+
+
+  getAddmissionMeta(): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.STUDENT_ADMISSION_META}`, { observeResponse: true });
   }
 
   getAllStudents(): Observable<any> {

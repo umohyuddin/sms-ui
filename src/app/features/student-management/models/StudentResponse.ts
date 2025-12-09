@@ -85,3 +85,23 @@ export interface Section {
   deleted: boolean;
   deletedAt: string | null;
 }
+
+
+
+export interface AcademicYear {
+  id: number;
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  isCurrent: boolean;
+}
+
+
+export interface AdmissionType {
+  id: number;
+  code: string;
+  name: string;
+  description: string;
+  isActive: boolean;
+  deleted: boolean;
+}

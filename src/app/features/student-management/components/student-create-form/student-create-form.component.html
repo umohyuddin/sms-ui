@@ -9,11 +9,32 @@
 
 
   <!--begin::Form-->
-  <form class="kt-form kt-form--label-right" [formGroup]="createSectionForm" (ngSubmit)="onSubmit()">
+  <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
     <div class="kt-portlet__body">
-      <h4>Section Information</h4>
+      <h4>Compus/Standard/Section Information</h4>
 
       <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Academic Year:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="Academic Year" formControlName="academicYearName" readonly>
+        </div>
+        <label class="col-lg-1 col-form-label">Admission Type:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="admissionTypeId"
+            [class.is-invalid]="admissionTypeId?.invalid && (admissionTypeId?.touched || admissionTypeId?.dirty)"
+            [class.is-valid]="admissionTypeId?.valid && (admissionTypeId?.touched || admissionTypeId?.dirty)">
+            <option value='' selected>Select Admission Type</option>
+            @for (p of admissionTypesDD; track p.id) {
+            <option [value]="p.id">{{ p.name }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Addmission Type</span>
+          <span class="invalid-feedback" *ngIf="admissionTypeId?.errors?.['required']">
+            Admission Type is required
+          </span>
+        </div>
+
+
         <label class="col-lg-1 col-form-label">Campus:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="campusId"
@@ -30,6 +51,11 @@
           </span>
         </div>
 
+
+
+
+      </div>
+      <div class="form-group row form-group-marginless kt-margin-t-20">
         <label class="col-lg-1 col-form-label">Standard:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="standardId"
@@ -41,48 +67,186 @@
             }
           </select>
           <span class="form-text text-muted">Please select Standard</span>
-          <span class="invalid-feedback" *ngIf="campusId?.errors?.['required']">
-            Campus is required
+          <span class="invalid-feedback" *ngIf="standardId?.errors?.['required']">
+            Standard is required
           </span>
         </div>
 
-        <label class="col-lg-1 col-form-label">Section Name:</label>
+        <label class="col-lg-1 col-form-label">Section:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="" formControlName="sectionName"
-            [class.is-invalid]="sectionName?.invalid && (sectionName?.touched || sectionName?.dirty)"
-            [class.is-valid]="sectionName?.valid && (sectionName?.touched || sectionName?.dirty)">
-          <span class="form-text text-muted">Please enter your Section name</span>
-          <span class="invalid-feedback" *ngIf="sectionName?.errors?.['required']">
-            Section Name is required
+          <select class="form-control" formControlName="sectionId"
+            [class.is-invalid]="sectionId?.invalid && (sectionId?.touched || sectionId?.dirty)"
+            [class.is-valid]="sectionId?.valid && (sectionId?.touched || sectionId?.dirty)">
+            <option value='' selected>Select Section</option>
+            @for (p of sectionDD; track p.id) {
+            <option [value]="p.id">{{ p.sectionName }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Standard</span>
+          <span class="invalid-feedback" *ngIf="sectionId?.errors?.['required']">
+            Section is required
           </span>
         </div>
       </div>
+      <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit">
+
+      </div>
+
+      <h4>Student Personal Information</h4>
+
       <div class="form-group row form-group-marginless kt-margin-t-20">
-
-        <label class="col-lg-1 col-form-label">Section Code</label>
+        <label class="col-lg-1 col-form-label">First Name:</label>
         <div class="col-lg-3">
-          <div class="kt-input-icon">
-            <input type="text" class="form-control" placeholder="" formControlName="sectionCode">
-          </div>
-          <span class="form-text text-muted">Please enter Section Code</span>
+          <input type="text" class="form-control" placeholder="First name" formControlName="firstName"
+            [class.is-invalid]="firstName?.invalid && (firstName?.touched || firstName?.dirty)"
+            [class.is-valid]="firstName?.valid && (firstName?.touched || firstName?.dirty)">
+          <span class="form-text text-muted">Please enter your First name</span>
+          <span class="invalid-feedback" *ngIf="firstName?.errors?.['required']">
+            First name is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label">Last Name:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="Last name" formControlName="lastName"
+            [class.is-invalid]="lastName?.invalid && (lastName?.touched || lastName?.dirty)"
+            [class.is-valid]="lastName?.valid && (firstName?.touched || lastName?.dirty)">
+          <span class="form-text text-muted">Please enter your Last name</span>
+          <span class="invalid-feedback" *ngIf="lastName?.errors?.['required']">
+            Last name is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label">Middle Name:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="Middle name" formControlName="middleName">
+          <span class="form-text text-muted">Please enter your Middle name</span>
         </div>
       </div>
 
-      <div class="form-group row kt-margin-t-40">
-        <label class="col-lg-1 col-form-label">Description:</label>
-          <div class="kt-input-icon">
-            <textarea class="form-control" id="exampleTextarea" rows="3" formControlName="description"></textarea>
-          </div>
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Student Code:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="Student Code" formControlName="studentCode">
+        </div>
+
+        <label class="col-lg-1 col-form-label">National Id:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="B-Form/CNIC/CRC/Passport" formControlName="cnic"
+            [class.is-invalid]="cnic?.invalid && (cnic?.touched || cnic?.dirty)"
+            [class.is-valid]="cnic?.valid && (cnic?.touched || cnic?.dirty)">
+          <span class="form-text text-muted">Please enter your National Id</span>
+          <span class="invalid-feedback" *ngIf="cnic?.errors?.['required']">
+            National Id is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label">DOB:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="DOB" formControlName="dateOfBirth"
+            [class.is-invalid]="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)"
+            [class.is-valid]="dateOfBirth?.valid && (dateOfBirth?.touched || dateOfBirth?.dirty)">
+          <span class="form-text text-muted">Please enter your DOB</span>
+          <span class="invalid-feedback" *ngIf="dateOfBirth?.errors?.['required']">
+            DOB is required
+          </span>
+        </div>
+
+
+      </div>
+
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Phone:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="+923205500003" formControlName="phone"
+            [class.is-invalid]="phone?.invalid && (phone?.touched || phone?.dirty)"
+            [class.is-valid]="phone?.valid && (phone?.touched || phone?.dirty)">
+          <span class="form-text text-muted">Please enter Phone Number</span>
+          <span class="invalid-feedback" *ngIf="phone?.errors?.['required']">
+            Phone is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label">Email:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="email" formControlName="email"
+            [class.is-invalid]="email?.invalid && (email?.touched || email?.dirty)"
+            [class.is-valid]="email?.valid && (email?.touched || email?.dirty)">
+          <span class="form-text text-muted">Please enter your Email</span>
+          <span class="invalid-feedback" *ngIf="email?.errors?.['required']">
+            Email is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label">Gender:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="gender"
+            [class.is-invalid]="gender?.invalid && (gender?.touched || gender?.dirty)"
+            [class.is-valid]="gender?.valid && (gender?.touched || gender?.dirty)">
+            <option value='' selected>Select Gender</option>
+            @for (p of genderDD; track p.key) {
+            <option [value]="p.key">{{ p.label }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Gender</span>
+          <span class="invalid-feedback" *ngIf="gender?.errors?.['required']">
+            Gender is required
+          </span>
+        </div>
+
+
+
+      </div>
+
+
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Religion:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="religion"
+            [class.is-invalid]="religion?.invalid && (religion?.touched || religion?.dirty)"
+            [class.is-valid]="religion?.valid && (religion?.touched || religion?.dirty)">
+            <option value='' selected>Select Religion</option>
+            @for (p of religionDD; track p.key) {
+            <option [value]="p.key">{{ p.label }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Religion</span>
+          <span class="invalid-feedback" *ngIf="religion?.errors?.['required']">
+            Religion is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label">Blood Group:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="bloodGroup">
+            <option value='' selected>Select Blood Group</option>
+            @for (p of bloodGroupDD; track p.key) {
+            <option [value]="p.key">{{ p.label }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Blood Group</span>
+        </div>
+        <label class="col-lg-1 col-form-label">Nationality:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="nationality">
+            <option value='' selected>Select Nationality</option>
+            @for (p of nationalityDD; track p.key) {
+            <option [value]="p.key">{{ p.label }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Nationality</span>
         </div>
       </div>
+
+
     </div>
     <div class="kt-portlet__foot">
       <div class="kt-form__actions">
         <div class="row">
           <div class="col-lg-5"></div>
           <div class="col-lg-7">
-            <button type="submit" class="btn btn-dark mr-2">{{isEditMode===true? 'Update Standard Details': "Add New
-              Standard"}}</button>
+            <button type="submit" class="btn btn-dark mr-2">
+              {{isEditMode===true? 'Update Standard Details': "Add New Student"}}</button>
             <button type="button" class="btn btn-secondary" (click)="goToSectionsList()">Cancel</button>
           </div>
         </div>

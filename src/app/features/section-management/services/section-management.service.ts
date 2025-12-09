@@ -45,6 +45,11 @@ export class SectionManagementService {
     );
   }
 
+  getSectionByStandardId(id: string): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.GET_BY_STANDARD_ID(id)}`, { observeResponse: true }
+    );
+  }
+
   searchSections(params: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET,
       `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.SEARCH}`,

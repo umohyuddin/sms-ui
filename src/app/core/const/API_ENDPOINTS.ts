@@ -12,7 +12,11 @@ export const API_ENDPOINTS = {
     INSTITUTE: {
         ACADEMIC_YEAR: {
             GET_BY_ID: (id: string) => `/api/school/academic/${id}`,
-            GET_ALL: '/api/school/academic'
+            GET_ALL: '/api/school/academic',
+            GET_CURRENT:'/api/school/academic/current'
+        },
+         ADMISSION_TYPES: {
+            GET_ALL: '/api/admission/types',
         },
         CAMPUSES: {
             CREATE: '/api/institute/campuses',
@@ -34,7 +38,8 @@ export const API_ENDPOINTS = {
             UPDATE: (id: string) => `/api/institute/campuses/standards/sections/${id}`,
             GET_ALL: '/api/institute/campuses/standards/sections',
             SEARCH: '/api/institute/campuses/standards/sections/search',
-            GET_BY_ID: (id: string) => `/api/institute/campuses/standards/sections/${id}`
+            GET_BY_ID: (id: string) => `/api/institute/campuses/standards/sections/${id}`,
+            GET_BY_STANDARD_ID: (id: string) => `/api/institute/campuses/standards/${id}/sections`
         }
     },
     FEE: {
@@ -87,6 +92,7 @@ export const API_ENDPOINTS = {
 
     LOOKUP: {
         FEE_CATALOG_META: '/api/lookup/fee-catalog/metadata',
+        STUDENT_ADMISSION_META: '/api/lookup/admission/metadata',
         PROVINCE: {
             GET_ALL: '/api/lookup/provinces'
         },
