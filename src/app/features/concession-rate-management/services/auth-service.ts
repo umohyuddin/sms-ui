@@ -28,7 +28,7 @@ export class AuthService {
   }
  logout() {
     // Remove JWT token
-    localStorage.removeItem('token');
+    localStorage.removeItem('auth_token');
     
     // Remove user info if saved
     localStorage.removeItem('user');

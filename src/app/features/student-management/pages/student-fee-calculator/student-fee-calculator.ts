@@ -385,6 +385,7 @@ export class StudentFeeCaculator implements OnInit {
     this.studentManagementSerivce.studentAssignFee(apiParams.studentId,requestDto).subscribe({
       next: (response) => {
         console.log('Fee assigned successfully', response);
+        this.router.navigate(ROUTES.STUDENT.DETAILS(apiParams.studentId))
       },
       error: (err) => {
         console.error('Error assigning fee', err);
