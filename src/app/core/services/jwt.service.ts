@@ -41,4 +41,8 @@ export class JwtService {
     const decoded: any = this.getDecodedToken();
     return decoded?.roles || [];
   }
+
+   isLoggedIn(): boolean {
+    return !!this.getToken(); // true if token exists
+  }
 }
