@@ -49,6 +49,7 @@ export const API_ENDPOINTS = {
             GET_ALL: '/api/fee/catalogs',
             SEARCH: (keyword: string) => `/api/fee/catalogs/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/fee/catalogs/${id}`
+            
         },
         FEE_CATALOG_COMPONENT: {
             CREATE: '/api/fee/components',
@@ -63,7 +64,8 @@ export const API_ENDPOINTS = {
             UPDATE: (id: string) => `/api/fee/rates/${id}`,
             GET_ALL: '/api/fee/rates',
             SEARCH: (keyword: string) => `/api/fee/rates/search/${keyword}`,
-            GET_BY_ID: (id: string) => `/api/fee/rates/${id}`
+            GET_BY_ID: (id: string) => `/api/fee/rates/${id}`,
+            GET_ACTIVE_RATES:'/api/fee/rates'
         }
     },
     DISCOUNT: {

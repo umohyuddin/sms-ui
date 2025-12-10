@@ -1,6 +1,6 @@
 export const ROUTES = {
-  AUTH:{
-    LOGIN:['auth/login']
+  AUTH: {
+    LOGIN: ['auth/login']
   },
   DASHBAORD: {
     MAIN_DASHBOARD: ['dashboard']
@@ -28,6 +28,9 @@ export const ROUTES = {
     CREATE: ['students', 'student-create'],
     EDIT: (id: string) => ['students', 'student-edit', id],
     DETAILS: (id: string) => ['students', 'student-details', id],
+    STUDENT_FEE_CALCULATOR: {
+      DETAILS:['students','fee-calculator']
+    }
   },
   FEE: {
     FEE_CATALOG: {

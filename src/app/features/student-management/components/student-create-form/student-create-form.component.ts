@@ -249,7 +249,7 @@ export class StudentCreateFormComponent {
   }
 
   private initializeForm() {
-     const today = new Date();
+    const today = new Date();
     this.createForm = this.fb.group({
       campusId: ['', Validators.required],
       standardId: ['', Validators.required],
@@ -260,7 +260,7 @@ export class StudentCreateFormComponent {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       middleName: [''],
-      fullName:[''],
+      fullName: [''],
       studentCode: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
       gender: ['', Validators.required],
@@ -271,7 +271,7 @@ export class StudentCreateFormComponent {
       religion: ['', Validators.required],
       nationality: ['', Validators.required],
       bloodGroup: [''],
-      enrollmentDate: [today,Validators.required],
+      enrollmentDate: [today, Validators.required],
     });
   }
 
@@ -290,19 +290,29 @@ export class StudentCreateFormComponent {
       console.warn('❌ Form is invalid');
       return;
     }
-
-    this.studentManagementSerivce.save(this.routedId, this.createForm.getRawValue()).subscribe({
-      next: (response) => {
-        console.log('✅ Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
-      },
-      error: (error) => {
-        console.error('❌ Post Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Post Complete');
+    this.goToFeeCalculator()
+    // this.studentManagementSerivce.save(this.routedId, this.createForm.getRawValue()).subscribe({
+    //   next: (response) => {
+    //     console.log('✅ Success Status:', response.status);
+    //     console.log('📦 Response Body:', response.body);
+    //     this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
+    //   },
+    //   error: (error) => {
+    //     console.error('❌ Post Error Status:', error.status);
+    //     console.error('Message:', error.message);
+    //   },
+    //   complete: () => {
+    //     console.log('🔚 Post Complete');
+    //   }
+    // })
+  }
+  goToFeeCalculator() {
+    this.router.navigate(ROUTES.STUDENT.STUDENT_FEE_CALCULATOR.DETAILS, {
+      queryParams: {
+        studentId: 1,
+        academicYearId: 3,
+        campusId: 1,
+        standardId: 1
       }
     })
   }

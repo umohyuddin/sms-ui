@@ -1,0 +1,252 @@
+<div class="kt-subheader  kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Student Fee & Discount </h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+
+            <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+                <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+                <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                    <span><i class="flaticon2-search-1"></i></span>
+                </span>
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <button type="button" class="btn btn-dark active" (click)="goToCreateStudent()">
+                    <i class="la la-plus"></i>
+                    Add New Student</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <app-student-listing-table></app-student-listing-table> -->
+
+<div class="row">
+    <div class="col-xl-12">
+
+        <!--begin::Portlet-->
+        <div class="kt-portlet kt-portlet--solid-brand kt-portlet--height-fluid">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <span class="kt-portlet__head-icon"><i class="flaticon-stopwatch"></i></span>
+                    <h3 class="kt-portlet__head-title">Fee Catalog</h3>
+                </div>
+                <div class="kt-portlet__head-toolbar">
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <div class="kt-portlet__content">
+                    Welcome! Here you can view the fee catalog for this
+                    <strong>{{activeFeeRate[0].campus.campusName}}</strong> and
+                    <strong>{{activeFeeRate[0].standard.standardName}}</strong>, defined for the
+                    <strong>{{activeFeeRate[0].academicYear.name}}</strong>
+                    academic year.
+                    All fee components and their amounts are displayed for your reference.
+                </div>
+            </div>
+        </div>
+
+        <!--end::Portlet-->
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-lg-6">
+
+        <!--begin:: Widgets/Tasks -->
+        <div class="kt-portlet kt-portlet--tabs kt-portlet--height-fluid">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        System Fee Catalog
+                    </h3>
+                </div>
+                <div class="kt-portlet__head-toolbar">
+                    <!-- Optional toolbar -->
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="kt_widget2_tab1_content">
+                        <div class="kt-widget2">
+
+                            <!-- Loop through each parent fee catalog -->
+                            <div *ngFor="let fee of activeFeeRate_">
+                                <!-- Display Parent Fee Catalog Name -->
+                                <h5 class="mb-3">{{ fee.name }}</h5>
+
+                                <!-- Loop through components -->
+                                <div *ngFor="let comp of fee.components"
+                                    class="kt-widget2__item d-flex justify-content-between align-items-center"
+                                    [ngClass]="comp.randomClass">
+
+                                    <!-- Left: Checkbox + Info -->
+                                    <div class="d-flex align-items-center">
+                                        <div class="kt-widget2__checkbox me-2">
+                                            <label class="kt-checkbox kt-checkbox--solid kt-checkbox--single">
+                                                <input type="checkbox" (change)="toggleSelection(fee, comp, $event)">
+                                                <span></span>
+                                            </label>
+                                        </div>
+                                        <div class="kt-widget2__info">
+                                            <a href="#" class="kt-widget2__title">
+                                                {{ comp.name }}
+                                            </a>
+                                            <a href="#" class="kt-widget2__username">
+                                                <!-- optionally add more info -->
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <!-- Right: Amount -->
+                                    <div class="">
+                                        <span class="kt-widget2__number" style="pointer-events: none; color: inherit;">
+                                            {{ getAmount(comp) }}
+                                        </span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--end:: Widgets/Tasks -->
+    </div>
+    <div class="col-xl-6">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        Student Assigned Fee Catalog Details
+                    </h3>
+                </div>
+                <div class="kt-portlet__head-toolbar">
+                    <!-- Optional toolbar -->
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+
+                <!--begin::widget 12-->
+                <div class="kt-widget4">
+
+                    <!-- Loop through selected fee catalogs -->
+                    <div *ngFor="let fee of getSelectedFeeCatalogs()">
+
+                        <!-- Parent Fee Catalog Heading -->
+                        <div class="kt-widget4__item">
+                            <strong class="kt-widget4__title" [ngClass]="getFeeHeadingClass(fee)"
+                                style="margin-top:10px;">
+                                {{ fee.name }}
+                            </strong>
+                        </div>
+
+                        <!-- Components -->
+                        <div *ngFor="let comp of selectedComponents[fee.id]"
+                            class="kt-widget4__item d-flex justify-content-between align-items-center"
+                            style="margin-left: 20px; margin-top:20px;">
+
+                            <!-- Left: Component name -->
+                            <div class="d-flex align-items-center">
+                                <span class="kt-widget4__icon">
+                                    <i [ngClass]="getFeeIconClass(fee)"></i>
+                                </span>
+                                <a href="#" class="kt-widget4__title kt-widget4__title--light ms-2">
+                                    {{ comp.name }}
+                                </a>
+                            </div>
+
+                            <!-- Right: Amount -->
+                            <span class="kt-widget4__number" [ngClass]="getFeeHeadingClass(fee)">
+                                {{ getAmount(comp) }}
+                            </span>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="row" *ngIf="getSelectedFeeCatalogs().length > 0">
+                        <div
+                            class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit">
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-12">
+
+                                <!--begin::Portlet-->
+                                <div class="kt-portlet kt-portlet--solid-warning kt-portletk-portlet--height-fluid">
+                                    <div class="kt-portlet__head">
+                                        <div class="kt-portlet__head-label">
+                                            <span class="kt-portlet__head-icon"><i
+                                                    class="flaticon-stopwatch"></i></span>
+                                            <h3 class="kt-portlet__head-title">Apply Scholerships & Discounts</h3>
+                                        </div>
+                                    </div>
+                                    <div class="kt-portlet__body">
+                                        <div class="kt-portlet__content">
+                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem
+                                            Ipsum has been the industry's standard dummy text ever since the 1500s, when
+                                            an
+                                            unknown printer took a galley of type and scrambled. Lorem Ipsum is simply
+                                            dummy
+                                            text of the printing and typesetting industry. Lorem Ipsum has been the
+                                            industry's standard dummy text ever since the 1500s, when an unknown printer
+                                            took a galley of type and scrambled.
+                                        </div>
+                                    </div>
+                                    <div class="kt-portlet__foot kt-portlet__foot--sm kt-align-right">
+                                        <a href="#" class="btn btn-font-light btn-outline-hover-light">Save</a>
+                                        <a href="#" class="btn btn-font-light btn-outline-hover-light">Cancel</a>
+                                    </div>
+                                </div>
+
+                                <!--end::Portlet-->
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="kt-widget1">
+                        <div class="kt-widget1__item">
+                            <div class="kt-widget1__info">
+                                <h1 class="kt-widget1__title" style="font-size: 2.5rem;"> Total</h1>
+                            </div>
+                            <span class="kt-widget1__number kt-font-brand"> {{ getTotalAmount() }}</span>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                    <div class="row" *ngIf="getSelectedFeeCatalogs().length > 0">
+                        <div class="col-xl-12">
+
+                            <!--begin::Portlet-->
+                            <div class="kt-portlet kt-portlet--solid-warning kt-portletk-portlet--height-fluid">
+                                <div class="kt-portlet__foot kt-portlet__foot--sm kt-align-right">
+                                    <a href="#" class="btn btn-font-light btn-outline-hover-light">Save</a>
+                                    <a href="#" class="btn btn-font-light btn-outline-hover-light">Cancel</a>
+                                </div>
+                            </div>
+
+                            <!--end::Portlet-->
+                        </div>
+
+                    </div>  
+                </div>
+
+            </div>
+
+            <!--end::Widget 12-->
+
+        </div>
+    </div>
+
