@@ -7,7 +7,8 @@ export const API_ENDPOINTS = {
         UPDATE: (id: string) => `/api/institute/students/${id}`,
         GET_ALL: '/api/institute/students',
         SEARCH: (keyword: string) => `/api/institute/students/search/${keyword}`,
-        GET_BY_ID: (id: string) => `/api/institute/students/${id}`
+        GET_BY_ID: (id: string) => `/api/institute/students/${id}`,
+        ASSIGN_STUDENT_FEE:(id:string) =>`/api/students/${id}/fees/assign`
     },
     INSTITUTE: {
         ACADEMIC_YEAR: {

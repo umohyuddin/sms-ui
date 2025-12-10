@@ -80,7 +80,6 @@ export class StudentFeeCaculator implements OnInit {
       next: (response) => {
         console.log('✅ Request Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.activatedRoute = response.body;
         this.activeFeeRate = response.body;
         const data: FeeRateResponse[] = response.body;
 
@@ -346,6 +345,60 @@ export class StudentFeeCaculator implements OnInit {
     return 'PKR ' + finalAmount;
   }
 
+
+  getSelectedFeeComponentIds(): number[] {
+    return Object.values(this.selectedComponents)
+      .flat()
+      .map(comp => comp.id);
+  }
+
+
+  submitFeeAndDiscount() {
+    // Extract query params from route or store them somewhere
+    const params = this.activatedRoute.snapshot.queryParams;
+    const apiParams = {
+      studentId: params['studentId'],
+      academicYearId: params['academicYearId'],
+      campusId: params['campusId'],
+      standardId: params['standardId']
+    };
+
+    // Prepare the component IDs
+    const componentIds = this.getSelectedFeeComponentIds();
+     const discountComponentId = this.getSelectedDiscountComponentId();
+
+    // Prepare the DTO
+    const requestDto = {
+      studentId: apiParams.studentId,
+      campusId: apiParams.campusId,
+      standardId: apiParams.standardId,
+      academicYearId: apiParams.academicYearId,
+      componentIds: componentIds,
+      discountComponentId:discountComponentId,
+      assignedDate: new Date().toISOString().split('T')[0], // yyyy-mm-dd
+      dueDate: new Date().toISOString().split('T')[0] // you can replace with actual due date
+    };
+
+    console.log('StudentFeeAssignmentRequestDTO:', requestDto);
+
+    // Send to API
+    this.studentManagementSerivce.studentAssignFee(apiParams.studentId,requestDto).subscribe({
+      next: (response) => {
+        console.log('Fee assigned successfully', response);
+      },
+      error: (err) => {
+        console.error('Error assigning fee', err);
+      }
+    });
+  };
+
+
+    getSelectedDiscountComponentId(): number | null {
+    const selected = Object.values(this.selectedDiscounts).flat();
+    return selected.length > 0 ? selected[0].id : null;
+  }
+
 }
+
 
 

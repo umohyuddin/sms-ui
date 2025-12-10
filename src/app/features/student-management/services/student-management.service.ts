@@ -37,7 +37,7 @@ export class StudentManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.GET_CURRENT}`, { observeResponse: true });
   }
 
-    getAdmissionType(): Observable<any> {
+  getAdmissionType(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ADMISSION_TYPES.GET_ALL}`, { observeResponse: true });
   }
 
@@ -68,17 +68,31 @@ export class StudentManagementService {
     );
   }
 
-getActiveFeeRates(paramsObj: any):Observable<any>{
-    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_RATES.GET_ACTIVE_RATES}`, { 
+  getActiveFeeRates(paramsObj: any): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_RATES.GET_ACTIVE_RATES}`, {
       params: paramsObj,
-      observeResponse: true });
-}
+      observeResponse: true
+    });
+  }
 
-getActiveDiscounts(paramsObj: any):Observable<any>{
-    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_RATES.GET_ACTIVE_DISCOUNTS}`, { 
+  getActiveDiscounts(paramsObj: any): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_RATES.GET_ACTIVE_DISCOUNTS}`, {
       params: paramsObj,
-      observeResponse: true });
-}
+      observeResponse: true
+    });
+  }
+
+
+  studentAssignFee(id: string, payload: any): Observable<any> {
+
+
+    const url =  `${this.baseUrl}${API_ENDPOINTS.STUDENTS.ASSIGN_STUDENT_FEE(id)}`;
+
+    return this.http.request(HTTP_METHOD.POST, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
 
   // deleteCampus(id: number): Observable<any> {
   //   return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}/${id}`, { observeResponse: true });
