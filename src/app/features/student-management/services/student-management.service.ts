@@ -74,6 +74,12 @@ getActiveFeeRates(paramsObj: any):Observable<any>{
       observeResponse: true });
 }
 
+getActiveDiscounts(paramsObj: any):Observable<any>{
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_RATES.GET_ACTIVE_DISCOUNTS}`, { 
+      params: paramsObj,
+      observeResponse: true });
+}
+
   // deleteCampus(id: number): Observable<any> {
   //   return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}/${id}`, { observeResponse: true });
   // }

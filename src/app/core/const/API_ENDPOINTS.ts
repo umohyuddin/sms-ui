@@ -88,7 +88,8 @@ export const API_ENDPOINTS = {
             UPDATE: (id: string) => `/api/school/discounts/rates/${id}`,
             GET_ALL: '/api/school/discounts/rates',
             SEARCH: (keyword: string) => `/api/school/discounts/rates/search/${keyword}`,
-            GET_BY_ID: (id: string) => `/api/school/discounts/rates/${id}`
+            GET_BY_ID: (id: string) => `/api/school/discounts/rates/${id}`,
+            GET_ACTIVE_DISCOUNTS:'/api/school/discounts/rates/byCampusYear'
         }
     },
 
