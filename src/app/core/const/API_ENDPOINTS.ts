@@ -12,6 +12,9 @@ export const API_ENDPOINTS = {
         STUDENT_FEE_SUMMARY:'/api/students/fee/summary/filter'
         
     },
+     DASHBOARD: {
+        GET_STUDENT_COUNTS: '/api/institute/students/dashboard',        
+    },
     INSTITUTE: {
         ACADEMIC_YEAR: {
             GET_BY_ID: (id: string) => `/api/school/academic/${id}`,

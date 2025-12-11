@@ -6,3 +6,14 @@
 }
 
 
+.dropdown {
+  position: absolute;
+  top: 10px;   /* adjust as needed */
+  right: 10px; /* align to right */
+  z-index: 10;
+}
+.kt-widget17__item {
+  position: relative; /* make container relative for absolute positioning */
+}
+
+
