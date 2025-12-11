@@ -164,7 +164,7 @@
                                             </a>
                                             <a class="kt-widget2__username">
                                                 <!-- optionally add description or other info -->
-                                                {{ subType.rates[0]?.description }}
+                                                {{ subType.rates[0].description }}
                                             </a>
                                         </div>
                                     </div>
@@ -172,7 +172,7 @@
                                     <!-- Right: Value -->
                                     <div class="">
                                         <span class="kt-widget2__number" style="pointer-events: none; color: inherit;">
-                                            {{ subType.rates[0]?.value }} {{ subType.rates[0]?.isPercentage ? '%' :
+                                            {{ subType.rates[0].value }} {{ subType.rates[0].isPercentage ? '%' :
                                             'PKR' }}
                                         </span>
                                     </div>
@@ -269,8 +269,8 @@
 
                             <!-- Discount Value -->
                             <span class="kt-widget4__number kt-font-success">
-                                {{ subType.rates[0]?.value }}
-                                {{ subType.rates[0]?.isPercentage ? '%' : 'PKR' }}
+                                {{ subType.rates[0].value }}
+                                {{ subType.rates[0].isPercentage ? '%' : 'PKR' }}
                             </span>
 
                         </div>

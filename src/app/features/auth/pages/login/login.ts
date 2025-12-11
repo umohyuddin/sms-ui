@@ -1,6 +1,7 @@
-import { ChangeDetectorRef, Component,ViewEncapsulation  } from '@angular/core';
+import {  Component,ViewEncapsulation  } from '@angular/core';
 import { LoginRightSection } from '../../components/login-right-section/login-right-section';
 import { LoginLeftSection } from '../../components/login-left-section/login-left-section';
+import { AppConfigService } from '../../../../core/services/app-config.service';
 @Component({
   selector: 'app-login',
   imports: [LoginRightSection, LoginLeftSection],
@@ -10,11 +11,13 @@ import { LoginLeftSection } from '../../components/login-left-section/login-left
    encapsulation: ViewEncapsulation.None 
 })
 export class Login {
-  spinner = true;
-
-  constructor(private cdr: ChangeDetectorRef) { }
-  ngAfterViewInit(): void {
-    this.spinner = false;
-    this.cdr.detectChanges();
+  academicYear: any;
+ 
+  constructor(private configService: AppConfigService) { }
+   ngOnInit() {
+      this.academicYear = this.configService.getAcademicYear();
+    console.log("Loaded academic year:", this.academicYear);
+    // const appData = this.cacheService.getConfig();
+    // console.log("Static app data:", appData);
   }
 }
