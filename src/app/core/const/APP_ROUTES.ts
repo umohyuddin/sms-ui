@@ -30,7 +30,8 @@ export const ROUTES = {
     DETAILS: (id: string) => ['students', 'student-details', id],
     STUDENT_FEE_CALCULATOR: {
       DETAILS:['students','fee-calculator']
-    }
+    },
+    STUDENT_FEE_COLLECTOR:['students','fee-collector']
   },
   FEE: {
     FEE_CATALOG: {

@@ -6,22 +6,22 @@ export const API_ENDPOINTS = {
         CREATE: '/api/institute/students',
         UPDATE: (id: string) => `/api/institute/students/${id}`,
         GET_ALL: '/api/institute/students',
-        SEARCH: (keyword: string) => `/api/institute/students/search/${keyword}`,
+        SEARCH: `/api/institute/students/search`,
         GET_BY_ID: (id: string) => `/api/institute/students/${id}`,
-        ASSIGN_STUDENT_FEE:(id:string) =>`/api/students/${id}/fees/assign`,
-        STUDENT_FEE_SUMMARY:'/api/students/fee/summary/filter'
-        
+        ASSIGN_STUDENT_FEE: (id: string) => `/api/students/${id}/fees/assign`,
+        STUDENT_FEE_SUMMARY: '/api/students/fee/summary/filter'
+
     },
-     DASHBOARD: {
-        GET_STUDENT_COUNTS: '/api/institute/students/dashboard',        
+    DASHBOARD: {
+        GET_STUDENT_COUNTS: '/api/institute/students/dashboard',
     },
     INSTITUTE: {
         ACADEMIC_YEAR: {
             GET_BY_ID: (id: string) => `/api/school/academic/${id}`,
             GET_ALL: '/api/school/academic',
-            GET_CURRENT:'/api/school/academic/current'
+            GET_CURRENT: '/api/school/academic/current'
         },
-         ADMISSION_TYPES: {
+        ADMISSION_TYPES: {
             GET_ALL: '/api/admission/types',
         },
         CAMPUSES: {
@@ -55,7 +55,7 @@ export const API_ENDPOINTS = {
             GET_ALL: '/api/fee/catalogs',
             SEARCH: (keyword: string) => `/api/fee/catalogs/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/fee/catalogs/${id}`
-            
+
         },
         FEE_CATALOG_COMPONENT: {
             CREATE: '/api/fee/components',
@@ -71,7 +71,7 @@ export const API_ENDPOINTS = {
             GET_ALL: '/api/fee/rates',
             SEARCH: (keyword: string) => `/api/fee/rates/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/fee/rates/${id}`,
-            GET_ACTIVE_RATES:'/api/fee/rates'
+            GET_ACTIVE_RATES: '/api/fee/rates'
         }
     },
     DISCOUNT: {
@@ -95,7 +95,7 @@ export const API_ENDPOINTS = {
             GET_ALL: '/api/school/discounts/rates',
             SEARCH: (keyword: string) => `/api/school/discounts/rates/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/school/discounts/rates/${id}`,
-            GET_ACTIVE_DISCOUNTS:'/api/school/discounts/rates/byCampusYear'
+            GET_ACTIVE_DISCOUNTS: '/api/school/discounts/rates/byCampusYear'
         }
     },
 

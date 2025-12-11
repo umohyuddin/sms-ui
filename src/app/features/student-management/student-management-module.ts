@@ -5,6 +5,7 @@ import { StudentListing } from './pages/student-listing/student-listing';
 import { StudentDetails } from './pages/student-details/student-details';
 import { StudentCreate } from './pages/student-create/student-create';
 import { StudentFeeCaculator } from './pages/student-fee-calculator/student-fee-calculator';
+import { StudentCollectFee } from './pages/student-collect-fee/student-collect-fee';
 
 
 const routes: Routes = [
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'student-edit/:id', component: StudentCreate },
   { path: 'student-create', component: StudentCreate },
   { path: 'fee-calculator', component: StudentFeeCaculator },
-  
+  { path: 'fee-collector', component: StudentCollectFee },
+
 ];
 
 

@@ -30,6 +30,12 @@ export class Dashboard {
   }
 
 
+  goToFeeCollector() {
+    this.router.navigate(ROUTES.STUDENT.STUDENT_FEE_COLLECTOR);
+
+  }
+
+
   private getStudentCounts() {
     this.dashboardManagementService.getStudentDashboardCounts().subscribe({
       next: (response) => {
