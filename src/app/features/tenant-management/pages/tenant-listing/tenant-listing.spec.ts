@@ -7,7 +7,7 @@ import { HttpClientService } from '../../../../core/services/http-client.service
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
-import { Tenant } from '../../models/tenant';
+import { Tenant } from '../../models/AcademicYearResponse';
 
 describe('TenantListing', () => {
   let component: TenantListing;

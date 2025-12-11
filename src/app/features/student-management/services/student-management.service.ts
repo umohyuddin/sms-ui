@@ -68,6 +68,16 @@ export class StudentManagementService {
     );
   }
 
+  getStudentFeeSummary(params: any): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.STUDENTS.STUDENT_FEE_SUMMARY}`,
+      {
+        observeResponse: true,
+        params: params
+      }
+    );
+  }
+
   getActiveFeeRates(paramsObj: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_RATES.GET_ACTIVE_RATES}`, {
       params: paramsObj,

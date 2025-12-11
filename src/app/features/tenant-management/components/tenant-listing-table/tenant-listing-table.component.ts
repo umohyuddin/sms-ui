@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Tenant } from '../../models/tenant';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { HttpClientService } from '../../../../core/services/http-client.service';
@@ -15,7 +14,6 @@ import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
   styleUrls: ['./tenant-listing-table.component.css']
 })
 export class TenantListingTableComponent {
-  @Input() tenantData: Tenant[] = [];
   URL = '';
 
   constructor(private router: Router,
@@ -63,7 +61,7 @@ export class TenantListingTableComponent {
         next: (response) => {
           console.log('✅ Delete Success Status:', response.status);
           console.log('📦 Delete Response Body:', response.body);
-          this.tenantData = this.tenantData.filter(t => t.tenantId !== tenantId);
+
           console.log(`Tenant ${tenantId} deleted successfully`);
         },
         error: (error) => {

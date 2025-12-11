@@ -13,10 +13,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MatSelectModule } from '@angular/material/select';
 import { TenantListingTableComponent } from '../../components/tenant-listing-table/tenant-listing-table.component';
 import { HttpClientService } from '../../../../core/services/http-client.service';
-import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
-import { HttpResponse } from '@angular/common/http';
-import { Tenant } from '../../models/tenant';
-import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { Router } from '@angular/router';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 
@@ -39,8 +35,7 @@ import { AppConfigService } from '../../../../core/services/app-config.service';
   standalone: true,
 })
 export class TenantListing implements OnInit {
-  tenants: Tenant[] = [];
-  spinner = true;
+    spinner = true;
   selectedRange = 'This month';
   selectedPeriod = 'This month';
   selectedTab: string = 'new';
@@ -65,26 +60,6 @@ export class TenantListing implements OnInit {
     //this.tenantListing();
   }
 
-  private tenantListing() {
-    this.httpClientService
-      .request<any>(HTTP_METHOD.GET, this.URL, { observeResponse: true })
-      .subscribe({
-        next: (response: HttpResponse<any>) => {
-          console.log('✅ Status:', response.status);
-          console.log('📦 Body:', response.body);
-          this.tenants = response.body || [];
-          console.log('Tenants List:', this.tenants);
-        },
-        error: (error) => {
-          console.error('❌ Error Status:', error.status);
-          console.error('Message:', error.message);
-          this.spinner = false;
-        }, complete: () => {
-          console.log('🔚 Complete');
-          this.spinner = false;
-        }
-      });
-  }
 
   goToCreateTenant(): void {
     this.router.navigate(['/tenants/tenant-create']);

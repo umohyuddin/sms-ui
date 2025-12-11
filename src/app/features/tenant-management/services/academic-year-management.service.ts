@@ -21,6 +21,10 @@ export class AcademicYearManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.GET_ALL}`, { observeResponse: true });
   }
 
+   getCurrentAcademicYear(): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.GET_CURRENT}`, { observeResponse: true });
+  }
+
     getAcademicYearId(id: string): Observable<any> {
     return this.http.request(
       HTTP_METHOD.GET,

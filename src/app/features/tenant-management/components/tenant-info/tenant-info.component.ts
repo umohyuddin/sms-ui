@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { Tenant } from '../../models/tenant';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 
@@ -12,5 +11,4 @@ import { MatExpansionModule } from '@angular/material/expansion';
   styleUrls: ['./tenant-info.component.css']
 })
 export class TenantInfoComponent {
- @Input() tenantData: Tenant | undefined;
 }

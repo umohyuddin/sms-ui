@@ -1,5 +1,5 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { Tenant } from '../../../tenant-management/models/tenant';
+import { Tenant } from '../../../tenant-management/models/AcademicYearResponse';
 import { Router } from '@angular/router';
 import { HttpClientService } from '../../../../core/services/http-client.service';
 import { AppConfigService } from '../../../../core/services/app-config.service';

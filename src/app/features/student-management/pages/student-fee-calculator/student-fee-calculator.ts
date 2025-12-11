@@ -18,7 +18,6 @@ import { ActiveDiscountRateFullResponse, DiscountComponent } from '../../models/
   imports: [
     CommonModule,
     FormsModule,
-    StudentListingTableComponent
   ],
   templateUrl: './student-fee-calculator.html',
   styleUrls: ['./student-fee-calculator.css'],

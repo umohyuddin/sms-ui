@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Tenant } from '../../features/tenant-management/models/tenant';
+import { Tenant } from '../../features/tenant-management/models/AcademicYearResponse';
 
 @Injectable({
   providedIn: 'root'

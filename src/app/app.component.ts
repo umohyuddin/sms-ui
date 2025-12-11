@@ -1,5 +1,6 @@
 import { RouterOutlet } from '@angular/router';
 import { Component, signal } from '@angular/core';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -11,4 +12,10 @@ export class AppComponent {
     readonly title = signal('tenant-manager');
     // String alias for legacy tests that expect a plain string property
     readonly titleValue = 'tenant-manager';
+
+    // constructor(private dataCache: DataCacheService) {}
+     ngOnInit() {
+    // Preload all required data when the app starts
+    // this.dataCache.preload();
+  }
 }
