@@ -88,8 +88,8 @@ export class CampusCreateFormComponent {
       cityId: ['', Validators.required],
       campusName: ['', [Validators.required]],
       campusCode: ['', Validators.maxLength(20)],
-      isActive: [true],
-      contactNumber: ['', [Validators.required, Validators.maxLength(15)]],
+      active: [true],
+      contactNumber: ['', [Validators.required, Validators.maxLength(15),Validators.pattern(/^\+?[0-9]{10,15}$/)]],
       email: ['', [Validators.required, Validators.email]],
       website: [''],
       address: ['']
