@@ -8,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-import { routes } from '../../../../app.routes';
 import { CampusManagementService } from '../../services/campus-management.service';
 
 
@@ -37,7 +36,7 @@ export class CampusCreateFormComponent {
     private router: Router,
     private appConfig: AppConfigService,
     private campusManagementService: CampusManagementService,
-    
+
   ) { }
 
   ngOnInit() {
@@ -60,9 +59,6 @@ export class CampusCreateFormComponent {
 
 
     this.onProvinceChange();
-    if (this.appConfig.dummyDataEnablement) {
-      this.patchDummyData();
-    }
 
   }
 
@@ -104,8 +100,13 @@ export class CampusCreateFormComponent {
   onProvinceChange() {
     this.createCampusForm.get('provinceId')?.valueChanges.subscribe(provinceId => {
       console.log("Province changed:", provinceId);
+      const cityControl = this.createCampusForm.get('cityId');
+      // Reset city control
+      this.createCampusForm.get('cityId')?.setValue(''); // reset value to null
+      this.createCampusForm.get('cityId')?.markAsUntouched();
+      this.createCampusForm.get('cityId')?.markAsDirty();
+      this.createCampusForm.get('cityId')?.updateValueAndValidity();
 
-      // Example: Load cities based on province
       this.loadCitiesByProvince(provinceId);
     });
   }
@@ -117,12 +118,10 @@ export class CampusCreateFormComponent {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.cities = response.body;
-        //this.router.navigate(['/Campuss']);
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
-        //this.router.navigate(['/Campuses']);
       },
       complete: () => {
         console.log('🔚 Request Complete');
@@ -172,7 +171,6 @@ export class CampusCreateFormComponent {
           console.log('✅ Success Status:', response.status);
           console.log('📦 Response Body:', response.body);
           this.campusData = response.body;
-          console.log('📦 Campus data :', this.campusData);
           this.createCampusForm.patchValue(this.campusData);
         },
         error: (error) => {
@@ -184,21 +182,7 @@ export class CampusCreateFormComponent {
         }
       })
   }
-  private patchDummyData() {
-    const dummyPayload = {
-      instituteId: 1,
 
-      campusName: 'Dummy Campus',
-      campusCode: 'D-002',
-      isActive: true,
-      contactNumber: '03001234567',
-      email: 'dummy@school.com',
-      website: 'https://dummy.com',
-      address: 'Dummy street, Karachi'
-    };
-
-    this.createCampusForm.patchValue(dummyPayload);
-  }
   goToCampusListing() {
     this.router.navigate(ROUTES.CAMPUS.LIST)
   }

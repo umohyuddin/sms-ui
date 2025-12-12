@@ -1,4 +1,22 @@
-// student-fee-summary.model.ts
+export interface StudentFeePayment {
+  id: number;
+  studentId: number;
+  studentFullName?: string;
+
+  paymentDate: string;
+  amountPaid: number;
+
+  paymentMonth: string;
+  paymentYear: number;
+
+  paymentMode: string;
+
+  createdAt: string;
+
+  academicYearId: number;
+  academicYearName?: string;
+}
+
 export interface StudentFeeSummaryResponse {
   id: number;
 
@@ -7,8 +25,11 @@ export interface StudentFeeSummaryResponse {
   balance: number;
 
   studentId: number;
-  studentFullName?: string; // optional
+  studentFullName?: string;
 
   academicYearId: number;
-  academicYearName?: string; // optional
+  academicYearName?: string;
+
+  studentFeePaymentsList: StudentFeePayment[];
 }
+

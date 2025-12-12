@@ -4,4 +4,5 @@ export interface AcademicYearResponse {
     startDate: string;
     endDate: string;
     isCurrent: boolean;
+    totalMonths:number;
 }
