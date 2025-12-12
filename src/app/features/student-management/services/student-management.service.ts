@@ -33,6 +33,14 @@ export class StudentManagementService {
     });
   }
 
+  savmakeFeePaymente(payload: any): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.STUDENTS.STUDENT_FEE_PAYMENT}`;
+    return this.http.request(HTTP_METHOD.POST, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
   getCurrentAcademicYear(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.GET_CURRENT}`, { observeResponse: true });
   }
@@ -96,7 +104,7 @@ export class StudentManagementService {
   studentAssignFee(id: string, payload: any): Observable<any> {
 
 
-    const url =  `${this.baseUrl}${API_ENDPOINTS.STUDENTS.ASSIGN_STUDENT_FEE(id)}`;
+    const url = `${this.baseUrl}${API_ENDPOINTS.STUDENTS.ASSIGN_STUDENT_FEE(id)}`;
 
     return this.http.request(HTTP_METHOD.POST, url, {
       observeResponse: true,

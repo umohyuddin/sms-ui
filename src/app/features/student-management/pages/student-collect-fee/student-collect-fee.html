@@ -1,4 +1,23 @@
-<!-- <app-student-create-form></app-student-create-form> -->
+<div class="kt-subheader  kt-grid__item" id="kt_subheader">
+  <div class="kt-container  kt-container--fluid ">
+    <div class="kt-subheader__main">
+      <h3 class="kt-subheader__title">Student Fee Collector</h3>
+      <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+
+      <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+        <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+        <span class="kt-input-icon__icon kt-input-icon__icon--right">
+          <span><i class="flaticon2-search-1"></i></span>
+        </span>
+      </div>
+    </div>
+    <div class="kt-subheader__toolbar">
+      <div class="kt-subheader__wrapper">
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -9,7 +28,7 @@
         <i class="kt-font-dark flaticon-squares"></i>
       </span>
       <h3 class="kt-portlet__head-title">
-        Student Fee Collector
+        Fee Management – Search Student
       </h3>
     </div>
     <div class="kt-portlet__head-toolbar">
@@ -21,10 +40,11 @@
     </div>
   </div>
   <div class="kt-portlet__body">
-
+    <!--begin: Search-->
     <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
       <div class="kt-portlet__body">
         <h4>Compus/Standard/Section Information</h4>
+
 
         <div class="form-group row form-group-marginless kt-margin-t-20">
           <label class="col-lg-1 col-form-label">Academic Year:</label>
@@ -32,6 +52,7 @@
             <input type="text" class="form-control" placeholder="Academic Year" formControlName="academicYearName"
               readonly>
           </div>
+
 
           <label class="col-lg-1 col-form-label">Campus:</label>
           <div class="col-lg-3">
@@ -48,6 +69,7 @@
               Campus is required
             </span>
           </div>
+
 
           <label class="col-lg-1 col-form-label">Standard:</label>
           <div class="col-lg-3">
@@ -66,8 +88,11 @@
           </div>
 
 
+
+
         </div>
         <div class="form-group row form-group-marginless kt-margin-t-20">
+
 
           <label class="col-lg-1 col-form-label">Student Id:</label>
           <div class="col-lg-3">
@@ -83,8 +108,7 @@
           <div class="row">
             <div class="col-lg-5"></div>
             <div class="col-lg-7">
-              <button type="submit" class="btn btn-dark mr-2">
-                {{isEditMode===true? 'Update Standard Details': "Search Student"}}</button>
+              <button type="submit" class="btn btn-dark mr-2">Search</button>
               <button type="button" class="btn btn-secondary">Cancel</button>
             </div>
           </div>
@@ -92,12 +116,14 @@
       </div>
     </form>
 
+    <!--end: Search-->
     <!--begin: Datatable -->
 
     <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
       <div class="row">
         <div class="col-sm-12">
           @if(studentsResponse && studentsResponse.length > 0){
+
 
           <div class="table-responsive-custom">
             <table
@@ -112,6 +138,8 @@
                 </tr>
               </thead>
               <tbody>
+
+
 
 
                 <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
@@ -130,6 +158,7 @@
                       [ngClass]="item.isActive ? 'kt-badge--brand' : 'kt-badge--danger'">
                       {{item.isActive===true ? 'Active' : 'Inactive'}}
                     </span>
+
 
                   </td>
                   <td>{{ item.enrollmentDate }}</td>
@@ -180,12 +209,14 @@
           <div class="dataTables_paginate paging_full_numbers" id="kt_table_1_paginate">
             <ul class="pagination">
 
+
               <!-- FIRST -->
               <li class="paginate_button page-item first" [class.disabled]="pagination.pageIndex === 0">
                 <a class="page-link" (click)="pagination.first()">
                   <i class="la la-angle-double-left"></i>
                 </a>
               </li>
+
 
               <!-- PREVIOUS -->
               <li class="paginate_button page-item previous" [class.disabled]="pagination.pageIndex === 0">
@@ -194,24 +225,29 @@
                 </a>
               </li>
 
+
               <!-- LEFT ELLIPSIS -->
               <li class="paginate_button page-item disabled" *ngIf="pagination.showLeftEllipsis">
                 <a class="page-link">...</a>
               </li>
 
+
               <!-- PAGE NUMBERS -->
               <li class="paginate_button page-item" *ngFor="let page of pagination.visiblePages"
                 [class.active]="pagination.pageIndex === page">
+
 
                 <a class="page-link" (click)="pagination.goToPage(page)">
                   {{ page + 1 }}
                 </a>
               </li>
 
+
               <!-- RIGHT ELLIPSIS -->
               <li class="paginate_button page-item disabled" *ngIf="pagination.showRightEllipsis">
                 <a class="page-link">...</a>
               </li>
+
 
               <!-- NEXT -->
               <li class="paginate_button page-item next"
@@ -221,6 +257,7 @@
                 </a>
               </li>
 
+
               <!-- LAST -->
               <li class="paginate_button page-item last"
                 [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
@@ -228,160 +265,261 @@
                   <i class="la la-angle-double-right"></i>
                 </a>
               </li>
-
             </ul>
-
           </div>
         </div>
       </div>
     </div>
-
-
 
     <!--end: Datatable -->
   </div>
 </div>
 
-<div class="row">
-  <div class="col-xl-12">
 
-    <!--begin:: Widgets/Personal Income-->
-    <div class="kt-portlet kt-portlet--fit kt-portlet--head-lg kt-portlet--head-overlay kt-portlet--height-fluid">
-      <div class="kt-portlet__head kt-portlet__space-x">
-        <div class="kt-portlet__head-label">
-          <h3 class="kt-portlet__head-title kt-font-light">
-            Student Fee Details
-          </h3>
-        </div>
-        <div class="kt-portlet__head-toolbar">
-        </div>
-      </div>
-      <div class="kt-portlet__body">
-        <div class="kt-widget27">
-          <div class="kt-widget27__visual">
-            <img src="/assets/media/bg/bg-4.jpg" alt="">
-            <h3 class="kt-widget27__title">
-              <span>PKR {{ feeSummary?.totalAssignedFee | number:'1.0-0' }}</span>
-            </h3>
-            <div class="kt-widget27__btn">
-              <a href="#" class="btn btn-pill btn-light btn-elevate btn-bold">Manage Student Fee Collection</a>
-            </div>
-          </div>
-          
-          <div class="table-responsive-custom mt-4">
-  <table
-    class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
-    id="kt_table_monthly_fee"
-    role="grid">
+<div class="kt-portlet kt-portlet--mobile">
+  <div class="kt-portlet__head kt-portlet__head--lg">
+    <div class="kt-portlet__head-label">
+      <span class="kt-portlet__head-icon">
+        <i class="kt-font-dark flaticon-squares"></i>
+      </span>
+      <h3 class="kt-portlet__head-title">
+        Student Financial Catalog
 
-    <thead>
-      <tr>
-        <th>Month</th>
-        <th>Status</th>
-        <th class="kt-align-right">Monthly Fee</th>
-        <th class="kt-align-right">Paid (This Month)</th>
-        <th class="kt-align-right">Total Paid So Far</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let month of monthlyFeeStatus">
-        
-        <!-- Month -->
-        <td>{{ month.month }}</td>
-
-        <!-- Status Badge -->
-        <td>
-          <span class="kt-badge kt-badge--inline"
-                [ngClass]="{
-                  'kt-badge--success': month.status === 'Paid',
-                  'kt-badge--warning': month.status === 'Partial',
-                  'kt-badge--danger': month.status === 'Unpaid'
-                }">
-            {{ month.status }}
-          </span>
-        </td>
-
-        <!-- Monthly Fee -->
-        <td class="kt-align-right kt-font-bold">
-          {{ month.monthlyFee | currency:'PKR' }}
-        </td>
-
-        <!-- Paid (This Month) -->
-        <td class="kt-align-right kt-font-bold">
-          {{ month.paid | currency:'PKR' }}
-        </td>
-
-        <!-- Running Total -->
-        <td class="kt-align-right kt-font-bold">
-          {{ month.totalPaidSoFar | currency:'PKR' }}
-        </td>
-
-      </tr>
-    </tbody>
-
-  </table>
-</div>
-
-          <div class="kt-widget27__container kt-portlet__space-x">
-            <!-- Nav pills for months -->
-            <ul class="nav nav-pills nav-fill" role="tablist">
-              <li class="nav-item" *ngFor="let month of monthlyFeeStatus; let i = index">
-                <a class="nav-link" [ngClass]="{ active: i === 0 }" data-toggle="pill" href="#month-{{ i }}">
-                  {{ month.month }}
-                </a>
-              </li>
-            </ul>
-
-
-
-
-            <!-- Tab content for months -->
-            <div class="tab-content mt-3">
-              <div *ngFor="let month of monthlyFeeStatus; let i = index" id="month-{{ i }}" class="tab-pane fade"
-                [ngClass]="{ 'show active': i === 0 }">
-
-                <div class="table-responsive-custom">
-                  <table
-                    class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
-                    id="kt_table_1" role="grid" aria-describedby="kt_table_1_info">
-                    <thead>
-                      <tr>
-                        <th>Month</th>
-                        <th>Status</th>
-                        <th class="kt-align-right">Monthly Fee</th>
-                        <th class="kt-align-right">Paid</th>
-                        <th class="kt-align-right">Total Paid So Far</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{{ month.month }}</td>
-                        <td>
-                          <span class="kt-badge kt-badge--inline" [ngClass]="{
-                      'kt-badge--success': month.status === 'Paid',
-                      'kt-badge--warning': month.status === 'Partial',
-                      'kt-badge--danger': month.status === 'Unpaid'
-                    }">
-                            {{ month.status }}
-                          </span>
-                        </td>
-                        <td class="kt-align-right kt-font-bold">{{ month.monthlyFee | currency:'PKR' }}</td>
-                        <td class="kt-align-right kt-font-bold">{{ month.paid | currency:'PKR' }}</td>
-                        <td class="kt-align-right kt-font-bold">{{ month.totalPaidSoFar | currency:'PKR' }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-              </div>
-            </div>
-          </div>
+      </h3>
+    </div>
+    <div class="kt-portlet__head-toolbar">
+      <div class="kt-portlet__head-wrapper">
+        <div class="kt-portlet__head-actions">
 
         </div>
       </div>
     </div>
+  </div>
+  <div class="kt-portlet__body">
 
-    <!--end:: Widgets/Personal Income-->
+    <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+
+
+      <div class="row">
+        <div class="col-xl-12">
+
+
+          <!--begin:: Widgets/Personal Income-->
+          <div class="kt-portlet kt-portlet--fit kt-portlet--head-lg kt-portlet--head-overlay kt-portlet--height-fluid">
+            <div class="kt-portlet__head kt-portlet__space-x">
+              <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title kt-font-light">
+                  Student Fee Details
+                </h3>
+              </div>
+              <div class="kt-portlet__head-toolbar">
+              </div>
+            </div>
+            <div class="kt-portlet__body">
+              <div class="kt-widget27">
+                <div class="kt-widget27__visual">
+                  <img src="/assets/media/bg/bg-4.jpg" alt="">
+                  <h3 class="kt-widget27__title">
+                    <span>PKR {{ feeSummary?.totalAssignedFee | number:'1.0-0' }}</span>
+                  </h3>
+                  <div class="kt-widget27__btn">
+                    <a class="btn btn-pill btn-light btn-elevate btn-bold">Click here to Collect Fee</a>
+                  </div>
+                </div>
+                <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer kt-margin-t-30">
+
+
+                  <div class="row kt-margin-t-30">
+                    <div class="col-sm-12">
+                      <form class="kt-form kt-form--label-right" [formGroup]="feeSubmitForm"
+                        (ngSubmit)="feeSubmitionForm()">
+                        <div class="form-group row form-group-marginless kt-margin-t-20">
+                          <label class="col-lg-1 col-form-label">Month:</label>
+                          <div class="col-lg-5">
+                            <input class="form-control" type="text" id="example-month-input"
+                              formControlName="paymentMonth" readonly>
+                          </div>
+                          <label class="col-lg-1 col-form-label">Amount:</label>
+                          <div class="col-lg-5">
+
+
+                            <input type="text" class="form-control" placeholder="Amount" formControlName="amountPaid">
+                          </div>
+                        </div>
+                        <div
+                          class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit">
+                        </div>
+
+                        <div class="row">
+                          <div class="col-lg-5"></div>
+                          <div class="col-lg-7">
+                            <button type="submit" class="btn btn-dark mr-2">
+                              Submit</button>
+                            <button type="button" class="btn btn-secondary">Cancel</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="table-responsive-custom mt-4">
+                        <table class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
+                          id="kt_table_1" role="grid" aria-describedby="kt_table_1_info">
+
+
+                          <thead tabindex="0" aria-controls="kt_table_1" rowspan="1" colspan="1">
+                            <tr role="row" class="odd">
+                              <th *ngFor="let col of feeTablecolumns">
+                                {{ col.label }}
+                              </th>
+                            </tr>
+                          </thead>
+
+
+                          <tbody>
+                            <tr role="row" class="odd" *ngFor="let month of feeSummary?.monthlyPayments">
+                              <!-- Month -->
+                              <td>{{ month?.month }}</td>
+
+
+                              <!-- Status Badge -->
+                              <td>
+                                <span class="kt-badge kt-badge--inline" [ngClass]="{
+            'kt-badge--success': month?.status === 'Paid',
+            'kt-badge--warning': month?.status === 'Partial',
+            'kt-badge--danger': month?.status === 'Unpaid'
+          }">
+                                  {{ month?.status }}
+                                </span>
+                              </td>
+
+                              <td class="kt-font-bold">
+                                {{ feeSummary?.monthlyFeeDecimal| currency:'PKR' }}
+                              </td>
+
+
+                              <!-- Monthly Fee -->
+                              <td class="kt-font-bold">
+                                {{ month?.totalMonthlyFee | currency:'PKR' }}
+                              </td>
+
+
+                              <!-- Paid (This Month) -->
+                              <td class="kt-font-bold">
+                                {{ month?.totalPaid | currency:'PKR' }}
+                              </td>
+
+
+                              <!-- Total Paid So Far -->
+                              <td class="kt-font-bold">
+                                {{ month?.totalPaidSoFar | currency:'PKR' }}
+                              </td>
+
+
+                              <!-- Partial Payments -->
+                              <td>
+                                <div *ngIf="(month?.partialPayments ?? []).length > 0; else noPayments">
+                                  <div *ngFor="let payment of month?.partialPayments ?? []">
+                                    {{ payment?.paymentDate }} - {{ payment?.amountPaid | currency:'PKR' }}
+                                    ({{ payment?.paymentMode || 'N/A' }})
+                                  </div>
+                                </div>
+                                <ng-template #noPayments>
+                                  <span class="text-muted kt-font-danger">No Payment</span>
+                                </ng-template>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--end: Datatable -->
   </div>
 </div>
+
+
+
+
+
+
+
+
+<!-- <div class="row">
+                    <div class="col-lg-12">
+                      <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
+                        <div class="kt-portlet__body">
+
+
+                          <div class="form-group row form-group-marginless kt-margin-t-20">
+                            <label class="col-lg-1 col-form-label">Academic Year:</label>
+                            <div class="col-lg-3">
+                              <input type="text" class="form-control" placeholder="Academic Year"
+                                formControlName="academicYearName" readonly>
+                            </div>
+                          </div>
+                          <div
+                            class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit">
+                          </div>
+                        </div>
+                        <div class="kt-portlet__foot">
+                          <div class="kt-form__actions">
+                            <div class="row">
+                              <div class="col-lg-5"></div>
+                              <div class="col-lg-7">
+                                <button type="submit" class="btn btn-dark mr-2">
+                                  {{isEditMode===true? 'Update Standard Details': "Search Student"}}</button>
+                                <button type="button" class="btn btn-secondary">Cancel</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+
+                  </div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <app-student-create-form></app-student-create-form> -->
+
+
+
+
+
+
+
+
+
+
+<!-- <app-student-create-form></app-student-create-form> -->

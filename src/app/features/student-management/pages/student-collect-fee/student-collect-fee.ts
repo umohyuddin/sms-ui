@@ -8,11 +8,12 @@ import { StandardResponse } from '../../../standard-management/models/standardRe
 import { CampusResponse } from '../../../campus-management/models/campusResponse';
 import { AcademicYearResponse } from '../../../tenant-management/models/AcademicYearResponse';
 import { StudentResponse } from '../../models/StudentResponse';
-import { StudentFeeSummaryResponse } from '../../models/FeeSummaryResponse';
+
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
 import { StudentManagementService } from '../../services/student-management.service';
 import { AppConfigService } from '../../../../core/services/app-config.service';
+import { StudentFeeSummaryResponse } from '../../models/StudentFeeSummaryResponse';
 
 @Component({
   selector: 'app-student-collect-fee',
@@ -22,17 +23,16 @@ import { AppConfigService } from '../../../../core/services/app-config.service';
   imports: [ReactiveFormsModule, CommonModule]
 })
 export class StudentCollectFee {
-
+  feeSubmitForm!: FormGroup;
   createForm!: FormGroup;
   standardData: StandardResponse[] = [];
   campuses: CampusResponse[] = [];
   routedId: string | null = null;
-  isEditMode: boolean = false;
   academicYear: AcademicYearResponse | null = null;
   pagination: Pagination<StudentResponse> = new Pagination([], 10);
   studentsResponse: StudentResponse[] = [];
   feeSummary: StudentFeeSummaryResponse | null = null;
-  monthlyFeeStatus: MonthlyFeeStatus[] = [];
+
 
   columns = [
     { key: 'rollNumber', label: 'Roll #', sortable: true },
@@ -54,6 +54,18 @@ export class StudentCollectFee {
     { key: 'action', label: 'Action', sortable: true }
   ];
 
+
+  feeTablecolumns = [
+    { key: 'month', label: 'Month', sortable: true },
+    { key: 'status', label: 'Status', sortable: true },
+    { key: 'MonthlyFee', label: 'Monthly Fee', sortable: true },
+
+    { key: 'totalMonthlyFee', label: 'Monthly Fee Commulative', sortable: true },
+    { key: 'totalPaid', label: 'Paid (This Month)', sortable: true },
+    { key: 'totalPaidSoFar', label: 'Total Paid So Far', sortable: true },
+    { key: 'partialPayments', label: 'Partial Payments', sortable: false }
+  ];
+
   constructor(
     private fb: FormBuilder,
     private campusManagementService: CampusManagementService,
@@ -62,15 +74,15 @@ export class StudentCollectFee {
     private configService: AppConfigService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.academicYear = this.configService.getAcademicYear();
     this.getCampuses();
     this.initializeForm();
+    this.initializeFeeSubmissionForm();
 
     this.routedId = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = !!this.routedId;
 
     this.onCampusChange();
   }
@@ -83,6 +95,20 @@ export class StudentCollectFee {
       academicYearId: [this.academicYear?.id || '', Validators.required],
       academicYearName: [this.academicYear?.name || '', Validators.required],
     });
+  }
+
+  private initializeFeeSubmissionForm() {
+    this.feeSubmitForm = this.fb.group({
+      paymentMonth: ['', Validators.required],
+      paymentMode: ["Cash"],
+      paymentYear: [],
+      amountPaid: ['', Validators.required],
+      paymentDate: ['', Validators.required]
+    });
+
+    this.feeSubmitForm.get('paymentMonth')?.setValue(this.getCurrentMonth());
+    this.feeSubmitForm.get('paymentYear')?.setValue(this.getCurrentYear());
+    this.feeSubmitForm.get('paymentDate')?.setValue(new Date().toISOString().slice(0, 10));
   }
 
   private getCampuses() {
@@ -121,6 +147,31 @@ export class StudentCollectFee {
     });
   }
 
+  feeSubmitionForm() {
+
+    const params = {
+      academicYearId: this.academicYear?.id,
+      studentId: this.feeSummary?.studentId,
+      ...this.feeSubmitForm.value
+    };
+    console.log('✅ Campus Form Data:', this.feeSubmitForm.getRawValue());
+    if (this.feeSubmitForm.invalid) {
+      // Mark all controls as touched to show validation errors
+      this.feeSubmitForm.markAllAsTouched();
+      console.warn('❌ Form is invalid');
+      return;
+    }
+
+
+
+    this.studentManagementSerivce.savmakeFeePaymente(params).subscribe({
+      next: response => {
+        this.studentsResponse = response.body;
+        this.pagination = new Pagination(this.studentsResponse, 10);
+      },
+      error: err => console.error(err)
+    });
+  }
   getFeeDetailstDetails(student: StudentResponse) {
     const params = {
       studentId: student.id,
@@ -130,8 +181,21 @@ export class StudentCollectFee {
     this.studentManagementSerivce.getStudentFeeSummary(params).subscribe({
       next: response => {
         this.feeSummary = response.body;
-        this.monthlyFeeStatus = this.getMonthlyFeeStatus(this.feeSummary!, this.academicYear!);
-        console.log('fee display data',this.monthlyFeeStatus)
+        // Ensure monthlyPayments is always an array
+        if (this.feeSummary) {
+          if (!this.feeSummary.monthlyPayments) {
+            this.feeSummary.monthlyPayments = [];
+          }
+
+          // Also ensure partialPayments for each month is defined
+          this.feeSummary.monthlyPayments.forEach(month => {
+            if (!month.partialPayments) {
+              month.partialPayments = [];
+            }
+          });
+        }
+
+        console.log('fee display data', this.feeSummary);
       },
       error: err => console.error(err)
     });
@@ -142,59 +206,27 @@ export class StudentCollectFee {
     this.pagination.changePageSize(newSize);
   }
 
+  getCurrentMonth(): string {
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    return monthNames[new Date().getMonth()];
+  }
+
+  getCurrentYear(): number {
+    return new Date().getFullYear();
+  }
+
+
   // getters
   get campusId() { return this.createForm.get('campusId'); }
   get standardId() { return this.createForm.get('standardId'); }
 
-  // Monthly fee calculation
-  getMonthlyFeeStatus(
-    summary: StudentFeeSummaryResponse,
-    academicYear: AcademicYearResponse
-  ): MonthlyFeeStatus[] {
-    const monthlyFee = summary.totalAssignedFee / academicYear.totalMonths;
-    const start = new Date(academicYear.startDate ?? '');
-    const months: string[] = [];
-
-    for (let i = 0; i < academicYear.totalMonths; i++) {
-      const d = new Date(start.getFullYear(), start.getMonth() + i, 1);
-      months.push(d.toLocaleString('default', { month: 'long' }));
-    }
-
-    const monthlyPayments: Record<string, number> = {};
-    summary.studentFeePaymentsList.forEach(p => {
-      monthlyPayments[p.paymentMonth] = (monthlyPayments[p.paymentMonth] || 0) + p.amountPaid;
-    });
-
-    let cumulativePaid = 0;
-    let cumulativeFee = 0;
-
-    return months.map(month => {
-      const paid = monthlyPayments[month] || 0;
-      cumulativePaid += paid;
-      cumulativeFee += monthlyFee;
-
-      let status: 'Paid' | 'Partial' | 'Unpaid' = 'Unpaid';
-      if (paid >= monthlyFee) status = 'Paid';
-      else if (paid > 0 && paid < monthlyFee) status = 'Partial';
-
-      return {
-        month,
-        monthlyFee,
-        totalMonthlyFee: cumulativeFee,
-        paid,
-        totalPaidSoFar: cumulativePaid,
-        status
-      };
-    });
-  }
 
 }
 
-export interface MonthlyFeeStatus {
-  month: string;
-  monthlyFee: number;
-  totalMonthlyFee?: number;
-  paid: number;
-  totalPaidSoFar?: number;
-  status: 'Paid' | 'Partial' | 'Unpaid';
-}
+
+
+

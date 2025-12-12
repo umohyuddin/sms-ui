@@ -9,7 +9,8 @@ export const API_ENDPOINTS = {
         SEARCH: `/api/institute/students/search`,
         GET_BY_ID: (id: string) => `/api/institute/students/${id}`,
         ASSIGN_STUDENT_FEE: (id: string) => `/api/students/${id}/fees/assign`,
-        STUDENT_FEE_SUMMARY: '/api/students/fee/summary/filter'
+        STUDENT_FEE_SUMMARY: '/api/students/fee/summary/filter',
+        STUDENT_FEE_PAYMENT:'/api/students/fee/payments'
 
     },
     DASHBOARD: {

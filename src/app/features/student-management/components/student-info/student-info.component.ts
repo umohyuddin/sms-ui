@@ -6,7 +6,7 @@ import { StudentResponse } from '../../models/StudentResponse';
 import { StudentManagementService } from '../../services/student-management.service';
 import { AcademicYearManagementService } from '../../../tenant-management/services/academic-year-management.service';
 import { AcademicYearResponse } from '../../../tenant-management/models/AcademicYearResponse';
-import { StudentFeeSummaryResponse } from '../../models/FeeSummaryResponse';
+import { StudentFeeSummaryResponse } from '../../models/StudentFeeSummaryResponse';
 
 
 @Component({
