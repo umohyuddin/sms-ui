@@ -33,10 +33,15 @@ export class ConcessionRateListingTableComponent {
 
   columns = [
     // { key: 'id', label: 'Id', sortable: true },
-    { key: 'feeCatalogName', label: 'Fee Catalog Name', sortable: true },
-    { key: 'feeCatalogCode', label: 'Fee Catalog Code', sortable: true },
+    { key: 'DiscountComponentName', label: 'Concession Component Name', sortable: true },
+    { key: 'DiscountType', label: 'Concession Type', sortable: true },
     { key: 'chargeType', label: 'Charge Type', sortable: true },
     { key: 'recurrenceRule', label: 'Recurrence Rule', sortable: false },
+        { key: 'value', label: 'Value', sortable: false },
+
+    { key: 'academicYearName', label: 'Academic Year', sortable: false },
+
+    { key: 'campus', label: 'Assigned Campus', sortable: false },
     { key: 'status', label: 'Status', sortable: true },
     { key: 'actions', label: 'Actions', sortable: true }
   ];
@@ -86,13 +91,13 @@ export class ConcessionRateListingTableComponent {
   viewDetails(item: ConcessionRateResponse, event: Event): void {
     console.log('Viewing details for item ID:', item.id);
     event.preventDefault();  // prevents anchor default behavior
-    this.router.navigate(ROUTES.CONCESSION.CONCESSION_TYPE.DETAILS(item.id.toString()));
+    this.router.navigate(ROUTES.CONCESSION.CONCESSION_RATE.DETAILS(item.id.toString()));
   }
 
   editDetails(item: ConcessionRateResponse, event: Event): void {
     event.preventDefault();  // prevents anchor default behavior
     console.log('Editing item item ID:', item.id);
-    this.router.navigate(ROUTES.CONCESSION.CONCESSION__SUB_TYPE.EDIT(item.id.toString()));
+    this.router.navigate(ROUTES.CONCESSION.CONCESSION_RATE.EDIT(item.id.toString()));
   }
 
   // deleteCampus(campusId: any, event: Event): void {

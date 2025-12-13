@@ -10,7 +10,7 @@ export const API_ENDPOINTS = {
         GET_BY_ID: (id: string) => `/api/institute/students/${id}`,
         ASSIGN_STUDENT_FEE: (id: string) => `/api/students/${id}/fees/assign`,
         STUDENT_FEE_SUMMARY: '/api/students/fee/summary/filter',
-        STUDENT_FEE_PAYMENT:'/api/students/fee/payments'
+        STUDENT_FEE_PAYMENT: '/api/students/fee/payments'
 
     },
     DASHBOARD: {
@@ -88,7 +88,8 @@ export const API_ENDPOINTS = {
             UPDATE: (id: string) => `/api/school/discounts/subtypes/${id}`,
             GET_ALL: '/api/school/discounts/subtypes',
             SEARCH: `/api/school/discounts/subtypes/search`,
-            GET_BY_ID: (id: string) => `/api/school/discounts/subtypes/${id}`
+            GET_BY_ID: (id: string) => `/api/school/discounts/subtypes/${id}`,
+            GET_BY_CONCESSION_TYPE: (id: string) => `/api/school/discounts/subtypes/byDiscountType/${id}`
         },
         DISCOUNT_RATES: {
             CREATE: '/api/school/discounts/rates',

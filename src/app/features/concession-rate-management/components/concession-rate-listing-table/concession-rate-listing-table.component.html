@@ -11,50 +11,6 @@
     <div class="kt-portlet__head-toolbar">
       <div class="kt-portlet__head-wrapper">
         <div class="kt-portlet__head-actions">
-          <div class="dropdown dropdown-inline">
-            <button type="button" class="btn btn-success btn-icon-sm dropdown-toggle" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              <i class="la la-download"></i> Export
-            </button>
-
-            <div class="dropdown-menu dropdown-menu-right">
-              <ul class="kt-nav">
-                <li class="kt-nav__section kt-nav__section--first">
-                  <span class="kt-nav__section-text">Choose an option</span>
-                </li>
-                <li class="kt-nav__item">
-                  <a href="#" class="kt-nav__link">
-                    <i class="kt-nav__link-icon la la-print"></i>
-                    <span class="kt-nav__link-text">Print</span>
-                  </a>
-                </li>
-                <li class="kt-nav__item">
-                  <a href="#" class="kt-nav__link">
-                    <i class="kt-nav__link-icon la la-copy"></i>
-                    <span class="kt-nav__link-text">Copy</span>
-                  </a>
-                </li>
-                <li class="kt-nav__item">
-                  <a href="#" class="kt-nav__link">
-                    <i class="kt-nav__link-icon la la-file-excel-o"></i>
-                    <span class="kt-nav__link-text">Excel</span>
-                  </a>
-                </li>
-                <li class="kt-nav__item">
-                  <a href="#" class="kt-nav__link">
-                    <i class="kt-nav__link-icon la la-file-text-o"></i>
-                    <span class="kt-nav__link-text">CSV</span>
-                  </a>
-                </li>
-                <li class="kt-nav__item">
-                  <a href="#" class="kt-nav__link">
-                    <i class="kt-nav__link-icon la la-file-pdf-o"></i>
-                    <span class="kt-nav__link-text">PDF</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -101,20 +57,30 @@
             <tbody>
 
               <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
-                <td>{{ item.name }}</td>
-                <td>{{ item.code }}</td>
-               
-                <!-- <td>
-                  <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                  [ngClass]="CHARGE_TYPE_CLASSES[item.chargeType || 'NONE']">
-                  {{ item.chargeTypeLabel }}</span>
-                </td> -->
+                <td>{{ item.discountSubType.name }}</td>
+                <td>{{ item.discountSubType.discountType.name }}</td>
 
-                <!-- <td><span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                  [ngClass]="RECURRENCE_RULE_CLASSES[item.recurrenceRule || 'NONE']">
-                  {{ item.recurrenceRuleLabel }}
-                </span>
-                </td> -->
+                <td>
+                  <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
+                    [ngClass]="CHARGE_TYPE_CLASSES[item.discountSubType.discountType.chargeType]">
+                    {{ item.discountSubType.discountType.chargeTypeLabel }}</span>
+                </td>
+
+                <td><span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
+                    [ngClass]="RECURRENCE_RULE_CLASSES[item.discountSubType.discountType.recurrenceRule]">
+                    {{ item.discountSubType.discountType.recurrenceRuleLabel }}
+                  </span>
+                </td>
+                @if(item.isPercentage){
+                <td>{{ item.value}} %</td>
+
+                }@else{
+                <td>{{ item.value}} PKR</td>
+
+                }
+                <td>{{ item.academicYearName }}</td>
+                <td>{{ item.campusName }}</td>
+
                 <td>
                   <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
                     [ngClass]="item.isActive ? 'kt-badge--brand' : 'kt-badge--danger'">
@@ -128,15 +94,14 @@
                       <i class="la la-ellipsis-h"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item" href="#" (click)="editDetails(item,$event)"><i
-                          class="la la-edit"></i> Edit Details</a>
+                      <a class="dropdown-item" href="#" (click)="editDetails(item,$event)"><i class="la la-edit"></i>
+                        Edit Details</a>
                       <a class="dropdown-item" href="#" (click)="viewDetails(item,$event)">
                         <i class="la la-eye"></i> View Details</a>
-                      <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
                     </div>
                   </span>
-                  <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
-                    <i class="la la-edit"></i>
+                  <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View" (click)="viewDetails(item,$event)">
+                    <i class="la la-eye"></i>
                   </a>
                 </td>
               </tr>

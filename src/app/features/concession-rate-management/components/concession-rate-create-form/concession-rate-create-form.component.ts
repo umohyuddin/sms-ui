@@ -1,10 +1,21 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { CampusResponse } from '../../../campus-management/models/campusResponse';
+import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
+import { FeeRateResponse, FeeComponent } from '../../../fee-rate-management/models/FeeRateResponse';
+import { FeeRateManagementService } from '../../../fee-rate-management/services/fee-rate-management.service';
+import { AppConfigService } from '../../../../core/services/app-config.service';
+import { AcademicYearResponse } from '../../../tenant-management/models/AcademicYearResponse';
+import { ConcessionResponse } from '../../../concession-management/models/ConcessionResponse';
+import { ConcessionManagementService } from '../../../concession-management/services/concession-management.service';
+import { ConcessionComponentManagementService } from '../../../concession-component-management/services/concession-component-management.service';
+import { ConcessionComponentResponse } from '../../../concession-component-management/models/ConcessionComponentResponse';
 import { ConcessionRateManagementService } from '../../services/concession-rate-management.service';
+import { ConcessionRateResponse } from '../../models/ConcessionRateResponse';
 
 
 @Component({
@@ -17,21 +28,35 @@ import { ConcessionRateManagementService } from '../../services/concession-rate-
   styleUrls: ['./concession-rate-create-form.component.css']
 })
 export class ConcessionRateCreateFormComponent {
+  academicYear: AcademicYearResponse | null = null;
   createForm!: FormGroup;
-  routedId: string | null = null;
-  URL = '';
-  isEditMode = false;
-  resourceData: any;
+  resourceData?: ConcessionRateResponse
+  routedId?: string | null = null;
+  concessionComponentDD: ConcessionComponentResponse[] = [];
+  campuseDD: CampusResponse[] = [];
+  isEditMode: boolean = false;
+  concessionTypeDD: ConcessionResponse[] = [];
+  feeCompnentDD: FeeComponent[] = [];
 
-  constructor(private fb: FormBuilder,
-    private consessionRateManagementService: ConcessionRateManagementService,
+  constructor(
+    private campusManagementService: CampusManagementService,
+    private concessionManagementService: ConcessionManagementService,
+    private concessionComponentManagementService: ConcessionComponentManagementService,
+    private concessionRateManagementService: ConcessionRateManagementService,
+    private feeRateManagementService: FeeRateManagementService,
+    private configService: AppConfigService,
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
   ) { }
 
   ngOnInit() {
-    this.initializeForm();
+    this.academicYear = this.configService.getAcademicYear();
+    this.getCampuses();
+    this.getDiscountTypes();
 
+    this.initializeForm();
+    this.handlePercentageValidation();
     this.routedId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.routedId;
 
@@ -41,64 +66,89 @@ export class ConcessionRateCreateFormComponent {
     } else {
       console.log('Create Mode Activated');
     }
+    this.onConcessionTypeChange();
+
   }
 
 
-
-  private initializeForm() {
-    this.createForm = this.fb.group({
-      instituteId: [1, Validators.required],
-      provinceId: ['', Validators.required],
-      cityId: ['', Validators.required],
-      campusName: ['', [Validators.required]],
-      campusCode: ['', Validators.maxLength(20)],
-      isActive: [true],
-      contactNumber: ['', [Validators.required, Validators.maxLength(15)]],
-      email: ['', [Validators.required, Validators.email]],
-      website: [''],
-      address: ['']
+  getDiscountTypes() {
+    this.concessionManagementService.getAllConcessions().subscribe({
+      next: (response) => {
+        console.log('✅ Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.concessionTypeDD = response.body;
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+        //this.router.navigate(['/Campuses']);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
     });
   }
 
 
-
-  goToConcessionRateList(): void {
-    this.router.navigate([ROUTES.CONCESSION.CONCESSION_RATE.LIST]);
+  onConcessionTypeChange() {
+    this.createForm.get('discountTypeId')?.valueChanges.subscribe(discountTypeId => {
+      console.log("Discount changed:", discountTypeId);
+      this.loadComponentsByConcessionId(discountTypeId);
+    });
   }
-  onSubmit(): void {
-    console.log('✅ Campus Form Data:', this.createForm.getRawValue());
-    if (this.createForm.invalid) {
-      // Mark all controls as touched to show validation errors
-      this.createForm.markAllAsTouched();
-      console.warn('❌ Form is invalid');
-      return;
-    }
-    this.consessionRateManagementService.saveConcessionComponent(this.routedId,this.createForm.getRawValue()).subscribe({
+  loadComponentsByConcessionId(concessionTypeId: any) {
+    this.concessionComponentManagementService.getConcessionComponentsByTypeId(concessionTypeId).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.router.navigate(['/Campuss']);
+        this.concessionComponentDD = response.body;
       },
       error: (error) => {
-        console.error('❌ Post Error Status:', error.status);
+        console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
-        this.router.navigate(['/Campuss']);
+        //this.router.navigate(['/Campuses']);
       },
       complete: () => {
-        console.log('🔚 Post Complete');
+        console.log('🔚 Request Complete');
       }
-    })
+    });
+  }
+
+  private initializeForm() {
+    this.createForm = this.fb.group({
+      academicYearId: [this.academicYear?.id, [Validators.required]],
+      academicYearName: [this.academicYear?.name, [Validators.required]],
+      discountTypeId: ['', [Validators.required]],
+      discountSubTypeId: ['', [Validators.required]],
+      campusId: ['', [Validators.required]],
+      isPercentage: [false, [Validators.required]],
+      value: [0, [Validators.required, Validators.min(0)]],
+      effectiveFrom: [null, [Validators.required]],
+      effectiveTo: [null, [Validators.required]],
+      active: [true]
+    });
   }
 
 
-  getConcessionRateDetails(concessionId: string): void {
-    this.consessionRateManagementService.getConcessionRateById(concessionId).subscribe({
+  getConcessionRateDetails(routedId: string): void {
+    this.concessionRateManagementService.getConcessionRateById(routedId)
+      .subscribe({
         next: (response) => {
-          console.log('✅ Success Status:', response.status);
+          console.log('Request Success Status:', response.status);
           console.log('📦 Response Body:', response.body);
           this.resourceData = response.body;
-          console.log('📦 Campus data :', this.resourceData);
-          this.createForm.patchValue(this.resourceData);
+          console.log('📦 Request data :', this.resourceData);
+          this.createForm.patchValue({
+            academicYearId: this.resourceData?.academicYearId,
+            campusId: this.resourceData?.campusId,
+            discountTypeId: this.resourceData?.discountSubType.discountType.id,
+            discountSubTypeId: this.resourceData?.discountSubType.id,
+            value: this.resourceData?.value,
+            isPercentage: this.resourceData?.isPercentage,
+            effectiveFrom: this.resourceData?.effectiveFrom,
+            effectiveTo: this.resourceData?.effectiveTo,
+            active: this.active
+          });
         },
         error: (error) => {
           console.error('❌ Request Error Status:', error.status);
@@ -109,28 +159,159 @@ export class ConcessionRateCreateFormComponent {
         }
       })
   }
-  
-  goToCampusListing() {
-    this.router.navigate(ROUTES.CAMPUS.LIST)
+
+  private getCampuses() {
+    this.campusManagementService.getAllCampuses().subscribe({
+      next: (response) => {
+        console.log('✅ Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.campuseDD = response.body;
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    });
   }
 
 
+
+  goToListing(): void {
+    this.router.navigate(ROUTES.CONCESSION.CONCESSION_RATE.LIST);
+  }
+  onSubmit(): void {
+    console.log('✅ Create standard Form Data:', this.createForm.getRawValue());
+    if (this.createForm.invalid) {
+      this.createForm.markAllAsTouched();
+      console.warn('❌ Form is invalid');
+      return;
+    }
+
+    this.feeRateManagementService.saveFeeRate(this.routedId ?? null, this.createForm.getRawValue()).subscribe({
+      next: (response) => {
+        console.log('✅ Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.router.navigate(ROUTES.FEE.FEE_RATE.LIST);
+      },
+      error: (error) => {
+        console.error('❌ Post Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Post Complete');
+      }
+    })
+  }
+
+
+
+  minDate = new Date().toISOString().split('T')[0]; // Prevent past dates
   //getters
-  get campusName() {
-    return this.createForm.get('campusName');
+  get academicYearId() {
+    return this.createForm.get('academicYearId');
+  }
+  get campusId() {
+    return this.createForm.get('campusId');
   }
 
-  get contactNumber() {
-    return this.createForm.get('contactNumber');
-  }
-  get email() {
-    return this.createForm.get('email');
+  get standardId() {
+    return this.createForm.get('standardId');
   }
 
-  get provinceId() {
-    return this.createForm.get('provinceId');
+  get discountTypeId() {
+    return this.createForm.get('discountTypeId');
   }
-  get cityId() {
-    return this.createForm.get('cityId');
+
+  get discountSubTypeId() {
+    return this.createForm.get('discountSubTypeId');
   }
+
+  get value() {
+    return this.createForm.get('value');
+  }
+  get effectiveFrom() {
+    return this.createForm.get('effectiveFrom');
+  }
+
+  get effectiveTo() {
+    return this.createForm.get('effectiveTo');
+  }
+  get active() {
+    return this.createForm.get('active');
+  }
+
+  getErrorMessage(controlName: keyof typeof this.validationMessages): string {
+    const control = this.createForm.get(controlName as string);
+    if (!control || !control.errors) return '';
+
+    for (const error in control.errors) {
+      const key = error as keyof typeof this.validationMessages[typeof controlName];
+      if (this.validationMessages[controlName][key]) {
+        return this.validationMessages[controlName][key];
+      }
+    }
+
+    return '';
+  }
+
+  private dateRangeValidator(form: AbstractControl) {
+    const from = form.get('effectiveFrom')?.value;
+    const to = form.get('effectiveTo')?.value;
+
+    if (from && to && new Date(to) < new Date(from)) {
+      return { invalidDateRange: true };
+    }
+    return null;
+  }
+  private handlePercentageValidation() {
+    this.createForm.get('isPercentage')?.valueChanges.subscribe(isPercentage => {
+      const valueCtrl = this.createForm.get('value');
+      if (!valueCtrl) return;
+
+      valueCtrl.clearValidators();
+
+      if (isPercentage) {
+        valueCtrl.setValidators([
+          Validators.required,
+          Validators.min(0),
+          Validators.max(100)
+        ]);
+      } else {
+        valueCtrl.setValidators([
+          Validators.required,
+          Validators.min(1)
+        ]);
+      }
+
+      valueCtrl.updateValueAndValidity();
+    });
+  }
+
+  validationMessages = {
+    campusId: {
+      required: 'Campus is required.'
+    },
+    discountTypeId: {
+      required: 'Concession Type is required.'
+    },
+    discountSubTypeId: {
+      required: 'Concession Component is required.'
+    },
+    value: {
+      required: 'Value is required.',
+      min: 'Value must be greater than zero.',
+      max: 'Percentage cannot exceed 100%.'
+    },
+    effectiveFrom: {
+      required: 'Effective From date is required.'
+    },
+    effectiveTo: {
+      required: 'Effective To date is required.'
+    }
+  };
+
+
 }

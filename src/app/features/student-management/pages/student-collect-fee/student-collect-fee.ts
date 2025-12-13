@@ -72,9 +72,7 @@ export class StudentCollectFee {
     private standardManagemenetService: StandardManagementService,
     private studentManagementSerivce: StudentManagementService,
     private configService: AppConfigService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) { }
+    private route: ActivatedRoute  ) { }
 
   ngOnInit() {
     this.academicYear = this.configService.getAcademicYear();

@@ -143,7 +143,7 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'concession/catalog/component/rate',
+    path: 'concession/component/rate',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
     children: [

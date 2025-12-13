@@ -12,6 +12,11 @@ export class ConcessionComponentManagementService {
 
   private baseUrl = '';
 
+    constructor(private http: HttpClientService, private appConfig: AppConfigService) {
+    this.baseUrl = appConfig.apiBaseUrl;
+    console.log('API Base URL:', this.appConfig.apiBaseUrl);
+  }
+
   saveConcessionComponent(id: string | null, payload: any): Observable<any> {
     const isUpdate = !!id;
 
@@ -34,11 +39,15 @@ export class ConcessionComponentManagementService {
       { observeResponse: true }
     );
   }
-  constructor(private http: HttpClientService, private appConfig: AppConfigService) {
-    this.baseUrl = appConfig.apiBaseUrl;
-    console.log('API Base URL:', this.appConfig.apiBaseUrl);
-  }
 
+
+getConcessionComponentsByTypeId(id: string): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_SUB_TYPE.GET_BY_CONCESSION_TYPE(id)}`,
+      { observeResponse: true }
+    );
+  }
   getAllConcessionComponent(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_SUB_TYPE.GET_ALL}`, { observeResponse: true });
   }

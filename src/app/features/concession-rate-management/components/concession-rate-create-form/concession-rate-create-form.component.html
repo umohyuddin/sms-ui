@@ -2,130 +2,138 @@
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
       <h3 class="kt-portlet__head-title">
-        {{ isEditMode ==true ? 'Update Concession Details' : 'Add New Concession' }}
+        {{isEditMode===true? 'Update Fee Rate & Metrix Details': "Add New Fee Rate & Metrix Component"}}
       </h3>
     </div>
   </div>
 
-  <!--begin::Form-->
-  <!-- <form class="kt-form kt-form--label-right" [formGroup]="createCampusForm" (ngSubmit)="onSubmit()">
-    <div class="kt-portlet__body">
-      <h4>Campus Information</h4>
-      <div class="form-group row form-group-marginless kt-margin-t-20">
-        <label class="col-lg-1 col-form-label">School:</label>
-        <div class="col-lg-3">
-          <select class="form-control" formControlName="instituteId">
-            <option value="" disabled>Select School</option>
-          </select>
-          <span class="form-text text-muted">Please select School</span>
 
+  <!--begin::Form-->
+  <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
+    <div class="kt-portlet__body">
+      <!-- <h4>Section Information</h4> -->
+
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Academic Year:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="Academic Year" formControlName="academicYearName"
+            readonly>
         </div>
 
-        <label class="col-lg-1 col-form-label">Campus Name:</label>
+        <label class="col-lg-1 col-form-label">Campus:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="Campus name" formControlName="campusName"
-            [class.is-invalid]="campusName?.invalid && (campusName?.touched || campusName?.dirty)"
-            [class.is-valid]="campusName?.valid && (campusName?.touched || campusName?.dirty)">
-          <span class="form-text text-muted">Please enter your Campus name</span>
-          <span class="invalid-feedback" *ngIf="campusName?.errors?.['required']">
-            Campus name is required
+          <select class="form-control" formControlName="campusId"
+            [class.is-invalid]="campusId?.invalid && (campusId?.touched || campusId?.dirty)"
+            [class.is-valid]="campusId?.valid && (campusId?.touched || campusId?.dirty)">
+            <option value='' selected>Select Campus</option>
+            @for (p of campuseDD; track p.id) {
+            <option [value]="p.id">{{ p.campusName }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Campus</span>
+          <span class="invalid-feedback" *ngIf="campusId?.invalid && (campusId?.touched || campusId?.dirty)">
+            {{ getErrorMessage('campusId') }}
           </span>
         </div>
-        <label class="col-lg-1 col-form-label">Campus Code:</label>
+        <label class="col-lg-1 col-form-label">Concession Type:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="Campus Code" formControlName="campusCode">
+          <select class="form-control" formControlName="discountTypeId"
+            [class.is-invalid]="discountTypeId?.invalid && (discountTypeId?.touched || discountTypeId?.dirty)"
+            [class.is-valid]="discountTypeId?.valid && (discountTypeId?.touched || discountTypeId?.dirty)">
+            <option value='' selected>Select Concession Type</option>
+            @for (p of concessionTypeDD; track p.id) {
+            <option [value]="p.id">{{ p.name }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Concession Type</span>
+          <span class="invalid-feedback"
+            *ngIf="discountTypeId?.invalid && (discountTypeId?.touched || discountTypeId?.dirty)">
+            {{ getErrorMessage('discountTypeId') }} </span>
         </div>
       </div>
+
       <div class="form-group row form-group-marginless kt-margin-t-20">
-        <label class="col-lg-1 col-form-label">Status:</label>
+
+
+        <label class="col-lg-1 col-form-label">Concession Component:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="discountSubTypeId"
+            [class.is-invalid]="discountSubTypeId?.invalid && (discountSubTypeId?.touched || discountSubTypeId?.dirty)"
+            [class.is-valid]="discountSubTypeId?.valid && (discountSubTypeId?.touched || discountSubTypeId?.dirty)">
+            <option value='' selected>Select Fee Catalog</option>
+            @for (p of concessionComponentDD; track p.id) {
+            <option [value]="p.id">{{ p.name }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select Fee Catalog</span>
+          <span class="invalid-feedback"
+            *ngIf="discountSubTypeId?.invalid && (discountSubTypeId?.touched || discountSubTypeId?.dirty)">
+            {{ getErrorMessage('discountSubTypeId') }}
+          </span>
+        </div>
+        <label class="col-lg-1 col-form-label">Value:</label>
+        <div class="col-lg-3">
+          <input type="number" class="form-control" placeholder="Enter amount (e.g., 2500)" formControlName="value"
+            [class.is-invalid]="value?.invalid && (value?.touched || value?.dirty)"
+            [class.is-valid]="value?.valid && (value?.touched || value?.dirty)" min="0">
+          <span class="form-text text-muted">Please enter the fee component amount.</span>
+          <span class="invalid-feedback" *ngIf="value?.invalid && (value?.touched || value?.dirty)">
+            {{ getErrorMessage('value') }}
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label">Value Type:</label>
         <div class="col-lg-3">
           <label class="kt-checkbox kt-margin-t-10">
-            <input type="checkbox" formControlName="isActive"> Is Active
+            <input type="checkbox" formControlName="isPercentage"> Is Percentage
             <span></span>
           </label>
         </div>
 
       </div>
-      <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
-      <h4 class="kt-margin-b-20">Contact Information</h4>
 
-      <div class="form-group row form-group-marginless">
+      <div class="form-group row form-group-marginless kt-margin-t-20">
 
-        <label class="col-lg-1 col-form-label">Contact:</label>
+
+        <label class="col-lg-1 col-form-label">Effective From:</label>
         <div class="col-lg-3">
-          <input type="tel" class="form-control" placeholder="Enter contact number" formControlName="contactNumber"
-            [class.is-invalid]="contactNumber?.invalid && (contactNumber?.touched || contactNumber?.dirty)"
-            [class.is-valid]="contactNumber?.valid && (contactNumber?.touched || contactNumber?.dirty)">
-          <span class="form-text text-muted">Please enter your contact</span>
-          <span class="invalid-feedback" *ngIf="contactNumber?.errors?.['required']">
-            Contact Number is required
+          <input type="date" class="form-control" formControlName="effectiveFrom" [min]="minDate"
+            [class.is-invalid]="effectiveFrom?.invalid && (effectiveFrom?.touched || effectiveFrom?.dirty)"
+            [class.is-valid]="effectiveFrom?.valid && (effectiveFrom?.touched || effectiveFrom?.dirty)" min="0">
+          <span class="form-text text-muted">Select the start date for this fee rate.</span>
+          <span class="invalid-feedback"
+            *ngIf="effectiveFrom?.invalid && (effectiveFrom?.touched || effectiveFrom?.dirty)">
+            {{ getErrorMessage('effectiveFrom') }}
           </span>
         </div>
-        <label class="col-lg-1 col-form-label">Email:</label>
-        <div class="col-lg-3">
-          <div class="kt-input-icon">
-            <input type="email" class="form-control" placeholder="Email" formControlName="email"
-              [class.is-invalid]="email?.invalid && (email?.touched || email?.dirty)"
-              [class.is-valid]="email?.valid && (email?.touched || email?.dirty)">
 
-          </div>
-          <span class="form-text text-muted">Please enter your Email</span>
-          <span class="invalid-feedback" *ngIf="email?.errors?.['email']">
-            Please enter a valid email address.
-          </span>
-          <span class="invalid-feedback" *ngIf="email?.errors?.['required']">
-            Email is required.
+        <label class="col-lg-1 col-form-label">Effective To:</label>
+        <div class="col-lg-3">
+          <input type="date" class="form-control" formControlName="effectiveTo" [min]="minDate"
+            [class.is-invalid]="effectiveTo?.invalid && (effectiveTo?.touched || effectiveTo?.dirty)"
+            [class.is-valid]="effectiveTo?.valid && (effectiveTo?.touched || effectiveTo?.dirty)" min="0">
+          <span class="form-text text-muted">Select the End date for this fee rate.</span>
+          <span class="invalid-feedback" *ngIf="effectiveTo?.invalid && (effectiveTo?.touched || effectiveTo?.dirty)">
+            {{ getErrorMessage('effectiveTo') }}
           </span>
         </div>
-        <label class="col-lg-1 col-form-label">Website:</label>
+
+        <label class="col-lg-1 col-form-label">Status:</label>
         <div class="col-lg-3">
-          <div class="kt-input-icon">
-            <input type="url" class="form-control" placeholder="Enter your Website" formControlName="website">
-          </div>
-          <span class="form-text text-muted">Please enter your Website</span>
+          <label class="kt-checkbox kt-margin-t-10">
+            <input type="checkbox" formControlName="active"> Is Active
+            <span></span>
+          </label>
         </div>
       </div>
-      <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
-      <h4 class="kt-margin-b-20">Address Information</h4>
-      <div class="form-group row">
-        <label class="col-lg-1 col-form-label">Province:</label>
-        <div class="col-lg-3">
-          <select class="form-control" formControlName="provinceId" 
-           [class.is-invalid]="provinceId?.invalid && (provinceId?.touched || provinceId?.dirty)"
-              [class.is-valid]="provinceId?.valid && (provinceId?.touched || provinceId?.dirty)">
-            <option value='' selected>Select Province</option>
-            @for (p of provinces; track p.id) {
-            <option [value]="p.id">{{ p.name }}</option>
-            }
-          </select>
-          <span class="form-text text-muted">Please select your Porvince</span>
-            <span class="invalid-feedback" *ngIf="provinceId?.errors?.['required']">
-            Province is required.
-          </span>
-        </div>
-        <label class="col-lg-1 col-form-label">City:</label>
-        <div class="col-lg-3">
-          <select class="form-control" formControlName="cityId"
-           [class.is-invalid]="cityId?.invalid && (cityId?.touched || cityId?.dirty)"
-              [class.is-valid]="cityId?.valid && (cityId?.touched || cityId?.dirty)">
-            <option value=''>Select City</option>
-            @for (c of cities; track c.id) {
-            <option [value]="c.id">{{ c.name }}</option>
-            }
-          </select>
-          <span class="form-text text-muted">Please Select your City</span>
-           <span class="invalid-feedback" *ngIf="cityId?.errors?.['required']">
-            City is required.
-          </span>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-lg-1 col-form-label">Address:</label>
+
+      <div class="form-group row kt-margin-t-40">
+        <!-- <label class="col-lg-1 col-form-label">Description:</label>
         <div class="col-lg-11">
           <div class="kt-input-icon">
-            <textarea class="form-control" id="exampleTextarea" rows="3" formControlName="address"></textarea>
+            <textarea class="form-control" id="exampleTextarea" rows="3" formControlName="description"></textarea>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="kt-portlet__foot">
@@ -134,13 +142,14 @@
           <div class="col-lg-5"></div>
           <div class="col-lg-7">
             <button type="submit" class="btn btn-dark mr-2">
-              {{ isEditMode ==true ? 'Update Campus Details' : 'Add New Campus' }}</button>
-            <button type="button" class="btn btn-danger" (click)="goToCampusListing()">Cancel</button>
+              {{isEditMode===true? 'Update Fee Component Rate & Matrix Details': "Add New Fee Component Rate & Matrix"}}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="goToListing()">Cancel</button>
           </div>
         </div>
       </div>
     </div>
-  </form> -->
+  </form>
 
   <!--end::Form-->
 </div>

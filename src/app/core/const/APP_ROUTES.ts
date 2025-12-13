@@ -67,10 +67,10 @@ export const ROUTES = {
       DETAILS: (id: string) => ['concession/catalog/component', 'concession-component-details', id],
     },
     CONCESSION_RATE: {
-      LIST: ['concession-rate'],
-      CREATE: ['concession-rate', 'concession-rate-create'],
-      EDIT: (id: string) => ['concession-rate', 'concession-rate-edit', id],
-      DETAILS: (id: string) => ['concession-rate', 'concession-rate-details', id],
+      LIST: ['concession/component/rate'],
+      CREATE: ['concession/component/rate', 'concession-rate-create'],
+      EDIT: (id: string) => ['concession/component/rate', 'concession-rate-edit', id],
+      DETAILS: (id: string) => ['concession/rate', 'concession-rate-details', id],
     },
   }
 };

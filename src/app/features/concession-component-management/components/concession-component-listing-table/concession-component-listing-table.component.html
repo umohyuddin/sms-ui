@@ -11,50 +11,6 @@
     <div class="kt-portlet__head-toolbar">
       <div class="kt-portlet__head-wrapper">
         <div class="kt-portlet__head-actions">
-          <!-- <div class="dropdown dropdown-inline">
-            <button type="button" class="btn btn-success btn-icon-sm dropdown-toggle" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              <i class="la la-download"></i> Export
-            </button>
-
-            <div class="dropdown-menu dropdown-menu-right">
-              <ul class="kt-nav">
-                <li class="kt-nav__section kt-nav__section--first">
-                  <span class="kt-nav__section-text">Choose an option</span>
-                </li>
-                <li class="kt-nav__item">
-                  <a href="#" class="kt-nav__link">
-                    <i class="kt-nav__link-icon la la-print"></i>
-                    <span class="kt-nav__link-text">Print</span>
-                  </a>
-                </li>
-                <li class="kt-nav__item">
-                  <a href="#" class="kt-nav__link">
-                    <i class="kt-nav__link-icon la la-copy"></i>
-                    <span class="kt-nav__link-text">Copy</span>
-                  </a>
-                </li>
-                <li class="kt-nav__item">
-                  <a href="#" class="kt-nav__link">
-                    <i class="kt-nav__link-icon la la-file-excel-o"></i>
-                    <span class="kt-nav__link-text">Excel</span>
-                  </a>
-                </li>
-                <li class="kt-nav__item">
-                  <a href="#" class="kt-nav__link">
-                    <i class="kt-nav__link-icon la la-file-text-o"></i>
-                    <span class="kt-nav__link-text">CSV</span>
-                  </a>
-                </li>
-                <li class="kt-nav__item">
-                  <a href="#" class="kt-nav__link">
-                    <i class="kt-nav__link-icon la la-file-pdf-o"></i>
-                    <span class="kt-nav__link-text">PDF</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div> -->
         </div>
       </div>
     </div>
@@ -102,27 +58,6 @@
     <!--begin: Datatable -->
 
     <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-      <!-- <div class="row">
-        <div class="col-sm-12 col-md-6">
-          <div class="dataTables_length" id="kt_table_1_length">
-            <label>Show <select (change)="onPageSizeChange($event)" name="kt_table_1_length" aria-controls="kt_table_1"
-                class="custom-select custom-select-sm form-control form-control-sm">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select> entries</label>
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-6">
-          <div id="kt_table_1_filter" class="dataTables_filter">
-            <label>Search:
-              <input [formControl]="searchControl" type="search" class="form-control form-control-sm" placeholder=""
-                aria-controls="kt_table_1">
-            </label>
-          </div>
-        </div>
-      </div> -->
       <div class="row">
         <div class="col-sm-12">
           @if(concessionComponentResponse && concessionComponentResponse.length > 0){
@@ -160,7 +95,7 @@
                   {{ item.discountType.recurrenceRuleLabel }}
                 </span>
                 </td> -->
-                <td nowrap="">
+                <td nowrap="" class="kt-align-center">
                   <span class="dropdown">
                     <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown"
                       aria-expanded="true">
