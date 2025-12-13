@@ -4,13 +4,12 @@ export interface ConcessionResponse {
   name: string;
   description?: string;
   chargeType: string;
-  chargeTypeLabel:string
+  chargeTypeLabel: string
   recurrenceRule?: string;
-  recurrenceRuleLabel?:string
- createdAt: string;
+  recurrenceRuleLabel?: string
+  createdAt: string;
   updatedAt: string;
   deleted: boolean;
   deletedAt?: string;
-
-  isActive: boolean;
+  active: boolean;
 }

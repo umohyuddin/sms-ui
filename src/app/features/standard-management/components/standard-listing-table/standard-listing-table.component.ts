@@ -39,7 +39,8 @@ export class StandardListingTableComponent {
     { key: 'standardName', label: 'Standard Name', sortable: true },
     { key: 'standardCode', label: 'Standard Code', sortable: true },
     { key: 'campusName', label: 'Campus Name', sortable: true },
-    { key: 'campusCode', label: 'Campus Code', sortable: true }
+    { key: 'campusCode', label: 'Campus Code', sortable: true },
+        { key: 'action', label: 'Action', sortable: true }
   ];
 
   ngOnInit() {

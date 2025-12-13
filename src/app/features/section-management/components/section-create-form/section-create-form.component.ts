@@ -2,15 +2,12 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientService } from '../../../../core/services/http-client.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AppConfigService } from '../../../../core/services/app-config.service';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
 import { CampusResponse } from '../../../campus-management/models/campusResponse';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { StandardResponse } from '../../../standard-management/models/standardResponse';
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
-import { SectionManagementModule } from '../../section-management-module';
 import { SectionManagementService } from '../../services/section-management.service';
 import { SectionResponse } from '../../models/SectionResponse';
 
@@ -30,7 +27,7 @@ export class SectionCreateFormComponent {
   routeSectionId?: string;
   URL = '';
   mode = '';
-  standardData: StandardResponse[]=[];
+  standardData: StandardResponse[] = [];
   sectionData?: SectionResponse;
   campuses: CampusResponse[] = [];
   cities: any[] = [];
@@ -43,9 +40,7 @@ export class SectionCreateFormComponent {
     private sectionManagementService: SectionManagementService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
-    private appConfig: AppConfigService
-  ) { }
+    private router: Router) { }
 
   ngOnInit() {
 
@@ -66,12 +61,11 @@ export class SectionCreateFormComponent {
   onCampusChange() {
     this.createSectionForm.get('campusId')?.valueChanges.subscribe(campusId => {
       console.log("Campus changed:", campusId);
-
-      // Example: Load cities based on province
       this.loadStandardByCampusId(campusId);
     });
   }
   loadStandardByCampusId(campusId: any) {
+    this.createSectionForm.get('standardId')?.setValue('')
     this.standardManagemenetService.getCampusById(campusId).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
@@ -81,7 +75,6 @@ export class SectionCreateFormComponent {
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
-        //this.router.navigate(['/Campuses']);
       },
       complete: () => {
         console.log('🔚 Request Complete');
@@ -101,7 +94,7 @@ export class SectionCreateFormComponent {
             sectionCode: this.sectionData?.sectionCode,
             description: this.sectionData?.description,
             campusId: this.sectionData?.standard.campus.id,
-            standardId : this.sectionData?.standard.id
+            standardId: this.sectionData?.standard.id
           });
         },
         error: (error) => {
@@ -133,11 +126,11 @@ export class SectionCreateFormComponent {
 
   private initializeForm() {
     this.createSectionForm = this.fb.group({
-      sectionName: ['', Validators.required],
+      sectionName: ['', [Validators.required, Validators.maxLength(50)]],
       campusId: ['', Validators.required],
       standardId: ['', Validators.required],
-      sectionCode: [''],
-      description: [''],
+      sectionCode: ['', [Validators.maxLength(15)]],
+      description: ['', Validators.maxLength(500)],
     });
   }
 
@@ -188,4 +181,40 @@ export class SectionCreateFormComponent {
   get description() {
     return this.createSectionForm.get('description');
   }
+
+  getErrorMessage(controlName: keyof typeof this.validationMessages): string {
+    const control = this.createSectionForm.get(controlName as string);
+    if (!control || !control.errors) return '';
+
+    for (const error in control.errors) {
+      const key = error as keyof typeof this.validationMessages[typeof controlName];
+      if (this.validationMessages[controlName][key]) {
+        return this.validationMessages[controlName][key];
+      }
+    }
+
+    return '';
+  }
+
+
+  validationMessages = {
+    campusId: {
+      required: 'Campus is required.'
+    },
+    standardId: {
+      required: 'Standard is required.'
+    },
+    sectionName: {
+      required: 'Section Name is required.',
+      maxlength: 'Section Name cannot exceed 50 characters.',
+      whitespace: 'Section Name cannot be empty or whitespace only.'
+    },
+    sectionCode: {
+      maxlength: 'Section Code cannot exceed 15 characters.',
+      whitespace: 'Section Code cannot be empty or whitespace only.'
+    },
+    description: {
+      maxlength: 'Description cannot exceed 500 characters.'
+    }
+  };
 }

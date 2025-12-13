@@ -6,6 +6,7 @@ import { ConcessionManagementService } from '../../services/concession-managemen
 import { CampusResponse } from '../../../campus-management/models/campusResponse';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
 import { ConcessionResponse } from '../../models/ConcessionResponse';
+import { CHARGE_TYPE_CLASSES, RECURRENCE_RULE_CLASSES } from '../../../../core/const/COLOR_CONST';
 
 
 @Component({
@@ -18,6 +19,8 @@ import { ConcessionResponse } from '../../models/ConcessionResponse';
 export class ConcessionInfoComponent {
   resourceResponse?: ConcessionResponse;
   routedId!: string;
+  RECURRENCE_RULE_CLASSES = RECURRENCE_RULE_CLASSES;
+    CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
   constructor(
     private concessionManagementService: ConcessionManagementService,
     private route: ActivatedRoute,

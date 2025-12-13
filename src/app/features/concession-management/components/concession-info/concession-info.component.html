@@ -27,7 +27,7 @@
                                 {{resourceResponse?.name}}
                             </a>
                             <span class=" ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
-                                [ngClass]="resourceResponse?.isActive ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">{{resourceResponse?.isActive
+                                [ngClass]="resourceResponse?.active ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">{{resourceResponse?.active
                                 ? 'Active' : 'Inactive'}}</span>
                         </div>
                     </div>
@@ -41,12 +41,20 @@
                         </div>
 
                         <div class="col-4">
-                            <a> <b> Charge Type:</b> {{resourceResponse?.chargeTypeLabel}}</a>
+                            <a> <b> Charge Type: </b> <span
+                                    class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
+                                    [ngClass]="CHARGE_TYPE_CLASSES[resourceResponse?.chargeType || 'NONE']">
+                                    {{ resourceResponse?.chargeTypeLabel }}</span></a>
                         </div>
                     </div>
                     <div class="kt-widget__subhead row">
                         <div class="col-4">
-                            <a> <b>Recurrence Type : </b> {{resourceResponse?.recurrenceRuleLabel}}</a>
+                            <a> <b>Recurrence Type: </b><span
+                                    class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
+                                    [ngClass]="RECURRENCE_RULE_CLASSES[resourceResponse?.recurrenceRule || 'NONE']">
+                                    {{ resourceResponse?.recurrenceRuleLabel }}
+                                </span>
+                            </a>
                         </div>
                     </div>
 

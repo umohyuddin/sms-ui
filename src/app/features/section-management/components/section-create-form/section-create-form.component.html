@@ -41,30 +41,52 @@
             }
           </select>
           <span class="form-text text-muted">Please select Standard</span>
-          <span class="invalid-feedback" *ngIf="campusId?.errors?.['required']">
-            Campus is required
+          <span class="invalid-feedback" *ngIf="standardId?.errors?.['required']">
+            Standard is required
           </span>
         </div>
 
         <label class="col-lg-1 col-form-label">Section Name:</label>
-        <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="" formControlName="sectionName"
+        <!-- <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="Enter Section Name" formControlName="sectionName"
             [class.is-invalid]="sectionName?.invalid && (sectionName?.touched || sectionName?.dirty)"
             [class.is-valid]="sectionName?.valid && (sectionName?.touched || sectionName?.dirty)">
-          <span class="form-text text-muted">Please enter your Section name</span>
+          <span class="form-text text-muted">Provide a unique name for the section.</span>
           <span class="invalid-feedback" *ngIf="sectionName?.errors?.['required']">
             Section Name is required
           </span>
+        </div> -->
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="Enter Section Name" formControlName="sectionName"
+            [class.is-invalid]="sectionName?.invalid && (sectionName?.touched || sectionName?.dirty)"
+            [class.is-valid]="sectionName?.valid && (sectionName?.touched || sectionName?.dirty)" />
+
+          <span class="form-text text-muted">
+            Provide a unique and clear name for the section (e.g., "A", "Blue", "Junior").
+          </span>
+
+          <!-- Unified Error Message -->
+          <div class="invalid-feedback" *ngIf="sectionName?.invalid && (sectionName?.touched || sectionName?.dirty)">
+            {{ getErrorMessage('sectionName') }}
+          </div>
         </div>
+
       </div>
       <div class="form-group row form-group-marginless kt-margin-t-20">
 
         <label class="col-lg-1 col-form-label">Section Code</label>
         <div class="col-lg-3">
           <div class="kt-input-icon">
-            <input type="text" class="form-control" placeholder="" formControlName="sectionCode">
+            <input type="text" class="form-control" placeholder="Enter Section Code" formControlName="sectionCode"
+              [class.is-invalid]="sectionCode?.invalid && (sectionCode?.touched || sectionCode?.dirty)"
+              [class.is-valid]="sectionCode?.valid && (sectionCode?.touched || sectionCode?.dirty)">
+            <span class="form-text text-muted">Short code for the section</span>
+            <span class="invalid-feedback" *ngIf="sectionCode?.invalid && (sectionCode?.touched || sectionCode?.dirty)">
+              {{ getErrorMessage('sectionCode') }}
+            </span>
+
           </div>
-          <span class="form-text text-muted">Please enter Section Code</span>
+
         </div>
       </div>
 
@@ -72,7 +94,7 @@
         <label class="col-lg-1 col-form-label">Description:</label>
         <div class="col-lg-11">
           <div class="kt-input-icon">
-            <textarea class="form-control" id="exampleTextarea" rows="3" formControlName="description"></textarea>
+            <textarea class="form-control" id="sectionDescription" rows="3" formControlName="description"></textarea>
           </div>
         </div>
       </div>
@@ -82,8 +104,8 @@
         <div class="row">
           <div class="col-lg-5"></div>
           <div class="col-lg-7">
-            <button type="submit" class="btn btn-dark mr-2">{{isEditMode===true? 'Update Standard Details': "Add New
-              Standard"}}</button>
+            <button type="submit" class="btn btn-dark mr-2">{{ isEditMode ? 'Update Section Details' : 'Add New Section'
+              }}</button>
             <button type="button" class="btn btn-secondary" (click)="goToSectionsList()">Cancel</button>
           </div>
         </div>

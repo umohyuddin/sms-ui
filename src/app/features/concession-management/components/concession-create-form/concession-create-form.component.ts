@@ -80,7 +80,7 @@ export class ConcessionCreateFormComponent {
     this.createForm = this.fb.group({
       name: ['', [Validators.required]],
       code: ['', Validators.maxLength(20)],
-      isActive: [true],
+      active: [true],
       chargeType: ['', Validators.required],
       recurrenceRule: ['', Validators.required],
       description: ['']
