@@ -171,7 +171,6 @@ export class ConcessionCreateFormComponent {
         return this.validationMessages[controlName][key];
       }
     }
-
     return '';
   }
 

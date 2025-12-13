@@ -10,7 +10,7 @@ export interface ConcessionComponentResponse {
 export interface DiscountType {
   id: number;
   name: string;
-  chargeType: string;
+  chargeType?: string;
   chargeTypeLabel: string
   recurrenceRule?: string;
   recurrenceRuleLabel?: string

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ConcessionComponentManagementService } from '../../services/concession-component-management.service';
 import { ConcessionComponentResponse } from '../../models/ConcessionComponentResponse';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
+import { CHARGE_TYPE_CLASSES, RECURRENCE_RULE_CLASSES } from '../../../../core/const/COLOR_CONST';
 
 
 @Component({
@@ -16,7 +17,8 @@ import { SmsUtil } from '../../../../core/utils/smsUtil';
 export class ConcessionComponentInfoComponent {
   resourceData?: ConcessionComponentResponse;
   routedId!: string;
-  URL = '';
+  RECURRENCE_RULE_CLASSES = RECURRENCE_RULE_CLASSES;
+  CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
   constructor(
     private concessionComponentManagementService: ConcessionComponentManagementService,
     private route: ActivatedRoute,
@@ -47,6 +49,6 @@ export class ConcessionComponentInfoComponent {
     })
   }
   getInitials(name?: string): string {
-      return SmsUtil.getInitials(name ?? '');
-    }
+    return SmsUtil.getInitials(name ?? '');
+  }
 }
