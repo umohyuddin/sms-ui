@@ -56,7 +56,7 @@
             </thead>
             <tbody>
 
-              <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
+              <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems  trackBy: trackById" >
                 <td>{{ item.name }}</td>
                 <td>{{ item.code }}</td>
                

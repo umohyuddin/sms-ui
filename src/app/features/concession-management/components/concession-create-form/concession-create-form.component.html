@@ -2,7 +2,7 @@
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
       <h3 class="kt-portlet__head-title">
-        {{ isEditMode ==true ? 'Update Concession Type Details' : 'Add Concession Type' }}
+        {{ isEditMode ? 'Update Concession Type Details' : 'Add Concession Type' }}
       </h3>
     </div>
   </div>
@@ -11,21 +11,33 @@
   <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
     <div class="kt-portlet__body">
       <h4>Concession Type Information</h4>
+
       <div class="form-group row form-group-marginless kt-margin-t-20">
+        <!-- Name -->
         <label class="col-lg-1 col-form-label">Name:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="name" formControlName="name"
+          <input type="text" class="form-control" placeholder="Enter Concession Name" formControlName="name"
             [class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
             [class.is-valid]="name?.valid && (name?.touched || name?.dirty)">
           <span class="form-text text-muted">Please enter your Concession Type name</span>
-          <span class="invalid-feedback" *ngIf="name?.errors?.['required']">
-            Concession Type name is required
+          <span class="invalid-feedback" *ngIf="name?.invalid && (name?.touched || name?.dirty)">
+            {{ getErrorMessage('name') }}
           </span>
         </div>
+
+        <!-- Code -->
         <label class="col-lg-1 col-form-label">Code:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="code" formControlName="code">
+          <input type="text" class="form-control" placeholder="Enter Code" formControlName="code"
+            [class.is-invalid]="code?.invalid && (code?.touched || code?.dirty)"
+            [class.is-valid]="code?.valid && (code?.touched || code?.dirty)">
+          <span class="form-text text-muted">Short code for the concession type</span>
+          <span class="invalid-feedback" *ngIf="code?.invalid && (code?.touched || code?.dirty)">
+            {{ getErrorMessage('code') }}
+          </span>
         </div>
+
+        <!-- Status -->
         <label class="col-lg-1 col-form-label">Status:</label>
         <div class="col-lg-3">
           <label class="kt-checkbox kt-margin-t-10">
@@ -33,10 +45,11 @@
             <span></span>
           </label>
         </div>
-
       </div>
+
       <div class="form-group row kt-margin-t-20">
-        <label class="col-lg-1 col-form-label">Charge Type: </label>
+        <!-- Charge Type -->
+        <label class="col-lg-1 col-form-label">Charge Type:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="chargeType"
             [class.is-invalid]="chargeType?.invalid && (chargeType?.touched || chargeType?.dirty)"
@@ -47,10 +60,12 @@
             }
           </select>
           <span class="form-text text-muted">Please select your Charge Type</span>
-          <span class="invalid-feedback" *ngIf="chargeType?.errors?.['required']">
-            Charge Type is required.
+          <span class="invalid-feedback" *ngIf="chargeType?.invalid && (chargeType?.touched || chargeType?.dirty)">
+            {{ getErrorMessage('chargeType') }}
           </span>
         </div>
+
+        <!-- Recurrence Rule -->
         <label class="col-lg-1 col-form-label">Recurrence Rule:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="recurrenceRule"
@@ -61,34 +76,43 @@
             <option [value]="c.key">{{ c.label }}</option>
             }
           </select>
-          <span class="form-text text-muted">Please Select your Recurrence Rule</span>
-          <span class="invalid-feedback" *ngIf="recurrenceRule?.errors?.['required']">
-            Recurrence Rule is required.
+          <span class="form-text text-muted">Please select your Recurrence Rule</span>
+          <span class="invalid-feedback" *ngIf="recurrenceRule?.invalid && (recurrenceRule?.touched || recurrenceRule?.dirty)">
+            {{ getErrorMessage('recurrenceRule') }}
           </span>
         </div>
       </div>
+
+      <!-- Description -->
       <div class="form-group row">
         <label class="col-lg-1 col-form-label">Description:</label>
         <div class="col-lg-11">
-          <div class="kt-input-icon">
-            <textarea class="form-control" id="exampleTextarea" rows="3" formControlName="description"></textarea>
-          </div>
+          <textarea class="form-control" placeholder="Enter Description" rows="3" formControlName="description"
+            [class.is-invalid]="description?.invalid && (description?.touched || description?.dirty)"
+            [class.is-valid]="description?.valid && (description?.touched || description?.dirty)"></textarea>
+          <span class="form-text text-muted">Optional description of the concession type</span>
+          <span class="invalid-feedback" *ngIf="description?.invalid && (description?.touched || description?.dirty)">
+            {{ getErrorMessage('description') }}
+          </span>
         </div>
       </div>
+
     </div>
+
+    <!-- Form Actions -->
     <div class="kt-portlet__foot">
       <div class="kt-form__actions">
         <div class="row">
           <div class="col-lg-5"></div>
           <div class="col-lg-7">
             <button type="submit" class="btn btn-dark mr-2">
-              {{ isEditMode ==true ? 'Update Concession Type Details' : 'Add New Concession Type' }}</button>
-            <button type="button" class="btn btn-danger" (click)="goToConcessionList()">Cancel</button>
+              {{ isEditMode ? 'Update Concession Type Details' : 'Add New Concession Type' }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="goToConcessionList()">Cancel</button>
           </div>
         </div>
       </div>
     </div>
   </form>
-
   <!--end::Form-->
 </div>

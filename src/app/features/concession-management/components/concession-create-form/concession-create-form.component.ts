@@ -35,7 +35,7 @@ export class ConcessionCreateFormComponent {
   ) { }
 
   ngOnInit() {
-        this.getFeeCatalogMeta();
+    this.getFeeCatalogMeta();
 
     this.initializeForm();
 
@@ -50,7 +50,7 @@ export class ConcessionCreateFormComponent {
     }
   }
 
-    private getFeeCatalogMeta() {
+  private getFeeCatalogMeta() {
     this.feeCatalogManagementService.getFeeCatalogMeta().subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
@@ -78,12 +78,12 @@ export class ConcessionCreateFormComponent {
 
   private initializeForm() {
     this.createForm = this.fb.group({
-      name: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.maxLength(150)]],
       code: ['', Validators.maxLength(20)],
       active: [true],
       chargeType: ['', Validators.required],
       recurrenceRule: ['', Validators.required],
-      description: ['']
+      description: ['', Validators.maxLength(500)]
     });
   }
 
@@ -160,4 +160,42 @@ export class ConcessionCreateFormComponent {
   get description() {
     return this.createForm.get('description');
   }
+
+    getErrorMessage(controlName: keyof typeof this.validationMessages): string {
+    const control = this.createForm.get(controlName as string);
+    if (!control || !control.errors) return '';
+
+    for (const error in control.errors) {
+      const key = error as keyof typeof this.validationMessages[typeof controlName];
+      if (this.validationMessages[controlName][key]) {
+        return this.validationMessages[controlName][key];
+      }
+    }
+
+    return '';
+  }
+
+  validationMessages = {
+    name: {
+      required: 'Name is required.',
+      maxlength: 'Name cannot exceed 150 characters.',
+      whitespace: 'Name cannot be empty or whitespace only.'
+    },
+    code: {
+      maxlength: 'Code cannot exceed 20 characters.',
+      pattern: 'Code can only contain uppercase letters, numbers, and underscores.',
+      whitespace: 'Code cannot be empty or whitespace only.'
+    },
+    chargeType: {
+      required: 'Charge Type is required.'
+    },
+    recurrenceRule: {
+      required: 'Recurrence Rule is required.'
+    },
+    description: {
+      maxlength: 'Description cannot exceed 500 characters.',
+      whitespace: 'Description cannot be empty or whitespace only.'
+    }
+  };
+
 }

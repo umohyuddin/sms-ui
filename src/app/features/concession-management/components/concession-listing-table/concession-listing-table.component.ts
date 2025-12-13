@@ -119,6 +119,9 @@ export class ConcessionListingTableComponent {
   //   }
   // }
 
+  trackById(index: number, item: any) {
+    return item.id;
+  }
   onPageSizeChange(event: any) {
     const newSize = +event.target.value;
     this.pagination.changePageSize(newSize);
