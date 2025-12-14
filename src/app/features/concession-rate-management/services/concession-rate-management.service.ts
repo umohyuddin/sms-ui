@@ -42,11 +42,9 @@ export class ConcessionRateManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_RATES.GET_ALL}`, { observeResponse: true });
   }
 
-  searchConcessionRate(query: string): Observable<any> {
-    const url = query
-      ? `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_RATES.SEARCH(query)}`
-      : `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_RATES.GET_ALL}`;
-    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
+
+  search(params: any): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_RATES.SEARCH}`, { observeResponse: true, params: params });
   }
 
   // deleteCampus(id: number): Observable<any> {

@@ -27,8 +27,8 @@ export class ConcessionListingTableComponent {
   CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
   searchForm !: FormGroup;
   discountTypesDD: DiscountType[] = [];
+  
   constructor(private router: Router,
-
     private fb: FormBuilder,
     private concessionComponentManagementService: ConcessionComponentManagementService,
     private concessionManagementService: ConcessionManagementService

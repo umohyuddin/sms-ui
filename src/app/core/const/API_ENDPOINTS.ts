@@ -95,12 +95,11 @@ export const API_ENDPOINTS = {
             CREATE: '/api/school/discounts/rates',
             UPDATE: (id: string) => `/api/school/discounts/rates/${id}`,
             GET_ALL: '/api/school/discounts/rates',
-            SEARCH: (keyword: string) => `/api/school/discounts/rates/search/${keyword}`,
+            SEARCH: `/api/school/discounts/rates/search`,
             GET_BY_ID: (id: string) => `/api/school/discounts/rates/${id}`,
             GET_ACTIVE_DISCOUNTS: '/api/school/discounts/rates/byCampusYear'
         }
     },
-
     LOOKUP: {
         FEE_CATALOG_META: '/api/lookup/fee-catalog/metadata',
         STUDENT_ADMISSION_META: '/api/lookup/admission/metadata',

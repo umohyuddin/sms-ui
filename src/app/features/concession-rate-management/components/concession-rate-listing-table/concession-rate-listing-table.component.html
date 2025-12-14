@@ -16,32 +16,79 @@
     </div>
   </div>
   <div class="kt-portlet__body">
+    <form class="kt-form kt-form--fit kt-margin-b-20" [formGroup]="searchForm" (ngSubmit)="onSubmitSearch()">
+      <div class="row kt-margin-b-20">
+        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+          <label>Concession Types:</label>
+          <select class="form-control kt-input" data-col-index="2" formControlName="discountTypeId">
+            <option value='' selected>Select Concession Type</option>
+            @for (c of discountTypesDD; track c.id) {
+            <option [value]="c.id">{{ c.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+          <label>Concession Component:</label>
+          <select class="form-control kt-input" data-col-index="2" formControlName="discountSubTypeId">
+            <option value='' selected>Select Concession Component</option>
+            @for (c of concessionComponentDD; track c.id) {
+            <option [value]="c.id">{{ c.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+          <label>Charge Type:</label>
+          <select class="form-control kt-input" data-col-index="2" formControlName="chargeTypeId">
+            <option value='' selected>Select Charge Type</option>
+            @for (s of chargeTypeDD; track s.key) {
+            <option [value]="s.key">{{ s.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
+          <label>Recurrence Rule:</label>
+          <select class="form-control kt-input" data-col-index="2" formControlName="recurrenceRuleId">
+            <option value='' selected>Select Recurrence Rule</option>
+            @for (s of recurrenceRuleDD; track s.key) {
+            <option [value]="s.key">{{ s.label }}</option>
+            }
+          </select>
 
 
+          <!-- <input type="text" class="form-control kt-input" placeholder="E.g: 1st grade" data-col-index="0"
+            formControlName="keyword"> -->
+        </div>
+      </div>
+         <div class="row kt-margin-b-20">
+
+        <div class="col-lg-12 kt-margin-b-10-tablet-and-mobile">
+          <label>Keyword:</label>
+          <input type="text" class="form-control kt-input" placeholder="E.g: 1st grade" data-col-index="0"
+            formControlName="keyword">
+        </div>
+      </div>
+      <div class="kt-separator kt-separator--md kt-separator--dashed"></div>
+      <div class="row">
+        <div class="col-lg-12 d-flex justify-content-end">
+          <button class="btn btn-dark btn-brand--icon" id="kt_search">
+            <span>
+              <i class="la la-search"></i>
+              <span>Search</span>
+            </span>
+          </button>
+          &nbsp;&nbsp;
+          <button class="btn btn-secondary btn-secondary--icon" id="kt_reset" (click)="resetForm()">
+            <span>
+              <i class="la la-close"></i>
+              <span>Reset</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </form>
     <!--begin: Datatable -->
 
     <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-      <div class="row">
-        <div class="col-sm-12 col-md-6">
-          <div class="dataTables_length" id="kt_table_1_length">
-            <label>Show <select (change)="onPageSizeChange($event)" name="kt_table_1_length" aria-controls="kt_table_1"
-                class="custom-select custom-select-sm form-control form-control-sm">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select> entries</label>
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-6">
-          <div id="kt_table_1_filter" class="dataTables_filter">
-            <label>Search:
-              <input [formControl]="searchControl" type="search" class="form-control form-control-sm" placeholder=""
-                aria-controls="kt_table_1">
-            </label>
-          </div>
-        </div>
-      </div>
       <div class="row">
         <div class="col-sm-12">
           @if(resourceData && resourceData.length > 0){
@@ -100,7 +147,8 @@
                         <i class="la la-eye"></i> View Details</a>
                     </div>
                   </span>
-                  <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View" (click)="viewDetails(item,$event)">
+                  <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View"
+                    (click)="viewDetails(item,$event)">
                     <i class="la la-eye"></i>
                   </a>
                 </td>
@@ -119,6 +167,17 @@
       </div>
       <div class="row">
         <div class="col-sm-12 col-md-5">
+          <div class="col-sm-12 col-md-6">
+            <div class="dataTables_length" id="kt_table_1_length">
+              <label>Show <select (change)="onPageSizeChange($event)" name="kt_table_1_length"
+                  aria-controls="kt_table_1" class="custom-select custom-select-sm form-control form-control-sm">
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select> entries</label>
+            </div>
+          </div>
           <div class="dataTables_info" id="kt_table_1_info" role="status" aria-live="polite">Showing {{
             pagination.startItem }} to {{ pagination.endItem }} of {{ pagination.totalItems }} entries</div>
         </div>
