@@ -105,7 +105,6 @@ export class FeeRateCreateFormComponent {
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
-        //this.router.navigate(['/Campuses']);
       },
       complete: () => {
         console.log('🔚 Request Complete');
@@ -122,7 +121,6 @@ export class FeeRateCreateFormComponent {
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
-        //this.router.navigate(['/Campuses']);
       },
       complete: () => {
         console.log('🔚 Request Complete');
@@ -133,8 +131,6 @@ export class FeeRateCreateFormComponent {
   onCampusChange() {
     this.createForm.get('campusId')?.valueChanges.subscribe(campusId => {
       console.log("Campus changed:", campusId);
-
-      // Example: Load cities based on province
       this.loadStandardByCampusId(campusId);
     });
   }
@@ -148,7 +144,6 @@ export class FeeRateCreateFormComponent {
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
-        //this.router.navigate(['/Campuses']);
       },
       complete: () => {
         console.log('🔚 Request Complete');

@@ -19,6 +19,7 @@ export interface FeeCatalogComponentResponse {
   componentCode: string;
   componentName: string;
   accountCode: string;
+  discountable: boolean;
   taxable: boolean;
   feeCatalog: FeeCatalog;
 }

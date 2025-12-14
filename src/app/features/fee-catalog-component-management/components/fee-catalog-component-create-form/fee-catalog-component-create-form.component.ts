@@ -63,7 +63,8 @@ export class FeeCatalogComponentCreateFormComponent {
             componentName: this.feeCatalogComponentData?.componentName,
             componentCode: this.feeCatalogComponentData?.componentCode,
             description: '',
-            active : this.feeCatalogComponentData?.active
+            active : this.feeCatalogComponentData?.active,
+            discountable:this.feeCatalogComponentData?.discountable
           });
         },
         error: (error) => {
@@ -99,7 +100,8 @@ export class FeeCatalogComponentCreateFormComponent {
       componentName: ['', Validators.required],
       componentCode: [''],
       description: [''],
-      active:[true]
+      active:[true],
+      discountable:[false]
     });
   }
 

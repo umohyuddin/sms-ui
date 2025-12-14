@@ -54,7 +54,11 @@
                         </div>
 
                         <div class="col-4">
-                            <a> <b> Fee Catalog Code:</b> {{resourceData?.feeCatalog?.code}}</a>
+                            <a style="padding: 5px !important;"> <b>Discountable:</b></a>
+                                <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline"
+                                    [ngClass]="resourceData?.discountable ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">{{resourceData?.active
+                                    ? 'YES' : 'NO'}}</span>
+                            
                         </div>
                     </div>
                     <div class="kt-widget__info">

@@ -40,6 +40,8 @@ export class FeeCatalogComponentListingTableComponent {
     { key: 'componentStatus', label: 'Fee Component Status', sortable: true },
     { key: 'feeCatelogName', label: 'Fee Catalog Name', sortable: true },
     { key: 'feeCatalogCode', label: 'Fee Catalog Code', sortable: true },
+    { key: 'discountable', label: 'Discountable', sortable: true },
+
     { key: 'actions', label: 'Actions', sortable: true }
   ];
 
@@ -135,11 +137,11 @@ export class FeeCatalogComponentListingTableComponent {
     console.log('✅ Standard Search Form Data:', this.searchForm.getRawValue());
     let formValues = this.searchForm.value;
     let params = {
-      feeCatalogId  : formValues.feeCatalogId,
+      feeCatalogId: formValues.feeCatalogId,
       keyword: formValues.keyword?.trim() || ''
     };
 
-     this.feeCatalogComponentManagementService.searchFeeCatalogComponents(params).subscribe({
+    this.feeCatalogComponentManagementService.searchFeeCatalogComponents(params).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
