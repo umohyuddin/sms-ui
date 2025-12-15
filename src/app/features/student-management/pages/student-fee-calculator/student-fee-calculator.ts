@@ -5,12 +5,13 @@ import { FormsModule } from '@angular/forms';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-import { StudentListingTableComponent } from '../../components/student-listing-table/student-listing-table.component';
 import { StudentManagementService } from '../../services/student-management.service';
 import { FeeRateResponse } from '../../../fee-rate-management/models/FeeRateResponse';
 import { ActiveFeeRateResponse, FeeComponent } from '../../models/ActiveFeeRateFormatedResponse';
 import { DiscountRate } from '../../models/DiscountRate';
 import { ActiveDiscountRateFullResponse, DiscountComponent } from '../../models/DiscountRateFormatedResponse';
+import { AppConfigService } from '../../../../core/services/app-config.service';
+import { AcademicYearResponse } from '../../../tenant-management/models/AcademicYearResponse';
 
 
 @Component({
@@ -24,7 +25,7 @@ import { ActiveDiscountRateFullResponse, DiscountComponent } from '../../models/
   standalone: true,
 })
 export class StudentFeeCaculator implements OnInit {
-
+  academicYear: AcademicYearResponse | null = null;
   activeFeeRate: FeeRateResponse[] = []
   activeFeeRate_: ActiveFeeRateResponse[] = []
   selectedDiscounts: { [feeId: number]: DiscountComponent[] } = {};
@@ -32,6 +33,7 @@ export class StudentFeeCaculator implements OnInit {
   activeDiscountRate_: ActiveDiscountRateFullResponse[] = [];
   discountAppliedAmount: number = 0;
   constructor(private studentManagementSerivce: StudentManagementService,
+    private configService: AppConfigService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) { }
@@ -56,70 +58,74 @@ export class StudentFeeCaculator implements OnInit {
     return rate ? `${rate.amount} ${rate.currency}` : '';
   }
   ngOnInit(): void {
+
     this.activatedRoute.queryParams.subscribe(params => {
-
-
       const apiParams = {
         studentId: params['studentId'],
         academicYearId: params['academicYearId'],
         campusId: params['campusId'],
         standardId: params['standardId']
       };
-
       console.log("Query Params Object:", apiParams);
+      this.academicYear = this.configService.getAcademicYear();
+      console.log("academic Year", this.academicYear)
       this.getActiveDiscounts(apiParams);
       this.getActiveFeeRates(apiParams)
     });
-
-
   }
 
   private getActiveFeeRates(apiParams: any) {
     this.studentManagementSerivce.getActiveFeeRates(apiParams).subscribe({
       next: (response) => {
-        console.log('✅ Request Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.activeFeeRate = response.body;
         const data: FeeRateResponse[] = response.body;
 
-        // Group by feeCatalog id
-        const catalogs = Array.from(new Set(data.map(d => d.feeComponent.feeCatalog.id)))
-          .map(catalogId => {
-            const catalogRates = data.filter(d => d.feeComponent.feeCatalog.id === catalogId);
-            const catalogName = catalogRates[0].feeComponent.feeCatalog.name;
+        const catalogs = Array.from(
+          new Set(data.map(d => d.feeComponent.feeCatalog.id))
+        ).map(catalogId => {
 
-            // Group by component
-            const components = Array.from(new Set(catalogRates.map(d => d.feeComponent.id)))
-              .map(compId => {
-                return {
-                  id: compId,
-                  name: catalogRates.find(d => d.feeComponent.id === compId)?.feeComponent.componentName,
-                  rates: catalogRates.filter(d => d.feeComponent.id === compId)
-                }
-              });
+          const catalogRates = data.filter(
+            d => d.feeComponent.feeCatalog.id === catalogId
+          );
 
-            return { id: catalogId, name: catalogName, components };
+          const catalog = catalogRates[0].feeComponent.feeCatalog;
+
+          const components = Array.from(
+            new Set(catalogRates.map(d => d.feeComponent.id))
+          ).map(compId => {
+
+            const compRates = catalogRates.filter(
+              d => d.feeComponent.id === compId
+            );
+
+            const component = compRates[0].feeComponent;
+
+            return {
+              id: component.id,
+              name: component.componentName,
+              chargeType: component.feeCatalog.chargeType,           // FIXED / VARIABLE
+              recurrenceRule: component.feeCatalog.recurrenceRule,   // MONTHLY / ONE_TIME
+              discountable: component.discountable,      // true / false
+
+              rates: compRates,
+              randomClass: this.getRandomClass()
+            };
           });
+
+          return {
+            id: catalog.id,
+            name: catalog.name,
+            components
+          };
+        });
 
         this.activeFeeRate_ = catalogs;
-        this.activeFeeRate_.forEach(fee => {
-          fee.components.forEach(comp => {
-            // Assign a random class only once
-            comp.randomClass = this.widgetClasses[Math.floor(Math.random() * this.widgetClasses.length)];
-          });
-        })
-        console.log('Grouped Fee Rates:', this.activeFeeRate_);
 
+        console.log('Grouped Fee Rates (Extended):', this.activeFeeRate_);
       },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    })
+      error: (error) => console.error(error)
+    });
   }
+
 
   private getActiveDiscounts(apiParams: any) {
     this.studentManagementSerivce.getActiveDiscounts(apiParams).subscribe({
@@ -242,65 +248,6 @@ export class StudentFeeCaculator implements OnInit {
       default: return 'flaticon2-graph-1 kt-font-brand';
     }
   }
-  // getTotalAmount(): string {
-  //   let total = 0;
-
-
-  //   this.getSelectedFeeCatalogs().forEach(fee => {
-  //     const comps = this.selectedComponents[fee.id] || [];
-  //     comps.forEach(comp => {
-  //       const amount = this.getAmount(comp); // e.g., "PKR 5000"
-  //       // Remove non-numeric characters and convert to number
-  //       const numericAmount = Number(amount.replace(/[^0-9.-]+/g, ""));
-  //       total += numericAmount;
-  //     });
-  //   });
-
-  //   // Return formatted string (e.g., PKR 5000)
-  //   return 'PKR ' + total;
-  // }
-
-
-  // getTotalAmount(): string {
-  //   let total = 0;
-  //   this.discountAppliedAmount = 0;
-  //   let discountAmount = 0;
-  //   //Sum all selected fees
-  //   this.getSelectedFeeCatalogs().forEach(fee => {
-  //     const comps = this.selectedComponents[fee.id] || [];
-  //     comps.forEach(comp => {
-  //       const amount = this.getAmount(comp); // e.g., "PKR 5000"
-  //       const numericAmount = Number(amount.replace(/[^0-9.-]+/g, ""));
-  //       total += numericAmount;
-  //     });
-  //   });
-
-  //   //Apply discounts
-  //   // --- Apply only one discount ---
-  //   this.getSelectedDiscounts().forEach(discountType => {
-  //     const subTypes = this.selectedDiscounts[discountType.id] || [];
-  //     subTypes.forEach(subType => {
-  //       const value = subType.rates[0]?.value || 0;
-  //       const isPercentage = subType.rates[0]?.isPercentage;
-
-  //       if (isPercentage) {
-  //         discountAmount = total * (value / 100);
-  //       } else {
-  //         discountAmount = value;
-  //       }
-  //     });
-  //   });
-
-  //   // Save discount for UI
-  //   this.discountAppliedAmount = discountAmount;
-
-  //   // SUBTRACT DISCOUNT
-  //   total = total - discountAmount;
-  //   // Prevent negative total
-  //   if (total < 0) total = 0;
-
-  //   return 'PKR ' + total;
-  // }
 
   getTotalSelectedFee(): number {
     let total = 0;
@@ -308,21 +255,17 @@ export class StudentFeeCaculator implements OnInit {
     this.getSelectedFeeCatalogs().forEach(fee => {
       const comps = this.selectedComponents[fee.id] || [];
       comps.forEach(comp => {
-        const amount = Number(this.getAmount(comp).replace(/[^0-9.-]+/g, ""));
-        total += amount;
+        total += this.calculateComponentAmount(comp);
       });
     });
-
     return total;
   }
 
   calculateDiscount() {
     let total = this.getTotalSelectedFee();
     let discount = 0;
-
     this.getSelectedDiscounts().forEach(type => {
       const subTypes = this.selectedDiscounts[type.id] || [];
-
       subTypes.forEach(subType => {
         const rate = subType.rates[0];
         if (!rate) return;
@@ -364,7 +307,7 @@ export class StudentFeeCaculator implements OnInit {
 
     // Prepare the component IDs
     const componentIds = this.getSelectedFeeComponentIds();
-     const discountComponentId = this.getSelectedDiscountComponentId();
+    const discountComponentId = this.getSelectedDiscountComponentId();
 
     // Prepare the DTO
     const requestDto = {
@@ -373,7 +316,7 @@ export class StudentFeeCaculator implements OnInit {
       standardId: apiParams.standardId,
       academicYearId: apiParams.academicYearId,
       componentIds: componentIds,
-      discountComponentId:discountComponentId,
+      discountComponentId: discountComponentId,
       assignedDate: new Date().toISOString().split('T')[0], // yyyy-mm-dd
       dueDate: new Date().toISOString().split('T')[0] // you can replace with actual due date
     };
@@ -381,7 +324,7 @@ export class StudentFeeCaculator implements OnInit {
     console.log('StudentFeeAssignmentRequestDTO:', requestDto);
 
     // Send to API
-    this.studentManagementSerivce.studentAssignFee(apiParams.studentId,requestDto).subscribe({
+    this.studentManagementSerivce.studentAssignFee(apiParams.studentId, requestDto).subscribe({
       next: (response) => {
         console.log('Fee assigned successfully', response);
         this.router.navigate(ROUTES.STUDENT.DETAILS(apiParams.studentId))
@@ -393,11 +336,75 @@ export class StudentFeeCaculator implements OnInit {
   };
 
 
-    getSelectedDiscountComponentId(): number | null {
+  getSelectedDiscountComponentId(): number | null {
     const selected = Object.values(this.selectedDiscounts).flat();
     return selected.length > 0 ? selected[0].id : null;
   }
 
+  calculateComponentAmount(
+    comp: FeeComponent,
+    context?: {
+      totalCredits?: number;
+      subjectCount?: number;
+      usageUnits?: number;
+    }
+  ): number {
+
+    const rate = comp.rates?.[0];
+    if (!rate) return 0;
+
+    const baseAmount = rate.amount;
+    const recurrence = this.getRecurrenceMultiplier(comp.recurrenceRule);
+
+
+    switch (comp.chargeType) {
+
+      case 'FIXED':
+      case 'VARIABLE':
+      case 'DISCOUNTED':
+        return baseAmount * recurrence;
+
+      case 'PER_CREDIT':
+        return (context?.totalCredits ?? 0) * baseAmount * recurrence;
+
+      case 'PER_SUBJECT':
+        return (context?.subjectCount ?? 0) * baseAmount * recurrence;
+
+      case 'USAGE_BASED':
+        return (context?.usageUnits ?? 0) * baseAmount;
+
+      case 'SLAB_BASED':
+        // Slab logic handled in backend
+        return baseAmount * recurrence;
+
+      case 'PERCENTAGE':
+        // Applied elsewhere (discount / penalty)
+        return 0;
+
+      default:
+        return 0; // ✅ SAFETY NET
+    }
+  }
+
+  /* ===========================
+  RECURRENCE MULTIPLIERS
+  =========================== */
+
+  private getRecurrenceMultiplier(rule: string): number {
+    if (!this.academicYear) return 1;
+
+    switch (rule) {
+      case 'ONE_TIME': return 1;
+      case 'MONTHLY': return this.academicYear.totalMonths ?? 1;
+      case 'BI_MONTHLY': return 6;
+      case 'QUARTERLY': return 4;
+      case 'HALF_YEARLY': return 2;
+      case 'YEARLY': return 1;
+      case 'TERM_WISE': return 2;
+      case 'SEMESTER_WISE': return 2;
+      default: return 1;
+    }
+  }
 }
 
 

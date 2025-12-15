@@ -37,14 +37,14 @@
                 </div>
             </div>
             <div class="kt-portlet__body">
-                <div class="kt-portlet__content">
+                <!-- <div class="kt-portlet__content">
                     Welcome! Here you can view the fee catalog for this
                     <strong>{{activeFeeRate[0].campus.campusName}}</strong> and
                     <strong>{{activeFeeRate[0].standard.standardName}}</strong>, defined for the
                     <strong>{{activeFeeRate[0].academicYear.name}}</strong>
                     academic year.
                     All fee components and their amounts are displayed for your reference.
-                </div>
+                </div> -->
             </div>
         </div>
 
@@ -95,8 +95,27 @@
                                                 {{ comp.name }}
                                             </a>
                                             <a class="kt-widget2__username">
-                                                <!-- optionally add more info -->
+                                                <ul class="kt-widget2__details-list"
+                                                    style="list-style: none; padding: 0; margin: 5px;">
+                                                    <li style="list-style: none; padding: 0; margin: 5px;">
+                                                        Discountable:
+                                                        <span class="kt-badge kt-badge--inline kt-badge--danger">{{
+                                                            comp.discountable ? "Yes" : "No" }}</span>
+                                                    </li>
+                                                    <li style="list-style: none; padding: 0; margin: 5px;">
+                                                        Charge Type:
+                                                        <span class="kt-badge kt-badge--inline kt-badge--success">{{
+                                                            comp.chargeType }}</span>
+                                                    </li>
+                                                    <li style="list-style: none; padding: 0; margin: 5px;">
+                                                        Recurrence:
+                                                        <span class="kt-badge kt-badge--inline kt-badge--brand">{{
+                                                            comp.recurrenceRule }}</span>
+                                                    </li>
+
+                                                </ul>
                                             </a>
+
                                         </div>
                                     </div>
 
@@ -292,8 +311,9 @@
                         <span class="kt-widget1__number kt-font-brand"> {{ getTotalAmount() }}</span>
                     </div>
 
-                    <div class="kt-widget1__item" >
-                        <button type="button" class="btn btn-dark btn-elevate" (click)="submitFeeAndDiscount()">Submit</button>
+                    <div class="kt-widget1__item">
+                        <button type="button" class="btn btn-dark btn-elevate"
+                            (click)="submitFeeAndDiscount()">Submit</button>
                         <button type="button" class="btn btn-danger btn-elevate">Cancel</button>
                     </div>
                 </div>

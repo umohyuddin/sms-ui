@@ -38,6 +38,7 @@ export interface FeeComponent {
   componentName: string;
   accountCode: string;
   taxable: boolean;
+    discountable: boolean;
   feeCatalog: FeeCatalog;   // added FeeCatalog
 }
 
@@ -48,6 +49,7 @@ export interface FeeCatalog {
   description: string;
   active: boolean;
   chargeType: string;
+
   chargeTypeLabel: string | null;
   recurrenceRule: string;
   recurrenceRuleLabel: string | null;

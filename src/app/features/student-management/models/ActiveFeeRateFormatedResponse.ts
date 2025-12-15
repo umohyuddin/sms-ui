@@ -2,13 +2,16 @@ export interface ActiveFeeRateResponse {
   id: number;
   name?: string; // now optional
   components: FeeComponent[];
-  
+
 }
 
 export interface FeeComponent {
   id: number;
   name?: string; // now optional
   rates: Rate[];
+  chargeType: string;
+  recurrenceRule: string;
+  discountable: boolean;
   randomClass?: string;
 }
 

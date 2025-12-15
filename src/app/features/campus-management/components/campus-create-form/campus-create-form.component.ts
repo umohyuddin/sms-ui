@@ -34,16 +34,11 @@ export class CampusCreateFormComponent {
     private httpClientService: HttpClientService,
     private route: ActivatedRoute,
     private router: Router,
-    private appConfig: AppConfigService,
     private campusManagementService: CampusManagementService,
 
   ) { }
 
   ngOnInit() {
-
-    console.log('Config:', this.appConfig);
-    this.URL = this.appConfig.apiBaseUrl;
-
     this.getProvinces();
     this.initializeForm();
 

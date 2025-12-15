@@ -52,6 +52,7 @@ export class ConcessionRateCreateFormComponent {
 
   ngOnInit() {
     this.academicYear = this.configService.getAcademicYear();
+
     this.getCampuses();
     this.getDiscountTypes();
 
