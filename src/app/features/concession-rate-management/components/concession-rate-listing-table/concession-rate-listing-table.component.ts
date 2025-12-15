@@ -35,7 +35,6 @@ export class ConcessionRateListingTableComponent {
   feeCatalogResponse: ConcessionResponse[] = [];
   RECURRENCE_RULE_CLASSES = RECURRENCE_RULE_CLASSES;
   CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
-  private destroy$ = new Subject<void>();
   discountTypesDD: DiscountType[] = [];
   searchForm !: FormGroup;
   constructor(private router: Router,
@@ -53,9 +52,7 @@ export class ConcessionRateListingTableComponent {
     { key: 'chargeType', label: 'Charge Type', sortable: true },
     { key: 'recurrenceRule', label: 'Recurrence Rule', sortable: false },
     { key: 'value', label: 'Value', sortable: false },
-
     { key: 'academicYearName', label: 'Academic Year', sortable: false },
-
     { key: 'campus', label: 'Assigned Campus', sortable: false },
     { key: 'status', label: 'Status', sortable: true },
     { key: 'actions', label: 'Actions', sortable: true }
@@ -226,7 +223,7 @@ export class ConcessionRateListingTableComponent {
     if (formValues.keyword?.trim()) {
       params = params.set('keyword', formValues.keyword.trim());
     }
-    
+
     this.concessionRateManagementService.search(params).subscribe({
       next: (response) => {
         console.log('✅ Success Status:', response.status);
@@ -252,6 +249,7 @@ export class ConcessionRateListingTableComponent {
       recurrenceRuleId: '',
       keyword: ''
     });
+    this.concessionComponentDD = []
     this.getAllConcessionRates(); // reload all data
   }
   onPageSizeChange(event: any) {
