@@ -33,7 +33,7 @@ export class FeeRateInfoComponent {
   getFeeRateDetails(routedId: string): void {
     this.feeRateManagementService.getFeeRateById(routedId).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.resourceData = response.body;
       },

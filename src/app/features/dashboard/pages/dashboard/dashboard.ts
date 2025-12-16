@@ -39,7 +39,7 @@ export class Dashboard {
   private getStudentCounts() {
     this.dashboardManagementService.getStudentDashboardCounts().subscribe({
       next: (response) => {
-        console.log('✅ Request Success Status:', response.status);
+        console.log('  Request Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
 
         this.dashboardStudentStats = response.body; // the raw discount rates

@@ -57,7 +57,7 @@ export class StandardListingTableComponent {
   private getCampuses() {
     this.campusManagementService.getAllCampuses().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.campusesResponse = response.body;
       },
@@ -84,7 +84,7 @@ export class StandardListingTableComponent {
   getStandards() {
     this.standardManagementService.getAllStandards().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.standardsResponse = response.body;
         this.pagination = new Pagination(this.standardsResponse, 10);
@@ -119,7 +119,7 @@ export class StandardListingTableComponent {
 
       this.standardManagementService.deleteCampus(standardId).subscribe({
         next: (response) => {
-          console.log('✅ Delete Success Status:', response.status);
+          console.log('  Delete Success Status:', response.status);
           console.log('📦 Delete Response Body:', response.body);
           // this.CampusData = this.CampusData.filter(t => t.CampusId !== CampusId);
           console.log(`Campus ${standardId} deleted successfully`);
@@ -140,7 +140,7 @@ export class StandardListingTableComponent {
     this.pagination.changePageSize(newSize);
   }
   onSubmit(): void {
-    console.log('✅ Standard Search Form Data:', this.standardSearchForm.getRawValue());
+    console.log('  Standard Search Form Data:', this.standardSearchForm.getRawValue());
     let formValues = this.standardSearchForm.value;
     let params = {
       campusId: formValues.campusId,
@@ -149,7 +149,7 @@ export class StandardListingTableComponent {
 
     this.standardManagementService.searchStandards(params).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.standardsResponse = response.body;
         this.pagination = new Pagination(this.standardsResponse, 10);

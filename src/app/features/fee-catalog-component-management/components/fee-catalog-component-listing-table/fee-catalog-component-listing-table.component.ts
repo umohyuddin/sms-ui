@@ -53,7 +53,7 @@ export class FeeCatalogComponentListingTableComponent {
   getFeeCatalog() {
     this.feeCatalogManagementService.getAllFeeCatalogs().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.feeCatalogResponseDD = response.body;
       },
@@ -78,7 +78,7 @@ export class FeeCatalogComponentListingTableComponent {
   getFeeCatalogComponents() {
     this.feeCatalogComponentManagementService.getAllFeeCatalogComponents().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
 
         this.feeCatalogComponentResponse = response.body;
@@ -113,7 +113,7 @@ export class FeeCatalogComponentListingTableComponent {
 
   //     this.standardManagementService.deleteCampus(standardId).subscribe({
   //       next: (response) => {
-  //         console.log('✅ Delete Success Status:', response.status);
+  //         console.log('  Delete Success Status:', response.status);
   //         console.log('📦 Delete Response Body:', response.body);
   //         // this.CampusData = this.CampusData.filter(t => t.CampusId !== CampusId);
   //         console.log(`Campus ${standardId} deleted successfully`);
@@ -134,7 +134,7 @@ export class FeeCatalogComponentListingTableComponent {
     this.pagination.changePageSize(newSize);
   }
   onSubmitSearch(): void {
-    console.log('✅ Standard Search Form Data:', this.searchForm.getRawValue());
+    console.log('  Standard Search Form Data:', this.searchForm.getRawValue());
     let formValues = this.searchForm.value;
     let params = {
       feeCatalogId: formValues.feeCatalogId,
@@ -143,7 +143,7 @@ export class FeeCatalogComponentListingTableComponent {
 
     this.feeCatalogComponentManagementService.searchFeeCatalogComponents(params).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.feeCatalogComponentResponse = response.body;
         this.pagination = new Pagination(this.feeCatalogComponentResponse, 10);

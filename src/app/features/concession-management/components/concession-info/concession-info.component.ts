@@ -37,7 +37,7 @@ export class ConcessionInfoComponent {
   getFeeCatalogDetails(routedId: string): void {
     this.concessionManagementService.getConcessionById(routedId).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.resourceResponse = response.body;
       },

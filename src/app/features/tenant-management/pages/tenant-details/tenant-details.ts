@@ -43,7 +43,7 @@ export class TenantDetails {
   //     .request<any>(HTTP_METHOD.GET, url, { observeResponse: true })
   //     .subscribe({
   //       next: (response: HttpResponse<any>) => {
-  //         console.log('✅ Status:', response.status);
+  //         console.log('  Status:', response.status);
   //         console.log('📦 Body:', response.body);
   //         this.tenantData = response.body;
   //         console.log('Tenant Details:', this.tenantData);

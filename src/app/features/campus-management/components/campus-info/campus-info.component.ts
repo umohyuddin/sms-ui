@@ -41,7 +41,7 @@ export class CampusInfoComponent {
       .request<any>(HTTP_METHOD.GET, url, { observeResponse: true })
       .subscribe({
         next: (response) => {
-          console.log('✅ Success Status:', response.status);
+          console.log('  Success Status:', response.status);
           console.log('📦 Response Body:', response.body);
           this.campusData = response.body;
           console.log('📦 Campus data :', this.campusData);

@@ -62,7 +62,7 @@ export class CampusCreateFormComponent {
       observeResponse: true
     }).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.provinces = response.body;
       },
@@ -110,7 +110,7 @@ export class CampusCreateFormComponent {
       observeResponse: true
     }).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.cities = response.body;
       },
@@ -132,7 +132,7 @@ export class CampusCreateFormComponent {
     this.router.navigate(['/Campuss']);
   }
   onSubmit(): void {
-    console.log('✅ Campus Form Data:', this.createCampusForm.getRawValue());
+    console.log('  Campus Form Data:', this.createCampusForm.getRawValue());
     if (this.createCampusForm.invalid) {
       // Mark all controls as touched to show validation errors
       this.createCampusForm.markAllAsTouched();
@@ -142,7 +142,7 @@ export class CampusCreateFormComponent {
 
     this.campusManagementService.saveCampuse(this.campusId, this.createCampusForm.getRawValue()).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.router.navigate(ROUTES.CAMPUS.LIST);
       },
@@ -163,7 +163,7 @@ export class CampusCreateFormComponent {
       .request<any>(HTTP_METHOD.GET, url, { observeResponse: true })
       .subscribe({
         next: (response) => {
-          console.log('✅ Success Status:', response.status);
+          console.log('  Success Status:', response.status);
           console.log('📦 Response Body:', response.body);
           this.campusData = response.body;
           this.createCampusForm.patchValue(this.campusData);

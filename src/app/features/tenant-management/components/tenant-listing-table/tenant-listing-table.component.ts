@@ -59,7 +59,7 @@ export class TenantListingTableComponent {
         observeResponse: true
       }).subscribe({
         next: (response) => {
-          console.log('✅ Delete Success Status:', response.status);
+          console.log('  Delete Success Status:', response.status);
           console.log('📦 Delete Response Body:', response.body);
 
           console.log(`Tenant ${tenantId} deleted successfully`);

@@ -33,7 +33,7 @@ export class ConcessionComponentInfoComponent {
   getConcessionRateDetails(concessionId: string): void {
     this.concessionRateManagementService.getConcessionRateById(concessionId).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.resourceData = response.body;
         console.log('📦 Campus data :', this.resourceData);

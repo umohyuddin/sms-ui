@@ -53,7 +53,7 @@ export class ConcessionCreateFormComponent {
   private getFeeCatalogMeta() {
     this.feeCatalogManagementService.getFeeCatalogMeta().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
 
         this.recurrenceRuleOptions = Object.entries(response.body.recurrenceRules).map(
@@ -91,7 +91,7 @@ export class ConcessionCreateFormComponent {
     this.router.navigate(ROUTES.CONCESSION.CONCESSION_TYPE.LIST);
   }
   onSubmit(): void {
-    console.log('✅ Campus Form Data:', this.createForm.getRawValue());
+    console.log('  Campus Form Data:', this.createForm.getRawValue());
     if (this.createForm.invalid) {
       // Mark all controls as touched to show validation errors
       this.createForm.markAllAsTouched();
@@ -100,7 +100,7 @@ export class ConcessionCreateFormComponent {
     }
     this.consessionManagementService.saveConcession(this.routedId, this.createForm.getRawValue()).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.router.navigate(ROUTES.CONCESSION.CONCESSION_TYPE.LIST);
       },
@@ -119,7 +119,7 @@ export class ConcessionCreateFormComponent {
   getConcessionDetails(concessionId: string): void {
     this.consessionManagementService.getConcessionById(concessionId).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.concessionData = response.body;
         console.log('📦 Campus data :', this.concessionData);

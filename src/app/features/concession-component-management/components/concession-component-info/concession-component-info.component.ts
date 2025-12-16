@@ -34,7 +34,7 @@ export class ConcessionComponentInfoComponent {
   getConcessionDetails(routedId: string): void {
     this.concessionComponentManagementService.getConcessionComponentById(routedId).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.resourceData = response.body;
         console.log('📦 Campus data :', this.resourceData);

@@ -20,7 +20,7 @@ export class AppConfigService {
 
     this.httpClientService.request<any>(HTTP_METHOD.GET, '/assets/config/config.json', { observeResponse: true }).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log('✅ Status:', response.status);
+        console.log('  Status:', response.status);
         console.log('📦 Body:', response.body);
         this.config = response.body
       },

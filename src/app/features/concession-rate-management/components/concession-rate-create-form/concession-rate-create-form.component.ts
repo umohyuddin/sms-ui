@@ -75,7 +75,7 @@ export class ConcessionRateCreateFormComponent {
   getDiscountTypes() {
     this.concessionManagementService.getAllConcessions().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.concessionTypeDD = response.body;
       },
@@ -100,7 +100,7 @@ export class ConcessionRateCreateFormComponent {
   loadComponentsByConcessionId(concessionTypeId: any) {
     this.concessionComponentManagementService.getConcessionComponentsByTypeId(concessionTypeId).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.concessionComponentDD = response.body;
       },
@@ -164,7 +164,7 @@ export class ConcessionRateCreateFormComponent {
   private getCampuses() {
     this.campusManagementService.getAllCampuses().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.campuseDD = response.body;
       },
@@ -184,7 +184,7 @@ export class ConcessionRateCreateFormComponent {
     this.router.navigate(ROUTES.CONCESSION.CONCESSION_RATE.LIST);
   }
   onSubmit(): void {
-    console.log('✅ Create standard Form Data:', this.createForm.getRawValue());
+    console.log('  Create standard Form Data:', this.createForm.getRawValue());
     if (this.createForm.invalid) {
       this.createForm.markAllAsTouched();
       console.warn('❌ Form is invalid');
@@ -193,7 +193,7 @@ export class ConcessionRateCreateFormComponent {
 
     this.feeRateManagementService.saveFeeRate(this.routedId ?? null, this.createForm.getRawValue()).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.router.navigate(ROUTES.FEE.FEE_RATE.LIST);
       },

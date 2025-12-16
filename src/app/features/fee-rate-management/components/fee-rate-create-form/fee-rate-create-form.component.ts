@@ -81,7 +81,7 @@ export class FeeRateCreateFormComponent {
   loadFeeComponentByFeeCatalogId(feeCatalogId: any) {
     this.feeComponentManageService.getByFeeCatalogId(feeCatalogId).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.feeCompnentDD = response.body;
       },
@@ -98,7 +98,7 @@ export class FeeRateCreateFormComponent {
   getFeeCatalogs() {
     this.feeCatalogManagementService.getAllFeeCatalogs().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.feeCatalogDD = response.body;
       },
@@ -114,7 +114,7 @@ export class FeeRateCreateFormComponent {
   getAcademicYears() {
     this.academicYearManagementService.getAcademicYears().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.academicYear = response.body;
       },
@@ -137,7 +137,7 @@ export class FeeRateCreateFormComponent {
   loadStandardByCampusId(campusId: any) {
     this.standardManagemenetService.getCampusById(campusId).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.standardData = response.body;
       },
@@ -198,7 +198,7 @@ export class FeeRateCreateFormComponent {
   private getCampuses() {
     this.campusManagementService.getAllCampuses().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.campuses = response.body;
       },
@@ -218,7 +218,7 @@ export class FeeRateCreateFormComponent {
     this.router.navigate(ROUTES.FEE.FEE_RATE.LIST);
   }
   onSubmit(): void {
-    console.log('✅ Create standard Form Data:', this.createForm.getRawValue());
+    console.log('  Create standard Form Data:', this.createForm.getRawValue());
     if (this.createForm.invalid) {
       this.createForm.markAllAsTouched();
       console.warn('❌ Form is invalid');
@@ -227,7 +227,7 @@ export class FeeRateCreateFormComponent {
 
     this.feeRateManagementService.saveFeeRate(this.routedId ?? null, this.createForm.getRawValue()).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.router.navigate(ROUTES.FEE.FEE_RATE.LIST);
       },

@@ -73,7 +73,7 @@ export class TenantCreateFormComponent {
     //window.location.href = '/tenants'; // Adjust the URL as needed
   }
   onSubmit(): void {
-    console.log('✅ Tenant Form Data:', this.academicYearForm.getRawValue());
+    console.log('  Tenant Form Data:', this.academicYearForm.getRawValue());
     if (this.academicYearForm.invalid) {
       // Mark all controls as touched to show validation errors
       this.academicYearForm.markAllAsTouched();
@@ -95,13 +95,13 @@ export class TenantCreateFormComponent {
     }
 
 
-    console.log('✅ Tenant Form Data:', this.academicYearForm.getRawValue());
+    console.log('  Tenant Form Data:', this.academicYearForm.getRawValue());
     this.httpClientService.request<any>(requestMethod, requestUrl, {
       observeResponse: true,
       body: this.academicYearForm.getRawValue()
     }).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.router.navigate(['/tenants']);
       },
@@ -213,7 +213,7 @@ export class TenantCreateFormComponent {
       .request<any>(HTTP_METHOD.GET, url, { observeResponse: true })
       .subscribe({
         next: (response: HttpResponse<any>) => {
-          console.log('✅ Status:', response.status);
+          console.log('  Status:', response.status);
           console.log('📦 Body:', response.body);
           this.tenantData = response.body;
           console.log('Tenant Details:', this.tenantData);

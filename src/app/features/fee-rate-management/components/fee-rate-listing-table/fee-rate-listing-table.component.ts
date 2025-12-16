@@ -63,7 +63,7 @@ export class FeeRateListingTableComponent {
   getFeeRates() {
     this.feeRateService.getAllFeeRates().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
          this.feeRateResponse = response.body;
          this.pagination = new Pagination(this.feeRateResponse, 10);
@@ -80,7 +80,7 @@ export class FeeRateListingTableComponent {
 //   private getCampuses() {
 //     this.campusManagementService.getAllCampuses().subscribe({
 //       next: (response) => {
-//         console.log('✅ Success Status:', response.status);
+//         console.log('  Success Status:', response.status);
 //         console.log('📦 Response Body:', response.body);
 //         this.campusesResponse = response.body;
 //       },
@@ -98,7 +98,7 @@ export class FeeRateListingTableComponent {
 //   getStandards() {
 //     this.standardManagementService.getAllStandards().subscribe({
 //       next: (response) => {
-//         console.log('✅ Success Status:', response.status);
+//         console.log('  Success Status:', response.status);
 //         console.log('📦 Response Body:', response.body);
 //         this.sectionsResponse = response.body;
 //       },
@@ -115,7 +115,7 @@ export class FeeRateListingTableComponent {
 //   getSections() {
 //     this.sectionManagementService.getAllSection().subscribe({
 //       next: (response) => {
-//         console.log('✅ Success Status:', response.status);
+//         console.log('  Success Status:', response.status);
 //         console.log('📦 Response Body:', response.body);
 //         this.sectionsResponse = response.body;
 //         this.pagination = new Pagination(this.sectionsResponse, 10);
@@ -149,7 +149,7 @@ export class FeeRateListingTableComponent {
 
 //   //     this.standardManagementService.deleteCampus(standardId).subscribe({
 //   //       next: (response) => {
-//   //         console.log('✅ Delete Success Status:', response.status);
+//   //         console.log('  Delete Success Status:', response.status);
 //   //         console.log('📦 Delete Response Body:', response.body);
 //   //         // this.CampusData = this.CampusData.filter(t => t.CampusId !== CampusId);
 //   //         console.log(`Campus ${standardId} deleted successfully`);
@@ -170,7 +170,7 @@ export class FeeRateListingTableComponent {
     this.pagination.changePageSize(newSize);
   }
 //   onSubmitSearch(): void {
-//     console.log('✅ Standard Search Form Data:', this.sectionsSearchForm.getRawValue());
+//     console.log('  Standard Search Form Data:', this.sectionsSearchForm.getRawValue());
 //     let formValues = this.sectionsSearchForm.value;
 //     let params = {
 //       campusId: formValues.campusId,
@@ -180,7 +180,7 @@ export class FeeRateListingTableComponent {
 
 //     // this.sectionManagementService.searchSections(params).subscribe({
 //     //   next: (response) => {
-//     //     console.log('✅ Success Status:', response.status);
+//     //     console.log('  Success Status:', response.status);
 //     //     console.log('📦 Response Body:', response.body);
 //     //     this.sectionsResponse = response.body;
 //     //     this.pagination = new Pagination(this.sectionsResponse, 10);

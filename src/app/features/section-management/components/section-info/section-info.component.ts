@@ -31,7 +31,7 @@ export class SectionInfoComponent {
   getSectionDetails(sectionId: string): void {
     this.sectionManagementService.getSectionById(sectionId).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.sectionData = response.body;
         console.log('📦 Standard data :', this.sectionData);

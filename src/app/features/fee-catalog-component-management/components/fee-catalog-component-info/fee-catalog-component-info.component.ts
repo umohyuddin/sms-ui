@@ -31,7 +31,7 @@ export class FeeCatalogComponentInfoComponent {
   getFeeCatalogComponentDetails(routedId: string): void {
     this.feeCatalogComponentManagementService.getFeeCatalogComponentsById(routedId).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.resourceData = response.body;
         console.log('📦 Standard data :', this.resourceData);

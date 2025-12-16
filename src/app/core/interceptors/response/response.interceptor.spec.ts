@@ -30,7 +30,7 @@ describe('responseInterceptor', () => {
         // and should have logged the API response
         expect(logSpy).toHaveBeenCalled();
         const firstCallArgs = logSpy.calls.argsFor(0);
-        expect(firstCallArgs[0]).toBe('✅ API Response:');
+        expect(firstCallArgs[0]).toBe('  API Response:');
         expect(firstCallArgs[1] && firstCallArgs[1].url).toBe('/api/test');
         expect(firstCallArgs[1] && firstCallArgs[1].status).toBe(200);
         done();

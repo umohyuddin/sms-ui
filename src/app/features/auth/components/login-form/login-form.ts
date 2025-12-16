@@ -36,10 +36,10 @@ export class LoginForm {
       return;
     }
     const loginData = this.loginForm.value as Login;
-    console.log('✅ Login Data:', loginData);
+    console.log('  Login Data:', loginData);
     this.authService.loginUser(loginData).subscribe({
       next: (response) => {
-        console.log('✅ Login Success Status:', response.status);
+        console.log('  Login Success Status:', response.status);
         console.log('📦 Login Response Body:', response.body);
         const token = response.body?.accessToken
         if (token) {

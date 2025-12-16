@@ -72,7 +72,7 @@ export class SectionListingTableComponent {
   loadStandardsByCampus(campusId: any) {
     this.standardManagementService.getCampusById(campusId).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.standardsResponseDD = response.body;
       },
@@ -90,7 +90,7 @@ export class SectionListingTableComponent {
   private getCampuses() {
     this.campusManagementService.getAllCampuses().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.campusesResponseDD = response.body;
       },
@@ -108,7 +108,7 @@ export class SectionListingTableComponent {
   private getStandards() {
     this.standardManagementService.getAllStandards().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.sectionsResponse = response.body;
       },
@@ -125,7 +125,7 @@ export class SectionListingTableComponent {
   getAllSections() {
     this.sectionManagementService.getAllSection().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.sectionsResponse = response.body;
         this.pagination = new Pagination(this.sectionsResponse, 10);
@@ -158,7 +158,7 @@ export class SectionListingTableComponent {
     this.pagination.changePageSize(newSize);
   }
   onSubmitSearch(): void {
-    console.log('✅Search Form Data:', this.sectionsSearchForm.getRawValue());
+    console.log(' Search Form Data:', this.sectionsSearchForm.getRawValue());
     let formValues = this.sectionsSearchForm.value;
     let params = {
       campusId: formValues.campusId,
@@ -168,7 +168,7 @@ export class SectionListingTableComponent {
 
     this.sectionManagementService.searchSections(params).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.sectionsResponse = response.body;
         this.pagination = new Pagination(this.sectionsResponse, 10);

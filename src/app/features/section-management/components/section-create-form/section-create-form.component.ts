@@ -68,7 +68,7 @@ export class SectionCreateFormComponent {
     this.createSectionForm.get('standardId')?.setValue('')
     this.standardManagemenetService.getCampusById(campusId).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.standardData = response.body;
       },
@@ -85,7 +85,7 @@ export class SectionCreateFormComponent {
     this.sectionManagementService.getSectionById(sectionId)
       .subscribe({
         next: (response) => {
-          console.log('✅ Request Success Status:', response.status);
+          console.log('  Request Success Status:', response.status);
           console.log('📦 Response Body:', response.body);
           this.sectionData = response.body;
           console.log('📦 Standard data :', this.sectionData);
@@ -110,7 +110,7 @@ export class SectionCreateFormComponent {
   private getCampuses() {
     this.campusManagementService.getAllCampuses().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.campuses = response.body;
       },
@@ -138,7 +138,7 @@ export class SectionCreateFormComponent {
     this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
   }
   onSubmit(): void {
-    console.log('✅ Create standard Form Data:', this.createSectionForm.getRawValue());
+    console.log('  Create standard Form Data:', this.createSectionForm.getRawValue());
     if (this.createSectionForm.invalid) {
       this.createSectionForm.markAllAsTouched();
       console.warn('❌ Form is invalid');
@@ -147,7 +147,7 @@ export class SectionCreateFormComponent {
 
     this.sectionManagementService.saveSection(this.sectionId, this.createSectionForm.getRawValue()).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
       },

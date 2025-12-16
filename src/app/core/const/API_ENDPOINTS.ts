@@ -72,7 +72,7 @@ export const API_ENDPOINTS = {
             GET_ALL: '/api/fee/rates',
             SEARCH: (keyword: string) => `/api/fee/rates/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/fee/rates/${id}`,
-            GET_ACTIVE_RATES: '/api/fee/rates'
+            GET_ACTIVE_RATES: '/api/fee/rates/active'
         }
     },
     DISCOUNT: {

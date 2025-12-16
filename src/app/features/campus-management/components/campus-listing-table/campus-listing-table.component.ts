@@ -66,7 +66,7 @@ export class CampusListingTableComponent {
   getCampuses() {
     this.campusManagementService.getAllCampuses().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.campuses = response.body;
         this.pagination = new Pagination(this.campuses, 10);
@@ -101,7 +101,7 @@ export class CampusListingTableComponent {
 
       this.campusManagementService.deleteCampus(campusId).subscribe({
         next: (response) => {
-          console.log('✅ Delete Success Status:', response.status);
+          console.log('  Delete Success Status:', response.status);
           console.log('📦 Delete Response Body:', response.body);
           // this.CampusData = this.CampusData.filter(t => t.CampusId !== CampusId);
           console.log(`Campus ${campusId} deleted successfully`);

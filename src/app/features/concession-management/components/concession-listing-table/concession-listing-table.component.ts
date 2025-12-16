@@ -68,7 +68,7 @@ export class ConcessionListingTableComponent {
   getAllConcessions() {
     this.concessionManagementService.getAllConcessions().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.feeCatalogResponse = response.body;
         this.pagination = new Pagination(this.feeCatalogResponse, 10);
@@ -103,7 +103,7 @@ export class ConcessionListingTableComponent {
 
   //     this.feeCatalogManagementService.deleteCampus(campusId).subscribe({
   //       next: (response) => {
-  //         console.log('✅ Delete Success Status:', response.status);
+  //         console.log('  Delete Success Status:', response.status);
   //         console.log('📦 Delete Response Body:', response.body);
   //         // this.CampusData = this.CampusData.filter(t => t.CampusId !== CampusId);
   //         console.log(`Campus ${campusId} deleted successfully`);

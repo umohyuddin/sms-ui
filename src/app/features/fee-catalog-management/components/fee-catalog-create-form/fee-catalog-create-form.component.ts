@@ -51,7 +51,7 @@ export class FeeCatalogCreateFormComponent {
   private getFeeCatalogMeta() {
     this.feeCatalogManagementService.getFeeCatalogMeta().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
 
         this.recurrenceRuleOptions = Object.entries(response.body.recurrenceRules).map(
@@ -89,7 +89,7 @@ export class FeeCatalogCreateFormComponent {
     this.router.navigate(ROUTES.FEE.FEE_CATALOG.LIST);
   }
   onSubmit(): void {
-    console.log('✅ Form Data:', this.createForm.getRawValue());
+    console.log('  Form Data:', this.createForm.getRawValue());
     if (this.createForm.invalid) {
       // Mark all controls as touched to show validation errors
       this.createForm.markAllAsTouched();
@@ -99,7 +99,7 @@ export class FeeCatalogCreateFormComponent {
 
     this.feeCatalogManagementService.saveFeeCatalog(this.routedId, this.createForm.getRawValue()).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.router.navigate(ROUTES.FEE.FEE_CATALOG.LIST);
       },
@@ -117,7 +117,7 @@ export class FeeCatalogCreateFormComponent {
   getFeeCatalogDetails(routedId: string): void {
     this.feeCatalogManagementService.getFeeCatalogById(routedId).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.resourceData = response.body;
         this.createForm.patchValue(this.resourceData ?? {});

@@ -54,7 +54,7 @@ export class FeeCatalogComponentCreateFormComponent {
     this.feeCatalogComponentManagementService.getFeeCatalogComponentsById(routedId)
       .subscribe({
         next: (response) => {
-          console.log('✅ Request Success Status:', response.status);
+          console.log('  Request Success Status:', response.status);
           console.log('📦 Response Body:', response.body);
           this.feeCatalogComponentData = response.body;
           console.log('📦 Request data :', this.feeCatalogComponentData);
@@ -80,7 +80,7 @@ export class FeeCatalogComponentCreateFormComponent {
   private getFeeCatalogs() {
     this.feeCatalogManagementService.getAllFeeCatalogs().subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.feeCatalogDD = response.body;
       },
@@ -109,7 +109,7 @@ export class FeeCatalogComponentCreateFormComponent {
     this.router.navigate(ROUTES.FEE.FEE_CATALOG_COMPONENT.LIST);
   }
   onSubmit(): void {
-    console.log('✅ Create standard Form Data:', this.createForm.getRawValue());
+    console.log('  Create standard Form Data:', this.createForm.getRawValue());
     if (this.createForm.invalid) {
       this.createForm.markAllAsTouched();
       console.warn('❌ Form is invalid');
@@ -118,7 +118,7 @@ export class FeeCatalogComponentCreateFormComponent {
 
     this.feeCatalogComponentManagementService.saveFeeCatalogComponent(this.routedId, this.createForm.getRawValue()).subscribe({
       next: (response) => {
-        console.log('✅ Success Status:', response.status);
+        console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.router.navigate(ROUTES.FEE.FEE_CATALOG_COMPONENT.LIST);
       },

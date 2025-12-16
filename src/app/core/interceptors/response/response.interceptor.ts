@@ -6,7 +6,7 @@ export const responseInterceptor: HttpInterceptorFn = (req, next) => {
     tap({
       next: (event) => {
         if (event instanceof HttpResponse) {
-          console.log('✅ API Response:', {
+          console.log('  API Response:', {
             url: event.url,
             status: event.status,
             statusText: event.statusText,
