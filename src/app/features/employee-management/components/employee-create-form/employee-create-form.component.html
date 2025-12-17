@@ -18,21 +18,7 @@
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Academic Year" formControlName="academicYearName" readonly>
         </div>
-        <label class="col-lg-1 col-form-label">Admission Type:</label>
-        <div class="col-lg-3">
-          <select class="form-control" formControlName="admissionTypeId"
-            [class.is-invalid]="admissionTypeId?.invalid && (admissionTypeId?.touched || admissionTypeId?.dirty)"
-            [class.is-valid]="admissionTypeId?.valid && (admissionTypeId?.touched || admissionTypeId?.dirty)">
-            <option value='' selected>Select Admission Type</option>
-            @for (p of admissionTypesDD; track p.id) {
-            <option [value]="p.id">{{ p.name }}</option>
-            }
-          </select>
-          <span class="form-text text-muted">Please select Addmission Type</span>
-          <span class="invalid-feedback" *ngIf="admissionTypeId?.errors?.['required']">
-            Admission Type is required
-          </span>
-        </div>
+
 
 
         <label class="col-lg-1 col-form-label">Campus:</label>

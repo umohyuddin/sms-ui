@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { StudentCreateFormComponent } from '../../components/student-create-form/student-create-form.component';
+import { EmployeeCreateFormComponent } from '../../components/employee-create-form/employee-create-form.component';
 
 @Component({
   selector: 'app-standard-create',
-  imports: [StudentCreateFormComponent],
-  templateUrl: './student-create.html',
-  styleUrls: ['./student-create.css'],
+  imports: [EmployeeCreateFormComponent],
+  templateUrl: './employee-create.html',
+  styleUrls: ['./employee-create.css'],
   standalone: true,
 })
-export class StudentCreate {
+export class EmployeeCreate {
    constructor() { }
  
 }

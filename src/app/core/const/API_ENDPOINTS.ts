@@ -13,6 +13,15 @@ export const API_ENDPOINTS = {
         STUDENT_FEE_PAYMENT: '/api/students/fee/payments'
 
     },
+    EMPLOYEE: {
+        CREATE: '/api/institute/employees',
+        UPDATE: (id: string) => `/api/institute/employees/${id}`,
+        UPDATE_PROFILE:`/api/institute/employees/update-profile-photo`,
+        GET_ALL: '/api/institute/employees',
+        SEARCH: `/api/institute/employees/search`,
+        GET_BY_ID: (id: string) => `/api/institute/employees/${id}`
+
+    },
     DASHBOARD: {
         GET_STUDENT_COUNTS: '/api/institute/students/dashboard',
     },

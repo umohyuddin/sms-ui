@@ -5,22 +5,20 @@
         <i class="kt-font-dark flaticon-squares"></i>
       </span>
       <h3 class="kt-portlet__head-title">
-        Student Listing
+        Employee Listing
       </h3>
     </div>
     <div class="kt-portlet__head-toolbar">
       <div class="kt-portlet__head-wrapper">
         <div class="kt-portlet__head-actions">
-          
         </div>
       </div>
     </div>
   </div>
   <div class="kt-portlet__body">
     <!--begin: Search-->
-    <form class="kt-form kt-form--fit kt-margin-b-20" [formGroup]="studentSearchForm" (ngSubmit)="onSubmitSearch()">
+    <form class="kt-form kt-form--fit kt-margin-b-20" [formGroup]="employeeSearchForm" (ngSubmit)="onSubmitSearch()">
       <div class="row kt-margin-b-20">
-
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
           <label>Campus:</label>
           <select class="form-control kt-input" data-col-index="2" formControlName="campusId">
@@ -56,7 +54,7 @@
             </span>
           </button>
           &nbsp;&nbsp;
-          <button class="btn btn-secondary btn-secondary--icon" id="kt_reset" (click)="getAllStudents()">
+          <button class="btn btn-secondary btn-secondary--icon" id="kt_reset" (click)="getAllEmployee()">
             <span>
               <i class="la la-close"></i>
               <span>Reset</span>
@@ -71,8 +69,7 @@
     <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
       <div class="row">
         <div class="col-sm-12">
-          @if(studentsResponse && studentsResponse.length > 0){
-
+          @if(employeeResponse && employeeResponse.length > 0){
           <div class="table-responsive-custom">
             <table
               class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
@@ -86,31 +83,28 @@
                 </tr>
               </thead>
               <tbody>
-
-
                 <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
                   <td>1254</td>
-                  <td>{{item.studentCode}}</td>
+                  <td>{{item.employeeCode}}</td>
                   <td>{{ item.fullName }}</td>
                   <td>{{ item.firstName }}</td>
                   <td>{{ item.lastName }}</td>
-                  <td>{{item.phone}}</td>
+                  <td>{{item.primaryPhone}}</td>
                   <td>{{item.gender}}</td>
                   <td>{{item.dateOfBirth}}</td>
                   <td>3310427306979</td>
                   <td>cnic</td>
                   <td>
                     <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                      [ngClass]="item.isActive ? 'kt-badge--brand' : 'kt-badge--danger'">
-                      {{item.isActive===true ? 'Active' : 'Inactive'}}
+                      [ngClass]="item.active ? 'kt-badge--brand' : 'kt-badge--danger'">
+                      {{item.active===true ? 'Active' : 'Inactive'}}
                     </span>
-
                   </td>
-                  <td>{{ item.enrollmentDate }}</td>
-                  <td>{{ item.standard.standardName }}</td>
-                  <td>{{ item.standard.standardCode }}</td>
-                  <td>{{ item.standard.campus.campusName }}</td>
-                  <td>{{ item.standard.campus.campusCode }}</td>
+                  <td>{{ item.joiningDate }}</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
                   <td nowrap="">
                     <span class="dropdown">
                       <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown"
@@ -166,7 +160,6 @@
         <div class="col-sm-12 col-md-7">
           <div class="dataTables_paginate paging_full_numbers" id="kt_table_1_paginate">
             <ul class="pagination">
-
               <!-- FIRST -->
               <li class="paginate_button page-item first" [class.disabled]="pagination.pageIndex === 0">
                 <a class="page-link" (click)="pagination.first()">
@@ -180,21 +173,17 @@
                   <i class="la la-angle-left"></i>
                 </a>
               </li>
-
               <!-- LEFT ELLIPSIS -->
               <li class="paginate_button page-item disabled" *ngIf="pagination.showLeftEllipsis">
                 <a class="page-link">...</a>
               </li>
-
               <!-- PAGE NUMBERS -->
               <li class="paginate_button page-item" *ngFor="let page of pagination.visiblePages"
                 [class.active]="pagination.pageIndex === page">
-
                 <a class="page-link" (click)="pagination.goToPage(page)">
                   {{ page + 1 }}
                 </a>
               </li>
-
               <!-- RIGHT ELLIPSIS -->
               <li class="paginate_button page-item disabled" *ngIf="pagination.showRightEllipsis">
                 <a class="page-link">...</a>
@@ -215,15 +204,11 @@
                   <i class="la la-angle-double-right"></i>
                 </a>
               </li>
-
             </ul>
-
           </div>
         </div>
       </div>
     </div>
-
-
     <!--end: Datatable -->
   </div>
 </div>

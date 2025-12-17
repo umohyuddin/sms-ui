@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { Router } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-import { StudentListingTableComponent } from '../../components/student-listing-table/student-listing-table.component';
+import { EmployeeListingTableComponent } from '../../components/employee-listing-table/employee-listing-table.component';
 
 
 @Component({
@@ -13,21 +13,21 @@ import { StudentListingTableComponent } from '../../components/student-listing-t
   imports: [
     CommonModule,
     FormsModule,
-    StudentListingTableComponent
+    EmployeeListingTableComponent
 ],
-  templateUrl: './student-listing.html',
-  styleUrls: ['./student-listing.css'],
+  templateUrl: './employee-listing.html',
+  styleUrls: ['./employee-listing.css'],
   standalone: true,
 })
-export class StudentListing implements OnInit {
+export class EmployeeListing implements OnInit {
   URL = '';
   constructor(private router: Router) { }
 
   ngOnInit(): void { }
 
 
-  goToCreateStudent(): void {
-    this.router.navigate(ROUTES.STUDENT.CREATE);
+  goToCreate(): void {
+    this.router.navigate(ROUTES.EMPLOYEE.CREATE);
   }
 }
 

@@ -9,34 +9,33 @@ import { CampusManagementService } from '../../../campus-management/services/cam
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
 import { StandardResponse } from '../../../standard-management/models/standardResponse';
 import { SectionManagementService } from '../../../section-management/services/section-management.service';
-import { StudentManagementService } from '../../services/student-management.service';
+import { EmployeeManagementService } from '../../services/employee-management.service';
 import { SectionResponse } from '../../../section-management/models/SectionResponse';
-import { StudentResponse } from '../../models/StudentResponse';
+import { EmployeeResponse } from '../../models/EmployeeResponse';
 
 
 @Component({
-  selector: 'app-student-listing-table',
+  selector: 'app-employee-listing-table',
   standalone: true,
   imports: [CommonModule,
     RouterModule,
     ReactiveFormsModule
   ],
-  templateUrl: './student-listing-table.component.html',
-  styleUrls: ['./student-listing-table.component.css']
+  templateUrl: './employee-listing-table.component.html',
+  styleUrls: ['./employee-listing-table.component.css']
 })
-export class StudentListingTableComponent {
-  pagination: Pagination<StudentResponse> = new Pagination([], 10);
-  studentsResponse: StudentResponse[] = [];
+export class EmployeeListingTableComponent {
+  pagination: Pagination<EmployeeResponse> = new Pagination([], 10);
+  employeeResponse: EmployeeResponse[] = [];
   sectionsResponse: SectionResponse[] = [];
   standardsResponse: StandardResponse[] = [];
-  studentSearchForm !: FormGroup;
-  private destroy$ = new Subject<void>();
+  employeeSearchForm !: FormGroup;
   campusesResponse: any;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private studentManagementService: StudentManagementService,
+    private employeeManagementService: EmployeeManagementService,
     private campusManagementService: CampusManagementService,
     private standardManagementService: StandardManagementService,
     private sectionManagementService: SectionManagementService
@@ -66,7 +65,7 @@ export class StudentListingTableComponent {
 
   ngOnInit() {
     this.initializeForm();
-    this.getAllStudents()
+    this.getAllEmployee()
     //this.getCampuses();
     //this.getStandards();
     //this.getSections();
@@ -74,7 +73,7 @@ export class StudentListingTableComponent {
 
 
   private initializeForm() {
-    this.studentSearchForm = this.fb.group({
+    this.employeeSearchForm = this.fb.group({
       campusId: [''],
       standardId: [''],
       sectionId: [''],
@@ -98,13 +97,13 @@ export class StudentListingTableComponent {
     });
   }
 
-  getAllStudents() {
-    this.studentManagementService.getAllStudents().subscribe({
+  getAllEmployee() {
+    this.employeeManagementService.getAllEmployee().subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.studentsResponse = response.body;
-        this.pagination = new Pagination(this.studentsResponse, 10);
+        this.employeeResponse = response.body;
+        this.pagination = new Pagination(this.employeeResponse, 10);
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
@@ -150,16 +149,16 @@ export class StudentListingTableComponent {
   //     }
   //   })
   // }
-  viewStudentDetails(student: StudentResponse, event: Event): void {
-    console.log('Viewing details for Student ID:', student.id);
+  viewStudentDetails(employee: EmployeeResponse, event: Event): void {
+    console.log('Viewing details for employee ID:', employee.id);
     event.preventDefault();  // prevents anchor default behavior
-    this.router.navigate(ROUTES.STUDENT.DETAILS(student.id.toString()));
+    this.router.navigate(ROUTES.EMPLOYEE.DETAILS(employee.id.toString()));
   }
 
-  editStudentDetails(student: StudentResponse, event: Event): void {
+  editStudentDetails(employee: EmployeeResponse, event: Event): void {
     event.preventDefault();  // prevents anchor default behavior
-    console.log('Editing Student ID:', student.id);
-    this.router.navigate(ROUTES.CAMPUS.SECTION.EDIT(student.id.toString()));
+    console.log('Editing employee ID:', employee.id);
+    this.router.navigate(ROUTES.EMPLOYEE.EDIT(employee.id.toString()));
   }
 
   // deleteStandard(standardId: any, event: Event): void {
@@ -191,20 +190,20 @@ export class StudentListingTableComponent {
     this.pagination.changePageSize(newSize);
   }
   onSubmitSearch(): void {
-    console.log('  Student Search Form Data:', this.studentSearchForm.getRawValue());
-    let formValues = this.studentSearchForm.value;
+    console.log('Employee Search Form Data:', this.employeeSearchForm.getRawValue());
+    let formValues = this.employeeSearchForm.value;
     let params = {
       campusId: formValues.campusId,
       standardId: formValues.standardId,
       keyword: formValues.keyword?.trim() || ''
     };
 
-    this.studentManagementService.searchStudents(params).subscribe({
+    this.employeeManagementService.searchEmployee(params).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.studentsResponse = response.body;
-        this.pagination = new Pagination(this.studentsResponse, 10);
+        this.employeeResponse = response.body;
+        this.pagination = new Pagination(this.employeeResponse, 10);
       },
       error: (error) => {
         console.error('❌ Post Error Status:', error.status);

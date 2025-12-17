@@ -25,9 +25,9 @@
                         <div class="kt-widget__content">
                             <div class="kt-widget__section">
                                 <a class="kt-widget__username">
-                                    {{studentData?.fullName}}
+                                    {{employeeData?.fullName}}
                                     <i
-                                        [ngClass]="studentData?.isActive ? 'flaticon2-correct kt-font-success' : 'flaticon2-close-cross kt-font-danger'"></i>
+                                        [ngClass]="employeeData?.active ? 'flaticon2-correct kt-font-success' : 'flaticon2-close-cross kt-font-danger'"></i>
                                 </a>
                                 <span class="kt-widget__subtitle">
 
@@ -43,11 +43,11 @@
                         <div class="kt-widget__content">
                             <div class="kt-widget__info">
                                 <span class="kt-widget__label">Email:</span>
-                                <a class="kt-widget__data">{{studentData?.email}}</a>
+                                <a class="kt-widget__data">{{employeeData?.email}}</a>
                             </div>
                             <div class="kt-widget__info">
                                 <span class="kt-widget__label">Phone:</span>
-                                <a href="#" class="kt-widget__data">{{studentData?.phone}}</a>
+                                <a href="#" class="kt-widget__data">{{employeeData?.primaryPhone}}</a>
                             </div>
                         </div>
                         <div class="kt-widget__items">
@@ -463,17 +463,42 @@
                     </div>
                 </div>
                 <div class="kt-portlet__body">
-
+                    <div class="form-group row">
+                        <label class="col-xl-3 col-lg-3 col-form-label">Profile</label>
+                        <div class="col-lg-9 col-xl-6">
+                            <div class="kt-avatar kt-avatar--outline kt-avatar--circle--" id="kt_apps_user_add_avatar">
+                                <div class="kt-avatar__holder" [style.backgroundImage]="'url(' + avatarPreview + ')'">
+                                </div>
+                                <label class="kt-avatar__upload" data-toggle="kt-tooltip" title=""
+                                    data-original-title="Change avatar">
+                                    <i class="fa fa-pen"></i>
+                                    <input type="file" name="kt_apps_contacts_add_avatar"
+                                        (change)="onAvatarSelected($event)">
+                                </label>
+                                <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title=""
+                                    data-original-title="Cancel avatar">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                                <div class="mt-3">
+                                    <button class="btn btn-sm btn-success" [disabled]="!selectedAvatar"
+                                        (click)="uploadAvatar()">
+                                        <i class="fa fa-upload"></i>
+                                        Upload Profile
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group row kt-margin-t-10">
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">First Name :
-                            </span> {{studentData?.firstName}}
+                            </span> {{employeeData?.firstName}}
                         </div>
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Last Name :
-                            </span> {{studentData?.lastName}}
+                            </span> {{employeeData?.lastName}}
                         </div>
 
                     </div>
@@ -483,12 +508,12 @@
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Full Name :
-                            </span> {{studentData?.fullName}}
+                            </span> {{employeeData?.fullName}}
                         </div>
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">DOB :
-                            </span> {{studentData?.dateOfBirth}}
+                            </span> {{employeeData?.dateOfBirth}}
                         </div>
                     </div>
                     <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
@@ -497,7 +522,7 @@
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Gender :
-                            </span> {{studentData?.gender}}
+                            </span> {{employeeData?.gender}}
                         </div>
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
@@ -511,12 +536,12 @@
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Email :
-                            </span> {{studentData?.email}}
+                            </span> {{employeeData?.email}}
                         </div>
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Contact # :
-                            </span> {{studentData?.phone}}
+                            </span> {{employeeData?.primaryPhone}}
                         </div>
                     </div>
                     <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
@@ -545,7 +570,7 @@
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Place Of Birth
                                 # :
-                            </span> {{studentData?.phone}}
+                            </span> {{employeeData?.dateOfBirth}}
                         </div>
                     </div>
 
@@ -591,7 +616,7 @@
                                 <span class="kt-widget4__number kt-font-brand"> {{feeSummary?.totalAssignedFee}}</span>
                             </div>
                             <div class="kt-widget4__item">
-                                
+
                                 <div class="kt-widget4__info">
                                     <a href="#" class="kt-widget4__title">
                                         Total Paid
@@ -730,13 +755,13 @@
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Guardian Name :
-                            </span> {{studentData?.firstName}}
+                            </span> {{employeeData?.firstName}}
                         </div>
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Guardian
                                 Relation :
-                            </span> {{studentData?.lastName}}
+                            </span> {{employeeData?.lastName}}
                         </div>
 
                     </div>
@@ -746,13 +771,13 @@
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Guardian CNIC :
-                            </span> {{studentData?.fullName}}
+                            </span> {{employeeData?.fullName}}
                         </div>
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Guardian Phone
                                 :
-                            </span> {{studentData?.dateOfBirth}}
+                            </span> {{employeeData?.dateOfBirth}}
                         </div>
                     </div>
                     <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
@@ -762,7 +787,7 @@
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Guardian Email
                                 :
-                            </span> {{studentData?.gender}}
+                            </span> {{employeeData?.gender}}
                         </div>
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
@@ -776,12 +801,12 @@
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Email :
-                            </span> {{studentData?.email}}
+                            </span> {{employeeData?.email}}
                         </div>
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Contact # :
-                            </span> {{studentData?.phone}}
+                            </span> {{employeeData?.primaryPhone}}
                         </div>
                     </div>
                     <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
@@ -810,7 +835,7 @@
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Place Of Birth
                                 # :
-                            </span> {{studentData?.phone}}
+                            </span> {{employeeData?.primaryPhone}}
                         </div>
                     </div>
 
@@ -937,7 +962,7 @@
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Admission Type
                                 :
-                            </span> {{studentData?.lastName}}
+                            </span> {{employeeData?.lastName}}
                         </div>
 
                     </div>
@@ -947,12 +972,12 @@
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Academic Year :
-                            </span> {{studentData?.fullName}}
+                            </span> {{employeeData?.fullName}}
                         </div>
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Class Section :
-                            </span> {{studentData?.dateOfBirth}}
+                            </span> {{employeeData?.dateOfBirth}}
                         </div>
                     </div>
                     <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
@@ -962,7 +987,7 @@
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Guardian Email
                                 :
-                            </span> {{studentData?.gender}}
+                            </span> {{employeeData?.gender}}
                         </div>
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
@@ -976,12 +1001,12 @@
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Email :
-                            </span> {{studentData?.email}}
+                            </span> {{employeeData?.email}}
                         </div>
                         <div class="col-6">
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Contact # :
-                            </span> {{studentData?.phone}}
+                            </span> {{employeeData?.email}}
                         </div>
                     </div>
                     <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
@@ -1010,7 +1035,7 @@
                             <!-- <label class="col-form-label">Name:</label> -->
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Place Of Birth
                                 # :
-                            </span> {{studentData?.phone}}
+                            </span> {{employeeData?.primaryPhone}}
                         </div>
                     </div>
 

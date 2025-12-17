@@ -8,7 +8,7 @@ import { API_ENDPOINTS } from '../../../core/const/API_ENDPOINTS';
 @Injectable({
   providedIn: 'root'
 })
-export class StudentManagementService {
+export class EmployeeManagementService {
 
   private baseUrl = '';
 
@@ -34,7 +34,15 @@ export class StudentManagementService {
   }
 
   saveFeePaymente(payload: any): Observable<any> {
-    const url = `${this.baseUrl}${API_ENDPOINTS.STUDENTS.STUDENT_FEE_PAYMENT}`;
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.GET_ALL}`;
+    return this.http.request(HTTP_METHOD.POST, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
+  uploadProfilePhoto(payload: any): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.UPDATE_PROFILE}`;
     return this.http.request(HTTP_METHOD.POST, url, {
       observeResponse: true,
       body: payload
@@ -54,19 +62,19 @@ export class StudentManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.STUDENT_ADMISSION_META}`, { observeResponse: true });
   }
 
-  getAllStudents(): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.STUDENTS.GET_ALL}`, { observeResponse: true });
+  getAllEmployee(): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.GET_ALL}`, { observeResponse: true });
   }
 
-  getStudentById(id: string): Observable<any> {
+  getEmployeeById(id: string): Observable<any> {
     return this.http.request(
       HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.STUDENTS.GET_BY_ID(id)}`,
+      `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.GET_BY_ID(id)}`,
       { observeResponse: true }
     );
   }
 
-  searchStudents(params: any): Observable<any> {
+  searchEmployee(params: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET,
       `${this.baseUrl}${API_ENDPOINTS.STUDENTS.SEARCH}`,
       {

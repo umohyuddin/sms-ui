@@ -1,21 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { StudentListing } from './pages/student-listing/student-listing';
-import { StudentDetails } from './pages/student-details/student-details';
-import { StudentCreate } from './pages/student-create/student-create';
-import { StudentFeeCaculator } from './pages/student-fee-calculator/student-fee-calculator';
-import { StudentCollectFee } from './pages/student-collect-fee/student-collect-fee';
+import { EmployeeListing } from './pages/employee-listing/employee-listing';
+import { EmployeeDetails } from './pages/employee-details/employee-details';
+import { EmployeeCreate } from './pages/employee-create/employee-create';
 
 
 const routes: Routes = [
-  { path: '', component: StudentListing },
-  { path: 'student-details/:id', component: StudentDetails },
-  { path: 'student-edit/:id', component: StudentCreate },
-  { path: 'student-create', component: StudentCreate },
-  { path: 'fee-calculator', component: StudentFeeCaculator },
-  { path: 'fee-collector', component: StudentCollectFee },
-
+  { path: '', component: EmployeeListing },
+  { path: 'employee-details/:id', component: EmployeeDetails },
+  { path: 'employee-edit/:id', component: EmployeeCreate },
+  { path: 'employee-create', component: EmployeeCreate },
 ];
 
 
@@ -26,4 +21,4 @@ const routes: Routes = [
     CommonModule, RouterModule.forChild(routes)
   ]
 })
-export class StudentManagementModule { }
+export class EmployeeManagementModule { }

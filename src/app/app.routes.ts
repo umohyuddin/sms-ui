@@ -88,6 +88,17 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'employee',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/employee-management/employee-management-module').then(m => m.EmployeeManagementModule)
+      }
+    ]
+  },
+  {
     path: 'fee/catalog',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
@@ -131,7 +142,7 @@ export const routes: Routes = [
       }
     ]
   },
-    {
+  {
     path: 'concession/catalog/component',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),

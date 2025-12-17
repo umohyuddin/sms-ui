@@ -10,9 +10,8 @@ import { StandardResponse } from '../../../standard-management/models/standardRe
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
 import { SectionResponse } from '../../../section-management/models/SectionResponse';
 import { SectionManagementService } from '../../../section-management/services/section-management.service';
-import { StudentManagementService } from '../../services/student-management.service';
+import { EmployeeManagementService } from '../../services/employee-management.service';
 import { KeyValueOption } from '../../../fee-catalog-management/models/feeConfig';
-import { AcademicYear, AdmissionType } from '../../models/StudentResponse';
 
 
 
@@ -22,10 +21,10 @@ import { AcademicYear, AdmissionType } from '../../models/StudentResponse';
   imports: [
     ReactiveFormsModule,
     CommonModule],
-  templateUrl: './student-create-form.component.html',
-  styleUrls: ['./student-create-form.component.css']
+  templateUrl: './employee-create-form.component.html',
+  styleUrls: ['./employee-create-form.component.css']
 })
-export class StudentCreateFormComponent {
+export class EmployeeCreateFormComponent {
   createForm!: FormGroup;
   routeSectionId?: string;
   mode = '';
@@ -37,28 +36,24 @@ export class StudentCreateFormComponent {
   isEditMode: boolean = false;
   sectionDD: SectionResponse[] = [];
   provinceDD: KeyValueOption[] = [];
-  currentAcademicYear?: AcademicYear;
 
   nationalityDD: KeyValueOption[] = [];
   religionDD: KeyValueOption[] = [];
   bloodGroupDD: KeyValueOption[] = [];
   genderDD: KeyValueOption[] = [];
-  admissionTypesDD: AdmissionType[] = [];
 
   constructor(
     private campusManagementService: CampusManagementService,
     private standardManagemenetService: StandardManagementService,
     private sectionManagementService: SectionManagementService,
-    private studentManagementSerivce: StudentManagementService,
+    private employeeManagementSerivce: EmployeeManagementService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
   ) { }
 
   ngOnInit() {
-    this.getGetAddmissionTypes();
-    this.getCurrentAcademicYear()
-    this.AddmissionLookUpData();
+    //this.AddmissionLookUpData();
     this.getCampuses();
     this.initializeForm();
     this.routedId = this.route.snapshot.paramMap.get('id');
@@ -76,74 +71,41 @@ export class StudentCreateFormComponent {
     this.createForm.patchValue(this.dummyAdmissionData);
 
   }
-  getGetAddmissionTypes() {
-    this.studentManagementSerivce.getAdmissionType().subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.admissionTypesDD = response.body;
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    });
-  }
-  getCurrentAcademicYear() {
-    this.studentManagementSerivce.getCurrentAcademicYear().subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.currentAcademicYear = response.body;
-        this.createForm.get('academicYearId')?.setValue(this.currentAcademicYear?.id)
-        this.createForm.get('academicYearName')?.setValue(this.currentAcademicYear?.name)
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    });
-  }
-  AddmissionLookUpData() {
-    this.studentManagementSerivce.getAddmissionMeta()
-      .subscribe({
-        next: (response) => {
-          console.log('  Request Success Status:', response.status);
-          console.log('📦 Response Body:', response.body);
-          this.provinceDD = Object.entries(response.body.provinces).map(
-            ([key, label]) => ({ key, label: label as string })
-          );
 
-          this.nationalityDD = Object.entries(response.body.nationalities).map(
-            ([key, label]) => ({ key, label: label as string })
-          );
+  // AddmissionLookUpData() {
+  //   this.studentManagementSerivce.getAddmissionMeta()
+  //     .subscribe({
+  //       next: (response) => {
+  //         console.log('  Request Success Status:', response.status);
+  //         console.log('📦 Response Body:', response.body);
+  //         this.provinceDD = Object.entries(response.body.provinces).map(
+  //           ([key, label]) => ({ key, label: label as string })
+  //         );
 
-          this.religionDD = Object.entries(response.body.religions).map(
-            ([key, label]) => ({ key, label: label as string })
-          );
+  //         this.nationalityDD = Object.entries(response.body.nationalities).map(
+  //           ([key, label]) => ({ key, label: label as string })
+  //         );
 
-          this.bloodGroupDD = Object.entries(response.body.bloodGroup).map(
-            ([key, label]) => ({ key, label: label as string })
-          );
-          this.genderDD = Object.entries(response.body.gender).map(
-            ([key, label]) => ({ key, label: label as string })
-          );
-        },
-        error: (error) => {
-          console.error('❌ Request Error Status:', error.status);
-          console.error('Message:', error.message);
-        },
-        complete: () => {
-          console.log('🔚 Request Complete');
-        }
-      })
-  }
+  //         this.religionDD = Object.entries(response.body.religions).map(
+  //           ([key, label]) => ({ key, label: label as string })
+  //         );
+
+  //         this.bloodGroupDD = Object.entries(response.body.bloodGroup).map(
+  //           ([key, label]) => ({ key, label: label as string })
+  //         );
+  //         this.genderDD = Object.entries(response.body.gender).map(
+  //           ([key, label]) => ({ key, label: label as string })
+  //         );
+  //       },
+  //       error: (error) => {
+  //         console.error('❌ Request Error Status:', error.status);
+  //         console.error('Message:', error.message);
+  //       },
+  //       complete: () => {
+  //         console.log('🔚 Request Complete');
+  //       }
+  //     })
+  // }
 
   onCampusChange() {
     this.createForm.get('campusId')?.valueChanges.subscribe(campusId => {

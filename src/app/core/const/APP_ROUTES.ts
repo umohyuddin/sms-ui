@@ -29,9 +29,15 @@ export const ROUTES = {
     EDIT: (id: string) => ['students', 'student-edit', id],
     DETAILS: (id: string) => ['students', 'student-details', id],
     STUDENT_FEE_CALCULATOR: {
-      DETAILS:['students','fee-calculator']
+      DETAILS: ['students', 'fee-calculator']
     },
-    STUDENT_FEE_COLLECTOR:['students','fee-collector']
+    STUDENT_FEE_COLLECTOR: ['students', 'fee-collector']
+  },
+  EMPLOYEE: {
+    LIST: ['employees'],
+    CREATE: ['employee', 'employee-create'],
+    EDIT: (id: string) => ['employees', 'employee-edit', id],
+    DETAILS: (id: string) => ['employee', 'employee-details', id]
   },
   FEE: {
     FEE_CATALOG: {
