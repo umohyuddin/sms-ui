@@ -1044,9 +1044,162 @@
             </div>
         </div>
     </div>
+    <!--Docs-->
 
 
+    <div *ngIf="activeTab === 'docs'" class="tab-content full-width-tab" style="margin-left: 10px;">
+        <div class="row">
+            <div class="col-xl-12">
 
+                <!--begin:: Widgets/Download Files-->
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-portlet__head">
+                        <div class="kt-portlet__head-label">
+                            <h3 class="kt-portlet__head-title">
+                                Employee Docs
+                            </h3>
+                        </div>
+                        <div class="kt-portlet__head-toolbar">
+                        </div>
+                    </div>
+                    <div class="kt-portlet__body">
+
+                        <!--begin::k-widget4-->
+                        <div class="kt-widget4">
+                            <form class="kt-form kt-form--label-right" [formGroup]="docsForm"
+                                (ngSubmit)="onDocsSubmit()">
+                                <div class="kt-portlet__body">
+                                    <div class="form-group row">
+                                        <div class="col-lg-6">
+                                            <label>Doc Type:</label>
+                                            <select class="form-control" formControlName="docKey"
+                                                [class.is-invalid]="docsKey?.invalid && (docsKey?.touched || docsKey?.dirty)"
+                                                [class.is-valid]="docsKey?.valid && (docsKey?.touched || docsKey?.dirty)">
+                                                <option value='' selected>Select Doc Type</option>
+                                                @for (p of docsTypeDD; track p.key) {
+                                                <option [value]="p.key">{{ p.label }}</option>
+                                                }
+                                            </select>
+                                            <span class="form-text text-muted">Please select Docs Type</span>
+                                            <span class="invalid-feedback" *ngIf="docsKey?.errors?.['required']">
+                                                Docs Type is required
+                                            </span>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label class="">File:</label>
+                                            <input type="file" class="form-control" placeholder="Enter contact number"  (change)="onFileSelected($event)">
+                                            <span class="form-text text-muted">Please browse your file</span>
+                                             <span class="invalid-feedback" *ngIf="docsForm.get('file')?.errors?.['required'] && (docsForm.get('file')?.touched || docsForm.get('file')?.dirty)">
+                                                File is required
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="kt-portlet__foot">
+                                    <div class="kt-form__actions">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <!-- <button type="submit" class="btn btn-primary">Save</button>
+                                                <button type="reset" class="btn btn-secondary">Cancel</button> -->
+                                            </div>
+                                            <div class="col-lg-6 kt-align-right">
+                                                <button type="submit" class="btn btn-primary">Save</button>
+                                                <button type="reset" class="btn btn-secondary">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div class="kt-widget4__item">
+                                <div class="kt-widget4__pic kt-widget4__pic--icon">
+                                    <img src="./assets/media/files/doc.svg" alt="">
+                                </div>
+                                <a href="#" class="kt-widget4__title">
+                                    Metronic Documentation
+                                </a>
+                                <div class="kt-widget4__tools">
+                                    <a href="#" class="btn btn-clean btn-icon btn-sm">
+                                        <i class="flaticon2-download-symbol-of-down-arrow-in-a-rectangle"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="kt-widget4__item">
+                                <div class="kt-widget4__pic kt-widget4__pic--icon">
+                                    <img src="./assets/media/files/jpg.svg" alt="">
+                                </div>
+                                <a href="#" class="kt-widget4__title">
+                                    Project Launch Event
+                                </a>
+                                <div class="kt-widget4__tools">
+                                    <a href="#" class="btn btn-clean btn-icon btn-sm">
+                                        <i class="flaticon2-download-symbol-of-down-arrow-in-a-rectangle"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="kt-widget4__item">
+                                <div class="kt-widget4__pic kt-widget4__pic--icon">
+                                    <img src="./assets/media/files/pdf.svg" alt="">
+                                </div>
+                                <a href="#" class="kt-widget4__title">
+                                    Full Developer Manual For 4.7
+                                </a>
+                                <div class="kt-widget4__tools">
+                                    <a href="#" class="btn btn-clean btn-icon btn-sm">
+                                        <i class="flaticon2-download-symbol-of-down-arrow-in-a-rectangle"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="kt-widget4__item">
+                                <div class="kt-widget4__pic kt-widget4__pic--icon">
+                                    <img src="./assets/media/files/javascript.svg" alt="">
+                                </div>
+                                <a href="#" class="kt-widget4__title">
+                                    Make JS Great Again
+                                </a>
+                                <div class="kt-widget4__tools">
+                                    <a href="#" class="btn btn-clean btn-icon btn-sm">
+                                        <i class="flaticon2-download-symbol-of-down-arrow-in-a-rectangle"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="kt-widget4__item">
+                                <div class="kt-widget4__pic kt-widget4__pic--icon">
+                                    <img src="./assets/media/files/zip.svg" alt="">
+                                </div>
+                                <a href="#" class="kt-widget4__title">
+                                    Download Ziped version OF 5.0
+                                </a>
+                                <div class="kt-widget4__tools">
+                                    <a href="#" class="btn btn-clean btn-icon btn-sm">
+                                        <i class="flaticon2-download-symbol-of-down-arrow-in-a-rectangle"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="kt-widget4__item">
+                                <div class="kt-widget4__pic kt-widget4__pic--icon">
+                                    <img src="./assets/media/files/pdf.svg" alt="">
+                                </div>
+                                <a href="#" class="kt-widget4__title">
+                                    Finance Report 2016/2017
+                                </a>
+                                <div class="kt-widget4__tools">
+                                    <a href="#" class="btn btn-clean btn-icon btn-sm">
+                                        <i class="flaticon2-download-symbol-of-down-arrow-in-a-rectangle"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--end::Widget 9-->
+                    </div>
+                </div>
+
+                <!--end:: Widgets/Download Files-->
+            </div>
+
+        </div>
+    </div>
 
 
     <!--End:: App Content-->

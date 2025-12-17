@@ -16,7 +16,8 @@ export const API_ENDPOINTS = {
     EMPLOYEE: {
         CREATE: '/api/institute/employees',
         UPDATE: (id: string) => `/api/institute/employees/${id}`,
-        UPDATE_PROFILE:`/api/institute/employees/update-profile-photo`,
+        UPDATE_PROFILE: `/api/institute/employees/update-profile-photo`,
+        UPLOAD_DOCS: `/api/institute/employees/upload-document`,
         GET_ALL: '/api/institute/employees',
         SEARCH: `/api/institute/employees/search`,
         GET_BY_ID: (id: string) => `/api/institute/employees/${id}`
@@ -112,6 +113,7 @@ export const API_ENDPOINTS = {
     LOOKUP: {
         FEE_CATALOG_META: '/api/lookup/fee-catalog/metadata',
         STUDENT_ADMISSION_META: '/api/lookup/admission/metadata',
+        EMPLOYEE_DOCS_META: '/api/lookup/docs/metadata',
         PROVINCE: {
             GET_ALL: '/api/lookup/provinces'
         },

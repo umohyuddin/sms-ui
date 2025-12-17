@@ -49,8 +49,21 @@ export class EmployeeManagementService {
     });
   }
 
+
+  uploadEmployeeDocs(payload: any): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.UPLOAD_DOCS}`;
+    return this.http.request(HTTP_METHOD.POST, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
   getCurrentAcademicYear(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.GET_CURRENT}`, { observeResponse: true });
+  }
+
+  getDocsMeta(): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.EMPLOYEE_DOCS_META}`, { observeResponse: true });
   }
 
   getAdmissionType(): Observable<any> {

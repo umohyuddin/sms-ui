@@ -8,16 +8,18 @@ import { AcademicYearManagementService } from '../../../tenant-management/servic
 import { AcademicYearResponse } from '../../../tenant-management/models/AcademicYearResponse';
 import { StudentFeeSummaryResponse } from '../../models/StudentFeeSummaryResponse';
 import { AppConfigService } from '../../../../core/services/app-config.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 
 @Component({
   selector: 'app-employee-info',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './employee-info.component.html',
   styleUrls: ['./employee-info.component.css']
 })
 export class EmployeeInfoComponent {
+  docsForm!: FormGroup;
   selectedAvatar!: File;
   employeeData?: EmployeeResponse;
   routedId!: string;
@@ -25,8 +27,12 @@ export class EmployeeInfoComponent {
   currentAcademicYear?: AcademicYearResponse;
   feeSummary?: StudentFeeSummaryResponse;
   avatarPreview: string = './assets/media/users/default.jpg';
+  docsTypeDD: { key: string; label: string; }[] = [];
+  selectedFile: File | null = null;
+  fileInvalid: boolean = false;
 
   constructor(
+    private fb: FormBuilder,
     private employeeManagementService: EmployeeManagementService,
     private academicYearService: AcademicYearManagementService,
     private route: ActivatedRoute,
@@ -38,8 +44,53 @@ export class EmployeeInfoComponent {
     console.log('employee ID from route:', this.routedId);
     this.getEmployeeDetails(this.routedId);
     this.getCurrentAcademicYear();
+    this.docsInitializeForm()
   }
 
+  private docsInitializeForm() {
+    this.docsForm = this.fb.group({
+      docKey: ['', Validators.required],
+      file: [null, Validators.required]
+    });
+  }
+
+
+
+  onDocsSubmit() {
+    if (!this.selectedFile) {
+      this.fileInvalid = true;
+    }
+
+    if (this.docsForm.invalid || !this.selectedFile) {
+      this.docsForm.markAllAsTouched();
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('docKey', this.docsForm.value.docKey);
+    formData.append('file', this.selectedFile);
+    formData.append('employeeId', this.routedId);
+
+    console.log('Form submitted:');
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
+    this.employeeManagementService.uploadEmployeeDocs(formData).subscribe({
+      next: (response) => {
+        console.log('✅ Status:', response.status);
+        console.log('📦 Body:', response.body);
+
+        // This is upload response, NOT full employee
+        if (this.employeeData) {
+          this.employeeData.profilePicture = response.body.filePath;
+        }
+      },
+      error: (error) => {
+        console.error('❌ Error:', error);
+      }
+    });
+
+  }
   getCurrentAcademicYear() {
     this.academicYearService.getCurrentAcademicYear().subscribe({
       next: (response) => {
@@ -63,6 +114,9 @@ export class EmployeeInfoComponent {
     switch (tab) {
       case 'feeSummary':
         //this.getFeeSummary();
+        break;
+      case 'docs':
+        this.docsLookUpData();
         break;
     }
   }
@@ -150,4 +204,40 @@ export class EmployeeInfoComponent {
     };
     reader.readAsDataURL(file);
   }
+
+
+  docsLookUpData() {
+    this.employeeManagementService.getDocsMeta()
+      .subscribe({
+        next: (response) => {
+          console.log('  Request Success Status:', response.status);
+          console.log('📦 Response Body:', response.body);
+          this.docsTypeDD = Object.entries(response.body.docs).map(
+            ([key, label]) => ({ key, label: label as string })
+          );
+        },
+        error: (error) => {
+          console.error('❌ Request Error Status:', error.status);
+          console.error('Message:', error.message);
+        },
+        complete: () => {
+          console.log('🔚 Request Complete');
+        }
+      })
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.docsForm.patchValue({ file: file });
+      this.docsForm.get('file')?.updateValueAndValidity();
+      this.selectedFile = file;
+    } else {
+      this.docsForm.patchValue({ file: null });
+    }
+  }
+
+  //getters
+
+  get docsKey() { return this.docsForm.get('docsKey'); }
 }
