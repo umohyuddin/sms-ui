@@ -18,6 +18,8 @@ export const API_ENDPOINTS = {
         UPDATE: (id: string) => `/api/institute/employees/${id}`,
         UPDATE_PROFILE: `/api/institute/employees/update-profile-photo`,
         UPLOAD_DOCS: `/api/institute/employees/upload-document`,
+        DOWNLOAD_DOCS: `/api/institute/employees/download-document`,
+        GET_EMPLOYEE_DOCS: (id: string) => `/api/institute/employees/${id}/documents`,
         GET_ALL: '/api/institute/employees',
         SEARCH: `/api/institute/employees/search`,
         GET_BY_ID: (id: string) => `/api/institute/employees/${id}`

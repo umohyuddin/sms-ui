@@ -9,6 +9,8 @@ import { AcademicYearResponse } from '../../../tenant-management/models/Academic
 import { StudentFeeSummaryResponse } from '../../models/StudentFeeSummaryResponse';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { EmployeeDocumentResponseDto } from '../../models/EmployeeDocumentResponseDto';
+import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 
 
 @Component({
@@ -30,6 +32,10 @@ export class EmployeeInfoComponent {
   docsTypeDD: { key: string; label: string; }[] = [];
   selectedFile: File | null = null;
   fileInvalid: boolean = false;
+  docsData: any;
+  documentsByType: { [key: string]: EmployeeDocumentResponseDto[] } = {};
+  personalForm!: FormGroup;
+  showPersonalForm: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -39,14 +45,36 @@ export class EmployeeInfoComponent {
     private appConfig: AppConfigService
   ) { }
 
+  
+  
   ngOnInit(): void {
     this.routedId = this.route.snapshot.paramMap.get('id') ?? '';
     console.log('employee ID from route:', this.routedId);
     this.getEmployeeDetails(this.routedId);
     this.getCurrentAcademicYear();
     this.docsInitializeForm()
+
+
+     this.personalForm = this.fb.group({
+      fullName: [''],
+      email: [''],
+      primaryPhone: [''],
+      gender: [''],
+      dob: ['']
+    });
   }
 
+  togglePersonalForm() {
+    this.showPersonalForm = !this.showPersonalForm;
+  }
+
+  updatePersonalInfo() {
+    if (this.personalForm.valid) {
+      console.log(this.personalForm.value);
+      // Call API to save data
+      this.showPersonalForm = false; // hide form after update
+    }
+  }
   private docsInitializeForm() {
     this.docsForm = this.fb.group({
       docKey: ['', Validators.required],
@@ -117,8 +145,41 @@ export class EmployeeInfoComponent {
         break;
       case 'docs':
         this.docsLookUpData();
+        this.getEmployeeAllDocs()
         break;
     }
+  }
+
+
+  groupByDocumentType(docs: EmployeeDocumentResponseDto[]) {
+    return docs.reduce((acc: any, doc) => {
+      const key = doc.documentType;
+
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+
+      acc[key].push(doc);
+      return acc;
+    }, {});
+  }
+  getEmployeeAllDocs() {
+    this.employeeManagementService.getEmployeeDocs(this.routedId).subscribe({
+      next: (response) => {
+        console.log('✅ Status:', response.status);
+        console.log('📦 Body:', response.body);
+        const docs: EmployeeDocumentResponseDto[] = response.body;
+        this.documentsByType = this.groupByDocumentType(docs);
+        console.log(this.documentsByType);
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    })
   }
   // getFeeSummary() {
   //   const params = {
@@ -236,6 +297,30 @@ export class EmployeeInfoComponent {
       this.docsForm.patchValue({ file: null });
     }
   }
+
+
+  getFileIcon(fileType: string): string {
+    fileType = fileType.toLowerCase();
+    switch (fileType) {
+      case 'pdf': return './assets/media/files/pdf.svg';
+      case 'jpg':
+      case 'jpeg': return './assets/media/files/jpg.svg';
+      case 'png': return './assets/media/files/png.svg';
+      case 'doc':
+      case 'docx': return './assets/media/files/doc.svg';
+      case 'js': return './assets/media/files/javascript.svg';
+      case 'zip': return './assets/media/files/zip.svg';
+      default: return './assets/media/files/file.svg';
+    }
+  }
+
+  downloadFile(doc: any) {
+    console.log(doc)
+    const url = `${this.appConfig.apiBaseUrl}${API_ENDPOINTS.EMPLOYEE.DOWNLOAD_DOCS}/${doc.id}?employeeId=${this.routedId}`;
+    window.open(url, '_blank');
+  }
+
+
 
   //getters
 

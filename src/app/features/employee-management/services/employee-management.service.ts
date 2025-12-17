@@ -58,6 +58,11 @@ export class EmployeeManagementService {
     });
   }
 
+
+  getEmployeeDocs(id:any):Observable<any>{
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.GET_EMPLOYEE_DOCS(id)}`, { observeResponse: true });
+
+  }
   getCurrentAcademicYear(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.GET_CURRENT}`, { observeResponse: true });
   }
@@ -65,6 +70,29 @@ export class EmployeeManagementService {
   getDocsMeta(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.EMPLOYEE_DOCS_META}`, { observeResponse: true });
   }
+
+ downloadEmployeeDocument(documentId: number, employeeId: string): void {
+  const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DOWNLOAD_DOCS}/${documentId}?employeeId=${employeeId}`;
+
+  // Cast the request as Observable<Blob>
+  (this.http.request(HTTP_METHOD.GET, url, { responseType: 'blob' as 'json' }) as unknown as Observable<Blob>)
+    .subscribe(
+      (blob: Blob) => {
+        const link = document.createElement('a');
+        const objectUrl = window.URL.createObjectURL(blob);
+        link.href = objectUrl;
+        link.download = `document_${documentId}.pdf`; // or dynamic filename
+        link.click();
+        window.URL.revokeObjectURL(objectUrl);
+      },
+      (err) => {
+        console.error('Error downloading document', err);
+      }
+    );
+}
+
+
+
 
   getAdmissionType(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ADMISSION_TYPES.GET_ALL}`, { observeResponse: true });
