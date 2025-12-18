@@ -467,38 +467,40 @@
                             </div>
                             <div class="col-6">
                                 <!-- <label class="col-form-label">Name:</label> -->
-                                <span class="form-control-plaintext kt-font-bolder" style="display: inline;">CRC/CNIC :
-                                </span> 311042730691
+                                <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Email :
+                                </span> {{employeeData?.email}}
                             </div>
+
                         </div>
                         <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
                         </div>
                         <div class="form-group row kt-margin-t-10">
-                            <div class="col-6">
-                                <!-- <label class="col-form-label">Name:</label> -->
-                                <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Email :
-                                </span> {{employeeData?.email}}
-                            </div>
                             <div class="col-6">
                                 <!-- <label class="col-form-label">Name:</label> -->
                                 <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Contact # :
                                 </span> {{employeeData?.primaryPhone}}
                             </div>
+                            <div class="col-6">
+                                <!-- <label class="col-form-label">Name:</label> -->
+                                <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Secondary Contect# :
+                                </span> {{employeeData?.secondaryPhone}}
+                            </div>
                         </div>
                         <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
                         </div>
                         <div class="form-group row kt-margin-t-10">
+                             <div class="col-6">
+                                <!-- <label class="col-form-label">Name:</label> -->
+                                <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Work Contect# :
+                                </span> {{employeeData?.workPhone}}
+                            </div>
+                            
                             <div class="col-6">
                                 <!-- <label class="col-form-label">Name:</label> -->
                                 <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Religion :
-                                </span> Islam
+                                </span> {{employeeData?.religion}}
                             </div>
-                            <div class="col-6">
-                                <!-- <label class="col-form-label">Name:</label> -->
-                                <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Nationality
-                                    :
-                                </span> Pakistan
-                            </div>
+                           
                         </div>
                         <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
                         </div>
@@ -511,10 +513,8 @@
                             </div>
                             <div class="col-6">
                                 <!-- <label class="col-form-label">Name:</label> -->
-                                <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Place Of
-                                    Birth
-                                    # :
-                                </span> {{employeeData?.dateOfBirth}}
+                                <span class="form-control-plaintext kt-font-bolder" style="display: inline;">
+                                Marital Status </span> {{employeeData?.maritalStatus}}
                             </div>
                         </div>
 
@@ -553,8 +553,7 @@
                             </div>
 
                             <button type="submit" class="btn btn-success mt-2">Save</button>
-                            <button type="button" class="btn btn-secondary mt-2"
-                                >Cancel</button>
+                            <button type="button" class="btn btn-secondary mt-2">Cancel</button>
                         </form>
                     </div>
                 </div>
@@ -1087,7 +1086,8 @@
                                                 <button type="reset" class="btn btn-secondary">Cancel</button> -->
                                             </div>
                                             <div class="col-lg-6 kt-align-right">
-                                                <button type="submit" class="btn btn-dark" style="margin-right: 10px;">Save</button>
+                                                <button type="submit" class="btn btn-dark"
+                                                    style="margin-right: 10px;">Save</button>
                                                 <button type="reset" class="btn btn-danger">Cancel</button>
                                             </div>
                                         </div>

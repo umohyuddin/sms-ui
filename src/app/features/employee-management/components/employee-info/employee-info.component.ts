@@ -1,10 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { EmployeeResponse } from '../../models/EmployeeResponse';
 import { EmployeeManagementService } from '../../services/employee-management.service';
-import { AcademicYearManagementService } from '../../../tenant-management/services/academic-year-management.service';
 import { AcademicYearResponse } from '../../../tenant-management/models/AcademicYearResponse';
 import { StudentFeeSummaryResponse } from '../../models/StudentFeeSummaryResponse';
 import { AppConfigService } from '../../../../core/services/app-config.service';
@@ -40,22 +39,20 @@ export class EmployeeInfoComponent {
   constructor(
     private fb: FormBuilder,
     private employeeManagementService: EmployeeManagementService,
-    private academicYearService: AcademicYearManagementService,
     private route: ActivatedRoute,
     private appConfig: AppConfigService
   ) { }
 
-  
-  
+
+
   ngOnInit(): void {
     this.routedId = this.route.snapshot.paramMap.get('id') ?? '';
     console.log('employee ID from route:', this.routedId);
     this.getEmployeeDetails(this.routedId);
-    this.getCurrentAcademicYear();
     this.docsInitializeForm()
 
 
-     this.personalForm = this.fb.group({
+    this.personalForm = this.fb.group({
       fullName: [''],
       email: [''],
       primaryPhone: [''],
@@ -119,23 +116,7 @@ export class EmployeeInfoComponent {
     });
 
   }
-  getCurrentAcademicYear() {
-    this.academicYearService.getCurrentAcademicYear().subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.currentAcademicYear = response.body;
-        console.log('📦 Standard data :', this.employeeData);
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    })
-  }
+ 
 
   setActiveTab(tab: string) {
     this.activeTab = tab;
@@ -205,26 +186,30 @@ export class EmployeeInfoComponent {
   // }
 
 
-  getEmployeeDetails(studentId: string): void {
-    this.employeeManagementService.getEmployeeById(studentId).subscribe({
+  getEmployeeDetails(id: string): void {
+    console.group(`Fetching Employee Details - ID: ${id}`);
+    this.employeeManagementService.getEmployeeById(id).subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
+        console.log('%c✅ Request Successful', 'color: green; font-weight: bold;');
+        console.log('Employee Response:', { status: response.status, data: response.body });
         this.employeeData = response.body;
-        this.avatarPreview = this.employeeData?.profilePicture
-          ? `${this.appConfig.apiBaseUrl}/${this.employeeData.profilePicture.replace(/\\/g, '/')}`
-          : this.avatarPreview;
-        console.log('📦 Emplyee GetById Request data :', this.employeeData);
-        console.log('📦 Emplyee GetById Request data :', this.avatarPreview);
+
+        if (this.employeeData?.profilePicture) {
+          this.avatarPreview = `${this.appConfig.apiBaseUrl}/${this.employeeData.profilePicture.replace(/\\/g, '/')}`;
+          console.log('Avatar Preview URL:', this.avatarPreview);
+        } else {
+          console.warn('⚠️ No profile picture found, using default avatar.');
+        }
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        console.error('%c❌ Request Failed', 'color: red; font-weight: bold;');
+        console.error('Employee Request Error:', { status: error.status, message: error.message });
       },
       complete: () => {
-        console.log('🔚 Request Complete');
+        console.log('%c🔚 Request Complete', 'color: blue; font-weight: bold;');
+        console.groupEnd();
       }
-    })
+    });
   }
 
   uploadAvatar() {
