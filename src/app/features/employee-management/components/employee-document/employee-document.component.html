@@ -1,0 +1,99 @@
+<div class="row">
+            <div class="col-xl-12">
+
+                <!--begin:: Widgets/Download Files-->
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-portlet__head">
+                        <div class="kt-portlet__head-label">
+                            <h3 class="kt-portlet__head-title">
+                                Employee Docs
+                            </h3>
+                        </div>
+                        <div class="kt-portlet__head-toolbar">
+                        </div>
+                    </div>
+                    <div class="kt-portlet__body">
+
+                        <!--begin::k-widget4-->
+                        <div class="kt-widget4">
+                            <form class="kt-form kt-form--label-right" [formGroup]="docsForm"
+                                (ngSubmit)="onDocsSubmit()">
+                                <div class="kt-portlet__body">
+                                    <div class="form-group row">
+                                        <div class="col-lg-6">
+                                            <label>Doc Type:</label>
+                                            <select class="form-control" formControlName="docKey"
+                                                [class.is-invalid]="docsKey?.invalid && (docsKey?.touched || docsKey?.dirty)"
+                                                [class.is-valid]="docsKey?.valid && (docsKey?.touched || docsKey?.dirty)">
+                                                <option value='' selected>Select Doc Type</option>
+                                                @for (p of docsTypeDD; track p.key) {
+                                                <option [value]="p.key">{{ p.label }}</option>
+                                                }
+                                            </select>
+                                            <span class="form-text text-muted">Please select Docs Type</span>
+                                            <span class="invalid-feedback" *ngIf="docsKey?.errors?.['required']">
+                                                Docs Type is required
+                                            </span>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label class="">File:</label>
+                                            <input type="file" class="form-control" placeholder="Enter contact number"
+                                                (change)="onFileSelected($event)">
+                                            <span class="form-text text-muted">Please browse your file</span>
+                                            <span class="invalid-feedback"
+                                                *ngIf="docsForm.get('file')?.errors?.['required'] && (docsForm.get('file')?.touched || docsForm.get('file')?.dirty)">
+                                                File is required
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="kt-portlet__foot">
+                                    <div class="kt-form__actions">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <!-- <button type="submit" class="btn btn-primary">Save</button>
+                                                <button type="reset" class="btn btn-secondary">Cancel</button> -->
+                                            </div>
+                                            <div class="col-lg-6 kt-align-right">
+                                                <button type="submit" class="btn btn-dark"
+                                                    style="margin-right: 10px;">Save</button>
+                                                <button type="reset" class="btn btn-danger">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- Document Groups -->
+                            <div *ngFor="let group of documentsByType | keyvalue">
+
+                                <!-- Document Type Heading -->
+                                <h5 class="mt-4 text-dark fw-bold">
+                                    {{ group.key.replace('_', ' ') }}
+                                </h5>
+
+                                <!-- Documents List -->
+                                <div *ngFor="let doc of group.value" class="kt-widget4__item">
+
+                                    <div class="kt-widget4__pic kt-widget4__pic--icon">
+                                        <img [src]="getFileIcon(doc.fileType)" alt="file icon">
+                                    </div>
+
+                                    <a href="javascript:void(0)" class="kt-widget4__title" (click)="downloadFile(doc)">
+                                        {{ doc.fileName }}
+                                    </a>
+
+                                    <div class="kt-widget4__tools">
+                                        <button type="button" class="btn btn-outline-brand btn-elevate btn-icon"
+                                            (click)="downloadFile(doc)"><i class="la la-cloud-download"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Widget 9-->
+                    </div>
+                </div>
+
+                <!--end:: Widgets/Download Files-->
+            </div>
+
+        </div>

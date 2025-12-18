@@ -1,28 +1,23 @@
-import { Component } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { EmployeeResponse } from '../../models/EmployeeResponse';
-import { EmployeeManagementService } from '../../services/employee-management.service';
-import { AcademicYearResponse } from '../../../tenant-management/models/AcademicYearResponse';
-import { StudentFeeSummaryResponse } from '../../models/StudentFeeSummaryResponse';
-import { AppConfigService } from '../../../../core/services/app-config.service';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { EmployeeDocumentResponseDto } from '../../models/EmployeeDocumentResponseDto';
+import { ActivatedRoute } from '@angular/router';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
-import { EmployeePersonalInformationComponent } from '../employee-personal-information/employee-personal-information.component';
-import { EmployeeDocumentComponent } from '../employee-document/employee-document.component';
-
+import { AppConfigService } from '../../../../core/services/app-config.service';
+import { AcademicYearResponse } from '../../../tenant-management/models/AcademicYearResponse';
+import { EmployeeDocumentResponseDto } from '../../models/EmployeeDocumentResponseDto';
+import { EmployeeResponse } from '../../models/EmployeeResponse';
+import { StudentFeeSummaryResponse } from '../../models/StudentFeeSummaryResponse';
+import { EmployeeManagementService } from '../../services/employee-management.service';
 
 @Component({
-  selector: 'app-employee-info',
+  selector: 'app-employee-document',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,EmployeePersonalInformationComponent,EmployeeDocumentComponent],
-  templateUrl: './employee-info.component.html',
-  styleUrls: ['./employee-info.component.css']
+  imports: [CommonModule,ReactiveFormsModule],
+  templateUrl: './employee-document.component.html',
+  styleUrl: './employee-document.component.css'
 })
-export class EmployeeInfoComponent {
-  docsForm!: FormGroup;
+export class EmployeeDocumentComponent {docsForm!: FormGroup;
   selectedAvatar!: File;
   employeeData?: EmployeeResponse;
   routedId!: string;

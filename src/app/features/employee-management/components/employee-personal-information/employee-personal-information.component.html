@@ -1,1 +1,341 @@
-<p>employee-personal-information works!</p>
+<div class="kt-grid__item kt-grid__item--fluid kt-app__content">
+    <div class="kt-portlet">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">
+                    Personal Information
+                </h3>
+            </div>
+            <div class="kt-portlet__head-toolbar">
+                <div class="kt-portlet__head-actions">
+                    <div class="dropdown dropdown-inline">
+                        <a href="#" class="btn btn-outline-success btn-sm btn-icon btn-icon-md" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="flaticon-signs-1"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="kt-nav">
+                                <li class="kt-nav__item">
+                                    <a class="kt-nav__link" (click)="togglePersonalForm()">
+                                        <i class="kt-nav__link-icon flaticon-profile-1"></i>
+                                        <span class="kt-nav__link-text">Update Info</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+            <div *ngIf="!showPersonalForm">
+                <div class="form-group row">
+                    <label class="col-xl-3 col-lg-3 col-form-label">Profile</label>
+                    <div class="col-lg-9 col-xl-6">
+                        <div class="kt-avatar kt-avatar--outline kt-avatar--circle--" id="kt_apps_user_add_avatar">
+                            <div class="kt-avatar__holder" [style.backgroundImage]="'url(' + avatarPreview + ')'">
+                            </div>
+                            <label class="kt-avatar__upload" data-toggle="kt-tooltip" title=""
+                                data-original-title="Change avatar">
+                                <i class="fa fa-pen"></i>
+                                <input type="file" name="kt_apps_contacts_add_avatar"
+                                    (change)="onAvatarSelected($event)">
+                            </label>
+                            <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title=""
+                                data-original-title="Cancel avatar">
+                                <i class="fa fa-times"></i>
+                            </span>
+                            <div class="mt-3">
+                                <button class="btn btn-sm btn-success" [disabled]="!selectedAvatar"
+                                    (click)="uploadAvatar()">
+                                    <i class="fa fa-upload"></i>
+                                    Upload Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group row kt-margin-t-10">
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">First Name
+                            :
+                        </span> {{employeeData?.firstName}}
+                    </div>
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Last Name :
+                        </span> {{employeeData?.lastName}}
+                    </div>
+
+                </div>
+                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                </div>
+                <div class="form-group row kt-margin-t-10">
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Full Name :
+                        </span> {{employeeData?.fullName}}
+                    </div>
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">DOB :
+                        </span> {{employeeData?.dateOfBirth}}
+                    </div>
+                </div>
+                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                </div>
+                <div class="form-group row kt-margin-t-10">
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Gender :
+                        </span> {{employeeData?.gender}}
+                    </div>
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Email :
+                        </span> {{employeeData?.email}}
+                    </div>
+
+                </div>
+                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                </div>
+                <div class="form-group row kt-margin-t-10">
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Contact # :
+                        </span> {{employeeData?.primaryPhone}}
+                    </div>
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Secondary Contect#
+                            :
+                        </span> {{employeeData?.secondaryPhone}}
+                    </div>
+                </div>
+                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                </div>
+                <div class="form-group row kt-margin-t-10">
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Work Contect# :
+                        </span> {{employeeData?.workPhone}}
+                    </div>
+
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Religion :
+                        </span> {{employeeData?.religion}}
+                    </div>
+
+                </div>
+                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                </div>
+                <div class="form-group row kt-margin-t-10">
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Blood_Group
+                            :
+                        </span> O+
+                    </div>
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">
+                            Marital Status </span> {{employeeData?.maritalStatus}}
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div *ngIf="showPersonalForm" class="personal-form mt-3">
+                <form class="kt-form kt-form--label-right" [formGroup]="updateForm" (ngSubmit)="onSubmit()">
+                    <div class="kt-portlet__body">
+                        <h4>Personal Information → Employee Details</h4>
+
+                        <!-- Name Fields -->
+                        <div class="form-group row form-group-marginless kt-margin-t-20">
+                            <!-- First Name -->
+                            <div class="col-lg-6">
+                                <label class="col-form-label">First Name:</label>
+                                <input type="text" class="form-control" placeholder="Enter first name"
+                                    formControlName="firstName"
+                                    [class.is-invalid]="firstName?.invalid && (firstName?.touched || firstName?.dirty)"
+                                    [class.is-valid]="firstName?.valid && (firstName?.touched || firstName?.dirty)">
+                                <span class="form-text text-muted">Enter employee's first name</span>
+                                <span class="invalid-feedback" *ngIf="firstName?.errors?.['required']">
+                                    First name is required
+                                </span>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="col-lg-6">
+                                <label class="col-form-label">Last Name:</label>
+                                <input type="text" class="form-control" placeholder="Enter last name"
+                                    formControlName="lastName"
+                                    [class.is-invalid]="lastName?.invalid && (lastName?.touched || lastName?.dirty)"
+                                    [class.is-valid]="lastName?.valid && (lastName?.touched || lastName?.dirty)">
+                                <span class="form-text text-muted">Enter employee's last name</span>
+                                <span class="invalid-feedback" *ngIf="lastName?.errors?.['required']">
+                                    Last name is required
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Middle Name -->
+                        <div class="form-group row form-group-marginless kt-margin-t-20">
+                            <div class="col-lg-6">
+                                <label class="col-form-label">Middle Name:</label>
+                                <input type="text" class="form-control" placeholder="Enter middle name (optional)"
+                                    formControlName="middleName">
+                                <span class="form-text text-muted">Enter middle name if applicable</span>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="form-group row form-group-marginless kt-margin-t-20">
+                            <!-- Primary Phone -->
+                            <div class="col-lg-6">
+                                <label class="col-form-label">Primary Phone:</label>
+                                <input type="text" class="form-control" placeholder="Enter primary phone"
+                                    formControlName="primaryPhone"
+                                    [class.is-invalid]="primaryPhone?.invalid && (primaryPhone?.touched || primaryPhone?.dirty)"
+                                    [class.is-valid]="primaryPhone?.valid && (primaryPhone?.touched || primaryPhone?.dirty)">
+                                <span class="form-text text-muted">Enter employee's primary phone</span>
+                                <span class="invalid-feedback" *ngIf="primaryPhone?.errors?.['required']">
+                                    Primary phone is required
+                                </span>
+                            </div>
+
+                            <!-- Secondary Phone -->
+                            <div class="col-lg-6">
+                                <label class="col-form-label">Secondary Phone:</label>
+                                <input type="text" class="form-control" placeholder="Enter secondary phone"
+                                    formControlName="secondaryPhone">
+                                <span class="form-text text-muted">Enter employee's secondary phone</span>
+                            </div>
+                        </div>
+
+                        <!-- Work Phone & DOB -->
+                        <div class="form-group row form-group-marginless kt-margin-t-20">
+                            <div class="col-lg-6">
+                                <label class="col-form-label">Work Phone:</label>
+                                <input type="text" class="form-control" placeholder="Enter work phone"
+                                    formControlName="workPhone">
+                                <span class="form-text text-muted">Enter employee's work phone</span>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <label class="col-form-label">Date of Birth:</label>
+                                <input type="date" class="form-control" placeholder="Select date of birth"
+                                    formControlName="dateOfBirth"
+                                    [class.is-invalid]="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)"
+                                    [class.is-valid]="dateOfBirth?.valid && (dateOfBirth?.touched || dateOfBirth?.dirty)">
+                                <span class="form-text text-muted">Select employee's date of birth</span>
+                                <span class="invalid-feedback" *ngIf="dateOfBirth?.errors?.['required']">
+                                    Date of birth is required
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Email & Gender -->
+                        <div class="form-group row form-group-marginless kt-margin-t-20">
+                            <div class="col-lg-6">
+                                <label class="col-form-label">Email:</label>
+                                <input type="email" class="form-control" placeholder="Enter email address"
+                                    formControlName="email"
+                                    [class.is-invalid]="email?.invalid && (email?.touched || email?.dirty)"
+                                    [class.is-valid]="email?.valid && (email?.touched || email?.dirty)">
+                                <span class="form-text text-muted">Enter a valid email</span>
+                                <span class="invalid-feedback" *ngIf="email?.errors?.['required']">
+                                    Email is required
+                                </span>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <label class="col-form-label">Gender:</label>
+                                <select class="form-control" formControlName="gender"
+                                    [class.is-invalid]="gender?.invalid && (gender?.touched || gender?.dirty)"
+                                    [class.is-valid]="gender?.valid && (gender?.touched || gender?.dirty)">
+                                    <option value="">Select gender</option>
+                                    <option *ngFor="let g of genderDD" [value]="g.key">{{ g.label }}</option>
+                                </select>
+                                <span class="form-text text-muted">Select employee's gender</span>
+                                <span class="invalid-feedback" *ngIf="gender?.errors?.['required']">
+                                    Gender is required
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Religion & Marital Status -->
+                        <div class="form-group row form-group-marginless kt-margin-t-20">
+                            <div class="col-lg-6">
+                                <label class="col-form-label">Religion:</label>
+                                <select class="form-control" formControlName="religion"
+                                    [class.is-invalid]="religion?.invalid && (religion?.touched || religion?.dirty)"
+                                    [class.is-valid]="religion?.valid && (religion?.touched || religion?.dirty)">
+                                    <option value="">Select religion</option>
+                                    <option *ngFor="let r of religionDD" [value]="r.key">{{ r.label }}</option>
+                                </select>
+                                <span class="form-text text-muted">Select employee's religion</span>
+                                <span class="invalid-feedback" *ngIf="religion?.errors?.['required']">
+                                    Religion is required
+                                </span>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <label class="col-form-label">Marital Status:</label>
+                                <select class="form-control" formControlName="maritalStatus"
+                                    [class.is-invalid]="maritalStatus?.invalid && (maritalStatus?.touched || maritalStatus?.dirty)"
+                                    [class.is-valid]="maritalStatus?.valid && (maritalStatus?.touched || maritalStatus?.dirty)">
+                                    <option value="">Select marital status</option>
+                                    <option *ngFor="let m of maritalStatusDD" [value]="m.key">{{ m.label }}</option>
+                                </select>
+                                <span class="form-text text-muted">Select employee's marital status</span>
+                                <span class="invalid-feedback" *ngIf="maritalStatus?.errors?.['required']">
+                                    Marital Status is required
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Blood Group & CNIC -->
+                        <div class="form-group row form-group-marginless kt-margin-t-20">
+                            <div class="col-lg-6">
+                                <label class="col-form-label">Blood Group:</label>
+                                <select class="form-control" formControlName="bloodGroup">
+                                    <option value="">Select blood group</option>
+                                    <option *ngFor="let b of bloodGroupDD" [value]="b.key">{{ b.label }}</option>
+                                </select>
+                                <span class="form-text text-muted">Select employee's blood group</span>
+                            </div>
+                        </div>
+
+                        <!-- Bio -->
+                        <div class="form-group row kt-margin-t-40">
+                            <label class="col-lg-1 col-form-label">Employee Bio/Notes:</label>
+                            <div class="col-lg-11">
+                                <textarea class="form-control" rows="3" formControlName="bio"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <div class="row">
+                                <div class="col-lg-5"></div>
+                                <div class="col-lg-7">
+                                    <button type="submit" class="btn btn-dark mr-2">Update Personal Info </button>
+                                    <button type="button" class="btn btn-secondary"
+                                        (click)="togglePersonalForm()">Discard Changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -55,8 +55,6 @@ export class EmployeeCreateFormComponent {
       fullName: [''],
       dateOfBirth: ['', Validators.required],
       gender: ['', Validators.required],
-      cnic: ['', Validators.required],
-      passportNumber: [''],
       primaryPhone: ['', Validators.required],
       secondaryPhone: [''],
       workPhone: [''],
@@ -167,7 +165,6 @@ export class EmployeeCreateFormComponent {
   get fullName() { return this.createForm.get('fullName'); }
   get dateOfBirth() { return this.createForm.get('dateOfBirth'); }
   get gender() { return this.createForm.get('gender'); }
-  get cnic() { return this.createForm.get('cnic'); }
   get passportNumber() { return this.createForm.get('passportNumber'); }
   get primaryPhone() { return this.createForm.get('primaryPhone'); }
   get secondaryPhone() { return this.createForm.get('secondaryPhone'); }
@@ -187,8 +184,6 @@ export class EmployeeCreateFormComponent {
     fullName: 'Uzair Ali Anwar',
     dateOfBirth: '1990-05-12',
     gender: 'MALE',
-    cnic: '311042730691',
-    passportNumber: 'A1234567',
     primaryPhone: '03001234567',
     secondaryPhone: '03007654321',
     workPhone: '02112345678',

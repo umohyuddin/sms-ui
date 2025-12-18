@@ -24,6 +24,13 @@ export class EmployeeManagementService {
     });
   }
 
+   update(payload: any,id:string): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.UPDATE(id)}`;
+    return this.http.request(HTTP_METHOD.PUT, url, {
+      observeResponse: true, body: payload
+    });
+  }
+
   saveFeePaymente(payload: any): Observable<any> {
     const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.GET_ALL}`;
     return this.http.request(HTTP_METHOD.POST, url, {
