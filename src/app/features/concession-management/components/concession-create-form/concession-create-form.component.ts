@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { ConcessionManagementService } from '../../services/concession-management.service';
 import { ConcessionResponse } from '../../models/ConcessionResponse';
-import { KeyValueOption } from '../../../fee-catalog-management/models/feeConfig';
+import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { FeeCatalogManagementService } from '../../../fee-catalog-management/services/fee-catalog-management.service';
 
 

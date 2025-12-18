@@ -26,7 +26,3 @@ export interface ChargeTypes {
 }
 
 
-export interface KeyValueOption {
-  key: string;
-  label: string;
-}

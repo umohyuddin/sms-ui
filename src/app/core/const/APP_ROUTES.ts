@@ -34,7 +34,7 @@ export const ROUTES = {
     STUDENT_FEE_COLLECTOR: ['students', 'fee-collector']
   },
   EMPLOYEE: {
-    LIST: ['employees'],
+    LIST: ['employee'],
     CREATE: ['employee', 'employee-create'],
     EDIT: (id: string) => ['employees', 'employee-edit', id],
     DETAILS: (id: string) => ['employee', 'employee-details', id]

@@ -5,7 +5,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { FeeCatalogManagementService } from '../../services/fee-catalog-management.service';
-import { FeeConfig, KeyValueOption } from '../../models/feeConfig';
+import { FeeConfig } from '../../models/feeConfig';
+import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { FeeCatalogResponse } from '../../models/FeeCatalogResponse';
 
 

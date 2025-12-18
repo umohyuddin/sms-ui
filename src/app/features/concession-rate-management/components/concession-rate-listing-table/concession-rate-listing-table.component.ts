@@ -8,7 +8,7 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CHARGE_TYPE_CLASSES, RECURRENCE_RULE_CLASSES } from '../../../../core/const/COLOR_CONST';
 import { ConcessionRateResponse } from '../../models/ConcessionRateResponse';
 import { ConcessionRateManagementService } from '../../services/concession-rate-management.service';
-import { KeyValueOption } from '../../../fee-catalog-management/models/feeConfig';
+import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { FeeCatalogManagementService } from '../../../fee-catalog-management/services/fee-catalog-management.service';
 import { ConcessionResponse } from '../../../concession-management/models/ConcessionResponse';
 import { ConcessionManagementService } from '../../../concession-management/services/concession-management.service';

@@ -11,9 +11,8 @@ import { StandardManagementService } from '../../../standard-management/services
 import { SectionResponse } from '../../../section-management/models/SectionResponse';
 import { SectionManagementService } from '../../../section-management/services/section-management.service';
 import { StudentManagementService } from '../../services/student-management.service';
-import { KeyValueOption } from '../../../fee-catalog-management/models/feeConfig';
 import { AcademicYear, AdmissionType } from '../../models/StudentResponse';
-
+import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 
 
 @Component({

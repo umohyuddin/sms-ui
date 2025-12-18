@@ -1,3 +1,5 @@
+import { KeyValueOption } from "../models/KeyValueOption";
+
 export class SmsUtil {
 
   /**
@@ -22,4 +24,9 @@ export class SmsUtil {
     return first + last;
   }
 
+
+
+  static mapToKeyValue(obj: Record<string, any>): KeyValueOption[] {
+  return Object.entries(obj).map(([key, label]) => ({ key, label: label as string }));
+}
 }

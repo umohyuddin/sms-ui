@@ -17,19 +17,10 @@ export class EmployeeManagementService {
     console.log('API Base URL:', this.appConfig.apiBaseUrl);
   }
 
-
-  save(id: string | null, payload: any): Observable<any> {
-    const isUpdate = !!id;
-
-    const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
-
-    const url = isUpdate
-      ? `${this.baseUrl}${API_ENDPOINTS.STUDENTS.UPDATE(id)}`
-      : `${this.baseUrl}${API_ENDPOINTS.STUDENTS.CREATE}`;
-
-    return this.http.request(method, url, {
-      observeResponse: true,
-      body: payload
+  save(payload: any): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.CREATE}`;
+    return this.http.request(HTTP_METHOD.POST, url, {
+      observeResponse: true, body: payload
     });
   }
 
@@ -49,7 +40,6 @@ export class EmployeeManagementService {
     });
   }
 
-
   uploadEmployeeDocs(payload: any): Observable<any> {
     const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.UPLOAD_DOCS}`;
     return this.http.request(HTTP_METHOD.POST, url, {
@@ -59,7 +49,7 @@ export class EmployeeManagementService {
   }
 
 
-  getEmployeeDocs(id:any):Observable<any>{
+  getEmployeeDocs(id: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.GET_EMPLOYEE_DOCS(id)}`, { observeResponse: true });
 
   }
@@ -71,25 +61,25 @@ export class EmployeeManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.EMPLOYEE_DOCS_META}`, { observeResponse: true });
   }
 
- downloadEmployeeDocument(documentId: number, employeeId: string): void {
-  const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DOWNLOAD_DOCS}/${documentId}?employeeId=${employeeId}`;
+  downloadEmployeeDocument(documentId: number, employeeId: string): void {
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DOWNLOAD_DOCS}/${documentId}?employeeId=${employeeId}`;
 
-  // Cast the request as Observable<Blob>
-  (this.http.request(HTTP_METHOD.GET, url, { responseType: 'blob' as 'json' }) as unknown as Observable<Blob>)
-    .subscribe(
-      (blob: Blob) => {
-        const link = document.createElement('a');
-        const objectUrl = window.URL.createObjectURL(blob);
-        link.href = objectUrl;
-        link.download = `document_${documentId}.pdf`; // or dynamic filename
-        link.click();
-        window.URL.revokeObjectURL(objectUrl);
-      },
-      (err) => {
-        console.error('Error downloading document', err);
-      }
-    );
-}
+    // Cast the request as Observable<Blob>
+    (this.http.request(HTTP_METHOD.GET, url, { responseType: 'blob' as 'json' }) as unknown as Observable<Blob>)
+      .subscribe(
+        (blob: Blob) => {
+          const link = document.createElement('a');
+          const objectUrl = window.URL.createObjectURL(blob);
+          link.href = objectUrl;
+          link.download = `document_${documentId}.pdf`; // or dynamic filename
+          link.click();
+          window.URL.revokeObjectURL(objectUrl);
+        },
+        (err) => {
+          console.error('Error downloading document', err);
+        }
+      );
+  }
 
 
 
