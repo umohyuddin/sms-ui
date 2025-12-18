@@ -24,7 +24,7 @@ export class EmployeeManagementService {
     });
   }
 
-   update(payload: any,id:string): Observable<any> {
+  update(payload: any, id: string): Observable<any> {
     const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.UPDATE(id)}`;
     return this.http.request(HTTP_METHOD.PUT, url, {
       observeResponse: true, body: payload
@@ -58,6 +58,11 @@ export class EmployeeManagementService {
 
   getEmployeeDocs(id: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.GET_EMPLOYEE_DOCS(id)}`, { observeResponse: true });
+
+  }
+
+  getEmployeeAddressById(id: any): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.ADDRESS.GET_BY_ID(id)}`, { observeResponse: true });
 
   }
   getCurrentAcademicYear(): Observable<any> {
@@ -108,6 +113,14 @@ export class EmployeeManagementService {
     return this.http.request(
       HTTP_METHOD.GET,
       `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.GET_BY_ID(id)}`,
+      { observeResponse: true }
+    );
+  }
+
+  getEmployeeAddress(id: string): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.ADDRESS.GET_EMPLOYEE_ID(id)}`,
       { observeResponse: true }
     );
   }

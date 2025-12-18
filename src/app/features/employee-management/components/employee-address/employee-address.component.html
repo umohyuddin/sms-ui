@@ -1,0 +1,77 @@
+<div class="kt-grid__item kt-grid__item--fluid kt-app__content">
+    <div class="kt-portlet">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">
+                    Address Information
+                </h3>
+            </div>
+            <div class="kt-portlet__head-toolbar">
+                <div class="kt-portlet__head-actions">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+            <div *ngIf="!showPersonalForm">
+                <div *ngFor="let address of employeeAddressData" class="kt-margin-t-10">
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">
+                                {{ address.addressType | titlecase }} Address Line 1:
+                            </span> {{ address.line1 }}
+                        </div>
+                        <div class="col-6">
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">
+                                Line 2:
+                            </span> {{ address.line2 }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">
+                                City:
+                            </span> {{ address.city }}
+                        </div>
+                        <div class="col-6">
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">
+                                State:
+                            </span> {{ address.state }}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">
+                                Postal Code:
+                            </span> {{ address.postalCode }}
+                        </div>
+                        <div class="col-6">
+                            <span class="form-control-plaintext kt-font-bolder" style="display: inline;">
+                                Country:
+                            </span> {{ address.country }}
+                        </div>
+                    </div>
+
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12 text-center">
+                            <button type="button" class="btn btn-outline-success btn-icon" (click)="togglePersonalForm(address.id)">
+                                <i class="flaticon-signs-1"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                    </div>
+
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

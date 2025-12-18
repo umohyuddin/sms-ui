@@ -22,8 +22,13 @@ export const API_ENDPOINTS = {
         GET_EMPLOYEE_DOCS: (id: string) => `/api/institute/employees/${id}/documents`,
         GET_ALL: '/api/institute/employees',
         SEARCH: `/api/institute/employees/search`,
-        GET_BY_ID: (id: string) => `/api/institute/employees/${id}`
+        GET_BY_ID: (id: string) => `/api/institute/employees/${id}`,
 
+        ADDRESS: {
+            GET_EMPLOYEE_ID: (id: string) => `/api/institute/employees/${id}/addresses`,
+            GET_BY_ID: (id: string) => `/api/institute/employees/addresses/${id}`,
+
+        }
     },
     DASHBOARD: {
         GET_STUDENT_COUNTS: '/api/institute/students/dashboard',

@@ -96,135 +96,26 @@
                                     </span>
                                 </span>
                             </a>
-                            <a [class.active]="activeTab === 'feeSummary'" (click)="setActiveTab('feeSummary')"
-                                class="kt-widget__item ">
+                            <a [class.active]="activeTab === 'addressInformation'"
+                                (click)="setActiveTab('addressInformation')" class="kt-widget__item ">
                                 <span class="kt-widget__section">
                                     <span class="kt-widget__icon">
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                             xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
                                             viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
+                                                <rect id="bound" x="0" y="0" width="24" height="24" />
                                                 <path
-                                                    d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z"
-                                                    id="Mask" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-                                                <path
-                                                    d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z"
-                                                    id="Mask-Copy" fill="#000000" fill-rule="nonzero"></path>
+                                                    d="M12,16.381038 L12,6.47213595 L5.99460483,18.4829263 L12,16.381038 Z M2.88230018,20.2353996 L11.2844582,3.43108351 C11.4820496,3.03590071 11.9625881,2.87572123 12.3577709,3.07331263 C12.5125928,3.15072359 12.6381308,3.27626158 12.7155418,3.43108351 L21.1176998,20.2353996 C21.3152912,20.6305824 21.1551117,21.1111209 20.7599289,21.3087123 C20.5664522,21.4054506 20.3420471,21.4197165 20.1378777,21.3482572 L12,18.5 L3.86212227,21.3482572 C3.44509941,21.4942152 2.98871325,21.2744737 2.84275525,20.8574509 C2.77129597,20.6532815 2.78556182,20.4288764 2.88230018,20.2353996 Z"
+                                                    id="Path-99" fill="#000000" fill-rule="nonzero" />
                                             </g>
                                         </svg> </span>
                                     <span class="kt-widget__desc">
-                                        Fee Summary Current Academic Year
+                                        Address Information
                                     </span>
                                 </span>
                             </a>
-                            <a [class.active]="activeTab === 'enrollment_administrative'"
-                                (click)="setActiveTab('enrollment_administrative')" class="kt-widget__item ">
-                                <span class="kt-widget__section">
-                                    <span class="kt-widget__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <polygon id="Shape" points="0 0 24 0 24 24 0 24"></polygon>
-                                                <path
-                                                    d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z"
-                                                    id="Mask" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-                                                <path
-                                                    d="M3.00065168,20.1992055 C3.38825852,15.4265159 7.26191235,13 11.9833413,13 C16.7712164,13 20.7048837,15.2931929 20.9979143,20.2 C21.0095879,20.3954741 20.9979143,21 20.2466999,21 C16.541124,21 11.0347247,21 3.72750223,21 C3.47671215,21 2.97953825,20.45918 3.00065168,20.1992055 Z"
-                                                    id="Mask-Copy" fill="#000000" fill-rule="nonzero"></path>
-                                            </g>
-                                        </svg> </span>
-                                    <span class="kt-widget__desc">
-                                        Enrollment & Administrative Information
-                                    </span>
-                                </span>
-                            </a>
-                            <a [class.active]="activeTab === 'guardian'" (click)="setActiveTab('guardian')"
-                                class="kt-widget__item">
-                                <span class="kt-widget__section">
-                                    <span class="kt-widget__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <rect id="bound" x="0" y="0" width="24" height="24"></rect>
-                                                <path
-                                                    d="M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z"
-                                                    id="Combined-Shape" fill="#000000" opacity="0.3"></path>
-                                                <path
-                                                    d="M8.56066017,16.6819805 L10.6819805,14.5606602 C11.267767,13.9748737 12.2175144,13.9748737 12.8033009,14.5606602 L14.9246212,16.6819805 C15.5104076,17.267767 15.5104076,18.2175144 14.9246212,18.8033009 L12.8033009,20.9246212 C12.2175144,21.5104076 11.267767,21.5104076 10.6819805,20.9246212 L8.56066017,18.8033009 C7.97487373,18.2175144 7.97487373,17.267767 8.56066017,16.6819805 Z M8.56066017,4.68198052 L10.6819805,2.56066017 C11.267767,1.97487373 12.2175144,1.97487373 12.8033009,2.56066017 L14.9246212,4.68198052 C15.5104076,5.26776695 15.5104076,6.21751442 14.9246212,6.80330086 L12.8033009,8.9246212 C12.2175144,9.51040764 11.267767,9.51040764 10.6819805,8.9246212 L8.56066017,6.80330086 C7.97487373,6.21751442 7.97487373,5.26776695 8.56066017,4.68198052 Z"
-                                                    id="Combined-Shape" fill="#000000"></path>
-                                            </g>
-                                        </svg> </span>
-                                    <span class="kt-widget__desc">
-                                        Gardian Details
-                                    </span>
-
-                                </span></a>
-                            <a [class.active]="activeTab === 'previous_academic'"
-                                (click)="setActiveTab('previous_academic')" class="kt-widget__item">
-                                <span class="kt-widget__section">
-                                    <span class="kt-widget__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <rect id="bound" x="0" y="0" width="24" height="24"></rect>
-                                                <path
-                                                    d="M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z"
-                                                    id="Combined-Shape" fill="#000000" opacity="0.3"></path>
-                                                <path
-                                                    d="M8.56066017,16.6819805 L10.6819805,14.5606602 C11.267767,13.9748737 12.2175144,13.9748737 12.8033009,14.5606602 L14.9246212,16.6819805 C15.5104076,17.267767 15.5104076,18.2175144 14.9246212,18.8033009 L12.8033009,20.9246212 C12.2175144,21.5104076 11.267767,21.5104076 10.6819805,20.9246212 L8.56066017,18.8033009 C7.97487373,18.2175144 7.97487373,17.267767 8.56066017,16.6819805 Z M8.56066017,4.68198052 L10.6819805,2.56066017 C11.267767,1.97487373 12.2175144,1.97487373 12.8033009,2.56066017 L14.9246212,4.68198052 C15.5104076,5.26776695 15.5104076,6.21751442 14.9246212,6.80330086 L12.8033009,8.9246212 C12.2175144,9.51040764 11.267767,9.51040764 10.6819805,8.9246212 L8.56066017,6.80330086 C7.97487373,6.21751442 7.97487373,5.26776695 8.56066017,4.68198052 Z"
-                                                    id="Combined-Shape" fill="#000000"></path>
-                                            </g>
-                                        </svg> </span>
-                                    <span class="kt-widget__desc">
-                                        Health & Medical Information </span>
-
-                                </span></a>
-                            <a [class.active]="activeTab === 'medical'" (click)="setActiveTab('medical')"
-                                class="kt-widget__item">
-                                <span class="kt-widget__section">
-                                    <span class="kt-widget__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <rect id="bound" x="0" y="0" width="24" height="24"></rect>
-                                                <path
-                                                    d="M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z"
-                                                    id="Combined-Shape" fill="#000000" opacity="0.3"></path>
-                                                <path
-                                                    d="M8.56066017,16.6819805 L10.6819805,14.5606602 C11.267767,13.9748737 12.2175144,13.9748737 12.8033009,14.5606602 L14.9246212,16.6819805 C15.5104076,17.267767 15.5104076,18.2175144 14.9246212,18.8033009 L12.8033009,20.9246212 C12.2175144,21.5104076 11.267767,21.5104076 10.6819805,20.9246212 L8.56066017,18.8033009 C7.97487373,18.2175144 7.97487373,17.267767 8.56066017,16.6819805 Z M8.56066017,4.68198052 L10.6819805,2.56066017 C11.267767,1.97487373 12.2175144,1.97487373 12.8033009,2.56066017 L14.9246212,4.68198052 C15.5104076,5.26776695 15.5104076,6.21751442 14.9246212,6.80330086 L12.8033009,8.9246212 C12.2175144,9.51040764 11.267767,9.51040764 10.6819805,8.9246212 L8.56066017,6.80330086 C7.97487373,6.21751442 7.97487373,5.26776695 8.56066017,4.68198052 Z"
-                                                    id="Combined-Shape" fill="#000000"></path>
-                                            </g>
-                                        </svg> </span>
-                                    <span class="kt-widget__desc">
-                                        Previous Academic Information </span>
-
-                                </span></a>
-                            <a [class.active]="activeTab === 'system'" (click)="setActiveTab('system')"
-                                class="kt-widget__item">
-                                <span class="kt-widget__section">
-                                    <span class="kt-widget__icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                            viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <rect id="bound" x="0" y="0" width="24" height="24"></rect>
-                                                <path
-                                                    d="M2.56066017,10.6819805 L4.68198052,8.56066017 C5.26776695,7.97487373 6.21751442,7.97487373 6.80330086,8.56066017 L8.9246212,10.6819805 C9.51040764,11.267767 9.51040764,12.2175144 8.9246212,12.8033009 L6.80330086,14.9246212 C6.21751442,15.5104076 5.26776695,15.5104076 4.68198052,14.9246212 L2.56066017,12.8033009 C1.97487373,12.2175144 1.97487373,11.267767 2.56066017,10.6819805 Z M14.5606602,10.6819805 L16.6819805,8.56066017 C17.267767,7.97487373 18.2175144,7.97487373 18.8033009,8.56066017 L20.9246212,10.6819805 C21.5104076,11.267767 21.5104076,12.2175144 20.9246212,12.8033009 L18.8033009,14.9246212 C18.2175144,15.5104076 17.267767,15.5104076 16.6819805,14.9246212 L14.5606602,12.8033009 C13.9748737,12.2175144 13.9748737,11.267767 14.5606602,10.6819805 Z"
-                                                    id="Combined-Shape" fill="#000000" opacity="0.3"></path>
-                                                <path
-                                                    d="M8.56066017,16.6819805 L10.6819805,14.5606602 C11.267767,13.9748737 12.2175144,13.9748737 12.8033009,14.5606602 L14.9246212,16.6819805 C15.5104076,17.267767 15.5104076,18.2175144 14.9246212,18.8033009 L12.8033009,20.9246212 C12.2175144,21.5104076 11.267767,21.5104076 10.6819805,20.9246212 L8.56066017,18.8033009 C7.97487373,18.2175144 7.97487373,17.267767 8.56066017,16.6819805 Z M8.56066017,4.68198052 L10.6819805,2.56066017 C11.267767,1.97487373 12.2175144,1.97487373 12.8033009,2.56066017 L14.9246212,4.68198052 C15.5104076,5.26776695 15.5104076,6.21751442 14.9246212,6.80330086 L12.8033009,8.9246212 C12.2175144,9.51040764 11.267767,9.51040764 10.6819805,8.9246212 L8.56066017,6.80330086 C7.97487373,6.21751442 7.97487373,5.26776695 8.56066017,4.68198052 Z"
-                                                    id="Combined-Shape" fill="#000000"></path>
-                                            </g>
-                                        </svg> </span>
-                                    <span class="kt-widget__desc">
-                                        System & Audit </span>
-
-                                </span></a>
+                            
                             <a [class.active]="activeTab === 'docs'" (click)="setActiveTab('docs')"
                                 class="kt-widget__item">
                                 <span class="kt-widget__section">
@@ -368,67 +259,9 @@
 
     <!-- feeSummary -->
 
-    <div *ngIf="activeTab === 'feeSummary'" class="tab-content full-width-tab" style="margin-left: 10px;">
+    <div *ngIf="activeTab === 'addressInformation'" class="tab-content full-width-tab" style="margin-left: 10px;">
 
-        <div class="row">
-
-            <div class="col-xl-12">
-
-                <!--begin:: Widgets/Authors Profit-->
-                <div class="kt-portlet kt-portlet--bordered-semi kt-portlet--height-fluid">
-                    <div class="kt-portlet__head">
-                        <div class="kt-portlet__head-label">
-                            <h3 class="kt-portlet__head-title">
-                                Fee Summary <span class="kt-font-warning"> ( {{feeSummary?.academicYearName}} )</span>
-                            </h3>
-                        </div>
-                        <div class="kt-portlet__head-toolbar">
-
-                        </div>
-                    </div>
-                    <div class="kt-portlet__body">
-                        <div class="kt-widget4">
-                            <div class="kt-widget4__item">
-
-                                <div class="kt-widget4__info">
-                                    <a href="#" class="kt-widget4__title">
-                                        Total Assigned
-                                    </a>
-                                    <p class="kt-widget4__text">
-
-                                    </p>
-                                </div>
-                                <span class="kt-widget4__number kt-font-brand"> {{feeSummary?.totalAssignedFee}}</span>
-                            </div>
-                            <div class="kt-widget4__item">
-
-                                <div class="kt-widget4__info">
-                                    <a href="#" class="kt-widget4__title">
-                                        Total Paid
-                                    </a>
-                                    <p class="kt-widget4__text">
-                                    </p>
-                                </div>
-                                <span class="kt-widget4__number kt-font-brand">{{feeSummary?.totalPaid}}</span>
-                            </div>
-                            <div class="kt-widget4__item">
-
-                                <div class="kt-widget4__info">
-                                    <a href="#" class="kt-widget4__title">
-                                        Balance
-                                    </a>
-                                    <p class="kt-widget4__text">
-                                    </p>
-                                </div>
-                                <span class="kt-widget4__number kt-font-brand">{{feeSummary?.balance}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--end:: Widgets/Authors Profit-->
-            </div>
-        </div>
+        <app-employee-address></app-employee-address>
     </div>
     <!-- Guardian Details -->
     <div *ngIf="activeTab === 'guardian'" class="tab-content full-width-tab">

@@ -12,12 +12,13 @@ import { EmployeeDocumentResponseDto } from '../../models/EmployeeDocumentRespon
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { EmployeePersonalInformationComponent } from '../employee-personal-information/employee-personal-information.component';
 import { EmployeeDocumentComponent } from '../employee-document/employee-document.component';
+import { EmployeeAddressComponent } from '../employee-address/employee-address.component';
 
 
 @Component({
   selector: 'app-employee-info',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,EmployeePersonalInformationComponent,EmployeeDocumentComponent],
+  imports: [CommonModule, ReactiveFormsModule,EmployeePersonalInformationComponent,EmployeeDocumentComponent,EmployeeAddressComponent],
   templateUrl: './employee-info.component.html',
   styleUrls: ['./employee-info.component.css']
 })
