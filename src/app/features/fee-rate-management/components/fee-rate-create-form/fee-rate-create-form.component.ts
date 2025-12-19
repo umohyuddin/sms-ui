@@ -182,7 +182,7 @@ export class FeeRateCreateFormComponent {
             amount: this.resourceData?.amount,
             effectiveFrom: this.resourceData?.effectiveFrom,
             effectiveTo: this.resourceData?.effectiveTo,
-            active: this.active
+            active: this.resourceData?.active
           });
         },
         error: (error) => {

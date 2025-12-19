@@ -71,6 +71,7 @@ export class FeeRateListingTableComponent {
       }
     });
   }
+  
   loadFeeComponents(feeCatalogId: any) {
     this.feeCatalogComponentManagementService.getByFeeCatalogId(feeCatalogId).subscribe({
       next: (response) => {
