@@ -4,8 +4,13 @@ import { Router, RouterModule } from '@angular/router';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-import { FeeRateResponse } from '../../models/FeeRateResponse';
+import { FeeComponent, FeeRateResponse } from '../../models/FeeRateResponse';
 import { FeeRateManagementService } from '../../services/fee-rate-management.service';
+import { AppConfigService } from '../../../../core/services/app-config.service';
+import { KeyValueOption } from '../../../../core/models/KeyValueOption';
+import { FeeCatalogManagementService } from '../../../fee-catalog-management/services/fee-catalog-management.service';
+import { FeeCatalogResponse } from '../../../fee-catalog-management/models/FeeCatalogResponse';
+import { FeeCatalogComponentManagementService } from '../../../fee-catalog-component-management/services/fee-catalog-component-management.service';
 
 @Component({
   selector: 'app-fee-rate-listing-table',
@@ -20,14 +25,17 @@ import { FeeRateManagementService } from '../../services/fee-rate-management.ser
 export class FeeRateListingTableComponent {
   pagination: Pagination<FeeRateResponse> = new Pagination([], 10);
   feeRateResponse: FeeRateResponse[] = [];
-  
-  sectionsSearchForm !: FormGroup;
-  campusesResponse: any;
+  searchForm !: FormGroup;
+  feeCatalogDD: FeeCatalogResponse[] = [];
+  feeComponentDD: FeeComponent[] = [];
 
   constructor(
+    private appConfig: AppConfigService,
     private fb: FormBuilder,
     private router: Router,
-    private feeRateService: FeeRateManagementService
+    private feeRateService: FeeRateManagementService,
+    private feeCatalogManagementService: FeeCatalogManagementService,
+    private feeCatalogComponentManagementService: FeeCatalogComponentManagementService
   ) { }
 
   columns = [
@@ -45,28 +53,30 @@ export class FeeRateListingTableComponent {
   ];
 
   ngOnInit() {
+    this.getFeeCatalogs();
     this.initializeForm();
-    this.getFeeRates();
-    //this.getCampuses();
-    //this.getStandards();
-    //this.getSections();
+    this.getAllFeeRates();
+    this.subscribeToFeeCatalogChange();
   }
 
-  private initializeForm() {
-    this.sectionsSearchForm = this.fb.group({
-      campusId: [''],
-      standardId: [''],
-      keyword: ['']
+
+  private subscribeToFeeCatalogChange() {
+    this.searchForm.get('feeCatalogId')?.valueChanges.subscribe(feeCatalogId => {
+      if (feeCatalogId) {
+        console.log('Fee Catalog changed', feeCatalogId);
+        this.loadFeeComponents(feeCatalogId);
+      } else {
+        this.feeComponentDD = []; // clear dependent dropdown
+        this.searchForm.get('feeComponentId')?.setValue('');
+      }
     });
   }
-
-  getFeeRates() {
-    this.feeRateService.getAllFeeRates().subscribe({
+  loadFeeComponents(feeCatalogId: any) {
+    this.feeCatalogComponentManagementService.getByFeeCatalogId(feeCatalogId).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-         this.feeRateResponse = response.body;
-         this.pagination = new Pagination(this.feeRateResponse, 10);
+        this.feeComponentDD = response.body;
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
@@ -77,58 +87,57 @@ export class FeeRateListingTableComponent {
       }
     });
   }
-//   private getCampuses() {
-//     this.campusManagementService.getAllCampuses().subscribe({
-//       next: (response) => {
-//         console.log('  Success Status:', response.status);
-//         console.log('📦 Response Body:', response.body);
-//         this.campusesResponse = response.body;
-//       },
-//       error: (error) => {
-//         console.error('❌ Request Error Status:', error.status);
-//         console.error('Message:', error.message);
-//       },
-//       complete: () => {
-//         console.log('🔚 Request Complete');
-//       }
-//     });
 
+  getFeeCatalogs() {
+    this.feeCatalogManagementService.getAllFeeCatalogs().subscribe({
+      next: (response) => {
+        console.log('  Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.feeCatalogDD = response.body;
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    })
+  }
+  private initializeForm() {
+    this.searchForm = this.fb.group({
+      feeCatalogId: [''],
+      feeComponentId: [''],
+      keyword: ['']
+    });
+  }
+  resetForm() {
+    this.searchForm.reset({
+      feeCatalogId: '',  // reset to default values
+      feeComponentId: '',
+      keyword: ''
+    });
+    this.getAllFeeRates(); // reload all data
+  }
 
+  getAllFeeRates() {
+    this.feeRateService.getAllFeeRates().subscribe({
+      next: (response) => {
+        console.log('  Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.feeRateResponse = response.body;
+        this.pagination = new Pagination(this.feeRateResponse, 10);
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    });
+  }
 
-//   getStandards() {
-//     this.standardManagementService.getAllStandards().subscribe({
-//       next: (response) => {
-//         console.log('  Success Status:', response.status);
-//         console.log('📦 Response Body:', response.body);
-//         this.sectionsResponse = response.body;
-//       },
-//       error: (error) => {
-//         console.error('❌ Request Error Status:', error.status);
-//         console.error('Message:', error.message);
-//       },
-//       complete: () => {
-//         console.log('🔚 Request Complete');
-//       }
-//     })
-//   }
-
-//   getSections() {
-//     this.sectionManagementService.getAllSection().subscribe({
-//       next: (response) => {
-//         console.log('  Success Status:', response.status);
-//         console.log('📦 Response Body:', response.body);
-//         this.sectionsResponse = response.body;
-//         this.pagination = new Pagination(this.sectionsResponse, 10);
-//       },
-//       error: (error) => {
-//         console.error('❌ Request Error Status:', error.status);
-//         console.error('Message:', error.message);
-//       },
-//       complete: () => {
-//         console.log('🔚 Request Complete');
-//       }
-//     })
-//   }
   viewFeeRateDetails(feeRate: FeeRateResponse, event: Event): void {
     console.log('Viewing details for Fee Rate ID:', feeRate.id);
     event.preventDefault();  // prevents anchor default behavior
@@ -141,59 +150,35 @@ export class FeeRateListingTableComponent {
     this.router.navigate(ROUTES.FEE.FEE_RATE.EDIT(feeRate.id.toString()));
   }
 
-//   // deleteStandard(standardId: any, event: Event): void {
-//   //   event.stopPropagation();
-
-//   //   console.log('Deleting standard', standardId);
-//   //   if (confirm('Are you sure you want to delete this Standard?')) {
-
-//   //     this.standardManagementService.deleteCampus(standardId).subscribe({
-//   //       next: (response) => {
-//   //         console.log('  Delete Success Status:', response.status);
-//   //         console.log('📦 Delete Response Body:', response.body);
-//   //         // this.CampusData = this.CampusData.filter(t => t.CampusId !== CampusId);
-//   //         console.log(`Campus ${standardId} deleted successfully`);
-//   //       },
-//   //       error: (error) => {
-//   //         console.error('❌ Delete Error Status:', error.status);
-//   //         console.error('Message:', error.message);
-//   //       },
-//   //       complete: () => {
-//   //         console.log('🔚 Delete Complete');
-//   //       }
-//   //     })
-//   //   }
-//   // }
-
   onPageSizeChange(event: any) {
     const newSize = +event.target.value;
     this.pagination.changePageSize(newSize);
   }
-//   onSubmitSearch(): void {
-//     console.log('  Standard Search Form Data:', this.sectionsSearchForm.getRawValue());
-//     let formValues = this.sectionsSearchForm.value;
-//     let params = {
-//       campusId: formValues.campusId,
-//       standardId: formValues.standardId,
-//       keyword: formValues.keyword?.trim() || ''
-//     };
+  onSubmitSearch(): void {
+    console.log(' Search Form Data:', this.searchForm.getRawValue());
+    let formValues = this.searchForm.value;
+    let params = {
+      feeCatalogId: formValues.feeCatalogId,
+      feeComponentId: formValues.feeComponentId,
+      keyword: formValues.keyword?.trim() || ''
+    };
 
-//     // this.sectionManagementService.searchSections(params).subscribe({
-//     //   next: (response) => {
-//     //     console.log('  Success Status:', response.status);
-//     //     console.log('📦 Response Body:', response.body);
-//     //     this.sectionsResponse = response.body;
-//     //     this.pagination = new Pagination(this.sectionsResponse, 10);
-//     //   },
-//     //   error: (error) => {
-//     //     console.error('❌ Post Error Status:', error.status);
-//     //     console.error('Message:', error.message);
-//     //     this.router.navigate(['/Campuss']);
-//     //   },
-//     //   complete: () => {
-//     //     console.log('🔚 Post Complete');
-//     //   }
-//     // })
-//   }
-// }
+    this.feeRateService.searchFeeRates(params).subscribe({
+      next: (response) => {
+        console.log('  Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.feeRateResponse = response.body;
+        this.pagination = new Pagination(this.feeRateResponse, 10);
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    })
+  }
+
+
 }

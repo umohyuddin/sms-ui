@@ -90,7 +90,7 @@ export const API_ENDPOINTS = {
             CREATE: '/api/fee/rates',
             UPDATE: (id: string) => `/api/fee/rates/${id}`,
             GET_ALL: '/api/fee/rates',
-            SEARCH: (keyword: string) => `/api/fee/rates/search/${keyword}`,
+            SEARCH: `/api/fee/rates/search`,
             GET_BY_ID: (id: string) => `/api/fee/rates/${id}`,
             GET_ACTIVE_RATES: '/api/fee/rates/active'
         }

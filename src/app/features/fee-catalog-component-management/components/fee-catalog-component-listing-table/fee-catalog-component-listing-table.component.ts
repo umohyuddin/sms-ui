@@ -105,29 +105,6 @@ export class FeeCatalogComponentListingTableComponent {
     this.router.navigate(ROUTES.FEE.FEE_CATALOG_COMPONENT.EDIT(feeCatalogComponent.id.toString()));
   }
 
-  // deleteStandard(standardId: any, event: Event): void {
-  //   event.stopPropagation();
-
-  //   console.log('Deleting standard', standardId);
-  //   if (confirm('Are you sure you want to delete this Standard?')) {
-
-  //     this.standardManagementService.deleteCampus(standardId).subscribe({
-  //       next: (response) => {
-  //         console.log('  Delete Success Status:', response.status);
-  //         console.log('📦 Delete Response Body:', response.body);
-  //         // this.CampusData = this.CampusData.filter(t => t.CampusId !== CampusId);
-  //         console.log(`Campus ${standardId} deleted successfully`);
-  //       },
-  //       error: (error) => {
-  //         console.error('❌ Delete Error Status:', error.status);
-  //         console.error('Message:', error.message);
-  //       },
-  //       complete: () => {
-  //         console.log('🔚 Delete Complete');
-  //       }
-  //     })
-  //   }
-  // }
 
   onPageSizeChange(event: any) {
     const newSize = +event.target.value;

@@ -20,17 +20,9 @@ export class FeeCatalogComponentManagementService {
 
   saveFeeCatalogComponent(id: string | null, payload: any): Observable<any> {
     const isUpdate = !!id;
-
     const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
-
-    const url = isUpdate
-      ? `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.UPDATE(id)}`
-      : `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.CREATE}`;
-
-    return this.http.request(method, url, {
-      observeResponse: true,
-      body: payload
-    });
+    const url = isUpdate ? `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.UPDATE(id)}` : `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.CREATE}`;
+    return this.http.request(method, url, { observeResponse: true, body: payload });
   }
 
   getAllFeeCatalogComponents(): Observable<any> {
@@ -38,19 +30,11 @@ export class FeeCatalogComponentManagementService {
   }
 
   getFeeCatalogComponentsById(id: string): Observable<any> {
-    return this.http.request(
-      HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.GET_BY_ID(id)}`,
-      { observeResponse: true }
-    );
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.GET_BY_ID(id)}`, { observeResponse: true });
   }
 
-    getByFeeCatalogId(id: string): Observable<any> {
-    return this.http.request(
-      HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.GET_BY_FEE_CATALOG(id)}`,
-      { observeResponse: true }
-    );
+  getByFeeCatalogId(id: string): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.GET_BY_FEE_CATALOG(id)}`, { observeResponse: true });
   }
 
   searchFeeCatalogComponents(params: any): Observable<any> {
