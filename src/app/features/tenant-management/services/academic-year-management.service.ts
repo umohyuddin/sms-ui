@@ -10,7 +10,7 @@ import { HTTP_METHOD } from '../../../core/const/HTTP_METHOD';
 })
 export class AcademicYearManagementService {
 
- private baseUrl = '';
+  private baseUrl = '';
 
   constructor(private http: HttpClientService, private appConfig: AppConfigService) {
     this.baseUrl = appConfig.apiBaseUrl;
@@ -21,11 +21,11 @@ export class AcademicYearManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.GET_ALL}`, { observeResponse: true });
   }
 
-   getCurrentAcademicYear(): Observable<any> {
+  getCurrentAcademicYear(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.GET_CURRENT}`, { observeResponse: true });
   }
 
-    getAcademicYearId(id: string): Observable<any> {
+  getAcademicYearId(id: string): Observable<any> {
     return this.http.request(
       HTTP_METHOD.GET,
       `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.GET_BY_ID(id)}`,
@@ -33,29 +33,24 @@ export class AcademicYearManagementService {
     );
   }
 
-    saveCampuse(id: string | null, payload: any): Observable<any> {
-    const isUpdate = !!id;
-
-    const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
-
-    const url = isUpdate
-      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.UPDATE(id)}`
-      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.CREATE}`;
-
-    return this.http.request(method, url, {
-      observeResponse: true,
-      body: payload
-    });
+  createAcademicYear(payload: any): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.POST,
+      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.CREATE}`,
+      {
+        observeResponse: true,
+        body: payload
+      }
+    );
+  }
+  searchAcademicYears(params: { keyword?: string }): Observable<any> {
+    const query = params.keyword ? `?keyword=${encodeURIComponent(params.keyword)}` : '';
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.SEARCH}${query}`;
+    return this.http.request(
+      HTTP_METHOD.GET,
+      url,
+      { observeResponse: true }
+    );
   }
 
-  searchCampuses(query: string): Observable<any> {
-    const url = query
-      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.SEARCH(query)}`
-      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.GET_ALL}`;
-    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
-  }
-
-  deleteCampus(id: number): Observable<any> {
-    return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}/${id}`, { observeResponse: true });
-  }
 }

@@ -6,75 +6,88 @@ import { MatButtonModule } from '@angular/material/button';
 import { HttpClientService } from '../../../../core/services/http-client.service';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
+import { Pagination } from '../../../../core/pagar/pagination';
+import { AcademicYearResponse } from '../../models/AcademicYearResponse';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AcademicYearManagementService } from '../../services/academic-year-management.service';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-tenant-listing-table',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule],
   templateUrl: './tenant-listing-table.component.html',
   styleUrls: ['./tenant-listing-table.component.css']
 })
 export class TenantListingTableComponent {
-  URL = '';
-
-  constructor(private router: Router,
-    private httpClientService: HttpClientService,
-    private appConfig: AppConfigService
+  pagination: Pagination<AcademicYearResponse> = new Pagination([], 10);
+  academicYears: AcademicYearResponse[] = [];
+  constructor(
+    private academicYearService: AcademicYearManagementService
   ) { }
 
-  ngOnInit() {
-    console.log('API Base URL:', this.appConfig.apiBaseUrl);
-    this.URL = this.appConfig.apiBaseUrl;
-  }
+  searchControl = new FormControl('');
+
+  private destroy$ = new Subject<void>();
+
   columns = [
-    // { key: 'id', label: 'Id', sortable: true },
     { key: 'name', label: 'Name', sortable: true },
-    { key: 'status', label: 'Status', sortable: true },
-    { key: 'createdBy', label: 'Created by', sortable: false },
-    { key: 'updatedBy', label: 'Updated by', sortable: false },
-    { key: 'updatedAt', label: 'Updated at', sortable: true },
-    { key: 'expiryDate', label: 'Expiry Date', sortable: true },
-    { key: 'actions', label: 'Actions', sortable: true }
+    { key: 'startDate', label: 'Start Date', sortable: true },
+    { key: 'endDate', label: 'End Date', sortable: true },
+    { key: 'Total Months', label: 'End Date', sortable: true },
+    { key: 'isCurrent', label: 'Current', sortable: true },
+    // { key: 'actions', label: 'Actions', sortable: true }
   ];
-
-  viewTenantDetails(tenantId: string): void {
-    console.log('Viewing details for tenant ID:', tenantId);
-    this.router.navigate(['/tenants/tenant-details', tenantId]);
+  ngOnInit() {
+    this.getAcademicYears();
+    this.subscribeToSearch();
   }
 
-  editTenant(tenant: any, event: Event): void {
-    event.stopPropagation();
-    console.log('Editing tenant ID:', tenant.tenantId);
-    this.router.navigate(['/tenants/tenant-edit', tenant.tenantId]);
 
 
+  getAcademicYears() {
+    this.academicYearService.getAcademicYears().subscribe({
+      next: (response) => {
+        console.log('📦 Academic Years:', response.body);
+        this.academicYears = response.body;
+        this.pagination = new Pagination(this.academicYears, 10);
+      },
+      error: (error) => {
+        console.error('❌ Error loading academic years:', error.message);
+      }
+    });
   }
 
-  deleteTenant(tenantId: any, event: Event): void {
-    event.stopPropagation();
+  viewAcademicYear(academicYear: AcademicYearResponse, event: Event) {
+    event.preventDefault();
+    console.log('Viewing Academic Year ID:', academicYear.id);
+    //this.router.navigate(ROUTES.DETAILS(academicYear.id.toString()));
+  }
 
-    console.log('Deleting tenant:', tenantId);
-    if (confirm('Are you sure you want to delete this tenant?')) {
+  editAcademicYear(academicYear: AcademicYearResponse, event: Event) {
+    event.preventDefault();
+    console.log('Editing Academic Year ID:', academicYear.id);
+    //this.router.navigate(ROUTES.CAMPUS.ACADEMIC_YEAR.EDIT(academicYear.id.toString()));
+  }
 
-      this.httpClientService.request<any>(HTTP_METHOD.DELETE, `${this.URL}/${tenantId}`, {
-        observeResponse: true
-      }).subscribe({
+  private subscribeToSearch() {
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        switchMap(search => this.academicYearService.searchAcademicYears({ keyword: search || '' })),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
         next: (response) => {
-          console.log('  Delete Success Status:', response.status);
-          console.log('📦 Delete Response Body:', response.body);
-
-          console.log(`Tenant ${tenantId} deleted successfully`);
+          this.academicYears = response.body;
+          this.pagination = new Pagination(this.academicYears, 10);
         },
-        error: (error) => {
-          console.error('❌ Delete Error Status:', error.status);
-          console.error('Message:', error.message);
-        },
-        complete: () => {
-          console.log('🔚 Delete Complete');
-        }
-      })
+        error: (error) => console.error('❌ Search Error:', error)
+      });
+  }
 
-
-    }
-
+  onPageSizeChange(event: any) {
+    this.pagination.changePageSize(+event.target.value);
   }
 }

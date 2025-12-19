@@ -4,34 +4,27 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute } from '@angular/router';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { AppConfigService } from '../../../../core/services/app-config.service';
-import { AcademicYearResponse } from '../../../tenant-management/models/AcademicYearResponse';
 import { EmployeeDocumentResponseDto } from '../../models/EmployeeDocumentResponseDto';
 import { EmployeeResponse } from '../../models/EmployeeResponse';
-import { StudentFeeSummaryResponse } from '../../models/StudentFeeSummaryResponse';
 import { EmployeeManagementService } from '../../services/employee-management.service';
+import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 
 @Component({
   selector: 'app-employee-document',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './employee-document.component.html',
   styleUrl: './employee-document.component.css'
 })
-export class EmployeeDocumentComponent {docsForm!: FormGroup;
-  selectedAvatar!: File;
+export class EmployeeDocumentComponent {
+  docsForm!: FormGroup;
   employeeData?: EmployeeResponse;
   routedId!: string;
-  activeTab: string = 'overview';
-  currentAcademicYear?: AcademicYearResponse;
-  feeSummary?: StudentFeeSummaryResponse;
-  avatarPreview: string = './assets/media/users/default.jpg';
-  docsTypeDD: { key: string; label: string; }[] = [];
+  docsTypeDD: KeyValueOption[] = [];
   selectedFile: File | null = null;
   fileInvalid: boolean = false;
   docsData: any;
   documentsByType: { [key: string]: EmployeeDocumentResponseDto[] } = {};
-  personalForm!: FormGroup;
-  showPersonalForm: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -45,30 +38,12 @@ export class EmployeeDocumentComponent {docsForm!: FormGroup;
   ngOnInit(): void {
     this.routedId = this.route.snapshot.paramMap.get('id') ?? '';
     console.log('employee ID from route:', this.routedId);
-    this.getEmployeeDetails(this.routedId);
     this.docsInitializeForm()
-
-
-    this.personalForm = this.fb.group({
-      fullName: [''],
-      email: [''],
-      primaryPhone: [''],
-      gender: [''],
-      dob: ['']
-    });
+    this.docsLookUpData();
+    this.getEmployeeAllDocs()
   }
 
-  togglePersonalForm() {
-    this.showPersonalForm = !this.showPersonalForm;
-  }
 
-  updatePersonalInfo() {
-    if (this.personalForm.valid) {
-      console.log(this.personalForm.value);
-      // Call API to save data
-      this.showPersonalForm = false; // hide form after update
-    }
-  }
   private docsInitializeForm() {
     this.docsForm = this.fb.group({
       docKey: ['', Validators.required],
@@ -76,18 +51,16 @@ export class EmployeeDocumentComponent {docsForm!: FormGroup;
     });
   }
 
-
-
   onDocsSubmit() {
-    if (!this.selectedFile) {
-      this.fileInvalid = true;
-    }
-
-    if (this.docsForm.invalid || !this.selectedFile) {
+    if (this.docsForm.invalid) {
       this.docsForm.markAllAsTouched();
       return;
     }
 
+    if (!this.selectedFile) {
+      this.docsForm.get('file')?.setErrors({ required: true });
+      return;
+    }
     const formData = new FormData();
     formData.append('docKey', this.docsForm.value.docKey);
     formData.append('file', this.selectedFile);
@@ -113,21 +86,6 @@ export class EmployeeDocumentComponent {docsForm!: FormGroup;
     });
 
   }
- 
-
-  setActiveTab(tab: string) {
-    this.activeTab = tab;
-    switch (tab) {
-      case 'feeSummary':
-        //this.getFeeSummary();
-        break;
-      case 'docs':
-        this.docsLookUpData();
-        this.getEmployeeAllDocs()
-        break;
-    }
-  }
-
 
   groupByDocumentType(docs: EmployeeDocumentResponseDto[]) {
     return docs.reduce((acc: any, doc) => {
@@ -159,95 +117,6 @@ export class EmployeeDocumentComponent {docsForm!: FormGroup;
       }
     })
   }
-  // getFeeSummary() {
-  //   const params = {
-  //     "studentId": this.routedId,
-  //     "academicYearId": this.currentAcademicYear?.id
-  //   }
-  //   this.studentManagementService.getStudentFeeSummary(params).subscribe({
-
-  //     next: (response) => {
-  //       console.log('  Success Status:', response.status);
-  //       console.log('📦 Response Body:', response.body);
-  //       this.feeSummary = response.body;
-  //       console.log('📦 Standard data :', this.employeeData);
-  //     },
-  //     error: (error) => {
-  //       console.error('❌ Request Error Status:', error.status);
-  //       console.error('Message:', error.message);
-  //     },
-  //     complete: () => {
-  //       console.log('🔚 Request Complete');
-  //     }
-  //   })
-  // }
-
-
-  getEmployeeDetails(id: string): void {
-    console.group(`Fetching Employee Details - ID: ${id}`);
-    this.employeeManagementService.getEmployeeById(id).subscribe({
-      next: (response) => {
-        console.log('%c✅ Request Successful', 'color: green; font-weight: bold;');
-        console.log('Employee Response:', { status: response.status, data: response.body });
-        this.employeeData = response.body;
-
-        if (this.employeeData?.profilePicture) {
-          this.avatarPreview = `${this.appConfig.apiBaseUrl}/${this.employeeData.profilePicture.replace(/\\/g, '/')}`;
-          console.log('Avatar Preview URL:', this.avatarPreview);
-        } else {
-          console.warn('⚠️ No profile picture found, using default avatar.');
-        }
-      },
-      error: (error) => {
-        console.error('%c❌ Request Failed', 'color: red; font-weight: bold;');
-        console.error('Employee Request Error:', { status: error.status, message: error.message });
-      },
-      complete: () => {
-        console.log('%c🔚 Request Complete', 'color: blue; font-weight: bold;');
-        console.groupEnd();
-      }
-    });
-  }
-
-  uploadAvatar() {
-    if (!this.selectedAvatar) {
-      console.error('No avatar selected');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('file', this.selectedAvatar);
-    formData.append('employeeId', String(this.routedId));
-
-    this.employeeManagementService.uploadProfilePhoto(formData).subscribe({
-      next: (response) => {
-        console.log('✅ Status:', response.status);
-        console.log('📦 Body:', response.body);
-
-        // This is upload response, NOT full employee
-        if (this.employeeData) {
-          this.employeeData.profilePicture = response.body.filePath;
-        }
-      },
-      error: (error) => {
-        console.error('❌ Error:', error);
-      }
-    });
-  }
-  onAvatarSelected(event: any) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    this.selectedAvatar = file;
-
-    // Preview
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.avatarPreview = reader.result as string;
-    };
-    reader.readAsDataURL(file);
-  }
-
 
   docsLookUpData() {
     this.employeeManagementService.getDocsMeta()
@@ -269,18 +138,23 @@ export class EmployeeDocumentComponent {docsForm!: FormGroup;
       })
   }
 
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (file) {
-      this.docsForm.patchValue({ file: file });
-      this.docsForm.get('file')?.updateValueAndValidity();
-      this.selectedFile = file;
-    } else {
-      this.docsForm.patchValue({ file: null });
-    }
+onFileSelected(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+
+  const fileControl = this.docsForm.get('file');
+
+  if (file) {
+    this.selectedFile = file;
+    fileControl?.setValue(file);
+  } else {
+    this.selectedFile = null;
+    fileControl?.setValue(null);
   }
 
-
+  fileControl?.markAsTouched();   // ✅ REQUIRED
+  fileControl?.updateValueAndValidity();
+}
   getFileIcon(fileType: string): string {
     fileType = fileType.toLowerCase();
     switch (fileType) {
@@ -302,9 +176,13 @@ export class EmployeeDocumentComponent {docsForm!: FormGroup;
     window.open(url, '_blank');
   }
 
-
-
+  onDocsCancel(): void {
+    this.docsForm.reset();
+    this.docsForm.markAsPristine();
+    this.docsForm.markAsUntouched();
+    this.selectedFile = null;
+  }
   //getters
 
-  get docsKey() { return this.docsForm.get('docsKey'); }
+  get docKey() { return this.docsForm.get('docKey'); }
 }

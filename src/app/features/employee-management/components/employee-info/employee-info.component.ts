@@ -165,28 +165,6 @@ export class EmployeeInfoComponent {
       }
     })
   }
-  // getFeeSummary() {
-  //   const params = {
-  //     "studentId": this.routedId,
-  //     "academicYearId": this.currentAcademicYear?.id
-  //   }
-  //   this.studentManagementService.getStudentFeeSummary(params).subscribe({
-
-  //     next: (response) => {
-  //       console.log('  Success Status:', response.status);
-  //       console.log('📦 Response Body:', response.body);
-  //       this.feeSummary = response.body;
-  //       console.log('📦 Standard data :', this.employeeData);
-  //     },
-  //     error: (error) => {
-  //       console.error('❌ Request Error Status:', error.status);
-  //       console.error('Message:', error.message);
-  //     },
-  //     complete: () => {
-  //       console.log('🔚 Request Complete');
-  //     }
-  //   })
-  // }
 
 
   getEmployeeDetails(id: string): void {

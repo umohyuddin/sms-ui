@@ -2,7 +2,7 @@
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
       <h3 class="kt-portlet__head-title">
-        Add New Academic Year
+        {{ isEditMode ? 'Update Academic Year' : 'Add New Academic Year' }}
       </h3>
     </div>
   </div>
@@ -10,42 +10,71 @@
   <!--begin::Form-->
   <form class="kt-form kt-form--label-right" [formGroup]="academicYearForm" (ngSubmit)="onSubmit()">
     <div class="kt-portlet__body">
+      <h4>Academic Year Information</h4>
+
       <div class="form-group row form-group-marginless kt-margin-t-20">
+        <!-- Name -->
+        <label class="col-lg-1 col-form-label">Name:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="e.g., 2024-2025" formControlName="name"
+            [class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
+            [class.is-valid]="name?.valid && (name?.touched || name?.dirty)" />
+          <span class="form-text text-muted">Provide the academic year name.</span>
+          <div class="invalid-feedback" *ngIf="name?.invalid && (name?.touched || name?.dirty)">
+            {{ getErrorMessage('name') }}
+          </div>
+        </div>
+
+        <!-- Start Date -->
         <label class="col-lg-1 col-form-label">Start Date:</label>
         <div class="col-lg-3">
-          <input class="form-control" type="date" id="example-date-input" formControlName="startDate">
+          <input type="date" class="form-control" formControlName="startDate"
+            [class.is-invalid]="startDate?.invalid && (startDate?.touched || startDate?.dirty)"
+            [class.is-valid]="startDate?.valid && (startDate?.touched || startDate?.dirty)" />
+          <span class="form-text text-muted">Select the start date.</span>
+          <div class="invalid-feedback" *ngIf="startDate?.invalid && (startDate?.touched || startDate?.dirty)">
+            {{ getErrorMessage('startDate') }}
+          </div>
         </div>
-        <label class="col-lg-1 col-form-label">Email:</label>
+
+        <!-- End Date -->
+        <label class="col-lg-1 col-form-label">End Date:</label>
         <div class="col-lg-3">
-          <input class="form-control" type="date" id="example-date-input" formControlName="endDate">
+          <input type="date" class="form-control" formControlName="endDate"
+            [class.is-invalid]="endDate?.invalid && (endDate?.touched || endDate?.dirty)"
+            [class.is-valid]="endDate?.valid && (endDate?.touched || endDate?.dirty)" />
+          <span class="form-text text-muted">Select the end date.</span>
+          <div class="invalid-feedback" *ngIf="endDate?.invalid && (endDate?.touched || endDate?.dirty)">
+            {{ getErrorMessage('endDate') }}
+          </div>
         </div>
+
+        <!-- Is Current -->
         <label class="col-lg-1 col-form-label">Status:</label>
         <div class="col-lg-3">
-          <div class="form-group row">
-            <div class="col-9">
-              <div class="kt-checkbox-inline">
-                <label class="kt-checkbox kt-checkbox kt-checkbox--solid kt-checkbox--brand" cheched="">
-                  <input type="checkbox" formControlName="isCurrent"> Is Current
-                  <span></span>
-                </label>
-              </div>
-            </div>
+          <div class="kt-checkbox-inline">
+            <label class="kt-checkbox kt-checkbox--solid kt-checkbox--brand">
+              <input type="checkbox" formControlName="isCurrent"> Is Current
+              <span></span>
+            </label>
           </div>
         </div>
       </div>
     </div>
+
     <div class="kt-portlet__foot">
       <div class="kt-form__actions">
         <div class="row">
           <div class="col-lg-5"></div>
           <div class="col-lg-7">
-            <button type="submit" class="btn btn-dark mr-2">Submit</button>
-            <button type="reset" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-dark mr-2">
+              {{ isEditMode ? 'Update Academic Year' : 'Add Academic Year' }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="goToAcademicYearList()">Cancel</button>
           </div>
         </div>
       </div>
     </div>
   </form>
-
   <!--end::Form-->
 </div>

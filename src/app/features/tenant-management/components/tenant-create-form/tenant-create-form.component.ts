@@ -12,16 +12,13 @@ import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { AppConfigService } from '../../../../core/services/app-config.service';
+import { AcademicYearManagementService } from '../../services/academic-year-management.service';
 
 
 @Component({
   selector: 'app-tenant-create-form',
   standalone: true,
-  imports: [MatExpansionModule,
-    MatSlideToggleModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
+  imports: [
     ReactiveFormsModule,
     CommonModule],
   templateUrl: './tenant-create-form.component.html',
@@ -32,11 +29,11 @@ export class TenantCreateFormComponent {
   routeTenantId?: string;
   URL = '';
   mode = '';
-  tenantData: any;
+  isEditMode: boolean = false;
 
   constructor(private fb: FormBuilder,
-    private httpClientService: HttpClientService,
-    private route: ActivatedRoute,
+    private academicYearService: AcademicYearManagementService,
+
     private router: Router,
     private appConfig: AppConfigService
   ) { }
@@ -46,32 +43,75 @@ export class TenantCreateFormComponent {
     console.log('Config:', this.appConfig);
     this.URL = this.appConfig.apiBaseUrl;
     this.initializeForm();
+    this.academicYearForm.get('startDate')?.valueChanges.subscribe(() => this.generateAcademicYearName());
+    this.academicYearForm.get('endDate')?.valueChanges.subscribe(() => this.generateAcademicYearName());
   }
 
 
   private initializeForm() {
     this.academicYearForm = this.fb.group({
-      id: [null],                           // Primary key - hidden in UI
-      name: ['', [Validators.required]],    // e.g., "2024-2025"
-
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
-      isCurrent: [false],
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(20),
+          this.noWhitespaceValidator
+        ]
+      ],
+      startDate: [
+        '',
+        [
+          Validators.required,
+          this.validateStartDate
+        ]
+      ],
+      endDate: [
+        '',
+        [
+          Validators.required,
+          this.validateEndDate.bind(this) // Needs access to startDate
+        ]
+      ],
+      isCurrent: [false]
     });
-
   }
 
-  generateTenantCode() {
-    const timestampCode = Date.now().toString().slice(-6); // last 6 digits of current timestamp
-    this.academicYearForm.get('tenantCode')?.setValue(timestampCode);
+
+  // Start date cannot be in the past
+  validateStartDate(control: any) {
+    const today = new Date();
+    if (control.value && new Date(control.value) < today) {
+      return { pastDate: true };
+    }
+    return null;
   }
 
-  goToTenantList(): void {
+  // End date must be after start date
+  validateEndDate(control: any) {
+    const startDate = this.academicYearForm?.get('startDate')?.value;
+    if (!control.value || !startDate) return null;
 
-    // Navigate to the create tenant page
-    this.router.navigate(['/tenants']);
-    //window.location.href = '/tenants'; // Adjust the URL as needed
+    const start = new Date(startDate);
+    const end = new Date(control.value);
+
+    // Must be after start date
+    if (end <= start) {
+      return { beforeStartDate: true };
+    }
+
+    // Check if duration is more than 12 months
+    const monthsDifference = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+    if (monthsDifference > 12) {
+      return { exceeds12Months: true };
+    }
+
+    return null;
   }
+
+  goToAcademicYearList() {
+    this.router.navigate(['tenants'])
+  }
+
   onSubmit(): void {
     console.log('  Tenant Form Data:', this.academicYearForm.getRawValue());
     if (this.academicYearForm.invalid) {
@@ -81,25 +121,7 @@ export class TenantCreateFormComponent {
       return;
     }
 
-
-
-    let requestMethod: string;
-    let requestUrl: string;
-
-    if (this.mode === 'create') {
-      requestMethod = HTTP_METHOD.POST;
-      requestUrl = this.URL;
-    } else {
-      requestMethod = HTTP_METHOD.PATCH;
-      requestUrl = `${this.URL}/${this.routeTenantId}`;
-    }
-
-
-    console.log('  Tenant Form Data:', this.academicYearForm.getRawValue());
-    this.httpClientService.request<any>(requestMethod, requestUrl, {
-      observeResponse: true,
-      body: this.academicYearForm.getRawValue()
-    }).subscribe({
+    this.academicYearService.createAcademicYear(this.academicYearForm.getRawValue()).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
@@ -117,201 +139,62 @@ export class TenantCreateFormComponent {
   }
 
 
- 
 
-  //Tenant getters
-  get tenantName() {
-    return this.academicYearForm.get('tenantName');
-  }
-  get tenantId() {
-    return this.academicYearForm.get('tenantId');
-  }
-  get tenantCode() {
-    return this.academicYearForm.get('tenantCode');
-  }
+  get name() { return this.academicYearForm.get('name'); }
+  get startDate() { return this.academicYearForm.get('startDate'); }
+  get endDate() { return this.academicYearForm.get('endDate'); }
+  get isCurrent() { return this.academicYearForm.get('isCurrent'); }
 
-  //keyCloak getters
-  get realm() {
-    return this.academicYearForm.get('tenantSettings.keyCloak.realm');
-  }
-
-  get authServerUrl() {
-    return this.academicYearForm.get('tenantSettings.keyCloak.auth-server-url');
-  }
-
-  get efServerUrl() {
-    return this.academicYearForm.get('tenantSettings.keyCloak.ef-server-url');
-  }
-
-
-  //Mongo getters
-  get mongoUserName() {
-    return this.academicYearForm.get('tenantSettings.mongo.userName');
-  }
-  get mongoPassword() {
-    return this.academicYearForm.get('tenantSettings.mongo.password');
-  }
-
-  //Radis getters
-  get userName() {
-    return this.academicYearForm.get('tenantSettings.mongo.userName');
-  }
-  get password() {
-    return this.academicYearForm.get('tenantSettings.mongo.password');
-  }
-
-  //Dialer getters
-  get maxConcurrentCalls() {
-    return this.academicYearForm.get('tenantSettings.dialer.maxConcurrentCalls');
-  }
-
-  get maxCallTime() {
-    return this.academicYearForm.get('tenantSettings.dialer.maxCallTime');
-  }
-
-  get callsPerSecond() {
-    return this.academicYearForm.get('tenantSettings.dialer.callsPerSecond');
-  }
-
-  get serviceIdentifier() {
-    return this.academicYearForm.get('tenantSettings.dialer.serviceIdentifier');
-  }
-
-
-  //mediaServer getter
-  get wssUrl() {
-    return this.academicYearForm.get('tenantSettings.mediaServer.wssUrl');
-  }
-
-  get domain() {
-    return this.academicYearForm.get('tenantSettings.mediaServer.domain');
-  }
-
-
-  //campaigns getter
-  get domainUserName() {
-    return this.academicYearForm.get('tenantSettings.campaigns.username');
-  }
-  get domainPassword() {
-    return this.academicYearForm.get('tenantSettings.campaigns.password');
-  }
-  get domainUrl() {
-    return this.academicYearForm.get('tenantSettings.campaigns.url');
-  }
-
-
-  toggleStatus(event: any) {
-    const isActive = event.target.checked;
-    console.log("isActive", isActive)
-    this.academicYearForm.get('tenantSettings.mongo.isManaged')?.setValue(isActive);
-  }
-
-  getTenantDetails(tenantId: string): void {
-
-    const url = `${this.URL}/${tenantId}`;
-    this.httpClientService
-      .request<any>(HTTP_METHOD.GET, url, { observeResponse: true })
-      .subscribe({
-        next: (response: HttpResponse<any>) => {
-          console.log('  Status:', response.status);
-          console.log('📦 Body:', response.body);
-          this.tenantData = response.body;
-          console.log('Tenant Details:', this.tenantData);
-          this.academicYearForm.patchValue(this.tenantData);
-        },
-        error: (error) => {
-          console.error('❌ Error Status:', error.status);
-          console.error('Message:', error.message);
-        }
-      });
-  }
-
-  DUMMY_PAYLOAD = {
-    tenantName: "testTenant",
-    tenantId: "testTenant",
-    tenantCode: "101",
-    tenantSettings: {
-      keyCloak: {
-        realm: "testTenant",
-        "auth-server-url": "https://test-server.com/auth/",
-        "ef-server-url": "https://test-server.com/unified-admin/",
-        "ssl-required": "external",
-        resource: "cim",
-        "verify-token-audience": false,
-        credentials: {
-          secret: "12345678-abcd-efgh-ijkl-9876543210ab"
-        },
-        "use-resource-role-mappings": true,
-        "confidential-port": 0,
-        "policy-enforcer": {},
-        CLIENT_ID: "cim",
-        CLIENT_DB_ID: "12345678-abcd-efgh-ijkl-9876543210ab",
-        GRANT_TYPE: "password",
-        GRANT_TYPE_PAT: "client_credentials",
-        USERNAME_ADMIN: "admin",
-        PASSWORD_ADMIN: "admin",
-        MASTER_USERNAME: "admin",
-        MASTER_PASSWORD: "admin",
-        SCOPE_NAME: "default-scope",
-        "bearer-only": true,
-        FINESSE_URL: "https://finesse-test",
-        TWILIO_SID: "AC1234567890abcdef1234567890abcdef",
-        TWILIO_VERIFY_SID: "VA1234567890abcdef1234567890abcdef",
-        TWILIO_AUTH_TOKEN: "abcdef1234567890abcdef1234567890",
-        RSA_Server_URL: "https://rsa-server",
-        RSA_Client_Key: "client-key",
-        RSA_Client_ID: "client-id",
-        PASSWORD_EXPIRY_WARNING_LIMIT: 15
-      },
-      redis: {
-        userName: "testTenant",
-        password: "Test1234!"
-      },
-      mongo: {
-        userName: "testTenant",
-        password: "Test1234!"
-      },
-      campaigns: {
-        url: "http://campaigns-test:1880",
-        username: "admin",
-        password: "admin"
-      },
-      surveys: {
-        url: "http://surveys-test:1880",
-        username: "admin",
-        password: "admin"
-      },
-      finesse: {
-        url: "https://finesse-test",
-        adminUser: "finesseAdmin",
-        adminPass: "finessePass"
-      },
-      secureLink: {
-        linkExpiryTime: 30
-      },
-      dialer: {
-        serviceIdentifier: "9001",
-        maxConcurrentCalls: "10",
-        maxCallTime: "120",
-        callsPerSecond: "20"
-      },
-      fqdn: "test-server.com",
-      subDomain: "test-server"
+  validationMessages = {
+    name: {
+      required: 'Academic Year Name is required.',
+      maxlength: 'Academic Year Name cannot exceed 20 characters.',
+      whitespace: 'Academic Year Name cannot be empty or whitespace only.'
     },
-    status: "Active",
-    createdBy: "admin",
-    updatedBy: "admin",
-    createdAt: "2025-11-03T12:00:00Z",
-    updatedAt: "2025-11-03T12:00:00Z"
+    startDate: {
+      required: 'Start Date is required.',
+      pastDate: 'Start Date cannot be in the past.'
+    },
+    endDate: {
+      required: 'End Date is required.',
+      beforeStartDate: 'End Date must be after Start Date.',
+      exceeds12Months: 'Academic Year cannot be longer than 12 months.'
+    }
   };
 
+
+  getErrorMessage(controlName: keyof typeof this.validationMessages): string {
+    const control = this.academicYearForm.get(controlName as string);
+    if (!control || !control.errors) return '';
+
+    for (const error in control.errors) {
+      const key = error as keyof typeof this.validationMessages[typeof controlName];
+      if (this.validationMessages[controlName][key]) {
+        return this.validationMessages[controlName][key];
+      }
+    }
+
+    return '';
+  }
+
+  // Whitespace validator
+  noWhitespaceValidator(control: any) {
+    if (control.value && !control.value.trim()) {
+      return { whitespace: true };
+    }
+    return null;
+  }
+
+  private generateAcademicYearName() {
+    const start = this.academicYearForm.get('startDate')?.value;
+    const end = this.academicYearForm.get('endDate')?.value;
+
+    if (start && end) {
+      const startYear = new Date(start).getFullYear();
+      const endYear = new Date(end).getFullYear();
+      const academicYearName = `${startYear}-${endYear}`;
+      this.academicYearForm.get('name')?.setValue(academicYearName);
+    }
+  }
 }
 
-
-
-// Tenant validation failed:
-// tenantSettings.fqdn: Path `fqdn` is required.
-// tenantSettings.surveys.url: Path `url` is required.
-// tenantSettings.surveys.username: Path `username` is required.
-// tenantSettings.surveys.password: Path `password` is required.
-// tenantSettings.keyCloak.SCOPE_NAME: Path `SCOPE_NAME` is required.

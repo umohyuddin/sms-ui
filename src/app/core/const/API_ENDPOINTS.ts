@@ -32,12 +32,15 @@ export const API_ENDPOINTS = {
     },
     DASHBOARD: {
         GET_STUDENT_COUNTS: '/api/institute/students/dashboard',
+        GET_DASHBOARD_COUNTS: '/api/lookup/dashboard/counts'
     },
     INSTITUTE: {
         ACADEMIC_YEAR: {
             GET_BY_ID: (id: string) => `/api/school/academic/${id}`,
             GET_ALL: '/api/school/academic',
-            GET_CURRENT: '/api/school/academic/current'
+            GET_CURRENT: '/api/school/academic/current',
+            SEARCH: `/api/school/academic/search`,
+            CREATE: '/api/school/academic',
         },
         ADMISSION_TYPES: {
             GET_ALL: '/api/admission/types',

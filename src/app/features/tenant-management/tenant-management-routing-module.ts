@@ -2,11 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { TenantListing } from './pages/tenant-listing/tenant-listing';
-import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort';
-import { MatCardModule } from '@angular/material/card';
 import { TenantDetails } from './pages/tenant-details/tenant-details';
 import { TenantCreate } from './pages/tenant-create/tenant-create';
 

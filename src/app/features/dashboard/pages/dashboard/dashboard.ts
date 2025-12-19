@@ -18,12 +18,14 @@ import { DashboardStudentStats } from '../../models/DashboardStudentStats';
 })
 export class Dashboard {
   dashboardStudentStats?: DashboardStudentStats
+  dashBoardCount: any;
   constructor(private router: Router,
     private dashboardManagementService: DashboardManagementService
   ) { }
 
   ngOnInit() {
     this.getStudentCounts();
+    this.getDashBoardCounts();
   }
   goToNewAddmission() {
     this.router.navigate(ROUTES.STUDENT.CREATE);
@@ -43,6 +45,25 @@ export class Dashboard {
         console.log('📦 Response Body:', response.body);
 
         this.dashboardStudentStats = response.body; // the raw discount rates
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    });
+  }
+
+  private getDashBoardCounts() {
+    this.dashboardManagementService.getDashboardCounts().subscribe({
+      next: (response) => {
+        console.log('  Request Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+
+        this.dashBoardCount = response.body;
+        console.log("Dashboard counts",this.dashBoardCount)
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);

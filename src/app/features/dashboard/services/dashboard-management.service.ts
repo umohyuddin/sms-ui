@@ -21,6 +21,12 @@ export class DashboardManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DASHBOARD.GET_STUDENT_COUNTS}`, { observeResponse: true });
   }
 
+    getDashboardCounts(): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DASHBOARD.GET_DASHBOARD_COUNTS}`, { observeResponse: true });
+  }
+
+
+  
     saveCampuse(id: string | null, payload: any): Observable<any> {
     const isUpdate = !!id;
 
