@@ -21,7 +21,7 @@ export const API_ENDPOINTS = {
         DOWNLOAD_DOCS: `/api/institute/employees/download-document`,
         GET_EMPLOYEE_DOCS: (id: string) => `/api/institute/employees/${id}/documents`,
         GET_ALL: '/api/institute/employees',
-        SEARCH: `/api/institute/employees/search`,
+        SEARCH: (keyword: string) => `/api/fee/catalogs/search/${keyword}`,
         GET_BY_ID: (id: string) => `/api/institute/employees/${id}`,
 
         ADDRESS: {

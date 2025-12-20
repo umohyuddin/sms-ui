@@ -19,3 +19,20 @@ export const CHARGE_TYPE_CLASSES: { [key: string]: string } = {
   USAGE_BASED: "charge-usage-based",
   DISCOUNTED: "charge-discounted"
 };
+
+
+export const GENDER_CLASSES: { [key: string]: string } = {
+  MALE: 'gender-male',
+  FEMALE: 'gender-female',
+  OTHER: 'gender-other',
+  PREFER_NOT_TO_SAY: 'gender-not-specified'
+};
+
+export const MARITAL_STATUS_CLASSES: { [key: string]: string } = {
+  SINGLE: 'marital-single',
+  MARRIED: 'marital-married',
+  DIVORCED: 'marital-divorced',
+  WIDOWED: 'marital-widowed',
+  SEPARATED: 'marital-separated',
+  ENGAGED: 'marital-engaged'
+};

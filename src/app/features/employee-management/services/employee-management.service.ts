@@ -125,16 +125,13 @@ export class EmployeeManagementService {
     );
   }
 
-  searchEmployee(params: any): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.STUDENTS.SEARCH}`,
-      {
-        observeResponse: true,
-        params: params
-      }
-    );
-  }
 
+
+
+  searchEmployee(query: string): Observable<any> {
+    const url = query ? `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.SEARCH(query)}` : `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.GET_ALL}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
+  }
   getStudentFeeSummary(params: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET,
       `${this.baseUrl}${API_ENDPOINTS.STUDENTS.STUDENT_FEE_SUMMARY}`,

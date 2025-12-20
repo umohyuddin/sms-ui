@@ -4,6 +4,7 @@ export interface EmployeeResponse {
   firstName: string;
   lastName: string;
   fullName: string;
+  middleName:string;
   gender: 'MALE' | 'FEMALE' | 'OTHER';
   dateOfBirth: string;       // ISO date string, e.g., "1990-05-12"
   maritalStatus: 'SINGLE' | 'MARRIED' | 'DIVORCED' | 'WIDOWED';

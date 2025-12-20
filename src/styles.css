@@ -3,22 +3,106 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* You can add global styles to this file, and also import other style files */
 
 /* Recurrence Rule Badges */
-.recurrence-one-time { background-color: #6b7280; color: white; }     /* gray */
-.recurrence-monthly { background-color: #3b82f6; color: white; }      /* blue */
-.recurrence-quarterly { background-color: #a855f7; color: white; }    /* purple */
-.recurrence-bi-monthly { background-color: #4f46e5; color: white; }   /* indigo */
-.recurrence-half-yearly { background-color: #eab308; color: black; }  /* yellow */
-.recurrence-yearly { background-color: #22c55e; color: white; }       /* green */
-.recurrence-term-wise { background-color: #ec4899; color: white; }    /* pink */
-.recurrence-semester-wise { background-color: #dc2626; color: white; }/* red */
+.recurrence-one-time { background-color: #64748b; color: white; }     /* slate */
+.recurrence-monthly { background-color: #2563eb; color: white; }     /* royal blue */
+.recurrence-quarterly { background-color: #7c3aed; color: white; }   /* deep violet */
+.recurrence-bi-monthly { background-color: #4338ca; color: white; }  /* deep indigo */
+.recurrence-half-yearly { background-color: #facc15; color: black; } /* amber */
+.recurrence-yearly { background-color: #15803d; color: white; }      /* forest green */
+.recurrence-term-wise { background-color: #be185d; color: white; }   /* dark rose */
+.recurrence-semester-wise { background-color: #991b1b; color: white;}/* deep red */
+
 
 /* Charge Type Badges */
-.charge-fixed { background-color: #16a34a; color: white; }           /* green */
-.charge-percentage { background-color: #7e22ce; color: white; }      /* purple */
-.charge-per-credit { background-color: #2563eb; color: white; }      /* blue */
-.charge-per-subject { background-color: #ca8a04; color: white; }     /* yellow */
-.charge-variable { background-color: #4f46e5; color: white; }        /* indigo */
-.charge-slab-based { background-color: #db2777; color: white; }      /* pink */
-.charge-usage-based { background-color: #f97316; color: white; }     /* orange */
-.charge-discounted { background-color: #dc2626; color: white; }      /* red */
+.charge-fixed { background-color: #065f46; color: white; }          /* emerald dark */
+.charge-percentage { background-color: #5b21b6; color: white; }     /* royal purple */
+.charge-per-credit { background-color: #1e40af; color: white; }     /* navy blue */
+.charge-per-subject { background-color: #92400e; color: white; }    /* bronze */
+.charge-variable { background-color: #312e81; color: white; }       /* midnight indigo */
+.charge-slab-based { background-color: #9d174d; color: white; }     /* wine */
+.charge-usage-based { background-color: #c2410c; color: white; }    /* burnt orange */
+.charge-discounted { background-color: #7f1d1d; color: white; }     /* maroon */
 
+/* Gender Badges */
+.gender-male {
+  background-color: #0ea5e9; /* sky blue */
+  color: white;
+}
+
+.gender-female {
+  background-color: #db2777; /* fuchsia */
+  color: white;
+}
+
+.gender-other {
+  background-color: #6d28d9; /* electric purple */
+  color: white;
+}
+
+.gender-not-specified {
+  background-color: #475569; /* cool gray */
+  color: white;
+}
+
+
+/* Marital Status Badges */
+.marital-single {
+  background-color: #3b82f6; /* blue */
+  color: white;
+}
+
+.marital-married {
+  background-color: #16a34a; /* green */
+  color: white;
+}
+
+.marital-divorced {
+  background-color: #f97316; /* orange */
+  color: white;
+}
+
+.marital-widowed {
+  background-color: #6b7280; /* slate gray */
+  color: white;
+}
+
+.marital-separated {
+  background-color: #a855f7; /* purple */
+  color: white;
+}
+
+.marital-engaged {
+  background-color: #ec4899; /* rose / pink */
+  color: white;
+}
+
+
+.marital-single {
+  background-color: #0284c7; /* calm blue */
+  color: white;
+}
+
+.marital-married {
+  background-color: #166534; /* deep green */
+  color: white;
+}
+
+.marital-divorced {
+  background-color: #ea580c; /* strong orange */
+  color: white;
+}
+
+.marital-widowed {
+  background-color: #334155; /* charcoal */
+  color: white;
+}
+
+.marital-separated {
+  background-color: #7e22ce; /* vivid purple */
+  color: white;
+}
+
+.marital-engaged {
+  background-color: #be123c; /* ruby */
+  color: white;
+}
