@@ -11,7 +11,7 @@
     <div class="kt-portlet__head-toolbar">
       <div class="kt-portlet__head-wrapper">
         <div class="kt-portlet__head-actions">
-          
+
         </div>
       </div>
     </div>
@@ -40,8 +40,8 @@
           </select>
         </div>
         <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-          <label>Section Name:</label>
-          <input type="text" class="form-control kt-input" placeholder="E.g: 1st grade" data-col-index="0"
+          <label>Keyword:</label>
+          <input type="text" class="form-control kt-input" placeholder="E.g: name/code" data-col-index="0"
             formControlName="keyword">
         </div>
 
@@ -89,16 +89,19 @@
 
 
                 <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
-                  <td>1254</td>
                   <td>{{item.studentCode}}</td>
                   <td>{{ item.fullName }}</td>
                   <td>{{ item.firstName }}</td>
                   <td>{{ item.lastName }}</td>
                   <td>{{item.phone}}</td>
-                  <td>{{item.gender}}</td>
+                  <td>
+                    <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded "
+                      [ngClass]="genderClasses[item.gender]">
+                      {{item.gender}}
+                    </span>
+                  </td>
                   <td>{{item.dateOfBirth}}</td>
-                  <td>3310427306979</td>
-                  <td>cnic</td>
+
                   <td>
                     <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
                       [ngClass]="item.isActive ? 'kt-badge--brand' : 'kt-badge--danger'">
@@ -109,8 +112,8 @@
                   <td>{{ item.enrollmentDate }}</td>
                   <td>{{ item.standard.standardName }}</td>
                   <td>{{ item.standard.standardCode }}</td>
-                  <td>{{ item.standard.campus.campusName }}</td>
-                  <td>{{ item.standard.campus.campusCode }}</td>
+                  <td>{{ item.campus.campusName }}</td>
+                  <td>{{ item.campus.campusCode }}</td>
                   <td nowrap="">
                     <span class="dropdown">
                       <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown"

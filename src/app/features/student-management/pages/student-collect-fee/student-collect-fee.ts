@@ -104,6 +104,7 @@ export class StudentCollectFee {
     this.createForm.get("campusId")?.setValue('');
     this.createForm.get("studentId")?.setValue('');
     this.standardDD = []
+    this.studentsResponse=[];
 
   }
 

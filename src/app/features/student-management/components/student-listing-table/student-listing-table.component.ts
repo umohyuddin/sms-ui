@@ -12,6 +12,7 @@ import { SectionManagementService } from '../../../section-management/services/s
 import { StudentManagementService } from '../../services/student-management.service';
 import { SectionResponse } from '../../../section-management/models/SectionResponse';
 import { StudentResponse } from '../../models/StudentResponse';
+import { GENDER_CLASSES } from '../../../../core/const/COLOR_CONST';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class StudentListingTableComponent {
   studentSearchForm !: FormGroup;
   private destroy$ = new Subject<void>();
   campusesResponse: any;
+  genderClasses = GENDER_CLASSES;
 
   constructor(
     private fb: FormBuilder,
@@ -43,7 +45,6 @@ export class StudentListingTableComponent {
   ) { }
 
   columns = [
-    { key: 'rollNumber', label: 'Roll #', sortable: true },
     { key: 'studentCode', label: 'Student Code', sortable: true },
     { key: 'fullName', label: 'Full Name', sortable: true },
     { key: 'fisrtName', label: 'First Name', sortable: true },
@@ -51,10 +52,6 @@ export class StudentListingTableComponent {
     { key: 'phone', label: 'Contact #', sortable: true },
     { key: 'gender', label: 'Gender', sortable: true },
     { key: 'dob', label: 'DOB', sortable: true },
-
-    { key: 'crc', label: 'CRC', sortable: true },
-    { key: 'cnic', label: 'CNIC', sortable: true },
-
     { key: 'isActive', label: 'Status', sortable: true },
     { key: 'enrollmentDate', label: 'Enrollment Date', sortable: true },
     { key: 'standardName', label: 'Standard Name', sortable: true },
@@ -67,7 +64,8 @@ export class StudentListingTableComponent {
   ngOnInit() {
     this.initializeForm();
     this.getAllStudents()
-    //this.getCampuses();
+    this.getCampuses();
+    this.onCampusChange()
     //this.getStandards();
     //this.getSections();
   }
@@ -87,6 +85,30 @@ export class StudentListingTableComponent {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
         this.campusesResponse = response.body;
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    });
+  }
+
+    onCampusChange() {
+    this.studentSearchForm.get('campusId')?.valueChanges.subscribe(campusId => {
+      console.log("Campus changed:", campusId);
+      this.loadStandardByCampusId(campusId);
+    });
+  }
+  loadStandardByCampusId(campusId: any) {
+    this.studentSearchForm.get('standardId')?.setValue('')
+    this.standardManagementService.getCampusById(campusId).subscribe({
+      next: (response) => {
+        console.log('  Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.standardsResponse = response.body;
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);

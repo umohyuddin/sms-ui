@@ -289,21 +289,20 @@ export class StudentCreateFormComponent {
       console.warn('❌ Form is invalid');
       return;
     }
-    this.goToFeeCalculator()
-    // this.studentManagementSerivce.save(this.routedId, this.createForm.getRawValue()).subscribe({
-    //   next: (response) => {
-    //     console.log('  Success Status:', response.status);
-    //     console.log('📦 Response Body:', response.body);
-    //     this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
-    //   },
-    //   error: (error) => {
-    //     console.error('❌ Post Error Status:', error.status);
-    //     console.error('Message:', error.message);
-    //   },
-    //   complete: () => {
-    //     console.log('🔚 Post Complete');
-    //   }
-    // })
+    this.studentManagementSerivce.save(this.routedId, this.createForm.getRawValue()).subscribe({
+      next: (response) => {
+        console.log('  Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.goToFeeCalculator()
+      },
+      error: (error) => {
+        console.error('❌ Post Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Post Complete');
+      }
+    })
   }
   goToFeeCalculator() {
     this.router.navigate(ROUTES.STUDENT.STUDENT_FEE_CALCULATOR.DETAILS, {
