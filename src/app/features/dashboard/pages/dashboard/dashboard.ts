@@ -6,6 +6,7 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { DiscountRate } from '../../../student-management/models/DiscountRate';
 import { DashboardManagementService } from '../../services/dashboard-management.service';
 import { DashboardStudentStats } from '../../models/DashboardStudentStats';
+import { DashboardFinancial } from '../../models/DashboardFinancial';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +20,7 @@ import { DashboardStudentStats } from '../../models/DashboardStudentStats';
 export class Dashboard {
   dashboardStudentStats?: DashboardStudentStats
   dashBoardCount: any;
+  dashBoardFinancials?:DashboardFinancial
   constructor(private router: Router,
     private dashboardManagementService: DashboardManagementService
   ) { }
@@ -26,7 +28,10 @@ export class Dashboard {
   ngOnInit() {
     this.getStudentCounts();
     this.getDashBoardCounts();
+    this.getDashBoardFinancials();
   }
+
+
   goToNewAddmission() {
     this.router.navigate(ROUTES.STUDENT.CREATE);
   }
@@ -64,6 +69,25 @@ export class Dashboard {
 
         this.dashBoardCount = response.body;
         console.log("Dashboard counts",this.dashBoardCount)
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    });
+  }
+
+    private getDashBoardFinancials() {
+    this.dashboardManagementService.getDashboardFinancials().subscribe({
+      next: (response) => {
+        console.log('  Request Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+
+        this.dashBoardFinancials = response.body;
+        console.log("Dashboard financials",this.dashBoardFinancials)
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);

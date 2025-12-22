@@ -32,7 +32,8 @@ export const API_ENDPOINTS = {
     },
     DASHBOARD: {
         GET_STUDENT_COUNTS: '/api/institute/students/dashboard',
-        GET_DASHBOARD_COUNTS: '/api/lookup/dashboard/counts'
+        GET_DASHBOARD_COUNTS: '/api/lookup/dashboard/counts',
+        GET_DASHBOARD_FINANCIAL: '/api/lookup/dashboard/financials'
     },
     INSTITUTE: {
         ACADEMIC_YEAR: {

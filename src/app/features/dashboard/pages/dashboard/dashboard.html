@@ -275,10 +275,46 @@
 							<div class="kt-widget1">
 								<div class="kt-widget1__item">
 									<div class="kt-widget1__info">
-										<h3 class="kt-widget1__title">Total Fees Collected (This Month)</h3>
+										<h3 class="kt-widget1__title">Total Fees Assigned (Yearly)</h3>
+										<span class="kt-widget1__desc">All students</span>
+									</div>
+									<span class="kt-widget1__number kt-font-brand" [ngClass]="{
+    'kt-font-success': dashBoardFinancials && dashBoardFinancials.assignedYearlyFee > 0,
+    'kt-font-danger': dashBoardFinancials && dashBoardFinancials.assignedYearlyFee < 0
+  }">{{ dashBoardFinancials?.assignedYearlyFee | number:'1.0-0' }}</span>
+								</div>
+								<div class="kt-widget1__item">
+									<div class="kt-widget1__info">
+										<h3 class="kt-widget1__title">Pending Fees</h3>
 										<span class="kt-widget1__desc">This Month</span>
 									</div>
-									<span class="kt-widget1__number kt-font-brand">+17,800</span>
+									<span class="kt-widget1__number kt-font-danger">+1,800</span>
+								</div>
+								<div class="kt-widget1__item">
+									<div class="kt-widget1__info">
+										<h3 class="kt-widget1__title">Total Outstanding Fees</h3>
+										<span class="kt-widget1__desc">System bugs and issues</span>
+									</div>
+									<span class="kt-widget1__number kt-font-success">-27,49%</span>
+								</div>
+							</div>
+
+							<!--end:: Widgets/Stats2-1 -->
+						</div>
+						<div class="col-md-12 col-lg-12 col-xl-4">
+
+							<!--begin:: Widgets/Stats2-1 -->
+							<div class="kt-widget1">
+								<div class="kt-widget1__item">
+									<div class="kt-widget1__info">
+										<h3 class="kt-widget1__title">Total Fees Collected (This Year)</h3>
+										<span class="kt-widget1__desc">All Students</span>
+									</div>
+<span class="kt-widget1__number kt-font-brand" [ngClass]="{
+    'kt-font-success': dashBoardFinancials && dashBoardFinancials.collectedYearlyFee > 0,
+    'kt-font-danger': dashBoardFinancials && dashBoardFinancials.collectedYearlyFee < 0
+  }">{{ dashBoardFinancials?.collectedYearlyFee | number:'1.0-0' }}</span>
+						
 								</div>
 								<div class="kt-widget1__item">
 									<div class="kt-widget1__info">
@@ -304,8 +340,8 @@
 							<div class="kt-widget1">
 								<div class="kt-widget1__item">
 									<div class="kt-widget1__info">
-										<h3 class="kt-widget1__title">Total Annual Revenue</h3>
-										<span class="kt-widget1__desc">Awerage IPO Margin</span>
+										<h3 class="kt-widget1__title">Total Outstanding Fees</h3>
+										<span class="kt-widget1__desc">Remaining balance from assigned fees</span>
 									</div>
 									<span class="kt-widget1__number kt-font-success">+24%</span>
 								</div>
@@ -327,35 +363,6 @@
 
 							<!--end:: Widgets/Stats2-2 -->
 						</div>
-						<div class="col-md-12 col-lg-12 col-xl-4">
-
-							<!--begin:: Widgets/Stats2-3 -->
-							<div class="kt-widget1">
-								<div class="kt-widget1__item">
-									<div class="kt-widget1__info">
-										<h3 class="kt-widget1__title">Total Fines Collected</h3>
-										<span class="kt-widget1__desc">This Month</span>
-									</div>
-									<span class="kt-widget1__number kt-font-success">+15%</span>
-								</div>
-								<div class="kt-widget1__item">
-									<div class="kt-widget1__info">
-										<h3 class="kt-widget1__title">Total Refunds Issued</h3>
-										<span class="kt-widget1__desc">This Month</span>
-									</div>
-									<span class="kt-widget1__number kt-font-danger">+80%</span>
-								</div>
-								<div class="kt-widget1__item">
-									<div class="kt-widget1__info">
-										<h3 class="kt-widget1__title">Revenue</h3>
-										<span class="kt-widget1__desc">Overall Revenue Increase</span>
-									</div>
-									<span class="kt-widget1__number kt-font-primary">+60%</span>
-								</div>
-							</div>
-
-							<!--end:: Widgets/Stats2-3 -->
-						</div>
 					</div>
 				</div>
 			</div>
@@ -363,7 +370,6 @@
 	</div>
 
 	<!--End::Row-->
-
 
 	<div class="row">
 		<div class="col-lg-12">
