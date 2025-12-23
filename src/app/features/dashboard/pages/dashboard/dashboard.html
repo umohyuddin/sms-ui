@@ -310,11 +310,11 @@
 										<h3 class="kt-widget1__title">Total Fees Collected (This Year)</h3>
 										<span class="kt-widget1__desc">All Students</span>
 									</div>
-<span class="kt-widget1__number kt-font-brand" [ngClass]="{
+									<span class="kt-widget1__number kt-font-brand" [ngClass]="{
     'kt-font-success': dashBoardFinancials && dashBoardFinancials.collectedYearlyFee > 0,
     'kt-font-danger': dashBoardFinancials && dashBoardFinancials.collectedYearlyFee < 0
   }">{{ dashBoardFinancials?.collectedYearlyFee | number:'1.0-0' }}</span>
-						
+
 								</div>
 								<div class="kt-widget1__item">
 									<div class="kt-widget1__info">
@@ -343,7 +343,11 @@
 										<h3 class="kt-widget1__title">Total Outstanding Fees</h3>
 										<span class="kt-widget1__desc">Remaining balance from assigned fees</span>
 									</div>
-									<span class="kt-widget1__number kt-font-success">+24%</span>
+									<span class="kt-widget1__number kt-font-warning" [ngClass]="{
+    'kt-font-success': dashBoardFinancials && dashBoardFinancials.outstandingYearlyFee > 0,
+    'kt-font-danger': dashBoardFinancials && dashBoardFinancials.outstandingYearlyFee < 0
+  }">{{ dashBoardFinancials?.outstandingYearlyFee | number:'1.0-0' }}</span>
+
 								</div>
 								<div class="kt-widget1__item">
 									<div class="kt-widget1__info">
