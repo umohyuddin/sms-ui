@@ -18,6 +18,7 @@ export class AppConfigService {
   private employeeLookUpData: any = null;
   docsTypeDD: KeyValueOption[] = [];
   addressTypeDD: KeyValueOption[] = [];
+    countriesDD: KeyValueOption[] = [];
   relationshipTypeDD: KeyValueOption[] = [];
   degreeDD: KeyValueOption[] = [];
   subjects: KeyValueOption[] = [];
@@ -89,6 +90,7 @@ export class AppConfigService {
       this.relationshipTypeDD = SmsUtil.mapToKeyValue(this.employeeLookUpData?.relationshipType ?? []);
       this.degreeDD = SmsUtil.mapToKeyValue(this.employeeLookUpData?.degree ?? []);
       this.subjects = SmsUtil.mapToKeyValue(this.employeeLookUpData?.subjects ?? []);
+      this.countriesDD = SmsUtil.mapToKeyValue(this.employeeLookUpData?.countries ?? []);
       console.group('✅ Dropdowns Loaded');
       console.log('docsTypeDD:', this.docsTypeDD);
       console.log('genderDD:', this.genderDD);

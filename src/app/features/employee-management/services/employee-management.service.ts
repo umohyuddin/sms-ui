@@ -24,8 +24,24 @@ export class EmployeeManagementService {
     });
   }
 
+
+  
   update(payload: any, id: string): Observable<any> {
     const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.UPDATE(id)}`;
+    return this.http.request(HTTP_METHOD.PUT, url, {
+      observeResponse: true, body: payload
+    });
+  }
+
+  saveAddress(payload: any, id: string): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.ADDRESS.CREATE(id)}`;
+    return this.http.request(HTTP_METHOD.POST, url, {
+      observeResponse: true, body: payload
+    });
+  }
+
+  updateAddress(payload: any, id: string): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.ADDRESS.UPDATE(id)}`;
     return this.http.request(HTTP_METHOD.PUT, url, {
       observeResponse: true, body: payload
     });
@@ -71,6 +87,10 @@ export class EmployeeManagementService {
 
   getDocsMeta(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.EMPLOYEE_DOCS_META}`, { observeResponse: true });
+  }
+
+    getProvinceByCountryId(id:any): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.PROVINCE.GET_BY_COUNTRY_ID(id)}`, { observeResponse: true });
   }
 
   downloadEmployeeDocument(documentId: number, employeeId: string): void {

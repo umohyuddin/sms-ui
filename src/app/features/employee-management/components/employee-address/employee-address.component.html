@@ -8,12 +8,17 @@
             </div>
             <div class="kt-portlet__head-toolbar">
                 <div class="kt-portlet__head-actions">
-                    
+
                 </div>
             </div>
         </div>
         <div class="kt-portlet__body">
             <div *ngIf="!showPersonalForm">
+                <div *ngIf="employeeAddressData?.length === 0" class="text-center kt-margin-t-20">
+                    <button type="button" class="btn btn-success" (click)="togglePersonalForm(null)">
+                        <i class="la la-plus"></i> Add Address
+                    </button>
+                </div>
                 <div *ngFor="let address of employeeAddressData" class="kt-margin-t-10">
                     <div class="form-group row">
                         <div class="col-6">
@@ -32,12 +37,12 @@
                         <div class="col-6">
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">
                                 City:
-                            </span> {{ address.city }}
+                            </span> {{ address.cityName }}
                         </div>
                         <div class="col-6">
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">
                                 State:
-                            </span> {{ address.state }}
+                            </span> {{ address.provinceName }}
                         </div>
                     </div>
 
@@ -50,7 +55,7 @@
                         <div class="col-6">
                             <span class="form-control-plaintext kt-font-bolder" style="display: inline;">
                                 Country:
-                            </span> {{ address.country }}
+                            </span> {{ address.countryName }}
                         </div>
                     </div>
 
@@ -58,7 +63,8 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-12 text-center">
-                            <button type="button" class="btn btn-outline-success btn-icon" (click)="togglePersonalForm(address.id)">
+                            <button type="button" class="btn btn-outline-success btn-icon"
+                                (click)="togglePersonalForm(address.id)">
                                 <i class="flaticon-signs-1"></i>
                             </button>
                         </div>
@@ -68,9 +74,133 @@
                     </div>
 
                 </div>
+                <div class="text-center kt-margin-t-20">
+                    <button type="button" class="btn btn-success" (click)="togglePersonalForm(null)">
+                        <i class="la la-plus"></i> Add New Address
+                    </button>
+                </div>
             </div>
 
+            <div *ngIf="showPersonalForm">
+                <form class="kt-form kt-form--label-right" [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+                    <h4>Employee Information → Address Details</h4>
 
+                    <div class="form-group row form-group-marginless kt-margin-t-20">
+
+                        <div class="col-lg-6">
+                            <label class="col-form-label">Address Type:</label>
+                            <select class="form-control" formControlName="addressType"
+                                [class.is-invalid]="addressType?.invalid && (addressType?.touched || addressType?.dirty)"
+                                [class.is-valid]="addressType?.valid && (addressType?.touched || addressType?.dirty)">
+                                <option value='' selected>Select Address Type</option>
+                                @for (p of addressTypeDD; track p.key) {
+                                <option [value]="p.key">{{ p.label }}</option>
+                                }
+                            </select>
+                            <span class="form-text text-muted">Select Address Type</span>
+                            <span class="invalid-feedback" *ngIf="addressType?.errors?.['required']">
+                                Address Type is required
+                            </span>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label class="col-form-label">Country</label>
+                            <select class="form-control" formControlName="countryId"
+                                [class.is-invalid]="countryId?.invalid && (countryId?.touched || countryId?.dirty)"
+                                [class.is-valid]="countryId?.valid && (countryId?.touched || countryId?.dirty)">
+                                <option value='' selected>Select Country</option>
+                                @for (p of countriesDD; track p.key) {
+                                <option [value]="p.key">{{ p.label }}</option>
+                                }
+                            </select>
+                            <span class="form-text text-muted">Select Country</span>
+                            <span class="invalid-feedback" *ngIf="countryId?.errors?.['required']">
+                                Country is required
+                            </span>
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group row form-group-marginless kt-margin-t-20">
+                        <div class="col-lg-6">
+                            <label class="col-form-label">State / Province:</label>
+                            <select class="form-control" formControlName="provinceId"
+                                [class.is-invalid]="provinceId?.invalid && (provinceId?.touched || provinceId?.dirty)"
+                                [class.is-valid]="provinceId?.valid && (provinceId?.touched || provinceId?.dirty)">
+                                <option value='' selected>State / Province</option>
+                                @for (p of provinceDD; track p.key) {
+                                <option [value]="p.key">{{ p.label }}</option>
+                                }
+                            </select>
+                            <span class="form-text text-muted">State / Province</span>
+                            <span class="invalid-feedback" *ngIf="provinceId?.errors?.['required']">
+                                State / Province is required
+                            </span>
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="col-form-label">City:</label>
+                            <select class="form-control" formControlName="cityId"
+                                [class.is-invalid]="cityId?.invalid && (cityId?.touched || cityId?.dirty)"
+                                [class.is-valid]="cityId?.valid && (cityId?.touched || cityId?.dirty)">
+                                <option value='' selected>Select City</option>
+                                @for (p of citiesDD; track p.key) {
+                                <option [value]="p.key">{{ p.label }}</option>
+                                }
+                            </select>
+                            <span class="form-text text-muted">Select City</span>
+                            <span class="invalid-feedback" *ngIf="cityId?.errors?.['required']">
+                                City is required
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row form-group-marginless kt-margin-t-20">
+                        <div class="col-lg-12">
+                            <label class="col-form-label">Postal Code:</label>
+                            <input type="text" class="form-control" placeholder="Postal Code"
+                                formControlName="postalCode">
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row kt-margin-t-40">
+                        <div class="col-lg-12">
+                            <label class="col-form-label">Line 1:</label>
+                            <div class="kt-input-icon">
+                                <textarea class="form-control" id="exampleTextarea" rows="3"
+                                    formControlName="line1"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row kt-margin-t-40">
+                        <div class="col-lg-12">
+                            <label class="col-form-label">Line 2:</label>
+                            <div class="kt-input-icon">
+                                <textarea class="form-control" id="exampleTextarea" rows="3"
+                                    formControlName="line2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <div class="row">
+                                <div class="col-lg-5"></div>
+                                <div class="col-lg-7">
+                                    <button type="submit" class="btn btn-dark mr-2">
+                                        {{ editingAddressId ? 'Update Employee Address' : 'Save Employee Address' }}
+                                    </button>
+                                    <button type="button" class="btn btn-secondary"
+                                        (click)="togglePersonalForm(null)">Discard Changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
 
         </div>
     </div>

@@ -8,6 +8,9 @@ import { EmployeeResponse } from '../../models/EmployeeResponse';
 import { EmployeeManagementService } from '../../services/employee-management.service';
 import { EmployeeAddress } from '../../models/EmployeeAddress';
 import { CommonModule } from '@angular/common';
+import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
+import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
+import { HttpClientService } from '../../../../core/services/http-client.service';
 
 @Component({
   selector: 'app-employee-address',
@@ -17,7 +20,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './employee-address.component.css'
 })
 export class EmployeeAddressComponent {
-    updateForm!: FormGroup;
+  addressForm!: FormGroup;
   employeeAddressData: EmployeeAddress[] = [];
   selectedAddress?: EmployeeAddress;
   routedId!: string;
@@ -25,11 +28,20 @@ export class EmployeeAddressComponent {
   personalForm!: FormGroup;
   showPersonalForm: boolean = false;
   response?: EmployeeResponse;
+  addressTypeDD: KeyValueOption[] = [];
+  countriesDD: KeyValueOption[] = [];
+  provinceDD: KeyValueOption[] = [];
+  citiesDD: KeyValueOption[] = [];
+  editingAddressId: any;
+
+
   constructor(
     private fb: FormBuilder,
     private employeeManagementService: EmployeeManagementService,
+
     private route: ActivatedRoute,
-    private appConfig: AppConfigService
+    private appConfig: AppConfigService,
+    private httpClientService: HttpClientService,
   ) { }
 
 
@@ -37,24 +49,44 @@ export class EmployeeAddressComponent {
   ngOnInit(): void {
     this.routedId = this.route.snapshot.paramMap.get('id') ?? '';
     console.log('employee ID from route:', this.routedId);
-    this.employeeLookUpData();
+    this.addressTypeDD = this.appConfig.addressTypeDD;
+    this.countriesDD = this.appConfig.countriesDD;
     this.initializeForm();
-
+    this.setupFormListeners();
     this.getEmployeeAddressDetails(this.routedId);
-
-
-    this.personalForm = this.fb.group({
-      fullName: [''],
-      email: [''],
-      primaryPhone: [''],
-      gender: [''],
-      dob: ['']
-    });
   }
 
+
+  // loadProvinceByCountryId(countryId: any) {
+  //   this.addressForm.get('provinceId')?.setValue('')
+  //   this.employeeManagementService.getProvinceByCountryId(countryId).subscribe({
+  //     next: (response) => {
+  //       console.log('  Success Status:', response.status);
+  //       console.log('📦 Response Body:', response.body);
+  //       this.provinceDD = response.body.map((item: any) => ({
+  //         key: item.id,   // unique key (IMPORTANT for trackBy)
+  //         label: item.name
+  //       }));
+  //     },
+  //     error: (error) => {
+  //       console.error('❌ Request Error Status:', error.status);
+  //       console.error('Message:', error.message);
+  //     },
+  //     complete: () => {
+  //       console.log('🔚 Request Complete');
+  //     }
+  //   });
+  // }
   togglePersonalForm(id: any) {
-    console.log("received Id", id);
-    this.getEmployeeAddressById(id);
+    console.log('received Id', id);
+
+    if (id !== null && id !== undefined) {
+      this.editingAddressId = id;
+      this.getEmployeeAddressById(id);
+    } else {
+      this.initializeForm();
+    }
+
     this.showPersonalForm = !this.showPersonalForm;
   }
 
@@ -69,28 +101,29 @@ export class EmployeeAddressComponent {
 
   private initializeForm() {
     const today = new Date();
-    this.updateForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      middleName: [''],
-      fullName: [''],
-      dateOfBirth: ['', Validators.required],
-      gender: ['', Validators.required],
-      passportNumber: [''],
-      primaryPhone: ['', Validators.required],
-      secondaryPhone: [''],
-      workPhone: [''],
-      email: ['', Validators.required],
-      religion: ['', Validators.required],
-      nationality: ['', Validators.required],
-      maritalStatus: ['', Validators.required],
-      bloodGroup: [''],
-      bio: [],
-      joiningDate: [today, Validators.required],
+    this.addressForm = this.fb.group({
+      addressType: ['', Validators.required],
+      provinceId: ['', Validators.required],
+      countryId: ['', Validators.required],
+      employeeId: [this.routedId, Validators.required],
+      addressId: [''],
+      cityId: ['', Validators.required],
+      postalCode: [''],
+      line1: ['', Validators.maxLength(500)],
+      line2: ['',]
     });
-
   }
 
+
+  private setupFormListeners() {
+    this.addressForm.get('countryId')?.valueChanges.subscribe(countryId => {
+      this.loadProvinceByCountryId(countryId);
+    });
+
+    this.addressForm.get('provinceId')?.valueChanges.subscribe(provinceId => {
+      this.loadCitiesByProvince(provinceId);
+    });
+  }
 
   getEmployeeAddressDetails(id: string): void {
     console.group(`Fetching Employee Details - ID: ${id}`);
@@ -99,10 +132,6 @@ export class EmployeeAddressComponent {
         console.log('%c✅ Request Successful', 'color: green; font-weight: bold;');
         console.log('Employee Response:', { status: response.status, data: response.body });
         this.employeeAddressData = response.body;
-
-
-
-        this.updateForm.patchValue(this.employeeAddressData ?? {});
       },
       error: (error) => {
         console.error('%c❌ Request Failed', 'color: red; font-weight: bold;');
@@ -141,35 +170,77 @@ export class EmployeeAddressComponent {
       })
   }
 
-  getEmployeeAddressById(id: any) {
-    console.group('📦 Fetching Employee Lookup Data');
-    this.employeeManagementService.getEmployeeAddressById(id)
-      .subscribe({
-        next: (response) => {
-          console.info('✅ Lookup data loaded', {
-            status: response.status,
-            body: response.body
-          });
-          this.selectedAddress = response.body;
-        },
-        error: (error) => {
-          console.error('❌ Failed to load lookup data', {
-            status: error.status,
-            message: error.message
-          });
-        },
-        complete: () => {
+  private loadProvinceByCountryId(countryId: any, callback?: () => void) {
+    this.addressForm.get('provinceId')?.setValue('');
+    this.employeeManagementService.getProvinceByCountryId(countryId).subscribe({
+      next: (response) => {
+        this.provinceDD = response.body.map((item: any) => ({
+          key: item.id,
+          label: item.name
+        }));
+      },
+      error: (error) => console.error(error),
+      complete: () => callback?.()
+    });
+  }
 
-          console.log('🔚 Request Complete');
-          console.groupEnd();
-        }
-      })
+  private loadCitiesByProvince(provinceId: any, callback?: () => void) {
+    if (!provinceId) return;
+    this.addressForm.get('cityId')?.setValue('');
+    this.httpClientService.request<any>(
+      HTTP_METHOD.GET,
+      this.appConfig.apiBaseUrl + API_ENDPOINTS.LOOKUP.CITIY.GET_BY_PROVINCE_ID(provinceId),
+      { observeResponse: true }
+    ).subscribe({
+      next: (response) => {
+        this.citiesDD = response.body.map((item: any) => ({
+          key: item.id,
+          label: item.name
+        }));
+      },
+      error: (error) => console.error(error),
+      complete: () => callback?.()
+    });
+  }
+
+
+  getEmployeeAddressById(id: number) {
+    this.employeeManagementService.getEmployeeAddressById(id).subscribe({
+      next: (response) => {
+        this.selectedAddress = response.body;
+
+        const selectedCountryId = this.selectedAddress?.countryId;
+        const selectedProvinceId = this.selectedAddress?.provinceId;
+        const selectedCityId = this.selectedAddress?.cityId;
+
+        // Load provinces first
+        this.loadProvinceByCountryId(selectedCountryId, () => {
+          // Load cities after provinces
+          this.loadCitiesByProvince(selectedProvinceId, () => {
+            // Patch form after dropdowns are loaded
+            this.addressForm.patchValue({
+              addressId: this.selectedAddress?.id,
+              employeeId: this.selectedAddress?.employeeId,
+              addressType: this.selectedAddress?.addressType,
+              line1: this.selectedAddress?.line1,
+              line2: this.selectedAddress?.line2,
+              postalCode: this.selectedAddress?.postalCode,
+              countryId: selectedCountryId,
+              provinceId: selectedProvinceId,
+              cityId: selectedCityId
+            });
+          });
+        });
+
+      },
+      error: (error) => console.error(error)
+    });
   }
 
 
   private getInvalidControls(): string[] {
     const invalid: string[] = [];
-    const controls = this.updateForm.controls;
+    const controls = this.addressForm.controls;
     for (const name in controls) {
       if (controls[name].invalid) {
         invalid.push(name);
@@ -180,66 +251,90 @@ export class EmployeeAddressComponent {
 
 
   onSubmit(): void {
-    // Construct fullName before submitting
-    this.updateForm.get('fullName')?.setValue(
-      `${this.updateForm.get('firstName')?.value} ${this.updateForm.get('middleName')?.value || ''} ${this.updateForm.get('lastName')?.value}`.trim()
-    );
+    console.group('➡️ Submitting Employee Address Form');
+    console.info('Form Data:', this.addressForm.getRawValue());
 
-    console.group('➡️ Submitting Employee Form');
-    console.info('Form Data:', this.updateForm.getRawValue());
-
-    if (this.updateForm.invalid) {
-      this.updateForm.markAllAsTouched();
+    if (this.addressForm.invalid) {
+      this.addressForm.markAllAsTouched();
       console.warn('❌ Employee form is invalid', {
         invalidControls: this.getInvalidControls(),
-        formValue: this.updateForm.getRawValue()
+        formValue: this.addressForm.getRawValue()
       });
       return;
     }
-    this.employeeManagementService.update(this.updateForm.getRawValue(), this.routedId)
-      .subscribe({
-        next: (response) => {
-          console.info('✅ Employee saved successfully', {
-            status: response.status,
-            employee: response.body
-          });
-          this.response = response.body;
-          console.log(`Employee Details: ID = ${this.response?.id}`);
 
-          this.employeeAddressData = response.body
-          //this.togglePersonalForm();
+    const addressPayload = this.addressForm.getRawValue();
+    const isUpdate = !!addressPayload.addressId; // if addressId exists, it's an update
 
-        },
-        error: (error) => {
-          console.error('❌ Failed to save employee', {
-            status: error.status,
-            message: error.message,
-            formData: this.updateForm.getRawValue()
-          });
-        },
-        complete: () => {
-          console.log('🔚 Employee form submission complete');
-          console.groupEnd();
+    const request$ = isUpdate
+      ? this.employeeManagementService.updateAddress(addressPayload, addressPayload.addressId)
+      : this.employeeManagementService.saveAddress(addressPayload, this.routedId);
+
+    request$.subscribe({
+      next: (response) => {
+        console.info(`✅ Employee address ${isUpdate ? 'updated' : 'added'} successfully`, {
+          status: response.status,
+          employee: response.body
+        });
+
+        this.response = response.body;
+
+        // Update local employeeAddressData list
+        if (isUpdate) {
+          // replace the updated address in the list
+          const index = this.employeeAddressData.findIndex(addr => addr.id === addressPayload.addressId);
+          if (index !== -1) this.employeeAddressData[index] = response.body;
+        } else {
+          // push new address to the list
+          this.employeeAddressData.push(response.body);
         }
-      })
+
+        this.togglePersonalForm(null); // hide form
+      },
+      error: (error) => {
+        console.error(`❌ Failed to ${isUpdate ? 'update' : 'add'} employee address`, {
+          status: error.status,
+          message: error.message,
+          formData: this.addressForm.getRawValue()
+        });
+      },
+      complete: () => {
+        console.log('🔚 Employee address form submission complete');
+        console.groupEnd();
+      }
+    });
   }
+
+
+
+  // loadCitiesByProvince(provinceId: any) {
+  //   this.httpClientService.request<any>(HTTP_METHOD.GET, this.appConfig.apiBaseUrl + API_ENDPOINTS.LOOKUP.CITIY.GET_BY_PROVINCE_ID(provinceId), {
+  //     observeResponse: true
+  //   }).subscribe({
+  //     next: (response) => {
+  //       console.log('  Success Status:', response.status);
+  //       console.log('📦 Response Body:', response.body);
+  //       this.citiesDD = response.body.map((item: any) => ({
+  //         key: item.id,   // unique key (IMPORTANT for trackBy)
+  //         label: item.name
+  //       }));
+  //     },
+
+  //     error: (error) => {
+  //       console.error('❌ Request Error Status:', error.status);
+  //       console.error('Message:', error.message);
+  //     },
+  //     complete: () => {
+  //       console.log('🔚 Request Complete');
+  //     }
+  //   });
+  // }
   //getters
-  get firstName() { return this.updateForm.get('firstName'); }
-  get lastName() { return this.updateForm.get('lastName'); }
-  get middleName() { return this.updateForm.get('middleName'); }
-  get fullName() { return this.updateForm.get('fullName'); }
-  get dateOfBirth() { return this.updateForm.get('dateOfBirth'); }
-  get gender() { return this.updateForm.get('gender'); }
-  get cnic() { return this.updateForm.get('cnic'); }
-  get passportNumber() { return this.updateForm.get('passportNumber'); }
-  get primaryPhone() { return this.updateForm.get('primaryPhone'); }
-  get secondaryPhone() { return this.updateForm.get('secondaryPhone'); }
-  get workPhone() { return this.updateForm.get('workPhone'); }
-  get email() { return this.updateForm.get('email'); }
-  get religion() { return this.updateForm.get('religion'); }
-  get nationality() { return this.updateForm.get('nationality'); }
-  get bloodGroup() { return this.updateForm.get('bloodGroup'); }
-  get bio() { return this.updateForm.get('bio'); }
-  get joiningDate() { return this.updateForm.get('joiningDate'); }
-  get maritalStatus() { return this.updateForm.get("maritalStatus"); }
+  get addressType() { return this.addressForm.get('addressType'); }
+  get countryId() { return this.addressForm.get('countryId'); }
+  get provinceId() { return this.addressForm.get('provinceId'); }
+  get cityId() { return this.addressForm.get('cityId'); }
+  get postalCode() { return this.addressForm.get('postalCode'); }
+  get line1() { return this.addressForm.get('line1'); }
+  get line2() { return this.addressForm.get('line2'); }
 }

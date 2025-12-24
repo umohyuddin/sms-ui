@@ -4,8 +4,15 @@ export interface EmployeeAddress {
   addressType: string;
   line1: string;
   line2?: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
+
+  cityId: number;
+  cityName: string;
+
+  provinceId?: number;
+  provinceName?: string;
+
+  postalCode?: string;
+
+  countryId: number;
+  countryName: string;
 }

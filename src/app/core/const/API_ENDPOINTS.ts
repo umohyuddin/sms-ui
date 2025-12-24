@@ -27,8 +27,10 @@ export const API_ENDPOINTS = {
         ADDRESS: {
             GET_EMPLOYEE_ID: (id: string) => `/api/institute/employees/${id}/addresses`,
             GET_BY_ID: (id: string) => `/api/institute/employees/addresses/${id}`,
-
+            CREATE: (id: string) => `/api/institute/employees/${id}/addresses`,
+            UPDATE: (id: string) => `/api/institute/employees/addresses/${id}`
         }
+
     },
     DASHBOARD: {
         GET_STUDENT_COUNTS: '/api/institute/students/dashboard',
@@ -126,10 +128,11 @@ export const API_ENDPOINTS = {
         STUDENT_ADMISSION_META: '/api/lookup/admission/metadata',
         EMPLOYEE_DOCS_META: '/api/lookup/docs/metadata',
         PROVINCE: {
-            GET_ALL: '/api/lookup/provinces'
+            GET_ALL: '/api/lookup/provinces',
+            GET_BY_COUNTRY_ID: (id: string) => `/api/lookup/countries/${id}/provinces`
         },
         CITIY: {
-            GET_BY_PROVINCE_ID: (id: number) => `/api/lookup/provinces/${id}/cities`
+            GET_BY_PROVINCE_ID: (id: number) => `/api/lookup/country/provinces/${id}/cities`
         }
     }
 };
