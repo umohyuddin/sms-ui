@@ -267,6 +267,18 @@
 	<div class="row">
 		<div class="col-lg-12 col-xl-12">
 			<div class="kt-portlet">
+				<div class="kt-portlet__head">
+					<div class="kt-portlet__head-label">
+						<span class="kt-portlet__head-icon">
+							<i class="flaticon2-graph-1"></i>
+						</span>
+
+						<h3 class="kt-portlet__head-title">
+							School Fee Dashboard 
+							<small>Financial performance for {{ dashBoardFinancials?.academicYearName }}</small>
+						</h3>
+					</div>
+				</div>
 				<div class="kt-portlet__body kt-portlet__body--fit">
 					<div class="row row-no-padding row-col-separator-xl">
 						<div class="col-md-12 col-lg-12 col-xl-4">
@@ -275,7 +287,8 @@
 							<div class="kt-widget1">
 								<div class="kt-widget1__item">
 									<div class="kt-widget1__info">
-										<h3 class="kt-widget1__title">Total Fees Assigned (Yearly)</h3>
+										<h3 class="kt-widget1__title">Total Fees Assigned
+											({{dashBoardFinancials?.academicYearName}})</h3>
 										<span class="kt-widget1__desc">All students</span>
 									</div>
 									<span class="kt-widget1__number kt-font-brand" [ngClass]="{
@@ -285,18 +298,22 @@
 								</div>
 								<div class="kt-widget1__item">
 									<div class="kt-widget1__info">
-										<h3 class="kt-widget1__title">Pending Fees</h3>
-										<span class="kt-widget1__desc">This Month</span>
+										<h3 class="kt-widget1__title">Total Expected Collection
+											({{dashBoardFinancials?.monthName}})</h3>
+										<span class="kt-widget1__desc">All Students</span>
 									</div>
-									<span class="kt-widget1__number kt-font-danger">+1,800</span>
+									<span class="kt-widget1__number kt-font-brand" [ngClass]="{
+    'kt-font-success': dashBoardFinancials && dashBoardFinancials.assignedMonthlyFee > 0,
+    'kt-font-danger': dashBoardFinancials && dashBoardFinancials.assignedMonthlyFee < 0
+  }">{{ dashBoardFinancials?.assignedMonthlyFee | number:'1.0-0' }}</span>
 								</div>
-								<div class="kt-widget1__item">
+								<!-- <div class="kt-widget1__item">
 									<div class="kt-widget1__info">
 										<h3 class="kt-widget1__title">Total Outstanding Fees</h3>
 										<span class="kt-widget1__desc">System bugs and issues</span>
 									</div>
 									<span class="kt-widget1__number kt-font-success">-27,49%</span>
-								</div>
+								</div> -->
 							</div>
 
 							<!--end:: Widgets/Stats2-1 -->
@@ -307,7 +324,8 @@
 							<div class="kt-widget1">
 								<div class="kt-widget1__item">
 									<div class="kt-widget1__info">
-										<h3 class="kt-widget1__title">Total Fees Collected (This Year)</h3>
+										<h3 class="kt-widget1__title">Total Fees Collected
+											({{dashBoardFinancials?.academicYearName}})</h3>
 										<span class="kt-widget1__desc">All Students</span>
 									</div>
 									<span class="kt-widget1__number kt-font-brand" [ngClass]="{
@@ -318,18 +336,22 @@
 								</div>
 								<div class="kt-widget1__item">
 									<div class="kt-widget1__info">
-										<h3 class="kt-widget1__title">Pending Fees</h3>
-										<span class="kt-widget1__desc">This Month</span>
+										<h3 class="kt-widget1__title">Total Fees Collected
+											({{dashBoardFinancials?.monthName}})</h3>
+										<span class="kt-widget1__desc">All Students</span>
 									</div>
-									<span class="kt-widget1__number kt-font-danger">+1,800</span>
+									<span class="kt-widget1__number kt-font-brand" [ngClass]="{
+    'kt-font-success': dashBoardFinancials && dashBoardFinancials.collectedMonthlyFee > 0,
+    'kt-font-danger': dashBoardFinancials && dashBoardFinancials.collectedMonthlyFee < 0
+  }">{{ dashBoardFinancials?.collectedMonthlyFee | number:'1.0-0' }}</span>
 								</div>
-								<div class="kt-widget1__item">
+								<!-- <div class="kt-widget1__item">
 									<div class="kt-widget1__info">
 										<h3 class="kt-widget1__title">Total Outstanding Fees</h3>
 										<span class="kt-widget1__desc">System bugs and issues</span>
 									</div>
 									<span class="kt-widget1__number kt-font-success">-27,49%</span>
-								</div>
+								</div> -->
 							</div>
 
 							<!--end:: Widgets/Stats2-1 -->
@@ -340,7 +362,8 @@
 							<div class="kt-widget1">
 								<div class="kt-widget1__item">
 									<div class="kt-widget1__info">
-										<h3 class="kt-widget1__title">Total Outstanding Fees</h3>
+										<h3 class="kt-widget1__title">Total Outstanding Fees
+											({{dashBoardFinancials?.academicYearName}})</h3>
 										<span class="kt-widget1__desc">Remaining balance from assigned fees</span>
 									</div>
 									<span class="kt-widget1__number kt-font-warning" [ngClass]="{
@@ -351,18 +374,22 @@
 								</div>
 								<div class="kt-widget1__item">
 									<div class="kt-widget1__info">
-										<h3 class="kt-widget1__title">Total Discounts Given</h3>
-										<span class="kt-widget1__desc">Yearly Expenses</span>
+										<h3 class="kt-widget1__title">Total Outstanding Fee
+											({{dashBoardFinancials?.monthName}})</h3>
+										<span class="kt-widget1__desc">--</span>
 									</div>
-									<span class="kt-widget1__number kt-font-info">+$560,800</span>
+									<span class="kt-widget1__number kt-font-warning" [ngClass]="{
+    'kt-font-success': dashBoardFinancials && dashBoardFinancials.outstandingMonthlyFee > 0,
+    'kt-font-danger': dashBoardFinancials && dashBoardFinancials.outstandingMonthlyFee < 0
+  }">{{ dashBoardFinancials?.outstandingMonthlyFee | number:'1.0-0' }}</span>
 								</div>
-								<div class="kt-widget1__item">
+								<!-- <div class="kt-widget1__item">
 									<div class="kt-widget1__info">
 										<h3 class="kt-widget1__title">Total Expected Revenue</h3>
 										<span class="kt-widget1__desc">This Month</span>
 									</div>
 									<span class="kt-widget1__number kt-font-warning">-10%</span>
-								</div>
+								</div> -->
 							</div>
 
 							<!--end:: Widgets/Stats2-2 -->
