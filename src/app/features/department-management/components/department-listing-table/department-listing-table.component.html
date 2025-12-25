@@ -1,0 +1,118 @@
+<div class="kt-portlet kt-portlet--mobile">
+  <app-portlet-header
+    [iconClass]="texts.icon"
+    [title]="texts.header"
+    >
+  </app-portlet-header>
+    <div class="kt-portlet__body">
+
+        <ng-container *ngIf="departments && departments.length > 0; else noData">
+
+            <!--begin: Datatable -->
+            <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="dataTables_length" id="kt_table_1_length">
+                            <label>Show
+                                <select (change)="onPageSizeChange($event)" name="kt_table_1_length"
+                                    aria-controls="kt_table_1"
+                                    class="custom-select custom-select-sm form-control form-control-sm">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select> entries
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div id="kt_table_1_filter" class="dataTables_filter">
+                            <label>Search:
+                                <input [formControl]="searchControl" type="search" class="form-control form-control-sm"
+                                    placeholder="" aria-controls="kt_table_1">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table
+                            class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
+                            id="kt_table_1" role="grid">
+                            <thead>
+                                <tr role="row">
+                                    <th *ngFor="let col of columns">{{ col.label }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let department of pagination.paginatedItems">
+                                    <td>{{ department.departmentName }}</td>
+                                    <td>{{ department.departmentCode }}</td>
+                                    <td>{{ department.description }}</td>
+                                    <td>{{ department.parentDepartmentId || '-' }}</td>
+                                    <td>{{ department.headEmployeeId || '-' }}</td>
+                                    <td>
+                                        <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
+                                            [ngClass]="department.isActive ? 'kt-badge--brand' : 'kt-badge--danger'">
+                                            {{ department.isActive ? 'Active' : 'Inactive' }}
+                                        </span>
+                                    </td>
+                                    <td nowrap="">
+                                        <span class="dropdown">
+                                            <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md"
+                                                data-toggle="dropdown">
+                                                <i class="la la-ellipsis-h"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#"
+                                                    (click)="editDepartmentDetails(department,$event)">
+                                                    <i class="la la-edit"></i> Edit Details
+                                                </a>
+                                                <a class="dropdown-item" href="#"
+                                                    (click)="viewDepartmentDetails(department,$event)">
+                                                    <i class="la la-eye"></i> View Details
+                                                </a>
+                                                <a class="dropdown-item" href="#"
+                                                    (click)="deleteDepartment(department.id,$event)">
+                                                    <i class="la la-trash"></i> Delete
+                                                </a>
+                                            </div>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info">
+                            Showing {{ pagination.startItem }} to {{ pagination.endItem }} of {{ pagination.totalItems
+                            }} entries
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_full_numbers">
+                            <ul class="pagination">
+                                <!-- Pagination buttons as before -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!--end: Datatable -->
+
+        </ng-container>
+
+        <!-- No Data Message -->
+        <ng-template #noData>
+            <app-no-data
+                [message]="texts.messages.noData"></app-no-data>
+        </ng-template>
+    </div>
+</div>

@@ -55,6 +55,14 @@ export const API_ENDPOINTS = {
             SEARCH: (keyword: string) => `/api/institute/campuses/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/institute/campuses/${id}`
         },
+        DEPARTMENTS: {
+            CREATE: '/api/institute/departments',
+            UPDATE: (id: string | number) => `/api/institute/departments/${id}`,
+            GET_ALL: '/api/institute/departments',
+            GET_ACTIVE: '/api/institute/departments/active',
+            GET_BY_ID: (id: string | number) => `/api/institute/departments/${id}`,
+            DELETE: (id: string | number) => `/api/institute/departments/${id}`
+        },
         STANDARDS: {
             CREATE: '/api/institute/campuses/standards',
             UPDATE: (id: string) => `/api/institute/campuses/standards/${id}`,

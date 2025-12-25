@@ -1,0 +1,23 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { PageSubHeaderComponent } from './page-sub-header.component';
+
+describe('PageSubHeaderComponent', () => {
+  let component: PageSubHeaderComponent;
+  let fixture: ComponentFixture<PageSubHeaderComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PageSubHeaderComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(PageSubHeaderComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

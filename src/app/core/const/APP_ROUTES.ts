@@ -23,6 +23,12 @@ export const ROUTES = {
       DETAILS: (id: string) => ['campuses/standards/sections', 'section-details', id],
     }
   },
+   DEPARTMENTS: {
+      LIST: ['departments'],
+      CREATE: ['departments', 'department-create'],
+      EDIT: (id: string) => ['departments', 'department-edit', id],
+      DETAILS: (id: string) => ['departments', 'department-details', id],
+    },
   STUDENT: {
     LIST: ['students'],
     CREATE: ['students', 'student-create'],
@@ -79,5 +85,7 @@ export const ROUTES = {
       DETAILS: (id: string) => ['concession/rate', 'concession-rate-details', id],
     },
   }
+
+
 };
 

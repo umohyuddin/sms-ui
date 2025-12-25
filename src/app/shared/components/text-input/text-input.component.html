@@ -1,0 +1,26 @@
+<label [class]="colLabel + ' col-form-label'">{{ label }}:</label>
+
+<div [class]="colInput">
+  <div class="kt-input-icon">
+    <input
+      [type]="type"
+      class="form-control"
+      [placeholder]="placeholder"
+      [formControl]="control"
+      [class.is-invalid]="control.invalid && (control.touched || control.dirty)"
+      [class.is-valid]="control.valid && (control.touched || control.dirty)"
+    />
+  </div>
+
+  <!-- helper text -->
+  <!-- <span class="form-text text-muted" *ngIf="helpText">
+    {{ helpText }}
+  </span> -->
+
+  <!-- validation messages -->
+  <span
+    class="invalid-feedback"
+    *ngFor="let err of (control.errors | keyvalue)">
+    {{ errorMessages[err.key] }}
+  </span>
+</div>

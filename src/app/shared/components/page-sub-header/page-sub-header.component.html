@@ -1,0 +1,23 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+  <div class="kt-container kt-container--fluid">
+    <div class="kt-subheader__main">
+      <h3 class="kt-subheader__title">{{ title }}</h3>
+      <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+
+      <div class="kt-input-icon kt-input-icon--right kt-subheader__search" *ngIf="showSearch">
+        <input type="text" class="form-control" [placeholder]="searchPlaceholder" (input)="onSearchChange($event)">
+        <span class="kt-input-icon__icon kt-input-icon__icon--right">
+          <span><i class="flaticon2-search-1"></i></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="kt-subheader__toolbar"  *ngIf="showButton && buttonText">
+      <div class="kt-subheader__wrapper">
+        <button type="button" [class]="buttonClass" (click)="onButtonClick()">
+          <i class="la la-edit"></i> {{ buttonText }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
