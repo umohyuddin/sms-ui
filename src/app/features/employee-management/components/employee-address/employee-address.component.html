@@ -14,11 +14,17 @@
         </div>
         <div class="kt-portlet__body">
             <div *ngIf="!showPersonalForm">
-                <div *ngIf="employeeAddressData?.length === 0" class="text-center kt-margin-t-20">
+                <div class="text-center kt-margin-t-20">
+                    <button type="button" class="btn btn-success" (click)="togglePersonalForm(null)">
+                        <i class="la la-plus"></i>
+                        {{ employeeAddressData?.length === 0 ? 'Add Address' : 'Add New Address' }}
+                    </button>
+                </div>
+                <!-- <div *ngIf="employeeAddressData?.length === 0" class="text-center kt-margin-t-20">
                     <button type="button" class="btn btn-success" (click)="togglePersonalForm(null)">
                         <i class="la la-plus"></i> Add Address
                     </button>
-                </div>
+                </div> -->
                 <div *ngFor="let address of employeeAddressData" class="kt-margin-t-10">
                     <div class="form-group row">
                         <div class="col-6">
@@ -74,11 +80,11 @@
                     </div>
 
                 </div>
-                <div class="text-center kt-margin-t-20">
+                <!-- <div class="text-center kt-margin-t-20">
                     <button type="button" class="btn btn-success" (click)="togglePersonalForm(null)">
                         <i class="la la-plus"></i> Add New Address
                     </button>
-                </div>
+                </div> -->
             </div>
 
             <div *ngIf="showPersonalForm">

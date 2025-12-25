@@ -112,6 +112,8 @@ export class EmployeeAddressComponent {
       line1: ['', Validators.maxLength(500)],
       line2: ['',]
     });
+
+      this.setupFormListeners();
   }
 
 
