@@ -29,6 +29,12 @@ export const ROUTES = {
       EDIT: (id: string) => ['departments', 'department-edit', id],
       DETAILS: (id: string) => ['departments', 'department-details', id],
     },
+    DESIGNATIONS: {
+      LIST: ['designation'],
+      CREATE: ['departments', 'department-create'],
+      EDIT: (id: string) => ['departments', 'department-edit', id],
+      DETAILS: (id: string) => ['departments', 'department-details', id],
+    },
   STUDENT: {
     LIST: ['students'],
     CREATE: ['students', 'student-create'],
