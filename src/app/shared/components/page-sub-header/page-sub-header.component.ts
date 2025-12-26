@@ -9,12 +9,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './page-sub-header.component.css'
 })
 export class PageSubHeaderComponent {
-   @Input() title!: string;
+  @Input() title!: string;
 
   // Optional button
   @Input() buttonText?: string;
   @Input() showButton: boolean = true;
-
+  @Input() buttonClass = 'btn btn-outline-success';
   @Output() buttonClick = new EventEmitter<void>();
 
   onButtonClick() {

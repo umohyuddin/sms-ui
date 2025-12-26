@@ -10,17 +10,9 @@
   <!--begin::Form-->
   <form class="kt-form kt-form--label-right" [formGroup]="createCampusForm" (ngSubmit)="onSubmit()">
     <div class="kt-portlet__body">
-      <h4>Campus Information</h4>
+      <h4>Department Information</h4>
+        
       <div class="form-group row form-group-marginless kt-margin-t-20">
-        <label class="col-lg-1 col-form-label">School:</label>
-        <div class="col-lg-3">
-          <select class="form-control" formControlName="instituteId">
-            <option value="" disabled>Select School</option>
-          </select>
-          <span class="form-text text-muted">Please select School</span>
-
-        </div>
-
         <label class="col-lg-1 col-form-label">Campus Name:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Campus name" formControlName="campusName"

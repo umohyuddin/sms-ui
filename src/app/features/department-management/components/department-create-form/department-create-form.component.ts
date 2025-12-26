@@ -7,12 +7,11 @@ import { HttpClientService } from '../../../../core/services/http-client.service
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CommonModule } from '@angular/common';
-import { TextInputComponent } from '../../../../shared/components/text-input/text-input.component';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 @Component({
   selector: 'app-department-create-form',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,TextInputComponent],
+  imports: [  NgSelectModule,CommonModule,ReactiveFormsModule],
   templateUrl: './department-create-form.component.html',
   styleUrl: './department-create-form.component.css'
 })
@@ -25,6 +24,13 @@ export class DepartmentCreateFormComponent {
   campusData: any;
   provinces: any[] = [];
   cities: any[] = [];
+
+
+    schools = [
+    { id: 1, name: 'School A' },
+    { id: 2, name: 'School B' },
+    { id: 3, name: 'School C' }
+  ];
 
   constructor(private fb: FormBuilder,
     private httpClientService: HttpClientService,
