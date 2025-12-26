@@ -7,11 +7,10 @@ import { HttpClientService } from '../../../../core/services/http-client.service
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CommonModule } from '@angular/common';
-import { NgSelectModule } from '@ng-select/ng-select';
 @Component({
   selector: 'app-department-create-form',
   standalone: true,
-  imports: [  NgSelectModule,CommonModule,ReactiveFormsModule],
+  imports: [CommonModule,ReactiveFormsModule],
   templateUrl: './department-create-form.component.html',
   styleUrl: './department-create-form.component.css'
 })
