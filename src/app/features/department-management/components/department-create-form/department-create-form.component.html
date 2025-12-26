@@ -16,10 +16,10 @@
         <label class="col-lg-1 col-form-label">Campus Name:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Campus name" formControlName="campusName"
-            [class.is-invalid]="campusName?.invalid && (campusName?.touched || campusName?.dirty)"
-            [class.is-valid]="campusName?.valid && (campusName?.touched || campusName?.dirty)">
+            [class.is-invalid]="campusName.invalid && (campusName.touched || campusName.dirty)"
+            [class.is-valid]="campusName.valid && (campusName.touched || campusName.dirty)">
           <span class="form-text text-muted">Please enter your Campus name</span>
-          <span class="invalid-feedback" *ngIf="campusName?.errors?.['required']">
+          <span class="invalid-feedback" *ngIf="campusName.errors?.['required']">
             Campus name is required
           </span>
         </div>
