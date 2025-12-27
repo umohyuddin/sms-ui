@@ -107,7 +107,7 @@ export class DepartmentCreateFormComponent {
     });
   }
   loadCitiesByProvince(provinceId: any) {
-    this.httpClientService.request<any>(HTTP_METHOD.GET, this.URL + API_ENDPOINTS.LOOKUP.CITIY.GET_BY_PROVINCE_ID(provinceId), {
+    this.httpClientService.request<any>(HTTP_METHOD.GET, this.URL + API_ENDPOINTS.LOOKUP.CITY.GET_BY_PROVINCE_ID(provinceId), {
       observeResponse: true
     }).subscribe({
       next: (response) => {

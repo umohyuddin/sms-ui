@@ -1,0 +1,198 @@
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+                School Profile
+            </h3>
+        </div>
+    </div>
+
+    <!--begin::Form-->
+    <form class="kt-form kt-form--label-right"
+          [formGroup]="profileForm"
+          (ngSubmit)="onSubmit()">
+
+        <div class="kt-portlet__body">
+
+            <!-- ================= Base Information ================= -->
+            <h4>Base Information</h4>
+
+            <div class="form-group row form-group-marginless kt-margin-t-20">
+                <!-- School Name -->
+                <label class="col-lg-1 col-form-label">School Name:</label>
+                <div class="col-lg-3">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Enter school name"
+                           formControlName="name"
+                           [class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
+                           [class.is-valid]="name?.valid && (name?.touched || name?.dirty)">
+                    <span class="form-text text-muted">Please enter the school name</span>
+                    <span class="invalid-feedback" *ngIf="name?.errors?.['required']">
+                        School name is required
+                    </span>
+                    <span class="invalid-feedback" *ngIf="name?.errors?.['maxlength']">
+                        Maximum 100 characters allowed
+                    </span>
+                </div>
+
+                <!-- Email -->
+                <label class="col-lg-1 col-form-label">Email:</label>
+                <div class="col-lg-3">
+                    <input type="email"
+                           class="form-control"
+                           placeholder="Enter official email"
+                           formControlName="email"
+                           [class.is-invalid]="email?.invalid && (email?.touched || email?.dirty)"
+                           [class.is-valid]="email?.valid && (email?.touched || email?.dirty)">
+                    <span class="form-text text-muted">Enter official email address</span>
+                    <span class="invalid-feedback" *ngIf="email?.errors?.['email']">
+                        Invalid email format
+                    </span>
+                </div>
+
+                <!-- Contact Number -->
+                <label class="col-lg-1 col-form-label">Contact No:</label>
+                <div class="col-lg-3">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="Enter contact number"
+                           formControlName="contactNumber"
+                           [class.is-invalid]="contactNumber?.invalid && (contactNumber?.touched || contactNumber?.dirty)"
+                           [class.is-valid]="contactNumber?.valid && (contactNumber?.touched || contactNumber?.dirty)">
+                    <span class="form-text text-muted">Enter official contact number</span>
+                    <span class="invalid-feedback" *ngIf="contactNumber?.errors?.['maxlength']">
+                        Maximum 20 characters allowed
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row form-group-marginless kt-margin-t-20">
+                <!-- Website -->
+                <label class="col-lg-1 col-form-label">Website:</label>
+                <div class="col-lg-3">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="https://www.schoolwebsite.com"
+                           formControlName="website"
+                           [class.is-invalid]="website?.invalid && (website?.touched || website?.dirty)">
+                    <span class="form-text text-muted">Enter official website</span>
+                </div>
+
+                <!-- Tagline -->
+                <label class="col-lg-1 col-form-label">Tagline:</label>
+                <div class="col-lg-3">
+                    <input type="text"
+                           class="form-control"
+                           placeholder="School tagline or motto"
+                           formControlName="tagLine"
+                           [class.is-invalid]="tagLine?.invalid && (tagLine?.touched || tagLine?.dirty)">
+                    <span class="form-text text-muted">Optional: tagline or motto</span>
+                </div>
+
+                <!-- Established Date -->
+                <!-- <label class="col-lg-1 col-form-label">Established:</label>
+                <div class="col-lg-3">
+                    <input type="date"
+                           class="form-control"
+                           formControlName="establishedDate">
+                    <span class="form-text text-muted">Select the establishment date</span>
+                </div> -->
+            </div>
+
+            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+
+            <!-- ================= Address Information ================= -->
+            <h4 class="kt-margin-b-20">Address Information</h4>
+
+            <div class="form-group row">
+                <!-- Country -->
+                <label class="col-lg-1 col-form-label">Country:</label>
+                <div class="col-lg-3">
+                    <select class="form-control"
+                            formControlName="countryId"
+                            [class.is-invalid]="countryId?.invalid && (countryId?.touched || countryId?.dirty)"
+                            [class.is-valid]="countryId?.valid && (countryId?.touched || countryId?.dirty)">
+                        <option value="">Select country</option>
+                        @for (c of countriesDD; track c.key) {
+                            <option [value]="c.key">{{ c.label }}</option>
+                        }
+                    </select>
+                    <span class="form-text text-muted">Select your country</span>
+                    <span class="invalid-feedback" *ngIf="countryId?.errors?.['required']">
+                        Country is required
+                    </span>
+                </div>
+
+                <!-- Province -->
+                <label class="col-lg-1 col-form-label">Province:</label>
+                <div class="col-lg-3">
+                    <select class="form-control"
+                            formControlName="provinceId"
+                            [class.is-invalid]="provinceId?.invalid && (provinceId?.touched || provinceId?.dirty)"
+                            [class.is-valid]="provinceId?.valid && (provinceId?.touched || provinceId?.dirty)">
+                        <option value="">Select province</option>
+                        @for (p of provinceDD; track p.key) {
+                            <option [value]="p.key">{{ p.label }}</option>
+                        }
+                    </select>
+                    <span class="form-text text-muted">Select your province</span>
+                    <span class="invalid-feedback" *ngIf="provinceId?.errors?.['required']">
+                        Province is required
+                    </span>
+                </div>
+
+                <!-- City -->
+                <label class="col-lg-1 col-form-label">City:</label>
+                <div class="col-lg-3">
+                    <select class="form-control"
+                            formControlName="cityId"
+                            [class.is-invalid]="cityId?.invalid && (cityId?.touched || cityId?.dirty)"
+                            [class.is-valid]="cityId?.valid && (cityId?.touched || cityId?.dirty)">
+                        <option value="">Select city</option>
+                        @for (c of citiesDD; track c.key) {
+                            <option [value]="c.key">{{ c.label }}</option>
+                        }
+                    </select>
+                    <span class="form-text text-muted">Select your city</span>
+                    <span class="invalid-feedback" *ngIf="cityId?.errors?.['required']">
+                        City is required
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <!-- Address -->
+                <label class="col-lg-1 col-form-label">Address:</label>
+                <div class="col-lg-11">
+                    <textarea class="form-control"
+                              rows="3"
+                              placeholder="Street, area, city, postal code"
+                              formControlName="address">
+                    </textarea>
+                    <span class="form-text text-muted">Enter full address</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= Footer ================= -->
+        <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+                <div class="row">
+                    <div class="col-lg-5"></div>
+                    <div class="col-lg-7">
+                        <button type="submit" class="btn btn-dark mr-2">
+                            Save
+                        </button>
+                        <button type="button" class="btn btn-danger" (click)="goToProfileListig()">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <!--end::Form-->
+</div>

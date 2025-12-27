@@ -37,7 +37,13 @@ export const API_ENDPOINTS = {
         GET_DASHBOARD_COUNTS: '/api/lookup/dashboard/counts',
         GET_DASHBOARD_FINANCIAL: '/api/lookup/dashboard/financials'
     },
+
     INSTITUTE: {
+        PROFILE: {
+            GET: '/api/institute',
+            CREATE: '/api/institute',
+            UPDATE: '/api/institute'
+        },
         ACADEMIC_YEAR: {
             GET_BY_ID: (id: string) => `/api/school/academic/${id}`,
             GET_ALL: '/api/school/academic',
@@ -52,6 +58,7 @@ export const API_ENDPOINTS = {
             CREATE: '/api/institute/campuses',
             UPDATE: (id: string) => `/api/institute/campuses/${id}`,
             GET_ALL: '/api/institute/campuses',
+            META: '/api/institute/campuses/meta',
             SEARCH: (keyword: string) => `/api/institute/campuses/search/${keyword}`,
             GET_BY_ID: (id: string) => `/api/institute/campuses/${id}`
         },
@@ -139,7 +146,7 @@ export const API_ENDPOINTS = {
             GET_ALL: '/api/lookup/provinces',
             GET_BY_COUNTRY_ID: (id: string) => `/api/lookup/countries/${id}/provinces`
         },
-        CITIY: {
+        CITY: {
             GET_BY_PROVINCE_ID: (id: number) => `/api/lookup/country/provinces/${id}/cities`
         }
     }

@@ -1,0 +1,54 @@
+.welcome-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+background: linear-gradient(135deg, #f6d365, #fda085);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    background-image: url('/assets/media/bg/450.jpg');
+    animation: fadeInBackground 2s ease forwards;
+}
+
+.welcome-card {
+  text-align: center;
+  background: white;
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  transform: scale(0.8);
+  animation: zoomIn 1s forwards;
+}
+
+.welcome-card h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  animation: slideIn 1s ease forwards;
+}
+
+.welcome-card p {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  color: #555;
+  animation: slideIn 1.2s ease forwards;
+}
+
+@keyframes zoomIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideIn {
+  0% { transform: translateY(-20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeInBackground {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
+

@@ -1,6 +1,8 @@
-entities=("department" "employee-type" "designation" "salary-structure" "salary-component" \
-"salary-structure-component" "employee-salary" "employee-deduction" "salary-payment" \
-"payroll-period" "employee-bonus" "employee-advance" "salary-slip")
+#entities=("department" "employee-type" "designation" "salary-structure" "salary-component" \
+#"salary-structure-component" "employee-salary" "employee-deduction" "salary-payment" \
+#"payroll-period" "employee-bonus" "employee-advance" "salary-slip")
+
+entities=("school-profile")
 
 BASE_PATH="src/app/features"
 

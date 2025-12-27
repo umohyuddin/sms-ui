@@ -5,6 +5,14 @@ export const ROUTES = {
   DASHBAORD: {
     MAIN_DASHBOARD: ['dashboard']
   },
+
+  SCHOOL_PROFILE: {
+    LIST: ['school/profile'],
+    CREATE: ['school/profile', 'profile-create'],
+    EDIT: (id: string) => ['school/profile', 'profile-create', id],
+    DETAILS: (id: string) => ['school/profile', 'profile-create', id],
+  },
+
   CAMPUS: {
     LIST: ['campuses'],
     CREATE: ['campuses', 'campus-create'],
@@ -23,18 +31,18 @@ export const ROUTES = {
       DETAILS: (id: string) => ['campuses/standards/sections', 'section-details', id],
     }
   },
-   DEPARTMENTS: {
-      LIST: ['departments'],
-      CREATE: ['departments', 'department-create'],
-      EDIT: (id: string) => ['departments', 'department-edit', id],
-      DETAILS: (id: string) => ['departments', 'department-details', id],
-    },
-    DESIGNATIONS: {
-      LIST: ['designation'],
-      CREATE: ['departments', 'department-create'],
-      EDIT: (id: string) => ['departments', 'department-edit', id],
-      DETAILS: (id: string) => ['departments', 'department-details', id],
-    },
+  DEPARTMENTS: {
+    LIST: ['departments'],
+    CREATE: ['departments', 'department-create'],
+    EDIT: (id: string) => ['departments', 'department-edit', id],
+    DETAILS: (id: string) => ['departments', 'department-details', id],
+  },
+  DESIGNATIONS: {
+    LIST: ['designation'],
+    CREATE: ['departments', 'department-create'],
+    EDIT: (id: string) => ['departments', 'department-edit', id],
+    DETAILS: (id: string) => ['departments', 'department-details', id],
+  },
   STUDENT: {
     LIST: ['students'],
     CREATE: ['students', 'student-create'],

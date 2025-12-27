@@ -9,19 +9,19 @@ import { StandardCreate } from './pages/standard-create/standard-create';
 
 
 
-const routes: Routes = [
-  { path: '', component: StandardListing },
-  { path: 'standard-details/:id', component: StandardDetails },
-  { path: 'standard-create', component: StandardCreate }
+  const routes: Routes = [
+    { path: '', component: StandardListing },
+    { path: 'standard-details/:id', component: StandardDetails },
+    { path: 'standard-create', component: StandardCreate }
 
-];
+  ];
 
-@NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ]
-})
+  @NgModule({
+    declarations: [],
+    imports: [
+      CommonModule
+    ]
+  })
 export class StandardManagementRoutingModule { }
 
 

@@ -191,7 +191,7 @@ export class EmployeeAddressComponent {
     this.addressForm.get('cityId')?.setValue('');
     this.httpClientService.request<any>(
       HTTP_METHOD.GET,
-      this.appConfig.apiBaseUrl + API_ENDPOINTS.LOOKUP.CITIY.GET_BY_PROVINCE_ID(provinceId),
+      this.appConfig.apiBaseUrl + API_ENDPOINTS.LOOKUP.CITY.GET_BY_PROVINCE_ID(provinceId),
       { observeResponse: true }
     ).subscribe({
       next: (response) => {

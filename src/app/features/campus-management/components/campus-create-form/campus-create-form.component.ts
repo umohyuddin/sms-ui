@@ -9,6 +9,8 @@ import { AppConfigService } from '../../../../core/services/app-config.service';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CampusManagementService } from '../../services/campus-management.service';
+import { CampusMetaData } from '../../models/CampusMetaData';
+import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 
 
 @Component({
@@ -21,16 +23,18 @@ import { CampusManagementService } from '../../services/campus-management.servic
   styleUrls: ['./campus-create-form.component.css']
 })
 export class CampusCreateFormComponent {
+  meta?: CampusMetaData
   createCampusForm!: FormGroup;
   routeCampusId?: string;
   URL = '';
   isEditMode = false;
   campusId: string | null = null;
   campusData: any;
-  provinces: any[] = [];
-  cities: any[] = [];
+  provinceDD: KeyValueOption[] = [];
+  citiesDD: KeyValueOption[] = [];
 
   constructor(private fb: FormBuilder,
+       private appConfig: AppConfigService,
     private httpClientService: HttpClientService,
     private route: ActivatedRoute,
     private router: Router,
@@ -39,7 +43,8 @@ export class CampusCreateFormComponent {
   ) { }
 
   ngOnInit() {
-    this.getProvinces();
+
+    this.loadCampusMeta();
     this.initializeForm();
 
     this.campusId = this.route.snapshot.paramMap.get('id');
@@ -57,34 +62,17 @@ export class CampusCreateFormComponent {
 
   }
 
-  private getProvinces() {
-    this.httpClientService.request<any>(HTTP_METHOD.GET, this.URL + API_ENDPOINTS.LOOKUP.PROVINCE.GET_ALL, {
-      observeResponse: true
-    }).subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.provinces = response.body;
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    });
-  }
 
   private initializeForm() {
     this.createCampusForm = this.fb.group({
-      instituteId: [1, Validators.required],
+      instituteId: ['', Validators.required],
+      instituteName: ['', Validators.required],
       provinceId: ['', Validators.required],
       cityId: ['', Validators.required],
       campusName: ['', [Validators.required]],
       campusCode: ['', Validators.maxLength(20)],
       active: [true],
-      contactNumber: ['', [Validators.required, Validators.maxLength(15),Validators.pattern(/^\+?[0-9]{10,15}$/)]],
+      contactNumber: ['', [Validators.required, Validators.maxLength(15), Validators.pattern(/^\+?[0-9]{10,15}$/)]],
       email: ['', [Validators.required, Validators.email]],
       website: [''],
       address: ['']
@@ -95,7 +83,6 @@ export class CampusCreateFormComponent {
   onProvinceChange() {
     this.createCampusForm.get('provinceId')?.valueChanges.subscribe(provinceId => {
       console.log("Province changed:", provinceId);
-      const cityControl = this.createCampusForm.get('cityId');
       // Reset city control
       this.createCampusForm.get('cityId')?.setValue(''); // reset value to null
       this.createCampusForm.get('cityId')?.markAsUntouched();
@@ -105,24 +92,24 @@ export class CampusCreateFormComponent {
       this.loadCitiesByProvince(provinceId);
     });
   }
-  loadCitiesByProvince(provinceId: any) {
-    this.httpClientService.request<any>(HTTP_METHOD.GET, this.URL + API_ENDPOINTS.LOOKUP.CITIY.GET_BY_PROVINCE_ID(provinceId), {
-      observeResponse: true
-    }).subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.cities = response.body;
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    });
-  }
+  // loadCitiesByProvince(provinceId: any) {
+  //   this.httpClientService.request<any>(HTTP_METHOD.GET, th + API_ENDPOINTS.LOOKUP.CITY.GET_BY_PROVINCE_ID(provinceId), {
+  //     observeResponse: true
+  //   }).subscribe({
+  //     next: (response) => {
+  //       console.log('  Success Status:', response.status);
+  //       console.log('📦 Response Body:', response.body);
+  //       this.cities = response.body;
+  //     },
+  //     error: (error) => {
+  //       console.error('❌ Request Error Status:', error.status);
+  //       console.error('Message:', error.message);
+  //     },
+  //     complete: () => {
+  //       console.log('🔚 Request Complete');
+  //     }
+  //   });
+  // }
   // generateCampusCode() {
   //   const timestampCode = Date.now().toString().slice(-6); // last 6 digits of current timestamp
   //   this.createCampusForm.get('CampusCode')?.setValue(timestampCode);
@@ -152,6 +139,53 @@ export class CampusCreateFormComponent {
       },
       complete: () => {
         console.log('🔚 Post Complete');
+      }
+    })
+  }
+
+
+    private loadCitiesByProvince(provinceId: any, callback?: () => void) {
+    if (!provinceId) return;
+    this.createCampusForm.get('cityId')?.setValue('');
+    this.httpClientService.request<any>(
+      HTTP_METHOD.GET,
+      this.appConfig.apiBaseUrl + API_ENDPOINTS.LOOKUP.CITY.GET_BY_PROVINCE_ID(provinceId),
+      { observeResponse: true }
+    ).subscribe({
+      next: (response) => {
+        this.citiesDD = response.body.map((item: any) => ({
+          key: item.id,
+          label: item.name
+        }));
+      },
+      error: (error) => console.error(error),
+      complete: () => callback?.()
+    });
+  }
+
+
+
+  loadCampusMeta(): void {
+    this.campusManagementService.getCampusMeta().subscribe({
+      next: (response) => {
+        console.log('  Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.meta = response.body;
+        this.provinceDD = this.meta?.provinces.map((item: any) => ({
+          key: item.id,
+          label: item.name
+        })) || [];
+        this.createCampusForm.patchValue({
+          instituteId: this.meta?.institute.id,
+          instituteName: this.meta?.institute.name
+        });
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
       }
     })
   }

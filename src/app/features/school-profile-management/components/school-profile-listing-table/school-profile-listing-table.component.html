@@ -1,0 +1,123 @@
+<div *ngIf="school; else emptyState">
+    <div class="kt-portlet kt-portlet--solid-warning kt-portlet--height-fluid" style="background-image: url(./assets/media/bg/bg-9.jpg); background-size: cover;
+              background-position: center center; background-repeat: no-repeat;">
+
+        <!-- Header with Dropdown -->
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">{{ school.name || '-' }}</h3>
+            </div>
+            <div class="kt-portlet__head-toolbar">
+                <a href="#" class="btn btn-warning btn-sm btn-bold" data-toggle="dropdown">
+                    <i class="flaticon2-gear"></i> Setting
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-fit dropdown-menu-md">
+                    <ul class="kt-nav">
+                        <li class="kt-nav__head">
+                            Company Settings
+                            <i class="flaticon2-information" data-toggle="kt-tooltip" data-placement="right" title=""
+                                data-original-title="Click to learn more..."></i>
+                        </li>
+                        <li class="kt-nav__separator"></li>
+                        <li class="kt-nav__item"><a routerLink="/school/profile/profile-create" class="kt-nav__link"><i
+                                    class="kt-nav__link-icon flaticon2-drop"></i><span class="kt-nav__link-text">Update
+                                    Details</span></a></li>
+                        <!-- <li class="kt-nav__item"><a href="#" class="kt-nav__link"><i class="kt-nav__link-icon flaticon2-calendar-8"></i><span class="kt-nav__link-text">New Staff</span></a></li>
+            <li class="kt-nav__item"><a href="#" class="kt-nav__link"><i class="kt-nav__link-icon flaticon2-link"></i><span class="kt-nav__link-text">New Owner</span></a></li>
+            <li class="kt-nav__item"><a href="#" class="kt-nav__link"><i class="kt-nav__link-icon flaticon2-new-email"></i><span class="kt-nav__link-text">Reports</span>
+              <span class="kt-nav__link-badge"><span class="kt-badge kt-badge--success">5</span></span>
+            </a></li> -->
+                        <!-- <li class="kt-nav__separator"></li>
+            <li class="kt-nav__foot">
+              <a class="btn btn-label-danger btn-bold btn-sm" href="#">Manage company</a>
+              <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="kt-tooltip" data-placement="right"
+                 title="" data-original-title="Click to learn more...">Learn more</a>
+            </li> -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body with Two Columns -->
+        <div class="kt-form kt-form--label-right">
+            <div class="kt-portlet__body">
+                <div class="row">
+                    <!-- Left Column -->
+                    <div class="col-md-6">
+                        <div class="row mb-2 align-items-center">
+                            <h5 class="col-5 text-end">Name:</h5>
+                            <h6 class="col-7">{{ school.name || '-' }}</h6>
+                        </div>
+                        <div class="row mb-2 align-items-center">
+                            <h5 class="col-5 text-end">Tagline:</h5>
+                            <h6 class="col-7">{{ school.tagLine || '-' }}</h6>
+                        </div>
+                        <div class="row mb-2 align-items-center">
+                            <h5 class="col-5 text-end">Address:</h5>
+                            <h6 class="col-7">{{ school.address || '-' }}</h6>
+                        </div>
+                        <div class="row mb-2 align-items-center">
+                            <h5 class="col-5 text-end">Contact Number:</h5>
+                            <h6 class="col-7">{{ school.contactNumber || '-' }}</h6>
+                        </div>
+                        <div class="row mb-2 align-items-center">
+                            <h5 class="col-5 text-end">Email:</h5>
+                            <h6 class="col-7">{{ school.email || '-' }}</h6>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="col-md-6">
+                        <div class="row mb-2 align-items-center">
+                            <h5 class="col-5 text-end">Website:</h5>
+                            <h6 class="col-7">{{ school.website || '-' }}</h6>
+                        </div>
+                        <div class="row mb-2 align-items-center">
+                            <h5 class="col-5 text-end">Established Date:</h5>
+                            <h6 class="col-7">{{ school.establishedDate || '-' }}</h6>
+                        </div>
+                        <div class="row mb-2 align-items-center">
+                            <h5 class="col-5 text-end">Country:</h5>
+                            <h6 class="col-7">{{ school.countryName || '-' }}</h6>
+                        </div>
+                        <div class="row mb-2 align-items-center">
+                            <h5 class="col-5 text-end">Province:</h5>
+                            <h6 class="col-7">{{ school.provinceName || '-' }}</h6>
+                        </div>
+                        <div class="row mb-2 align-items-center">
+                            <h5 class="col-5 text-end">City:</h5>
+                            <h6 class="col-7">{{ school.cityName || '-' }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+        <div class="alert alert-success" role="alert" *ngIf="(school.campusCount || 0) === 0">
+        <div class="alert-text">
+            <h4 class="alert-heading">{{texts.messages.profileAddedHeading}}</h4>
+            <p>{{texts.messages.profileAddedMessagge}}</p>
+            <hr>
+            <p class="mb-0"><strong>Note:</strong> {{texts.messages.profileAddedNote}}</p>
+                    <div class="text-center mt-5">
+            <button type="button" class="btn btn-dark btn-elevate" (click)="goToCampusSetUp()">
+                Set Up Campus
+            </button>
+        </div>
+        </div>
+
+    </div>
+    
+    
+</div>
+
+<ng-template #emptyState>
+    <div class="welcome-container">
+        <div class="welcome-card">
+            <h2>{{ texts.messages.welcomeHeading }}</h2>
+            <p>{{ texts.messages.welcomeNote }}</p>
+            <button class="btn btn-primary" (click)="createSchool()">{{ texts.buttons.add }}</button>
+        </div>
+    </div>
+</ng-template>

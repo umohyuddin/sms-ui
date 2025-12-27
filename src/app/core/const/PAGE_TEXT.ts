@@ -1,6 +1,23 @@
 export const PageTexts = {
+  SCHOOL_PROFILE: {
+    icon: 'kt-font-dark flaticon-squares',
+    header: 'Your Profile',
+    buttons: {
+      add: 'Add your Profile',
+      edit: 'Edit your Profile',
+      view: 'View your Profile'
+    },
+    messages: {
+      welcomeNote: 'Add your Profile to unlock all the features and manage everything with ease.',
+      welcomeHeading: 'Welcome to Your Profile Setup!',
+      profileAddedHeading: 'School Profile Added!',
+      profileAddedMessagge:'Your school profile has been successfully created. However, no campus has been set up yet.',
+      profileAddedNote:'Please set up at least one campus to ensure your system runs smoothly. If your school is a standalone entity, creating at least one campus is required for proper functionality.'
+    }
+  },
+
   departments: {
-    icon:'kt-font-dark flaticon-squares',
+    icon: 'kt-font-dark flaticon-squares',
     header: 'Departments Listing',
     buttons: {
       add: 'Add Department',

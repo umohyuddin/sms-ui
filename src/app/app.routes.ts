@@ -121,6 +121,17 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'school/profile',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/school-profile-management/school-profile-management.module').then(m => m.SchoolProfileManagementModule)
+      }
+    ]
+  },
+  {
     path: 'fee/catalog',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
