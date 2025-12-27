@@ -38,10 +38,10 @@ export const ROUTES = {
     DETAILS: (id: string) => ['departments', 'department-details', id],
   },
   DESIGNATIONS: {
-    LIST: ['designation'],
-    CREATE: ['departments', 'department-create'],
-    EDIT: (id: string) => ['departments', 'department-edit', id],
-    DETAILS: (id: string) => ['departments', 'department-details', id],
+    LIST: ['designations'],
+    CREATE: ['designations', 'designation-create'],
+    EDIT: (id: string) => ['designations', 'designation-edit', id],
+    DETAILS: (id: string) => ['designations', 'designation-details', id],
   },
   STUDENT: {
     LIST: ['students'],

@@ -110,7 +110,7 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'designation',
+    path: 'designations',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
     children: [

@@ -8,5 +8,12 @@ import { Component } from '@angular/core';
   styleUrl: './employee-type-listing.component.css'
 })
 export class EmployeeTypeListingComponent {
+constructor(private router: Router) { }
 
+  ngOnInit(): void {}
+
+
+  goToFeeCatalog(): void {
+    this.router.navigate(ROUTES.FEE.FEE_CATALOG.CREATE);
+  }
 }

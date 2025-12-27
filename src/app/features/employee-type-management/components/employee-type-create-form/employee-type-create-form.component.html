@@ -1,1 +1,94 @@
-<p>employee-type-create-form works!</p>
+<div class="kt-portlet">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-label">
+      <h3 class="kt-portlet__head-title">
+        {{ isEditMode ==true ? 'Update Fee Catalog Type Details' : 'Add Fee Catalog Type' }}
+      </h3>
+    </div>
+  </div>
+
+  <!--begin::Form-->
+  <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
+    <div class="kt-portlet__body">
+      <h4>Fee Catalog type Information</h4>
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Name:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="name" formControlName="name"
+            [class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
+            [class.is-valid]="name?.valid && (name?.touched || name?.dirty)">
+          <span class="form-text text-muted">Please enter your Fee Catalog Type name</span>
+          <span class="invalid-feedback" *ngIf="name?.errors?.['required']">
+            Fee catalog type name is required
+          </span>
+        </div>
+        <label class="col-lg-1 col-form-label">Code:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="code" formControlName="code">
+        </div>
+        <label class="col-lg-1 col-form-label">Status:</label>
+        <div class="col-lg-3">
+          <label class="kt-checkbox kt-margin-t-10">
+            <input type="checkbox" formControlName="active"> Is Active
+            <span></span>
+          </label>
+        </div>
+
+      </div>
+      <div class="form-group row kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Catalog Charge Type : </label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="chargeType"
+            [class.is-invalid]="chargeType?.invalid && (chargeType?.touched || chargeType?.dirty)"
+            [class.is-valid]="chargeType?.valid && (chargeType?.touched || chargeType?.dirty)">
+            <option value='' selected>Select Charge Type</option>
+            @for (p of chargeTypeOptions; track p.key) {
+            <option [value]="p.key">{{ p.label }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please select your Charge Type</span>
+          <span class="invalid-feedback" *ngIf="chargeType?.errors?.['required']">
+            Charge Type is required.
+          </span>
+        </div>
+        <label class="col-lg-1 col-form-label">Recurrence Rule:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="recurrenceRule"
+            [class.is-invalid]="recurrenceRule?.invalid && (recurrenceRule?.touched || recurrenceRule?.dirty)"
+            [class.is-valid]="recurrenceRule?.valid && (recurrenceRule?.touched || recurrenceRule?.dirty)">
+            <option value=''>Select Recurrence Rule</option>
+            @for (c of recurrenceRuleOptions; track c.key) {
+            <option [value]="c.key">{{ c.label }}</option>
+            }
+          </select>
+          <span class="form-text text-muted">Please Select your Recurrence Rule</span>
+          <span class="invalid-feedback" *ngIf="recurrenceRule?.errors?.['required']">
+            Recurrence Rule is required.
+          </span>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-lg-1 col-form-label">Description:</label>
+        <div class="col-lg-11">
+          <div class="kt-input-icon">
+            <textarea class="form-control" id="exampleTextarea" rows="3" formControlName="description"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions">
+        <div class="row">
+          <div class="col-lg-5"></div>
+          <div class="col-lg-7">
+            <button type="submit" class="btn btn-dark mr-2">
+              {{ isEditMode ==true ? 'Update Fee Catalog Details' : 'Add New Fee Catalog' }}</button>
+            <button type="button" class="btn btn-danger" (click)="goToFeeCatelogList()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!--end::Form-->
+</div>

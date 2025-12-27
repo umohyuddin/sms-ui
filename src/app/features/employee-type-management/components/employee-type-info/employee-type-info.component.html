@@ -1,1 +1,64 @@
-<p>employee-type-info works!</p>
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-dark flaticon-squares"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                Fee Catalog Item Details
+            </h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+
+            </div>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <div class="kt-widget kt-widget--user-profile-3">
+            <div class="kt-widget__top">
+                <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-bolder kt-font-light">
+                    {{getInitials(feeCatalogData?.name)}}
+                </div>
+                <div class="kt-widget__content">
+                    <div class="kt-widget__head">
+                        <div class="kt-widget__user">
+                            <a href="#" class="kt-widget__username">
+                                {{feeCatalogData?.name}}
+                            </a>
+                            <span class=" ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
+                                [ngClass]="feeCatalogData?.active ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">{{feeCatalogData?.active
+                                ? 'Active' : 'Inactive'}}</span>
+                        </div>
+                    </div>
+                    <div class="kt-widget__subhead row">
+                        <div class="col-4">
+                            <a> <b>Fee Catalog Name :</b> {{feeCatalogData?.name}}</a>
+                        </div>
+
+                        <div class="col-4">
+                            <a><b>Fee Catalog Code : </b>{{feeCatalogData?.code}}</a>
+                        </div>
+
+                        <div class="col-4">
+                            <a> <b> Charge Type:</b> {{feeCatalogData?.chargeTypeLabel}}</a>
+                        </div>
+                    </div>
+                    <div class="kt-widget__subhead row">
+                        <div class="col-4">
+                            <a> <b>Recurrence Type : </b> {{feeCatalogData?.recurrenceRuleLabel}}</a>
+                        </div>
+                    </div>
+
+                    <div class="kt-widget__info">
+                        <div class="kt-widget__desc">
+                            <!-- <i style="font-size: 1.5rem !important;"
+                                class="flaticon-menu-button mr-2"></i> -->
+                            <b>Description : {{feeCatalogData?.description}}</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
