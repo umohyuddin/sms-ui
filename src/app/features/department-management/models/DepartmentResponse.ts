@@ -7,5 +7,5 @@ export interface DepartmentResponse {
     headEmployeeName?: string;
     parentDepartmentId: number | null;
     headEmployeeId: number;
-    isActive: boolean;
+    active: boolean;
 }

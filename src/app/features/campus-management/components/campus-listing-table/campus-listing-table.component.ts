@@ -6,22 +6,25 @@ import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } fro
 import { Pagination } from '../../../../core/pagar/pagination';
 import { CampusManagementService } from '../../services/campus-management.service';
 import { CampusResponse } from '../../models/campusResponse';
+import { NoDataComponent } from '../../../../shared/components/no-data/no-data.component';
+import { PageTexts } from '../../../../core/const/PAGE_TEXT';
 
 @Component({
   selector: 'app-campus-listing-table',
   standalone: true,
   imports: [CommonModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule, NoDataComponent
   ],
   templateUrl: './campus-listing-table.component.html',
   styleUrls: ['./campus-listing-table.component.css']
 })
 export class CampusListingTableComponent {
+  texts = PageTexts.campus;
   pagination: Pagination<CampusResponse> = new Pagination([], 10);
   searchControl = new FormControl('');
   campuses: CampusResponse[] = [];
-
+  
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router,

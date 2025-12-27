@@ -51,12 +51,12 @@
                                     <td>{{ department.departmentName }}</td>
                                     <td>{{ department.departmentCode }}</td>
                                     <td>{{ department.description }}</td>
-                                    <td>{{ department.parentDepartmentId || '-' }}</td>
+                                    <td>{{ department.parentDepartmentName || '-' }}</td>
                                     <td>{{ department.headEmployeeId || '-' }}</td>
                                     <td>
                                         <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                                            [ngClass]="department.isActive ? 'kt-badge--brand' : 'kt-badge--danger'">
-                                            {{ department.isActive ? 'Active' : 'Inactive' }}
+                                            [ngClass]="department.active ? 'kt-badge--brand' : 'kt-badge--danger'">
+                                            {{ department.active ? 'Active' : 'Inactive' }}
                                         </span>
                                     </td>
                                     <td nowrap="">
@@ -74,12 +74,16 @@
                                                     (click)="viewDepartmentDetails(department,$event)">
                                                     <i class="la la-eye"></i> View Details
                                                 </a>
-                                                <a class="dropdown-item" href="#"
+                                                <!-- <a class="dropdown-item" href="#"
                                                     (click)="deleteDepartment(department.id,$event)">
                                                     <i class="la la-trash"></i> Delete
-                                                </a>
+                                                </a> -->
                                             </div>
+
                                         </span>
+                                           <a (click)="viewDepartmentDetails(department,$event)" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
+                    <i class="la la-eye"></i>
+                  </a>
                                     </td>
                                 </tr>
                             </tbody>

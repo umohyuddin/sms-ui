@@ -21,11 +21,11 @@ export class DepartmentManagementService {
   }
 
   getAllDepartments(): Observable<any> {
-    return this.http.request(
-      HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DEPARTMENTS.GET_ALL}`,
-      { observeResponse: true }
-    );
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DEPARTMENTS.GET_ALL}`, { observeResponse: true });
+  }
+
+  getDepartmentById(id: string | number): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DEPARTMENTS.GET_BY_ID(id)}`, { observeResponse: true });
   }
 
   saveDepartment(id: string | null, payload: any): Observable<any> {

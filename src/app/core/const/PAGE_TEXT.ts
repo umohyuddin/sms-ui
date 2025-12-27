@@ -30,6 +30,20 @@ export const PageTexts = {
       deleteConfirmation: 'Are you sure you want to delete this department?'
     }
   },
+  campus: {
+    icon: 'kt-font-dark flaticon-squares',
+    header: 'Departments Listing',
+    buttons: {
+      add: 'Add Department',
+      edit: 'Edit Department',
+      delete: 'Delete Department',
+      view: 'View Department'
+    },
+    messages: {
+      noData: 'No campuses available at the moment. Please check back later or add a new campus.',
+      deleteConfirmation: 'Are you sure you want to delete this department?'
+    }
+  },
 
   employees: {
     header: 'Employees Listing',
