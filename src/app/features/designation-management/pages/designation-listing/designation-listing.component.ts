@@ -16,7 +16,7 @@ export class DesignationListingComponent {
   ngOnInit(): void {}
 
 
-  goToCreateDepartments(): void {
+  goToCreateDesignations(): void {
     this.router.navigate(ROUTES.DESIGNATIONS.CREATE);
   }
 }

@@ -71,6 +71,13 @@ export const ROUTES = {
     EDIT: (id: string) => ['employees', 'employee-edit', id],
     DETAILS: (id: string) => ['employee', 'employee-details', id]
   },
+
+  SALARY_STRUCTURE: {
+    LIST: ['salary/structures'],
+    CREATE: ['salary/structures', 'salary-structures-create'],
+    EDIT: (id: string) => ['salary/structures', 'salary-structure-edit', id],
+    DETAILS: (id: string) => ['salary/structures', 'salary-structure-details', id],
+  },
   FEE: {
     FEE_CATALOG: {
       LIST: ['fee/catalog'],

@@ -2,6 +2,14 @@ export const API_ENDPOINTS = {
     AUTH: {
         CREATE: '/sms/auth',
     },
+    SALARY_STRUCTURE: {
+        GET_ALL: '/api/institute/salary-structures',
+        GET_BY_ID: (id: string) => `/api/institute/salary-structures/${id}`,
+        CREATE: '/api/institute/salary-structures',
+        UPDATE: (id: string) => `/api/institute/salary-structures${id}`,
+        DELETE: (id: string) => `/api/institute/salary-structures${id}`,
+        SEARCH: '/api/institute/salary-structures'
+    },
     STUDENTS: {
         CREATE: '/api/institute/students',
         UPDATE: (id: string) => `/api/institute/students/${id}`,
@@ -70,6 +78,15 @@ export const API_ENDPOINTS = {
             GET_ACTIVE: '/api/institute/departments/active',
             GET_BY_ID: (id: string | number) => `/api/institute/departments/${id}`,
             DELETE: (id: string | number) => `/api/institute/departments/${id}`
+        },
+        DESIGNATIONS: {
+            CREATE: '/api/institute/designations',
+            UPDATE: (id: string | number) => `/api/institute/designations/${id}`,
+            GET_ALL: '/api/institute/designations',
+            GET_ACTIVE: '/api/institute/designations/active',
+            GET_BY_ID: (id: string | number) => `/api/institute/designations/${id}`,
+            DELETE: (id: string | number) => `/api/institute/designations/${id}`,
+            SEARCH: (keyword: string) => `/api/institute/designations/${keyword}`,
         },
         EMPLOYEE_TYPE: {
             CREATE: '/api/institute/employee-types',
