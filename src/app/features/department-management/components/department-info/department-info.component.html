@@ -28,8 +28,8 @@
                 {{ departmentData?.departmentName ?? '-' }}
               </a>
               <span class="ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
-                [ngClass]="departmentData?.isActive ? 'kt-badge--brand' : 'kt-badge--danger'">
-                {{ departmentData?.isActive ? 'Active' : 'Inactive' }}
+                [ngClass]="departmentData?.active ? 'kt-badge--brand' : 'kt-badge--danger'">
+                {{ departmentData?.active ? 'Active' : 'Inactive' }}
               </span>
             </div>
           </div>

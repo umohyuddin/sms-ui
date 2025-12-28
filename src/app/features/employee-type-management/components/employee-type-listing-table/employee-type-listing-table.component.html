@@ -45,7 +45,7 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          @if(feeCatalogResponse && feeCatalogResponse.length > 0){
+          @if(response && response.length > 0){
           <table class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
             id="kt_table_1" role="grid" aria-describedby="kt_table_1_info" style="width: 1162px;">
             <thead>
@@ -59,20 +59,7 @@
 
               <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
                 <td>{{ item.name }}</td>
-                <td>{{ item.code }}</td>
-               
-                <td>
-                  <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                  [ngClass]="CHARGE_TYPE_CLASSES[item.chargeType || 'NONE']">
-                  {{ item.chargeTypeLabel }}</span>
-                </td>
-
-                <td><span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                  [ngClass]="RECURRENCE_RULE_CLASSES[item.recurrenceRule || 'NONE']">
-                  {{ item.recurrenceRuleLabel }}
-                </span>
-
-                </td>
+                <td>{{ item.description }}</td>
                 <td>
                   <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
                     [ngClass]="item.active ? 'kt-badge--brand' : 'kt-badge--danger'">

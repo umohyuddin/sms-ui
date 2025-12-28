@@ -1,17 +1,23 @@
 import { Component } from '@angular/core';
+import { EmployeeTypeResponse } from '../../models/EmployeeTypeResponse';
+import { EmployeeTypeService } from '../../services/employee-type.service';
+import { ActivatedRoute } from '@angular/router';
+import { SmsUtil } from '../../../../core/utils/smsUtil';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-employee-type-info',
   standalone: true,
-  imports: [],
+  imports: [CommonModule,ReactiveFormsModule],
   templateUrl: './employee-type-info.component.html',
   styleUrl: './employee-type-info.component.css'
 })
 export class EmployeeTypeInfoComponent {
- feeCatalogData?: FeeCatalogResponse;
+ response?: EmployeeTypeResponse;
   routedId!: string;
   constructor(
-    private feeCatalogManagementService: FeeCatalogManagementService,
+    private employeeTypeManagementService: EmployeeTypeService,
     private route: ActivatedRoute,
 
   ) { }
@@ -24,11 +30,11 @@ export class EmployeeTypeInfoComponent {
   }
 
   getFeeCatalogDetails(routedId: string): void {
-    this.feeCatalogManagementService.getFeeCatalogById(routedId).subscribe({
+    this.employeeTypeManagementService.getEmployeeTypeId(routedId).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.feeCatalogData = response.body;
+        this.response = response.body;
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);

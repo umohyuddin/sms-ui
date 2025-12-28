@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EmployeeTypeInfoComponent } from '../../components/employee-type-info/employee-type-info.component';
 
 @Component({
   selector: 'app-employee-type-details',
   standalone: true,
-  imports: [],
+  imports: [EmployeeTypeInfoComponent],
   templateUrl: './employee-type-details.component.html',
   styleUrl: './employee-type-details.component.css'
 })
@@ -23,7 +26,7 @@ export class EmployeeTypeDetailsComponent {
     }
     goToUpdatePage() {
       if (this.routedId) {
-        this.router.navigate(ROUTES.FEE.FEE_CATALOG.EDIT(this.routedId.toString()));
+        this.router.navigate(ROUTES.EMPLOYEE_TYPE.EDIT(this.routedId.toString()));
       } else {
         console.log('Resource ID from URL Not Found:');
       }

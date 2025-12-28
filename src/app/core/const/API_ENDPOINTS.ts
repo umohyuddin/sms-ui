@@ -29,7 +29,7 @@ export const API_ENDPOINTS = {
             GET_BY_ID: (id: string) => `/api/institute/employees/addresses/${id}`,
             CREATE: (id: string) => `/api/institute/employees/${id}/addresses`,
             UPDATE: (id: string) => `/api/institute/employees/addresses/${id}`
-        }
+        },
 
     },
     DASHBOARD: {
@@ -50,6 +50,7 @@ export const API_ENDPOINTS = {
             GET_CURRENT: '/api/school/academic/current',
             SEARCH: `/api/school/academic/search`,
             CREATE: '/api/school/academic',
+            UPDATE: (id: string) => `/api/school/academic/${id}`,
         },
         ADMISSION_TYPES: {
             GET_ALL: '/api/admission/types',
@@ -69,6 +70,15 @@ export const API_ENDPOINTS = {
             GET_ACTIVE: '/api/institute/departments/active',
             GET_BY_ID: (id: string | number) => `/api/institute/departments/${id}`,
             DELETE: (id: string | number) => `/api/institute/departments/${id}`
+        },
+        EMPLOYEE_TYPE: {
+            CREATE: '/api/institute/employee-types',
+            UPDATE: (id: string | number) => `/api/institute/employee-types/${id}`,
+            GET_ALL: '/api/institute/employee-types',
+            GET_ACTIVE: '/api/institute/employee-types',
+            GET_BY_ID: (id: string | number) => `/api/institute/employee-types/${id}`,
+            DELETE: (id: string | number) => `/api/institute/employee-types/${id}`,
+            SEARCH: (keyword: string) => `/api/institute/employee-types/${keyword}`,
         },
         STANDARDS: {
             CREATE: '/api/institute/campuses/standards',

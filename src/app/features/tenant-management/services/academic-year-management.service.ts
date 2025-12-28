@@ -33,15 +33,20 @@ export class AcademicYearManagementService {
     );
   }
 
-  createAcademicYear(payload: any): Observable<any> {
-    return this.http.request(
-      HTTP_METHOD.POST,
-      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.CREATE}`,
-      {
-        observeResponse: true,
-        body: payload
-      }
-    );
+
+  saveAcademicYear(id: string | null, payload: any): Observable<any> {
+    const isUpdate = !!id;
+
+    const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
+
+    const url = isUpdate
+      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.UPDATE(id)}`
+      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.CREATE}`;
+
+    return this.http.request(method, url, {
+      observeResponse: true,
+      body: payload
+    });
   }
   searchAcademicYears(params: { keyword?: string }): Observable<any> {
     const query = params.keyword ? `?keyword=${encodeURIComponent(params.keyword)}` : '';

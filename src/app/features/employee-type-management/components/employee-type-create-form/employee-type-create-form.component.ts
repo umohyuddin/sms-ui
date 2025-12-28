@@ -1,9 +1,16 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { EmployeeTypeResponse } from '../../models/EmployeeTypeResponse';
+import { KeyValueOption } from '../../../../core/models/KeyValueOption';
+import { EmployeeTypeService } from '../../services/employee-type.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-employee-type-create-form',
   standalone: true,
-  imports: [],
+  imports: [CommonModule,ReactiveFormsModule],
   templateUrl: './employee-type-create-form.component.html',
   styleUrl: './employee-type-create-form.component.css'
 })
@@ -11,19 +18,15 @@ export class EmployeeTypeCreateFormComponent {
  createForm!: FormGroup;
   routedId: string | null = null
   isEditMode = false;
-  resourceData: FeeCatalogResponse | null = null;
+  resourceData: EmployeeTypeResponse | null = null;
  
-  recurrenceRuleOptions: KeyValueOption[] = [];
-  chargeTypeOptions: KeyValueOption[]=  [];
-
-  constructor(private feeCatalogManagementService: FeeCatalogManagementService,
+  constructor(private empTypeManagementService: EmployeeTypeService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
   ) { }
 
   ngOnInit() {
-    this.getFeeCatalogMeta();
     this.initializeForm();
 
     this.routedId = this.route.snapshot.paramMap.get('id');
@@ -37,38 +40,12 @@ export class EmployeeTypeCreateFormComponent {
     }
   }
 
-  private getFeeCatalogMeta() {
-    this.feeCatalogManagementService.getFeeCatalogMeta().subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-
-        this.recurrenceRuleOptions = Object.entries(response.body.recurrenceRules).map(
-          ([key, label]) => ({ key, label: label as string })
-        );
-
-        this.chargeTypeOptions = Object.entries(response.body.chargeTypes).map(
-          ([key, label]) => ({ key, label: label as string })
-        );
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    });
-  }
 
 
   private initializeForm() {
     this.createForm = this.fb.group({
       name: ['', [Validators.required]],
-      code: ['', Validators.maxLength(20)],
       active: [true],
-      chargeType: ['', Validators.required],
-      recurrenceRule: ['', Validators.required],
       description: ['']
     });
   }
@@ -86,7 +63,7 @@ export class EmployeeTypeCreateFormComponent {
       return;
     }
 
-    this.feeCatalogManagementService.saveFeeCatalog(this.routedId, this.createForm.getRawValue()).subscribe({
+    this.empTypeManagementService.saveEmployeeType(this.routedId, this.createForm.getRawValue()).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
@@ -104,7 +81,7 @@ export class EmployeeTypeCreateFormComponent {
 
 
   getFeeCatalogDetails(routedId: string): void {
-    this.feeCatalogManagementService.getFeeCatalogById(routedId).subscribe({
+    this.empTypeManagementService.getEmployeeTypeId(routedId).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
@@ -126,22 +103,9 @@ export class EmployeeTypeCreateFormComponent {
     return this.createForm.get('name');
   }
 
-  get code() {
-    return this.createForm.get('code');
-  }
-
   get active() {
     return this.createForm.get('active');
   }
-
-  get chargeType() {
-    return this.createForm.get('chargeType');
-  }
-
-  get recurrenceRule() {
-    return this.createForm.get('recurrenceRule');
-  }
-
   get description() {
     return this.createForm.get('description');
   }

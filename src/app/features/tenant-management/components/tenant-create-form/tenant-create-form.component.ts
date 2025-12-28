@@ -1,18 +1,11 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientService } from '../../../../core/services/http-client.service';
-import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpResponse } from '@angular/common/http';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { AcademicYearManagementService } from '../../services/academic-year-management.service';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
 
 @Component({
@@ -30,11 +23,12 @@ export class TenantCreateFormComponent {
   URL = '';
   mode = '';
   isEditMode: boolean = false;
+  academicYearId: any;
 
   constructor(private fb: FormBuilder,
-    private academicYearService: AcademicYearManagementService,
-
+    private route: ActivatedRoute,
     private router: Router,
+    private academicYearService: AcademicYearManagementService,
     private appConfig: AppConfigService
   ) { }
 
@@ -42,10 +36,29 @@ export class TenantCreateFormComponent {
 
     console.log('Config:', this.appConfig);
     this.URL = this.appConfig.apiBaseUrl;
+    this.academicYearId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.academicYearId;
+
+    if (this.isEditMode) {
+      this.loadAcademicYear(this.academicYearId!);
+    }
     this.initializeForm();
     this.academicYearForm.get('startDate')?.valueChanges.subscribe(() => this.generateAcademicYearName());
     this.academicYearForm.get('endDate')?.valueChanges.subscribe(() => this.generateAcademicYearName());
   }
+    private loadAcademicYear(id: string): void {
+    this.academicYearService.getAcademicYearId(id).subscribe({
+      next: (response) => {
+        console.log('📦 Academic Year:', response.body);
+        this.academicYearForm.patchValue(response.body);
+      },
+      error: (error) => {
+        console.error('❌ Load Error:', error);
+        this.router.navigate(ROUTES.ACADEMIC_YEAR.LIST);
+      }
+    });
+  }
+
 
 
   private initializeForm() {
@@ -109,7 +122,7 @@ export class TenantCreateFormComponent {
   }
 
   goToAcademicYearList() {
-    this.router.navigate(['tenants'])
+    this.router.navigate(ROUTES.ACADEMIC_YEAR.LIST)
   }
 
   onSubmit(): void {
@@ -121,16 +134,15 @@ export class TenantCreateFormComponent {
       return;
     }
 
-    this.academicYearService.createAcademicYear(this.academicYearForm.getRawValue()).subscribe({
+    this.academicYearService.saveAcademicYear(this.academicYearId,this.academicYearForm.getRawValue()).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.router.navigate(['/tenants']);
+        this.router.navigate(ROUTES.ACADEMIC_YEAR.LIST);
       },
       error: (error) => {
         console.error('❌ Post Error Status:', error.status);
         console.error('Message:', error.message);
-        this.router.navigate(['/tenants']);
       },
       complete: () => {
         console.log('🔚 Post Complete');

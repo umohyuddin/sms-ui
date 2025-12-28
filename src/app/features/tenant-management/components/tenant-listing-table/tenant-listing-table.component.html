@@ -64,6 +64,12 @@
                       {{ ay.isCurrent ? 'Active' : 'Inactive' }}
                     </span>
                   </td>
+                  <td nowrap="">
+                    <a (click)="editDetails(ay,$event)" class="btn btn-sm btn-clean btn-icon btn-icon-md"
+                      title="Edit">
+                      <i class="la la-edit"></i>
+                    </a>
+                  </td>
                 </tr>
               </tbody>
             </table>

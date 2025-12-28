@@ -7,9 +7,9 @@ import { TenantCreate } from './pages/tenant-create/tenant-create';
 
 const routes: Routes = [
   { path: '', component: TenantListing },
-  { path: 'tenant-details/:id', component: TenantDetails },
-    { path: 'tenant-edit/:id', component: TenantCreate },
-  { path: 'tenant-create', component: TenantCreate }
+  { path: 'academic-year-details/:id', component: TenantDetails },
+  { path: 'academic-year-create', component: TenantCreate },
+  { path: 'academic-year-edit/:id', component: TenantCreate }
 ];
 
 

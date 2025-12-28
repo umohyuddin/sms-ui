@@ -33,7 +33,7 @@ export const routes: Routes = [
   },
 
   {
-    path: 'tenants',
+    path: 'academic-years',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
     children: [
@@ -117,6 +117,17 @@ export const routes: Routes = [
       {
         path: '',
         loadChildren: () => import('./features/designation-management/designation-management.module').then(m => m.DesignationManagementModule)
+      }
+    ]
+  },
+  {
+    path: 'employee/types',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/employee-type-management/employee-type-management.module').then(m => m.EmployeeTypeManagementModule)
       }
     ]
   },

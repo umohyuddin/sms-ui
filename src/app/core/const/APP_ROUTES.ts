@@ -13,6 +13,12 @@ export const ROUTES = {
     DETAILS: (id: string) => ['school/profile', 'profile-create', id],
   },
 
+  ACADEMIC_YEAR: {
+    LIST: ['academic-years'],
+    CREATE: ['academic-years', 'academic-year-create'],
+    EDIT: (id: string) => ['academic-years', 'academic-year-edit', id],
+    DETAILS: (id: string) => ['academic-years', 'academic-year-details', id]
+  },
   CAMPUS: {
     LIST: ['campuses'],
     CREATE: ['campuses', 'campus-create'],
@@ -54,6 +60,12 @@ export const ROUTES = {
     STUDENT_FEE_COLLECTOR: ['students', 'fee-collector']
   },
   EMPLOYEE: {
+    LIST: ['employee'],
+    CREATE: ['employee', 'employee-create'],
+    EDIT: (id: string) => ['employees', 'employee-edit', id],
+    DETAILS: (id: string) => ['employee', 'employee-details', id]
+  },
+  EMPLOYEE_TYPE: {
     LIST: ['employee'],
     CREATE: ['employee', 'employee-create'],
     EDIT: (id: string) => ['employees', 'employee-edit', id],

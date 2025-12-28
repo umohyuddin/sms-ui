@@ -23,6 +23,7 @@ export class TenantListingTableComponent {
   pagination: Pagination<AcademicYearResponse> = new Pagination([], 10);
   academicYears: AcademicYearResponse[] = [];
   constructor(
+    private router:Router,
     private academicYearService: AcademicYearManagementService
   ) { }
 
@@ -36,14 +37,22 @@ export class TenantListingTableComponent {
     { key: 'endDate', label: 'End Date', sortable: true },
     { key: 'Total Months', label: 'End Date', sortable: true },
     { key: 'isCurrent', label: 'Current', sortable: true },
-    // { key: 'actions', label: 'Actions', sortable: true }
+    { key: 'actions', label: 'Actions', sortable: true }
   ];
   ngOnInit() {
     this.getAcademicYears();
     this.subscribeToSearch();
   }
 
-
+editDetails(academic_year: AcademicYearResponse, event: Event): void {
+    event.preventDefault();  // prevents anchor default behavior
+    if (academic_year.id === undefined) {
+      console.error('Campus ID is undefined');
+      return;
+    }
+    console.log('Editing Campus ID:', academic_year.id);
+    this.router.navigate(ROUTES.ACADEMIC_YEAR.EDIT(academic_year.id.toString()));
+  }
 
   getAcademicYears() {
     this.academicYearService.getAcademicYears().subscribe({
