@@ -1,12 +1,29 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { Router } from '@angular/router';
+import { SalaryStructureComponentListingTableComponent } from '../../components/salary-structure-component-listing-table/salary-structure-component-listing-table.component';
 
 @Component({
   selector: 'app-salary-structure-component-listing',
-  standalone: true,
-  imports: [],
+  imports: [
+    CommonModule,
+    FormsModule,
+    SalaryStructureComponentListingTableComponent
+  ],
   templateUrl: './salary-structure-component-listing.component.html',
-  styleUrl: './salary-structure-component-listing.component.css'
+  styleUrls: ['./salary-structure-component-listing.component.css'],
+  standalone: true,
 })
-export class SalaryStructureComponentListingComponent {
+export class SalaryStructureComponentListingComponent implements OnInit {
+  constructor(private router: Router) { }
 
+  ngOnInit(): void {}
+
+  goToSalaryStructureComponentCreate(): void {
+    // Assuming route exists
+    // this.router.navigate(ROUTES.SALARY.SALARY_STRUCTURE_COMPONENT.CREATE);
+  }
 }
