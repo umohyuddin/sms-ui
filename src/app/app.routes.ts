@@ -55,6 +55,17 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'salary/component',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/salary-component-management/salary-component-management.module').then(m => m.SalaryComponentManagementModule)
+      }
+    ]
+  },
+  {
     path: 'campuses',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),

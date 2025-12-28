@@ -10,6 +10,14 @@ export const API_ENDPOINTS = {
         DELETE: (id: string) => `/api/institute/salary-structures${id}`,
         SEARCH: '/api/institute/salary-structures'
     },
+    SALARY_COMPONENT: {
+        GET_ALL: '/api/institute/salary-components',
+        GET_BY_ID: (id: string) => `/api/institute/salary-components/${id}`,
+        CREATE: '/api/institute/salary-components',
+        UPDATE: (id: string) => `/api/institute/salary-components/${id}`,
+        SEARCH: (keyword: string) => `/api/institute/salary-components/${keyword}`,
+        META: '/api/institute/salary-components'
+    },
     STUDENTS: {
         CREATE: '/api/institute/students',
         UPDATE: (id: string) => `/api/institute/students/${id}`,
