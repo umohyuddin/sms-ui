@@ -8,13 +8,15 @@ import { CampusManagementService } from '../../services/campus-management.servic
 import { CampusResponse } from '../../models/campusResponse';
 import { NoDataComponent } from '../../../../shared/components/no-data/no-data.component';
 import { PageTexts } from '../../../../core/const/PAGE_TEXT';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-campus-listing-table',
   standalone: true,
   imports: [CommonModule,
     ReactiveFormsModule,
-    RouterModule, NoDataComponent
+    RouterModule
   ],
   templateUrl: './campus-listing-table.component.html',
   styleUrls: ['./campus-listing-table.component.css']
@@ -24,7 +26,7 @@ export class CampusListingTableComponent {
   pagination: Pagination<CampusResponse> = new Pagination([], 10);
   searchControl = new FormControl('');
   campuses: CampusResponse[] = [];
-  
+
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router,
@@ -66,12 +68,12 @@ export class CampusListingTableComponent {
       });
   }
 
-  getCampuses() {
+  private getCampuses() {
     this.campusManagementService.getAllCampuses().subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.campuses = response.body;
+        this.campuses = response.body || [];
         this.pagination = new Pagination(this.campuses, 10);
       },
       error: (error) => {
@@ -87,13 +89,13 @@ export class CampusListingTableComponent {
   viewCampusDetails(campus: CampusResponse, event: Event): void {
     console.log('Viewing details for Campus ID:', campus.id);
     event.preventDefault();  // prevents anchor default behavior
-    this.router.navigate(['/campuses/campus-details', campus.id]);
+    this.router.navigate(ROUTES.CAMPUS.DETAILS(campus.id.toString()));
   }
 
   editCampusDetails(campus: CampusResponse, event: Event): void {
     event.preventDefault();  // prevents anchor default behavior
     console.log('Editing Campus ID:', campus.id);
-    this.router.navigate(['/campuses/campus-edit', campus.id]);
+    this.router.navigate(ROUTES.CAMPUS.EDIT(campus.id.toString()));
   }
 
   deleteCampus(campusId: any, event: Event): void {
@@ -123,5 +125,10 @@ export class CampusListingTableComponent {
   onPageSizeChange(event: any) {
     const newSize = +event.target.value;
     this.pagination.changePageSize(newSize);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
