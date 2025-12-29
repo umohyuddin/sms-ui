@@ -1,12 +1,104 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
+import { Pagination } from '../../../../core/pagar/pagination';
+import { EmployeeSalary } from '../../models/EmployeeSalary';
+import { EmployeeSalaryService } from '../../services/employee-salary.service';
 
 @Component({
   selector: 'app-employee-salary-listing-table',
   standalone: true,
-  imports: [],
+  imports: [CommonModule,
+    ReactiveFormsModule,
+    RouterModule
+  ],
   templateUrl: './employee-salary-listing-table.component.html',
-  styleUrl: './employee-salary-listing-table.component.css'
+  styleUrls: ['./employee-salary-listing-table.component.css']
 })
-export class EmployeeSalaryListingTableComponent {
+export class EmployeeSalaryListingTableComponent implements OnInit {
+  pagination: Pagination<EmployeeSalary> = new Pagination([], 10);
+  searchControl = new FormControl('');
+  employeeSalaries: EmployeeSalary[] = [];
+  private destroy$ = new Subject<void>();
 
+  constructor(private router: Router,
+    private employeeSalaryService: EmployeeSalaryService,
+  ) { }
+
+  columns = [
+    { key: 'employeeCode', label: 'Employee Code', sortable: true },
+    { key: 'employeeName', label: 'Employee Name', sortable: true },
+    { key: 'grossSalary', label: 'Gross Salary', sortable: true },
+    { key: 'totalDeductions', label: 'Total Deductions', sortable: true },
+    { key: 'netSalary', label: 'Net Salary', sortable: true },
+    { key: 'effectiveDate', label: 'Effective Date', sortable: false },
+    { key: 'actions', label: 'Actions', sortable: false }
+  ];
+
+  ngOnInit() {
+    this.getEmployeeSalaries();
+    this.subscribeToSearch();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private subscribeToSearch() {
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        switchMap(search => this.employeeSalaryService.searchEmployeeSalaries(search || '')),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (response) => {
+          this.employeeSalaries = response.body;
+          this.pagination = new Pagination(this.employeeSalaries, 10);
+        },
+        error: (error) => {
+          console.error('Search error:', error);
+        }
+      });
+  }
+
+  getEmployeeSalaries() {
+    this.employeeSalaryService.getAllEmployeeSalaries().subscribe({
+      next: (response) => {
+        console.log('Success Status:', response.status);
+        console.log('Response Body:', response.body);
+        this.employeeSalaries = response.body;
+        this.pagination = new Pagination(this.employeeSalaries, 10);
+      },
+      error: (error) => {
+        console.error('Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('Request Complete');
+      }
+    })
+  }
+
+  viewDetails(item: EmployeeSalary, event: Event): void {
+    console.log('Viewing details for Salary ID:', item.salaryId);
+    event.preventDefault();
+    // Assuming routes are defined
+    // this.router.navigate(ROUTES.EMPLOYEE.EMPLOYEE_SALARY.DETAILS(item.salaryId.toString()));
+  }
+
+  editDetails(item: EmployeeSalary, event: Event): void {
+    event.preventDefault();
+    console.log('Editing Salary ID:', item.salaryId);
+    // this.router.navigate(ROUTES.EMPLOYEE.EMPLOYEE_SALARY.EDIT(item.salaryId.toString()));
+  }
+
+  onPageSizeChange(event: any) {
+    const newSize = +event.target.value;
+    this.pagination.changePageSize(newSize);
+  }
 }

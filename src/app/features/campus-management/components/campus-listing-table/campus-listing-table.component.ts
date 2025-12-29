@@ -6,10 +6,8 @@ import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } fro
 import { Pagination } from '../../../../core/pagar/pagination';
 import { CampusManagementService } from '../../services/campus-management.service';
 import { CampusResponse } from '../../models/campusResponse';
-import { NoDataComponent } from '../../../../shared/components/no-data/no-data.component';
 import { PageTexts } from '../../../../core/const/PAGE_TEXT';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-campus-listing-table',
