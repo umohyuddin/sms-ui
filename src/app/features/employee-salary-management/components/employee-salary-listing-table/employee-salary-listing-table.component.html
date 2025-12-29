@@ -60,9 +60,9 @@
               <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
                 <td>{{ item.employeeCode }}</td>
                 <td>{{ item.employeeName }}</td>
-                <td>{{ item.grossSalary | currency:'INR':'symbol':'1.2-2' }}</td>
-                <td>{{ item.totalDeductions | currency:'INR':'symbol':'1.2-2' }}</td>
-                <td>{{ item.netSalary | currency:'INR':'symbol':'1.2-2' }}</td>
+                <td>{{ item.grossSalary | currency:'PKR ':'symbol':'1.2-2' }}</td>
+                <td>{{ item.totalDeductions | currency:'PKR ':'symbol':'1.2-2' }}</td>
+                <td>{{ item.netSalary | currency:'PKR  ':'symbol':'1.2-2' }}</td>
                 <td>{{ item.effectiveDate | date:'dd/MM/yyyy' }}</td>
                 <td nowrap="">
                   <span class="dropdown">
