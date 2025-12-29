@@ -176,6 +176,17 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'employee/deductions',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/employee-deduction-management/employee-deduction-management.module').then(m => m.EmployeeDeductionManagementModule)
+      }
+    ]
+  },
+  {
     path: 'school/profile',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
