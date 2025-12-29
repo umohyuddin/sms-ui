@@ -15,6 +15,7 @@ import { TenantListingTableComponent } from '../../components/tenant-listing-tab
 import { HttpClientService } from '../../../../core/services/http-client.service';
 import { Router } from '@angular/router';
 import { AppConfigService } from '../../../../core/services/app-config.service';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
 @Component({
   selector: 'app-tenant-listing',
@@ -62,7 +63,7 @@ export class TenantListing implements OnInit {
 
 
   goToCreateTenant(): void {
-    this.router.navigate(['/tenants/tenant-create']);
+    this.router.navigate(ROUTES.ACADEMIC_YEAR.CREATE);
   }
 }
 

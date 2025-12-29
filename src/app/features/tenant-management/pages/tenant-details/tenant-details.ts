@@ -19,45 +19,15 @@ export class TenantDetails {
   tenantId!: string;
   isActive = true;
   URL = '';
-  toggleStatus() {
 
-    this.isActive = !this.isActive;
-  }
-  constructor(private httpClientService: HttpClientService
-    , private route: ActivatedRoute,
+  constructor(
     private appConfig: AppConfigService
   ) { }
 
   ngOnInit(): void {
     console.log('API Base URL:', this.appConfig.apiBaseUrl);
     this.URL = this.appConfig.apiBaseUrl;
-
-    // this.tenantId = this.route.snapshot.paramMap.get('id') ?? '';
-    // console.log('Tenant ID from route:', this.tenantId);
-    // this.getTenantDetails(this.tenantId);
   }
-
-  // getTenantDetails(tenantId: string): void {
-  //   const url = `${this.URL}/${tenantId}`;
-  //   this.httpClientService
-  //     .request<any>(HTTP_METHOD.GET, url, { observeResponse: true })
-  //     .subscribe({
-  //       next: (response: HttpResponse<any>) => {
-  //         console.log('  Status:', response.status);
-  //         console.log('📦 Body:', response.body);
-  //         this.tenantData = response.body;
-  //         console.log('Tenant Details:', this.tenantData);
-  //       },
-  //       error: (error) => {
-  //         this.spinner = false;
-  //         console.error('❌ Error Status:', error.status);
-  //         console.error('Message:', error.message);
-  //       },
-  //       complete: () => {
-  //         this.spinner = false;
-  //       }
-  //     });
-  // }
 }
 
 
