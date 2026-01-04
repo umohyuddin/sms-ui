@@ -45,7 +45,6 @@ export class ConcessionRateCreateFormComponent {
     private concessionManagementService: ConcessionManagementService,
     private concessionComponentManagementService: ConcessionComponentManagementService,
     private concessionRateManagementService: ConcessionRateManagementService,
-    private feeRateManagementService: FeeRateManagementService,
     private configService: AppConfigService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -84,7 +83,7 @@ export class ConcessionRateCreateFormComponent {
       discountTypeId: ['', Validators.required],
       discountSubTypeId: ['', Validators.required],
       campusId: ['', Validators.required],
-      isPercentage: [false, Validators.required],
+      isPercentage: [{ value: false, disabled: true }, Validators.required],
       value: [0, [Validators.required, Validators.min(0)]],
       effectiveFrom: [{ value: null, disabled: true }, Validators.required],
       effectiveTo: [{ value: null, disabled: true }, Validators.required],
@@ -120,18 +119,59 @@ export class ConcessionRateCreateFormComponent {
     LoggerUtil.groupEnd();
   }
 
+  private subscribeToConcessionTypeChanges() {
+    const discountTypeCtrl = this.createForm.get('discountTypeId');
+    if (!discountTypeCtrl) return;
+
+    discountTypeCtrl.valueChanges.subscribe(discountTypeId => {
+      if (!discountTypeId) return;
+
+      const selectedConcession = this.concessionTypeDD.find(c => c.id == discountTypeId);
+      if (selectedConcession) {
+        // Automatically set isPercentage based on chargeType
+        this.createForm.patchValue({ isPercentage: selectedConcession.chargeType === 'PERCENTAGE' }, { emitEvent: false });
+      }
+
+      // Load the corresponding components
+      this.loadComponentsByConcessionId(discountTypeId);
+    });
+  }
+
   private loadConcessionTypes() {
     LoggerUtil.group(`📦 [${this.MODULE}] Load Concession Types`);
     this.concessionManagementService.getAllConcessions().subscribe({
       next: (res) => {
-        this.concessionTypeDD = res.body;
+        this.concessionTypeDD = res.body || [];
         LoggerUtil.log(this.MODULE, 'ConcessionType', '📦 Concession types loaded', this.concessionTypeDD);
+
+        // Subscribe to dropdown changes for user selection
+        this.subscribeToConcessionTypeChanges();
+
+        // Handle edit mode after concessions are loaded
+        if (this.isEditMode && this.resourceData) {
+          const discountTypeId = this.resourceData.discountSubType.discountType.id;
+
+          // Patch discountTypeId WITHOUT triggering valueChanges
+          this.createForm.patchValue({ discountTypeId }, { emitEvent: false });
+
+          // Set isPercentage based on chargeType
+          const selectedConcession = this.concessionTypeDD.find(c => c.id === discountTypeId);
+          if (selectedConcession) {
+            this.createForm.patchValue({ isPercentage: selectedConcession.chargeType === 'PERCENTAGE' }, { emitEvent: false });
+          }
+
+          // Load components for edit mode
+          this.loadComponentsByConcessionId(discountTypeId, () => {
+            // After components loaded, patch discountSubTypeId
+            this.createForm.patchValue({ discountSubTypeId: this.resourceData?.discountSubType.id }, { emitEvent: false });
+          });
+        }
       },
-      error: (err) => LoggerUtil.error(this.MODULE, 'ConcessionType', '❌ Failed to load concession types', err),
-      complete: () => LoggerUtil.log(this.MODULE, 'ConcessionType', '🔚 Load complete')
+      error: (err) => LoggerUtil.error(this.MODULE, 'ConcessionType', '❌ Failed to load concession types', err)
     });
     LoggerUtil.groupEnd();
   }
+
 
   onConcessionTypeChange() {
     LoggerUtil.group(`🔄 [${this.MODULE}] Concession Type Change`);
@@ -142,18 +182,34 @@ export class ConcessionRateCreateFormComponent {
     LoggerUtil.groupEnd();
   }
 
-  private loadComponentsByConcessionId(concessionTypeId: any) {
+  private loadComponentsByConcessionId(concessionTypeId: any, callback?: () => void) {
     LoggerUtil.group(`📦 [${this.MODULE}] Load Concession Components`);
     this.concessionComponentManagementService.getConcessionComponentsByTypeId(concessionTypeId).subscribe({
       next: (res) => {
-        this.concessionComponentDD = res.body;
+        this.concessionComponentDD = res.body || [];
         LoggerUtil.log(this.MODULE, 'ConcessionComponent', '📦 Components loaded', this.concessionComponentDD);
+
+        if (callback) callback();
       },
       error: (err) => LoggerUtil.error(this.MODULE, 'ConcessionComponent', '❌ Failed to load components', err),
       complete: () => LoggerUtil.log(this.MODULE, 'ConcessionComponent', '🔚 Load complete')
     });
     LoggerUtil.groupEnd();
   }
+
+
+  // private loadComponentsByConcessionId(concessionTypeId: any) {
+  //   LoggerUtil.group(`📦 [${this.MODULE}] Load Concession Components`);
+  //   this.concessionComponentManagementService.getConcessionComponentsByTypeId(concessionTypeId).subscribe({
+  //     next: (res) => {
+  //       this.concessionComponentDD = res.body;
+  //       LoggerUtil.log(this.MODULE, 'ConcessionComponent', '📦 Components loaded', this.concessionComponentDD);
+  //     },
+  //     error: (err) => LoggerUtil.error(this.MODULE, 'ConcessionComponent', '❌ Failed to load components', err),
+  //     complete: () => LoggerUtil.log(this.MODULE, 'ConcessionComponent', '🔚 Load complete')
+  //   });
+  //   LoggerUtil.groupEnd();
+  // }
 
   getConcessionRateDetails(routedId: string) {
     LoggerUtil.group(`🏷️ [${this.MODULE}] Load Rate Details`);
