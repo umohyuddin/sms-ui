@@ -6,100 +6,114 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { AcademicYearManagementService } from '../../services/academic-year-management.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-
+import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 
 @Component({
   selector: 'app-tenant-create-form',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './tenant-create-form.component.html',
   styleUrls: ['./tenant-create-form.component.css']
 })
 export class TenantCreateFormComponent {
   academicYearForm!: FormGroup;
-  routeTenantId?: string;
+  academicYearId: string | null = null;
+  isEditMode = false;
   URL = '';
-  mode = '';
-  isEditMode: boolean = false;
-  academicYearId: any;
+  private readonly MODULE = 'AcademicYear';
+  private readonly COMPONENT = 'AcademicYearForm';
 
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private academicYearService: AcademicYearManagementService,
     private appConfig: AppConfigService
-  ) { }
+  ) {}
 
   ngOnInit() {
-
-    console.log('Config:', this.appConfig);
+    LoggerUtil.group(`📌 [${this.MODULE}] Init`);
     this.URL = this.appConfig.apiBaseUrl;
     this.academicYearId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.academicYearId;
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '📝 Mode detected', this.isEditMode ? 'EDIT' : 'CREATE');
 
-    if (this.isEditMode) {
-      this.loadAcademicYear(this.academicYearId!);
-    }
     this.initializeForm();
+
+    if (this.isEditMode && this.academicYearId) {
+      LoggerUtil.log(this.MODULE, this.COMPONENT, '🔹 Loading academic year', this.academicYearId);
+      this.loadAcademicYear(this.academicYearId);
+    }
+
+    // auto-generate name when dates change
     this.academicYearForm.get('startDate')?.valueChanges.subscribe(() => this.generateAcademicYearName());
     this.academicYearForm.get('endDate')?.valueChanges.subscribe(() => this.generateAcademicYearName());
+    LoggerUtil.groupEnd(); // Init
   }
-    private loadAcademicYear(id: string): void {
-    this.academicYearService.getAcademicYearId(id).subscribe({
-      next: (response) => {
-        console.log('📦 Academic Year:', response.body);
-        this.academicYearForm.patchValue(response.body);
-      },
-      error: (error) => {
-        console.error('❌ Load Error:', error);
-        this.router.navigate(ROUTES.ACADEMIC_YEAR.LIST);
-      }
-    });
-  }
-
-
 
   private initializeForm() {
+    LoggerUtil.group(`⚙️ [${this.MODULE}] Form Initialization`);
     this.academicYearForm = this.fb.group({
-      name: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(20),
-          this.noWhitespaceValidator
-        ]
-      ],
-      startDate: [
-        '',
-        [
-          Validators.required,
-          this.validateStartDate
-        ]
-      ],
-      endDate: [
-        '',
-        [
-          Validators.required,
-          this.validateEndDate.bind(this) // Needs access to startDate
-        ]
-      ],
+      name: ['', [Validators.required, Validators.maxLength(20), this.noWhitespaceValidator]],
+      startDate: ['', [Validators.required, this.validateStartDate]],
+      endDate: ['', [Validators.required, this.validateEndDate.bind(this)]],
       isCurrent: [false]
+    });
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Form initialized');
+    LoggerUtil.groupEnd();
+  }
+
+  private loadAcademicYear(id: string) {
+    LoggerUtil.group(`📦 [${this.MODULE}] Load Academic Year`);
+    this.academicYearService.getAcademicYearId(id).subscribe({
+      next: (response) => {
+        LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Academic year loaded', response.body);
+        this.academicYearForm.patchValue(response.body, { emitEvent: false });
+      },
+      error: (error) => {
+        LoggerUtil.error(this.MODULE, this.COMPONENT, '❌ Failed to load academic year', error);
+        this.router.navigate(ROUTES.ACADEMIC_YEAR.LIST);
+      },
+      complete: () => LoggerUtil.groupEnd()
     });
   }
 
+  onSubmit() {
+    LoggerUtil.group(`🚀 [${this.MODULE}] Submit`);
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '📋 Submit triggered');
 
-  // Start date cannot be in the past
+    if (this.academicYearForm.invalid) {
+      this.academicYearForm.markAllAsTouched();
+      LoggerUtil.error(this.MODULE, this.COMPONENT, '❌ Form validation failed', this.academicYearForm.errors);
+      LoggerUtil.groupEnd();
+      return;
+    }
+
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '📤 Submitting form data', this.academicYearForm.getRawValue());
+
+    this.academicYearService.saveAcademicYear(this.academicYearId, this.academicYearForm.getRawValue()).subscribe({
+      next: (response) => {
+        LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Save successful', response.body);
+        LoggerUtil.log(this.MODULE, this.COMPONENT, '➡️ Redirecting to list');
+        this.router.navigate(ROUTES.ACADEMIC_YEAR.LIST);
+      },
+      error: (error) => LoggerUtil.error(this.MODULE, this.COMPONENT, '❌ Save failed', error),
+      complete: () => LoggerUtil.groupEnd()
+    });
+  }
+
+  goToAcademicYearList() {
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '➡️ Redirecting to list');
+    this.router.navigate(ROUTES.ACADEMIC_YEAR.LIST);
+  }
+
+  // Custom validators
   validateStartDate(control: any) {
     const today = new Date();
-    if (control.value && new Date(control.value) < today) {
-      return { pastDate: true };
-    }
+    if (control.value && new Date(control.value) < today) return { pastDate: true };
     return null;
   }
 
-  // End date must be after start date
   validateEndDate(control: any) {
     const startDate = this.academicYearForm?.get('startDate')?.value;
     if (!control.value || !startDate) return null;
@@ -107,51 +121,29 @@ export class TenantCreateFormComponent {
     const start = new Date(startDate);
     const end = new Date(control.value);
 
-    // Must be after start date
-    if (end <= start) {
-      return { beforeStartDate: true };
-    }
+    if (end <= start) return { beforeStartDate: true };
 
-    // Check if duration is more than 12 months
-    const monthsDifference = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-    if (monthsDifference > 12) {
-      return { exceeds12Months: true };
-    }
+    const monthsDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+    if (monthsDiff > 12) return { exceeds12Months: true };
 
     return null;
   }
 
-  goToAcademicYearList() {
-    this.router.navigate(ROUTES.ACADEMIC_YEAR.LIST)
+  noWhitespaceValidator(control: any) {
+    if (control.value && !control.value.trim()) return { whitespace: true };
+    return null;
   }
 
-  onSubmit(): void {
-    console.log('  Tenant Form Data:', this.academicYearForm.getRawValue());
-    if (this.academicYearForm.invalid) {
-      // Mark all controls as touched to show validation errors
-      this.academicYearForm.markAllAsTouched();
-      console.warn('❌ Form is invalid');
-      return;
+  private generateAcademicYearName() {
+    const start = this.academicYearForm.get('startDate')?.value;
+    const end = this.academicYearForm.get('endDate')?.value;
+    if (start && end) {
+      const name = `${new Date(start).getFullYear()}-${new Date(end).getFullYear()}`;
+      this.academicYearForm.get('name')?.setValue(name);
     }
-
-    this.academicYearService.saveAcademicYear(this.academicYearId,this.academicYearForm.getRawValue()).subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.router.navigate(ROUTES.ACADEMIC_YEAR.LIST);
-      },
-      error: (error) => {
-        console.error('❌ Post Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Post Complete');
-      }
-    })
   }
 
-
-
+  // Getters for easy access
   get name() { return this.academicYearForm.get('name'); }
   get startDate() { return this.academicYearForm.get('startDate'); }
   get endDate() { return this.academicYearForm.get('endDate'); }
@@ -174,39 +166,13 @@ export class TenantCreateFormComponent {
     }
   };
 
-
   getErrorMessage(controlName: keyof typeof this.validationMessages): string {
     const control = this.academicYearForm.get(controlName as string);
     if (!control || !control.errors) return '';
-
     for (const error in control.errors) {
       const key = error as keyof typeof this.validationMessages[typeof controlName];
-      if (this.validationMessages[controlName][key]) {
-        return this.validationMessages[controlName][key];
-      }
+      if (this.validationMessages[controlName][key]) return this.validationMessages[controlName][key];
     }
-
     return '';
   }
-
-  // Whitespace validator
-  noWhitespaceValidator(control: any) {
-    if (control.value && !control.value.trim()) {
-      return { whitespace: true };
-    }
-    return null;
-  }
-
-  private generateAcademicYearName() {
-    const start = this.academicYearForm.get('startDate')?.value;
-    const end = this.academicYearForm.get('endDate')?.value;
-
-    if (start && end) {
-      const startYear = new Date(start).getFullYear();
-      const endYear = new Date(end).getFullYear();
-      const academicYearName = `${startYear}-${endYear}`;
-      this.academicYearForm.get('name')?.setValue(academicYearName);
-    }
-  }
 }
-

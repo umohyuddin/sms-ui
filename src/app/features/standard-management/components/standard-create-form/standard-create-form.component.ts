@@ -7,158 +7,182 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClientService } from '../../../../core/services/http-client.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AppConfigService } from '../../../../core/services/app-config.service';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
-import { CampusResponse } from '../../../campus-management/models/campusResponse';
-import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { StandardManagementService } from '../../services/standard-management.service';
+import { CampusResponse } from '../../../campus-management/models/campusResponse';
 import { StandardResponse } from '../../models/standardResponse';
-
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 
 @Component({
   selector: 'app-standard-create-form',
   standalone: true,
-  imports: [MatExpansionModule,
+  imports: [
+    MatExpansionModule,
     MatSlideToggleModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
-    CommonModule],
+    CommonModule
+  ],
   templateUrl: './standard-create-form.component.html',
   styleUrls: ['./standard-create-form.component.css']
 })
 export class StandardCreateFormComponent {
   createStandardForm!: FormGroup;
-  routestandardId?: string;
-  URL = '';
-  mode = '';
-  standardData?: StandardResponse;
-  campuses: CampusResponse[] = [];
-  cities: any[] = [];
   standardId: string | null = null;
   isEditMode: boolean = false;
+  standardData?: StandardResponse;
+  campuses: CampusResponse[] = [];
+  private readonly MODULE = 'Standard';
+  private readonly COMPONENT = 'StandardForm';
+
+  validationMessages = {
+    standardName: {
+      required: 'Standard Name is required.',
+      whitespace: 'Standard Name cannot be empty or whitespace only.'
+    },
+    standardCode: {
+      maxlength: 'Standard Code cannot exceed 20 characters.',
+      whitespace: 'Standard Code cannot be empty.'
+    },
+    description: {
+      maxlength: 'Description cannot exceed 500 characters.',
+      whitespace: 'Description cannot be empty.'
+    },
+    campusId: {
+      required: 'Campus selection is required.'
+    }
+  };
 
   constructor(
-    private campusManagementService: CampusManagementService,
-    private standardManagemenetService: StandardManagementService,
     private fb: FormBuilder,
-    private httpClientService: HttpClientService,
-    private route: ActivatedRoute,
     private router: Router,
-    private appConfig: AppConfigService
-  ) { }
+    private route: ActivatedRoute,
+    private campusManagementService: CampusManagementService,
+    private standardManagementService: StandardManagementService
+  ) {}
 
   ngOnInit() {
+    LoggerUtil.group(`📌 [${this.MODULE}] Init`);
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '⚙️ Initializing component');
 
-    this.getCampuses();
     this.initializeForm();
+    this.loadCampuses();
+
     this.standardId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.standardId;
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '📝 Mode detected', this.isEditMode ? 'EDIT' : 'CREATE');
 
-    if (this.isEditMode) {
-      console.log('Edit Mode Activated - Load data for:', this.standardId);
-      this.getStandardDetails(this.standardId!);
-    } else {
-      console.log('Create Mode Activated');
+    if (this.isEditMode && this.standardId) {
+      this.getStandardDetails(this.standardId);
     }
-  }
 
-  getStandardDetails(standardId: string): void {
-    this.standardManagemenetService.getStandardById(standardId)
-      .subscribe({
-        next: (response) => {
-          console.log('  Request Success Status:', response.status);
-          console.log('📦 Response Body:', response.body);
-          this.standardData = response.body;
-          console.log('📦 Standard data :', this.standardData);
-          this.createStandardForm.patchValue({
-            standardName: this.standardData?.standardName,
-            standardCode: this.standardData?.standardCode,
-            description: this.standardData?.description,
-            campusId: this.standardData?.campus?.id
-          });
-        },
-        error: (error) => {
-          console.error('❌ Request Error Status:', error.status);
-          console.error('Message:', error.message);
-        },
-        complete: () => {
-          console.log('🔚 Request Complete');
-        }
-      })
-  }
-
-  private getCampuses() {
-    this.campusManagementService.getAllCampuses().subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.campuses = response.body;
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    });
+    LoggerUtil.groupEnd();
   }
 
   private initializeForm() {
+    LoggerUtil.group(`⚙️ [${this.MODULE}] Form Initialization`);
     this.createStandardForm = this.fb.group({
-      standardName: ['', Validators.required],
-      standardCode: [''],
-      description: [''],
+      standardName: ['', [Validators.required, this.noWhitespaceValidator]],
+      standardCode: ['', [Validators.maxLength(20), this.noWhitespaceValidator]],
+      description: ['', [Validators.maxLength(500), this.noWhitespaceValidator]],
       campusId: ['', Validators.required]
     });
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Form initialized');
+    LoggerUtil.groupEnd();
   }
 
-  goTostandardList(): void {
-    this.router.navigate(ROUTES.CAMPUS.STANDARD.LIST);
+  private loadCampuses() {
+    LoggerUtil.group(`🏫 [${this.MODULE}] Load Campuses`);
+    this.campusManagementService.getAllCampuses().subscribe({
+      next: (response) => {
+        this.campuses = response.body;
+        LoggerUtil.log(this.MODULE, 'Campuses', '📦 Campuses loaded', this.campuses);
+      },
+      error: (error) => LoggerUtil.error(this.MODULE, 'Campuses', '❌ Failed to load campuses', error),
+      complete: () => LoggerUtil.log(this.MODULE, 'Campuses', '🔚 Load campuses completed')
+    });
+    LoggerUtil.groupEnd();
   }
-  onSubmit(): void {
-    console.log('  Create standard Form Data:', this.createStandardForm.getRawValue());
+
+  private getStandardDetails(standardId: string) {
+    LoggerUtil.group(`📦 [${this.MODULE}] Load Standard Details`);
+    LoggerUtil.log(this.MODULE, 'Details', '📌 Fetching standard by ID', standardId);
+
+    this.standardManagementService.getStandardById(standardId).subscribe({
+      next: (response) => {
+        this.standardData = response.body;
+        LoggerUtil.log(this.MODULE, 'Details', '✅ Standard data loaded', this.standardData);
+
+        this.createStandardForm.patchValue({
+          standardName: this.standardData?.standardName,
+          standardCode: this.standardData?.standardCode,
+          description: this.standardData?.description,
+          campusId: this.standardData?.campus?.id
+        });
+      },
+      error: (error) => LoggerUtil.error(this.MODULE, 'Details', '❌ Failed to load standard details', error),
+      complete: () => LoggerUtil.log(this.MODULE, 'Details', '🔚 Standard details flow completed')
+    });
+    LoggerUtil.groupEnd();
+  }
+
+  onSubmit() {
+    LoggerUtil.group(`🚀 [${this.MODULE}] Submit`);
+    LoggerUtil.log(this.MODULE, 'Submit', '📋 Form submit triggered');
+
     if (this.createStandardForm.invalid) {
       this.createStandardForm.markAllAsTouched();
-      console.warn('❌ Form is invalid');
+      LoggerUtil.error(this.MODULE, 'Submit', '❌ Form validation failed', this.createStandardForm.errors);
+      LoggerUtil.groupEnd();
       return;
     }
-    
-    this.standardManagemenetService.saveStandard(this.standardId,this.createStandardForm.getRawValue()).subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.router.navigate(ROUTES.CAMPUS.STANDARD.LIST                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      );
-      },
-      error: (error) => {
-        console.error('❌ Post Error Status:', error.status);
-        console.error('Message:', error.message);
-        this.router.navigate(['/standards']);
-      },
-      complete: () => {
-        console.log('🔚 Post Complete');
-      }
-    })
+
+    LoggerUtil.log(this.MODULE, 'Submit', '📤 Submitting form data', this.createStandardForm.getRawValue());
+
+    this.standardManagementService.saveStandard(this.standardId, this.createStandardForm.getRawValue())
+      .subscribe({
+        next: (response) => {
+          LoggerUtil.log(this.MODULE, 'Submit', '✅ Save successful', response.body);
+          LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to standard list');
+          this.router.navigate(ROUTES.CAMPUS.STANDARD.LIST);
+        },
+        error: (error) => LoggerUtil.error(this.MODULE, 'Submit', '❌ Save failed', error),
+        complete: () => {
+          LoggerUtil.log(this.MODULE, 'Submit', '🔚 Submit flow completed');
+          LoggerUtil.groupEnd();
+        }
+      });
   }
 
-  //getters
-  get standardName() {
-    return this.createStandardForm.get('standardName');
+  goToStandardList() {
+    LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to standard list');
+    this.router.navigate(ROUTES.CAMPUS.STANDARD.LIST);
   }
 
-  get standardCode() {
-    return this.createStandardForm.get('standardCode');
+  // getters
+  get standardName() { return this.createStandardForm.get('standardName'); }
+  get standardCode() { return this.createStandardForm.get('standardCode'); }
+  get description() { return this.createStandardForm.get('description'); }
+  get campusId() { return this.createStandardForm.get('campusId'); }
+
+  noWhitespaceValidator(control: any) {
+    if (control.value && !control.value.trim()) return { whitespace: true };
+    return null;
   }
 
-  get description() {
-    return this.createStandardForm.get('description');
-  }
+  getErrorMessage(controlName: keyof typeof this.validationMessages): string {
+    const control = this.createStandardForm.get(controlName as string);
+    if (!control || !control.errors) return '';
 
-  get campusId() {
-    return this.createStandardForm.get('campusId');
+    for (const error in control.errors) {
+      const key = error as keyof typeof this.validationMessages[typeof controlName];
+      if (this.validationMessages[controlName][key]) return this.validationMessages[controlName][key];
+    }
+
+    return '';
   }
 }

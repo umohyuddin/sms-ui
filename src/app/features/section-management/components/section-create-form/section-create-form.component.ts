@@ -10,177 +10,158 @@ import { StandardResponse } from '../../../standard-management/models/standardRe
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
 import { SectionManagementService } from '../../services/section-management.service';
 import { SectionResponse } from '../../models/SectionResponse';
-
-
+import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 
 @Component({
   selector: 'app-section-create-form',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './section-create-form.component.html',
   styleUrls: ['./section-create-form.component.css']
 })
 export class SectionCreateFormComponent {
   createSectionForm!: FormGroup;
-  routeSectionId?: string;
-  URL = '';
-  mode = '';
+  sectionId: string | null = null;
+  isEditMode = false;
+  campuses: CampusResponse[] = [];
   standardData: StandardResponse[] = [];
   sectionData?: SectionResponse;
-  campuses: CampusResponse[] = [];
-  cities: any[] = [];
-  sectionId: string | null = null;
-  isEditMode: boolean = false;
+
+  private readonly MODULE = 'Section';
+  private readonly COMPONENT = 'SectionForm';
 
   constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
     private campusManagementService: CampusManagementService,
     private standardManagemenetService: StandardManagementService,
-    private sectionManagementService: SectionManagementService,
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router) { }
+    private sectionManagementService: SectionManagementService
+  ) {}
 
   ngOnInit() {
-
-    this.getCampuses();
-    this.initializeForm();
+    LoggerUtil.group(`📌 [${this.MODULE}] Init`);
     this.sectionId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.sectionId;
+    LoggerUtil.log(this.MODULE, this.COMPONENT, 'Mode detected', this.isEditMode ? 'EDIT' : 'CREATE');
 
-    if (this.isEditMode) {
-      console.log('Edit Mode Activated - Load data for:', this.sectionId);
-      this.getSectionDetails(this.sectionId!);
-    } else {
-      console.log('Create Mode Activated');
+    this.initializeForm();
+    this.getCampuses();
+
+    if (this.isEditMode && this.sectionId) {
+      LoggerUtil.log(this.MODULE, this.COMPONENT, 'Edit Mode: Loading section details for', this.sectionId);
+      this.getSectionDetails(this.sectionId);
     }
+
     this.onCampusChange();
-  }
-
-  onCampusChange() {
-    this.createSectionForm.get('campusId')?.valueChanges.subscribe(campusId => {
-      console.log("Campus changed:", campusId);
-      this.loadStandardByCampusId(campusId);
-    });
-  }
-  loadStandardByCampusId(campusId: any) {
-    this.createSectionForm.get('standardId')?.setValue('')
-    this.standardManagemenetService.getCampusById(campusId).subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.standardData = response.body;
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    });
-  }
-  getSectionDetails(sectionId: string): void {
-    this.sectionManagementService.getSectionById(sectionId)
-      .subscribe({
-        next: (response) => {
-          console.log('  Request Success Status:', response.status);
-          console.log('📦 Response Body:', response.body);
-          this.sectionData = response.body;
-          console.log('📦 Standard data :', this.sectionData);
-          this.createSectionForm.patchValue({
-            sectionName: this.sectionData?.sectionName,
-            sectionCode: this.sectionData?.sectionCode,
-            description: this.sectionData?.description,
-            campusId: this.sectionData?.standard.campus.id,
-            standardId: this.sectionData?.standard.id
-          });
-        },
-        error: (error) => {
-          console.error('❌ Request Error Status:', error.status);
-          console.error('Message:', error.message);
-        },
-        complete: () => {
-          console.log('🔚 Request Complete');
-        }
-      })
-  }
-
-  private getCampuses() {
-    this.campusManagementService.getAllCampuses().subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.campuses = response.body;
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    });
+    LoggerUtil.groupEnd();
   }
 
   private initializeForm() {
+    LoggerUtil.group(`⚙️ [${this.MODULE}] Form Initialization`);
     this.createSectionForm = this.fb.group({
-      sectionName: ['', [Validators.required, Validators.maxLength(50)]],
+      sectionName: ['', [Validators.required, Validators.maxLength(50), this.noWhitespaceValidator]],
       campusId: ['', Validators.required],
       standardId: ['', Validators.required],
-      sectionCode: ['', [Validators.maxLength(15)]],
-      description: ['', Validators.maxLength(500)],
+      sectionCode: ['', [Validators.maxLength(15), this.noWhitespaceValidator]],
+      description: ['', Validators.maxLength(500)]
+    });
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Form initialized', this.createSectionForm.value);
+    LoggerUtil.groupEnd();
+  }
+
+  onCampusChange() {
+    LoggerUtil.group(`🌐 [${this.MODULE}] Campus Change Subscription`);
+    this.createSectionForm.get('campusId')?.valueChanges.subscribe(campusId => {
+      LoggerUtil.log(this.MODULE, 'Campus', 'Campus changed', campusId);
+      this.createSectionForm.get('standardId')?.reset('');
+      this.loadStandardByCampusId(campusId);
+    });
+    LoggerUtil.groupEnd();
+  }
+
+  private loadStandardByCampusId(campusId: any) {
+    if (!campusId) return;
+
+    LoggerUtil.group(`📦 [${this.MODULE}] Load Standards`);
+    this.standardManagemenetService.getCampusById(campusId).subscribe({
+      next: (response) => {
+        LoggerUtil.log(this.MODULE, 'Standards', '✅ Standards loaded', response.body);
+        this.standardData = response.body;
+      },
+      error: (error) => LoggerUtil.error(this.MODULE, 'Standards', '❌ Failed to load standards', error),
+      complete: () => LoggerUtil.groupEnd()
     });
   }
 
-  goToSectionsList(): void {
-    this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
+  private getCampuses() {
+    LoggerUtil.group(`🏫 [${this.MODULE}] Load Campuses`);
+    this.campusManagementService.getAllCampuses().subscribe({
+      next: (response) => {
+        LoggerUtil.log(this.MODULE, 'Campuses', '✅ Campuses loaded', response.body);
+        this.campuses = response.body;
+      },
+      error: (error) => LoggerUtil.error(this.MODULE, 'Campuses', '❌ Failed to load campuses', error),
+      complete: () => LoggerUtil.groupEnd()
+    });
   }
-  onSubmit(): void {
-    console.log('  Create standard Form Data:', this.createSectionForm.getRawValue());
+
+  getSectionDetails(sectionId: string) {
+    LoggerUtil.group(`📌 [${this.MODULE}] Load Section Details`);
+    this.sectionManagementService.getSectionById(sectionId).subscribe({
+      next: (response) => {
+        LoggerUtil.log(this.MODULE, 'Details', '✅ Section data loaded', response.body);
+        this.sectionData = response.body;
+        this.createSectionForm.patchValue({
+          sectionName: this.sectionData?.sectionName,
+          sectionCode: this.sectionData?.sectionCode,
+          description: this.sectionData?.description,
+          campusId: this.sectionData?.standard.campus.id,
+          standardId: this.sectionData?.standard.id
+        });
+      },
+      error: (error) => LoggerUtil.error(this.MODULE, 'Details', '❌ Failed to load section details', error),
+      complete: () => LoggerUtil.groupEnd()
+    });
+  }
+
+  onSubmit() {
+    LoggerUtil.group(`🚀 [${this.MODULE}] Form Submit`);
     if (this.createSectionForm.invalid) {
+      LoggerUtil.warn(this.MODULE, 'Submit', '❌ Form invalid');
       this.createSectionForm.markAllAsTouched();
-      console.warn('❌ Form is invalid');
+      LoggerUtil.groupEnd();
       return;
     }
 
-    this.sectionManagementService.saveSection(this.sectionId, this.createSectionForm.getRawValue()).subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
-      },
-      error: (error) => {
-        console.error('❌ Post Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Post Complete');
-      }
-    })
+    LoggerUtil.log(this.MODULE, 'Submit', '📤 Submitting form', this.createSectionForm.getRawValue());
+    this.sectionManagementService.saveSection(this.sectionId, this.createSectionForm.getRawValue())
+      .subscribe({
+        next: (response) => {
+          LoggerUtil.log(this.MODULE, 'Submit', '✅ Section saved successfully', response.body);
+          this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
+        },
+        error: (error) => LoggerUtil.error(this.MODULE, 'Submit', '❌ Save failed', error),
+        complete: () => LoggerUtil.groupEnd()
+      });
   }
 
-  //getters
-  get sectionName() {
-    return this.createSectionForm.get('sectionName');
+  goToSectionsList() {
+    LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to sections list');
+    this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
   }
 
-  get campusId() {
-    return this.createSectionForm.get('campusId');
+  // Validators
+  noWhitespaceValidator(control: any) {
+    return control.value && !control.value.trim() ? { whitespace: true } : null;
   }
 
-  get standardId() {
-    return this.createSectionForm.get('standardId');
-  }
-
-  get sectionCode() {
-    return this.createSectionForm.get('sectionCode');
-  }
-
-  get description() {
-    return this.createSectionForm.get('description');
-  }
+  // Getters for template
+  get sectionName() { return this.createSectionForm.get('sectionName'); }
+  get campusId() { return this.createSectionForm.get('campusId'); }
+  get standardId() { return this.createSectionForm.get('standardId'); }
+  get sectionCode() { return this.createSectionForm.get('sectionCode'); }
+  get description() { return this.createSectionForm.get('description'); }
 
   getErrorMessage(controlName: keyof typeof this.validationMessages): string {
     const control = this.createSectionForm.get(controlName as string);
@@ -188,22 +169,14 @@ export class SectionCreateFormComponent {
 
     for (const error in control.errors) {
       const key = error as keyof typeof this.validationMessages[typeof controlName];
-      if (this.validationMessages[controlName][key]) {
-        return this.validationMessages[controlName][key];
-      }
+      if (this.validationMessages[controlName][key]) return this.validationMessages[controlName][key];
     }
-
     return '';
   }
 
-
   validationMessages = {
-    campusId: {
-      required: 'Campus is required.'
-    },
-    standardId: {
-      required: 'Standard is required.'
-    },
+    campusId: { required: 'Campus is required.' },
+    standardId: { required: 'Standard is required.' },
     sectionName: {
       required: 'Section Name is required.',
       maxlength: 'Section Name cannot exceed 50 characters.',
@@ -213,8 +186,6 @@ export class SectionCreateFormComponent {
       maxlength: 'Section Code cannot exceed 15 characters.',
       whitespace: 'Section Code cannot be empty or whitespace only.'
     },
-    description: {
-      maxlength: 'Description cannot exceed 500 characters.'
-    }
+    description: { maxlength: 'Description cannot exceed 500 characters.' }
   };
 }
