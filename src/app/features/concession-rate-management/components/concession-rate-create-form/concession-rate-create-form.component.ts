@@ -129,7 +129,7 @@ export class ConcessionRateCreateFormComponent {
       const selectedConcession = this.concessionTypeDD.find(c => c.id == discountTypeId);
       if (selectedConcession) {
         // Automatically set isPercentage based on chargeType
-        this.createForm.patchValue({ isPercentage: selectedConcession.chargeType === 'PERCENTAGE' }, { emitEvent: false });
+        this.createForm.patchValue({ isPercentage: selectedConcession.chargeType === 'PERCENTAGE' }, { emitEvent: true });
       }
 
       // Load the corresponding components
@@ -268,20 +268,32 @@ export class ConcessionRateCreateFormComponent {
     LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to list');
     this.router.navigate(ROUTES.CONCESSION.CONCESSION_RATE.LIST);
   }
-  private handlePercentageValidation() {
-    this.createForm.get('isPercentage')?.valueChanges.subscribe(isPercentage => {
-      const valueCtrl = this.createForm.get('value');
-      if (!valueCtrl) return;
+private handlePercentageValidation() {
+  const valueCtrl = this.createForm.get('value');
+  const isPercentageCtrl = this.createForm.get('isPercentage');
 
-      valueCtrl.clearValidators();
-      if (isPercentage) {
-        valueCtrl.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
-      } else {
-        valueCtrl.setValidators([Validators.required, Validators.min(1)]);
-      }
-      valueCtrl.updateValueAndValidity();
-    });
-  }
+  if (!valueCtrl || !isPercentageCtrl) return;
+
+  // Whenever isPercentage changes (or we patch it), update the validators for 'value'
+  const updateValidators = () => {
+    valueCtrl.clearValidators();
+    if (isPercentageCtrl.value) {
+      // If it's a percentage, value must be between 0 and 100
+      valueCtrl.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+    } else {
+      // If it's a fixed amount, minimum 1
+      valueCtrl.setValidators([Validators.required, Validators.min(1)]);
+    }
+    valueCtrl.updateValueAndValidity();
+  };
+
+  // Run once initially in case isPercentage is patched (like in edit mode)
+  updateValidators();
+
+  // Subscribe to changes if isPercentage is patched dynamically
+  isPercentageCtrl.valueChanges.subscribe(() => updateValidators());
+}
+
 
   minDate = new Date().toISOString().split('T')[0];
 
