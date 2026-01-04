@@ -12,46 +12,46 @@
     <div class="kt-portlet__body">
       <h4>Concession Component Information</h4>
 
+      <!-- Concession Catalog, Component Name, Component Code -->
       <div class="form-group row form-group-marginless kt-margin-t-20">
-        <label class="col-lg-1 col-form-label">Fee Catalog:</label>
+        <label class="col-lg-1 col-form-label required">Concession Catalog:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="discountTypeId"
             [class.is-invalid]="discountTypeId?.invalid && (discountTypeId?.touched || discountTypeId?.dirty)"
             [class.is-valid]="discountTypeId?.valid && (discountTypeId?.touched || discountTypeId?.dirty)">
-            <option value='' selected>Select Fee Catalog</option>
-            @for (p of concessionDD; track p.id) {
-            <option [value]="p.id">{{ p.name }}</option>
-            }
+            <option value="">Select Concession Catalog</option>
+            <option *ngFor="let p of concessionDD" [value]="p.id">{{ p.name }}</option>
           </select>
-          <span class="form-text text-muted">Please select Fee Catalog</span>
+          <span class="form-text text-muted">Select the catalog this component belongs to</span>
           <span class="invalid-feedback" *ngIf="discountTypeId?.invalid && (discountTypeId?.touched || discountTypeId?.dirty)">
             {{ getErrorMessage('discountTypeId') }}
           </span>
         </div>
 
-        <label class="col-lg-1 col-form-label">Component Name:</label>
+        <label class="col-lg-1 col-form-label required">Component Name:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Enter Component Name" formControlName="name"
             [class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
             [class.is-valid]="name?.valid && (name?.touched || name?.dirty)">
-          <span class="form-text text-muted">Please enter your Component name</span>
+          <span class="form-text text-muted">Enter a descriptive name for the component</span>
           <span class="invalid-feedback" *ngIf="name?.invalid && (name?.touched || name?.dirty)">
             {{ getErrorMessage('name') }}
           </span>
         </div>
 
-        <label class="col-lg-1 col-form-label">Component Code:</label>
+        <label class="col-lg-1 col-form-label required">Component Code:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Enter Component Code" formControlName="code"
             [class.is-invalid]="code?.invalid && (code?.touched || code?.dirty)"
             [class.is-valid]="code?.valid && (code?.touched || code?.dirty)">
-          <span class="form-text text-muted">Short code for the component</span>
+          <span class="form-text text-muted">Short unique code for the component</span>
           <span class="invalid-feedback" *ngIf="code?.invalid && (code?.touched || code?.dirty)">
             {{ getErrorMessage('code') }}
           </span>
         </div>
       </div>
 
+      <!-- Status Checkbox -->
       <div class="form-group row form-group-marginless kt-margin-t-20">
         <label class="col-lg-1 col-form-label">Status:</label>
         <div class="col-lg-3">
@@ -62,14 +62,14 @@
         </div>
       </div>
 
+      <!-- Description -->
       <div class="form-group row kt-margin-t-40">
         <label class="col-lg-1 col-form-label">Description:</label>
         <div class="col-lg-11">
-          <textarea class="form-control" placeholder="Enter Description" rows="3" formControlName="description"
+          <textarea class="form-control" placeholder="Optional: Add description for the component" rows="3" formControlName="description"
             [class.is-invalid]="description?.invalid && (description?.touched || description?.dirty)"
-            [class.is-valid]="description?.valid && (description?.touched || description?.dirty)">
-          </textarea>
-          <span class="form-text text-muted">Optional: Add description for the component</span>
+            [class.is-valid]="description?.valid && (description?.touched || description?.dirty)"></textarea>
+          <span class="form-text text-muted">Provide optional details about the component</span>
           <span class="invalid-feedback" *ngIf="description?.invalid && (description?.touched || description?.dirty)">
             {{ getErrorMessage('description') }}
           </span>
@@ -78,6 +78,7 @@
 
     </div>
 
+    <!-- Form Actions -->
     <div class="kt-portlet__foot">
       <div class="kt-form__actions">
         <div class="row">
