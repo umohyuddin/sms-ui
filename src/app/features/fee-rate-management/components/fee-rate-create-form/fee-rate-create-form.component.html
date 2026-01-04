@@ -2,168 +2,152 @@
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
       <h3 class="kt-portlet__head-title">
-        {{isEditMode===true? 'Update Fee Rate & Metrix Details': "Add New Fee Rate & Metrix Component"}}
+        {{ isEditMode ? 'Update Fee Rate & Matrix Details' : 'Add New Fee Rate & Matrix Component' }}
       </h3>
     </div>
   </div>
 
-
   <!--begin::Form-->
   <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
     <div class="kt-portlet__body">
-      <!-- <h4>Section Information</h4> -->
 
+      <!-- Academic Year / Campus / Standard -->
+      <h4>Fee Assignment Details</h4>
       <div class="form-group row form-group-marginless kt-margin-t-20">
-        <label class="col-lg-1 col-form-label">Academic Year:</label>
+        <label class="col-lg-1 col-form-label required">Academic Year:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="academicYearId"
             [class.is-invalid]="academicYearId?.invalid && (academicYearId?.touched || academicYearId?.dirty)"
             [class.is-valid]="academicYearId?.valid && (academicYearId?.touched || academicYearId?.dirty)">
-            <option value='' selected>Academic Year</option>
-            @for (p of academicYear; track p.id) {
-            <option [value]="p.id">{{ p.name }}</option>
-            }
+            <option value="">Select Academic Year</option>
+            <option *ngFor="let p of academicYear" [value]="p.id">{{ p.name }}</option>
           </select>
-          <span class="form-text text-muted">Please select Campus</span>
-          <span class="invalid-feedback" *ngIf="academicYearId?.errors?.['required']">
-            Academic Year is required
+          <span class="form-text text-muted">Select the academic year for this fee rate.</span>
+          <span class="invalid-feedback"
+            *ngIf="academicYearId?.invalid && (academicYearId?.touched || academicYearId?.dirty)">
+            {{ getErrorMessage('academicYearId') }}
           </span>
         </div>
 
-
-        <label class="col-lg-1 col-form-label">Campus:</label>
+        <label class="col-lg-1 col-form-label required">Campus:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="campusId"
             [class.is-invalid]="campusId?.invalid && (campusId?.touched || campusId?.dirty)"
             [class.is-valid]="campusId?.valid && (campusId?.touched || campusId?.dirty)">
-            <option value='' selected>Select Campus</option>
-            @for (p of campuses; track p.id) {
-            <option [value]="p.id">{{ p.campusName }}</option>
-            }
+            <option value="">Select Campus</option>
+            <option *ngFor="let c of campuses" [value]="c.id">{{ c.campusName }}</option>
           </select>
-          <span class="form-text text-muted">Please select Campus</span>
-          <span class="invalid-feedback" *ngIf="campusId?.errors?.['required']">
-            Campus is required
+          <span class="form-text text-muted">Choose the campus where this fee applies.</span>
+          <span class="invalid-feedback" *ngIf="campusId?.invalid && (campusId?.touched || campusId?.dirty)">
+            {{ getErrorMessage('campusId') }}
           </span>
         </div>
 
-        <label class="col-lg-1 col-form-label">Standard:</label>
+        <label class="col-lg-1 col-form-label required">Standard:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="standardId"
             [class.is-invalid]="standardId?.invalid && (standardId?.touched || standardId?.dirty)"
             [class.is-valid]="standardId?.valid && (standardId?.touched || standardId?.dirty)">
-            <option value='' selected>Select Standard</option>
-            @for (p of standardData; track p.id) {
-            <option [value]="p.id">{{ p.standardName }}</option>
-            }
+            <option value="">Select Standard</option>
+            <option *ngFor="let s of standardData" [value]="s.id">{{ s.standardName }}</option>
           </select>
-          <span class="form-text text-muted">Please select Standard</span>
-          <span class="invalid-feedback" *ngIf="campusId?.errors?.['required']">
-            Campus is required
+          <span class="form-text text-muted">Select the standard/class applicable for this fee.</span>
+          <span class="invalid-feedback" *ngIf="standardId?.invalid && (standardId?.touched || standardId?.dirty)">
+            {{ getErrorMessage('standardId') }}
           </span>
         </div>
       </div>
 
+      <!-- Fee Catalog / Fee Component / Amount -->
       <div class="form-group row form-group-marginless kt-margin-t-20">
-        <label class="col-lg-1 col-form-label">Fee Catalog:</label>
+        <label class="col-lg-1 col-form-label required">Fee Catalog:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="feeCatalogId"
             [class.is-invalid]="feeCatalogId?.invalid && (feeCatalogId?.touched || feeCatalogId?.dirty)"
             [class.is-valid]="feeCatalogId?.valid && (feeCatalogId?.touched || feeCatalogId?.dirty)">
-            <option value='' selected>Select Fee Catalog</option>
-            @for (p of feeCatalogDD; track p.id) {
-            <option [value]="p.id">{{ p.name }}</option>
-            }
+            <option value="">Select Fee Catalog</option>
+            <option *ngFor="let f of feeCatalogDD" [value]="f.id">{{ f.name }}</option>
           </select>
-          <span class="form-text text-muted">Please select Fee Catalog</span>
-          <span class="invalid-feedback" *ngIf="feeCatalogId?.errors?.['required']">
-            Academic Year is required
+          <span class="form-text text-muted">Pick the fee catalog to assign this rate.</span>
+          <span class="invalid-feedback"
+            *ngIf="feeCatalogId?.invalid && (feeCatalogId?.touched || feeCatalogId?.dirty)">
+            {{ getErrorMessage('feeCatalogId') }}
           </span>
         </div>
 
-        <label class="col-lg-1 col-form-label">Fee Catalog Component:</label>
+        <label class="col-lg-1 col-form-label required">Fee Component:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="feeComponentId"
             [class.is-invalid]="feeComponentId?.invalid && (feeComponentId?.touched || feeComponentId?.dirty)"
             [class.is-valid]="feeComponentId?.valid && (feeComponentId?.touched || feeComponentId?.dirty)">
-            <option value='' selected>Select Fee Catalog</option>
-            @for (p of feeCompnentDD; track p.id) {
-            <option [value]="p.id">{{ p.componentName }}</option>
-            }
+            <option value="">Select Fee Component</option>
+            <option *ngFor="let fc of feeCompnentDD" [value]="fc.id">{{ fc.componentName }}</option>
           </select>
-          <span class="form-text text-muted">Please select Fee Catalog</span>
-          <span class="invalid-feedback" *ngIf="feeComponentId?.errors?.['required']">
-            Fee Component is is required
+          <span class="form-text text-muted">Select the specific fee component to apply this value to.</span>
+          <span class="invalid-feedback"
+            *ngIf="feeComponentId?.invalid && (feeComponentId?.touched || feeComponentId?.dirty)">
+            {{ getErrorMessage('feeComponentId') }}
           </span>
         </div>
-        <label class="col-lg-1 col-form-label">Amount:</label>
+
+        <label class="col-lg-1 col-form-label required">Value:</label>
         <div class="col-lg-3">
-          <input type="number" class="form-control" placeholder="Enter amount (e.g., 2500)" formControlName="amount"
+          <input type="number" class="form-control" formControlName="amount" placeholder="Enter Amount"
             [class.is-invalid]="amount?.invalid && (amount?.touched || amount?.dirty)"
             [class.is-valid]="amount?.valid && (amount?.touched || amount?.dirty)" min="0">
-          <span class="form-text text-muted">Please enter the fee component amount.</span>
-          <span class="invalid-feedback" *ngIf="amount?.errors?.['required']">
-            Amount is required.
-          </span>
-          <span class="invalid-feedback" *ngIf="amount?.errors?.['min']">
-            Amount cannot be negative.
+          <span class="form-text text-muted">Enter the fee amount. If percentage is checked, this will be treated as a
+            percentage.</span>
+          <span class="invalid-feedback" *ngIf="amount?.invalid && (amount?.touched || amount?.dirty)">
+            {{ getErrorMessage('amount') }}
           </span>
         </div>
-
       </div>
 
+      <!-- Effective Dates / Status -->
+      <!-- Effective Dates / Status -->
       <div class="form-group row form-group-marginless kt-margin-t-20">
-
-
-        <label class="col-lg-1 col-form-label">Effective From:</label>
+        <label class="col-lg-1 col-form-label required">Effective From:</label>
         <div class="col-lg-3">
-          <input type="date" class="form-control"
-            formControlName="effectiveFrom" [min]="minDate"
+          <input type="date" class="form-control" formControlName="effectiveFrom" [min]="minDate"
             [class.is-invalid]="effectiveFrom?.invalid && (effectiveFrom?.touched || effectiveFrom?.dirty)"
-            [class.is-valid]="effectiveFrom?.valid && (effectiveFrom?.touched || effectiveFrom?.dirty)" min="0">
-          <span class="form-text text-muted">Select the start date for this fee rate.</span>
-          <span class="invalid-feedback" *ngIf="effectiveFrom?.errors?.['required']">
-            Effective From date is required.
+            [class.is-valid]="effectiveFrom?.valid && (effectiveFrom?.touched || effectiveFrom?.dirty)">
+          <span class="form-text text-muted">Select the starting date for this fee rate.</span>
+          <span class="invalid-feedback"
+            *ngIf="effectiveFrom?.invalid && (effectiveFrom?.touched || effectiveFrom?.dirty)">
+            {{ getErrorMessage('effectiveFrom') }}
           </span>
         </div>
 
-        <label class="col-lg-1 col-form-label">Effective To:</label>
+        <label class="col-lg-1 col-form-label required">Effective To:</label>
         <div class="col-lg-3">
-          <input type="date" class="form-control"
-            formControlName="effectiveTo" [min]="minDate"
+          <input type="date" class="form-control" formControlName="effectiveTo" [min]="minDate"
             [class.is-invalid]="effectiveTo?.invalid && (effectiveTo?.touched || effectiveTo?.dirty)"
-            [class.is-valid]="effectiveTo?.valid && (effectiveTo?.touched || effectiveTo?.dirty)" min="0">
-          <span class="form-text text-muted">Select the End date for this fee rate.</span>
-          <span class="invalid-feedback" *ngIf="effectiveTo?.errors?.['required']">
-            Effective To date is required.
+            [class.is-valid]="effectiveTo?.valid && (effectiveTo?.touched || effectiveTo?.dirty)">
+          <span class="form-text text-muted">Select the ending date for this fee rate.</span>
+          <!-- 🔹 Display field-level error including date range -->
+          <span class="invalid-feedback" *ngIf="effectiveTo?.invalid && (effectiveTo?.touched || effectiveTo?.dirty)">
+            {{ getErrorMessage('effectiveTo') }}
           </span>
         </div>
-
         <label class="col-lg-1 col-form-label">Status:</label>
         <div class="col-lg-3">
           <label class="kt-checkbox kt-margin-t-10">
             <input type="checkbox" formControlName="active"> Is Active
             <span></span>
           </label>
+          <span class="form-text text-muted">Toggle to make this fee rate active or inactive.</span>
         </div>
       </div>
 
-      <div class="form-group row kt-margin-t-40">
-        <!-- <label class="col-lg-1 col-form-label">Description:</label>
-        <div class="col-lg-11">
-          <div class="kt-input-icon">
-            <textarea class="form-control" id="exampleTextarea" rows="3" formControlName="description"></textarea>
-          </div>
-        </div> -->
-      </div>
     </div>
+
     <div class="kt-portlet__foot">
       <div class="kt-form__actions">
         <div class="row">
           <div class="col-lg-5"></div>
           <div class="col-lg-7">
             <button type="submit" class="btn btn-dark mr-2">
-              {{isEditMode===true? 'Update Fee Component Rate & Matrix Details': "Add New Fee Component Rate & Matrix"}}
+              {{ isEditMode ? 'Update Fee Component Rate & Matrix' : 'Add New Fee Component Rate & Matrix' }}
             </button>
             <button type="button" class="btn btn-secondary" (click)="goToFeeRateListing()">Cancel</button>
           </div>
@@ -171,6 +155,5 @@
       </div>
     </div>
   </form>
-
   <!--end::Form-->
 </div>
