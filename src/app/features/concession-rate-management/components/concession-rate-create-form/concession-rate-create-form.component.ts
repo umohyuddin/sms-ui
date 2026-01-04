@@ -50,7 +50,7 @@ export class ConcessionRateCreateFormComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit() {
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);
@@ -86,13 +86,26 @@ export class ConcessionRateCreateFormComponent {
       campusId: ['', Validators.required],
       isPercentage: [false, Validators.required],
       value: [0, [Validators.required, Validators.min(0)]],
-      effectiveFrom: [null, Validators.required],
-      effectiveTo: [null, Validators.required],
+      effectiveFrom: [{ value: null, disabled: true }, Validators.required],
+      effectiveTo: [{ value: null, disabled: true }, Validators.required],
       active: [true]
     });
+    this.setAcademicYearDates(this.academicYear);
     LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Form initialized');
     LoggerUtil.groupEnd(); // Form Initialization
   }
+  private setAcademicYearDates(academicYear: AcademicYearResponse | null) {
+    if (!academicYear) return;
+
+    const startDate = academicYear.startDate; // e.g., '2026-01-01'
+    const endDate = academicYear.endDate;     // e.g., '2026-12-31'
+
+    this.createForm.patchValue({
+      effectiveFrom: startDate,
+      effectiveTo: endDate
+    });
+  }
+
 
   private loadCampuses() {
     LoggerUtil.group(`🏫 [${this.MODULE}] Load Campuses`);
@@ -167,6 +180,8 @@ export class ConcessionRateCreateFormComponent {
     LoggerUtil.groupEnd();
   }
 
+
+
   onSubmit() {
     LoggerUtil.group(`🚀 [${this.MODULE}] Submit`);
     LoggerUtil.log(this.MODULE, 'Submit', '📋 Form submit triggered');
@@ -193,7 +208,7 @@ export class ConcessionRateCreateFormComponent {
     });
   }
 
-   goToListing() {
+  goToListing() {
     LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to list');
     this.router.navigate(ROUTES.CONCESSION.CONCESSION_RATE.LIST);
   }
