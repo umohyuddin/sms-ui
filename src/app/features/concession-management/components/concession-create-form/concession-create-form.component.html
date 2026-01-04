@@ -14,19 +14,19 @@
 
       <div class="form-group row form-group-marginless kt-margin-t-20">
         <!-- Name -->
-        <label class="col-lg-1 col-form-label">Name:</label>
+        <label class="col-lg-1 col-form-label required">Name:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Enter Concession Name" formControlName="name"
             [class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
             [class.is-valid]="name?.valid && (name?.touched || name?.dirty)">
-          <span class="form-text text-muted">Please enter your Concession Type name</span>
+          <span class="form-text text-muted">Please enter Concession Type name</span>
           <span class="invalid-feedback" *ngIf="name?.invalid && (name?.touched || name?.dirty)">
             {{ getErrorMessage('name') }}
           </span>
         </div>
 
         <!-- Code -->
-        <label class="col-lg-1 col-form-label">Code:</label>
+        <label class="col-lg-1 col-form-label required">Code:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Enter Code" formControlName="code"
             [class.is-invalid]="code?.invalid && (code?.touched || code?.dirty)"
@@ -49,15 +49,13 @@
 
       <div class="form-group row kt-margin-t-20">
         <!-- Charge Type -->
-        <label class="col-lg-1 col-form-label">Charge Type:</label>
+        <label class="col-lg-1 col-form-label required">Charge Type:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="chargeType"
             [class.is-invalid]="chargeType?.invalid && (chargeType?.touched || chargeType?.dirty)"
             [class.is-valid]="chargeType?.valid && (chargeType?.touched || chargeType?.dirty)">
-            <option value='' selected>Select Charge Type</option>
-            @for (p of chargeTypeOptions; track p.key) {
-            <option [value]="p.key">{{ p.label }}</option>
-            }
+            <option value='' disabled selected>Select Charge Type</option>
+            <option *ngFor="let p of chargeTypeOptions" [value]="p.key">{{ p.label }}</option>
           </select>
           <span class="form-text text-muted">Please select your Charge Type</span>
           <span class="invalid-feedback" *ngIf="chargeType?.invalid && (chargeType?.touched || chargeType?.dirty)">
@@ -66,18 +64,17 @@
         </div>
 
         <!-- Recurrence Rule -->
-        <label class="col-lg-1 col-form-label">Recurrence Rule:</label>
+        <label class="col-lg-1 col-form-label required">Recurrence Rule:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="recurrenceRule"
             [class.is-invalid]="recurrenceRule?.invalid && (recurrenceRule?.touched || recurrenceRule?.dirty)"
             [class.is-valid]="recurrenceRule?.valid && (recurrenceRule?.touched || recurrenceRule?.dirty)">
-            <option value=''>Select Recurrence Rule</option>
-            @for (c of recurrenceRuleOptions; track c.key) {
-            <option [value]="c.key">{{ c.label }}</option>
-            }
+            <option value='' disabled selected>Select Recurrence Rule</option>
+            <option *ngFor="let c of recurrenceRuleOptions" [value]="c.key">{{ c.label }}</option>
           </select>
           <span class="form-text text-muted">Please select your Recurrence Rule</span>
-          <span class="invalid-feedback" *ngIf="recurrenceRule?.invalid && (recurrenceRule?.touched || recurrenceRule?.dirty)">
+          <span class="invalid-feedback"
+            *ngIf="recurrenceRule?.invalid && (recurrenceRule?.touched || recurrenceRule?.dirty)">
             {{ getErrorMessage('recurrenceRule') }}
           </span>
         </div>

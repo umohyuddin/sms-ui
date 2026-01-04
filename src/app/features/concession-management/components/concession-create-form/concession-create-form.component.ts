@@ -60,7 +60,7 @@ export class ConcessionCreateFormComponent {
           ([key, label]) => ({ key, label: label as string })
         );
 
-        this.chargeTypeOptions = Object.entries(response.body.chargeTypes).map(
+        this.chargeTypeOptions = Object.entries(response.body.discountChargeTypes).map(
           ([key, label]) => ({ key, label: label as string })
         );
       },
