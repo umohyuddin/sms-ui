@@ -32,6 +32,8 @@ export class SalaryStructureService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.SALARY_STRUCTURE.GET_ALL}`, { observeResponse: true });
   }
 
+   
+
   /** Get Salary Structure by ID */
   getSalaryStructureById(id: string): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.SALARY_STRUCTURE.GET_BY_ID(id)}`, { observeResponse: true });

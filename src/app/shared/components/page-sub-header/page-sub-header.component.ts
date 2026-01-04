@@ -15,6 +15,7 @@ export class PageSubHeaderComponent {
   @Input() buttonText?: string;
   @Input() showButton: boolean = true;
   @Input() buttonClass = 'btn btn-outline-success';
+  @Input() buttonIcon: string = 'la la-plus';
   @Output() buttonClick = new EventEmitter<void>();
 
   onButtonClick() {

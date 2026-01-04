@@ -52,13 +52,13 @@ export class SchoolProfileCreateFormComponent {
 
   private initializeForm() {
     this.profileForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(100)]],
-      tagLine: [''],
-      email: ['', [Validators.email]],
-      contactNumber: ['', [Validators.maxLength(20)]],
-      website: [''],
+      name: ['', [Validators.required, Validators.maxLength(100), Validators.pattern(/^(?!\s*$).+/)]],
+      tagLine: ['', Validators.maxLength(150)],
+      email: ['', [Validators.required, Validators.email]],
+      contactNumber: ['', [Validators.maxLength(20), Validators.pattern(/^\+?[0-9\s\-()]*$/)]],
+      website: ['', Validators.pattern(/^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/)],
       establishedDate: [null],
-      address: [''],
+      address: ['', Validators.maxLength(300)],
 
       countryId: ['', Validators.required],
       provinceId: ['', Validators.required],
@@ -202,42 +202,83 @@ export class SchoolProfileCreateFormComponent {
       }
     });
   }
-  get name() {
-    return this.profileForm.get('name');
+
+
+  isInvalid(controlName: string): boolean {
+    const control = this.profileForm.get(controlName);
+    return !!(
+      control &&
+      control.invalid &&
+      (control.touched || control.dirty)
+    );
   }
 
-  get email() {
-    return this.profileForm.get('email');
+  getErrorMessage(controlName: keyof typeof this.validationMessages): string {
+    const control = this.profileForm.get(controlName as string);
+    if (!control || !control.errors) return '';
+
+    for (const error in control.errors) {
+      const key = error as keyof typeof this.validationMessages[typeof controlName];
+      if (this.validationMessages[controlName][key]) {
+        return this.validationMessages[controlName][key];
+      }
+    }
+
+    return '';
   }
 
-  get contactNumber() {
-    return this.profileForm.get('contactNumber');
-  }
 
-  get website() {
-    return this.profileForm.get('website');
-  }
+  validationMessages = {
+    name: {
+      required: 'School name is required.',
+      maxlength: 'School name cannot exceed 100 characters.',
+      pattern: 'School name cannot be empty or whitespace only.'
+    },
 
-  get establishedDate() {
-    return this.profileForm.get('establishedDate');
-  }
+    tagLine: {
+      maxlength: 'Tagline cannot exceed 150 characters.'
+    },
 
-  get address() {
-    return this.profileForm.get('address');
-  }
+    email: {
+      required: 'Email is required.',
+      email: 'Please enter a valid email address.'
+    },
 
-  get countryId() {
-    return this.profileForm.get('countryId');
-  }
+    contactNumber: {
+      maxlength: 'Contact number cannot exceed 20 characters.',
+      pattern: 'Invalid phone number format.'
+    },
 
-  get provinceId() {
-    return this.profileForm.get('provinceId');
-  }
+    website: {
+      pattern: 'Please enter a valid website URL.'
+    },
 
-  get cityId() {
-    return this.profileForm.get('cityId');
-  }
-  get tagLine() {
-    return this.profileForm.get('tagLine');
-  }
+    address: {
+      maxlength: 'Address cannot exceed 300 characters.'
+    },
+
+    countryId: {
+      required: 'Country is required.'
+    },
+
+    provinceId: {
+      required: 'Province is required.'
+    },
+
+    cityId: {
+      required: 'City is required.'
+    }
+  };
+
+
+
+  get name() { return this.profileForm.get('name'); }
+  get email() { return this.profileForm.get('email'); }
+  get contactNumber() { return this.profileForm.get('contactNumber'); }
+  get website() { return this.profileForm.get('website'); }
+  get tagLine() { return this.profileForm.get('tagLine'); }
+  get address() { return this.profileForm.get('address'); }
+  get countryId() { return this.profileForm.get('countryId'); }
+  get provinceId() { return this.profileForm.get('provinceId'); }
+  get cityId() { return this.profileForm.get('cityId'); }
 }

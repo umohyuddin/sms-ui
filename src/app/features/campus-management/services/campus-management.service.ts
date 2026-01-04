@@ -50,6 +50,10 @@ export class CampusManagementService {
   getProvinceByCountryId(id: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.PROVINCE.GET_BY_COUNTRY_ID(id)}`, { observeResponse: true });
   }
+
+  getCampusById(id: any): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.GET_BY_ID(id)}`, { observeResponse: true });
+  }
   deleteCampus(id: number): Observable<any> {
     return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}/${id}`, { observeResponse: true });
   }

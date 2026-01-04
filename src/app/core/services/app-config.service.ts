@@ -29,6 +29,7 @@ export class AppConfigService {
   bloodGroupDD: KeyValueOption[] = [];
   religionDD: KeyValueOption[] = [];
   nationalityDD: KeyValueOption[] = [];
+  systemEmployeeType: KeyValueOption[] = [];
 
   constructor(
     private httpClientService: HttpClientService,
@@ -148,6 +149,9 @@ export class AppConfigService {
 
       this.countriesDD = SmsUtil.mapToKeyValue(this.employeeLookUpData?.countries ?? []);
       console.log('countriesDD:', this.countriesDD);
+
+      this.systemEmployeeType = SmsUtil.mapToKeyValue(this.employeeLookUpData?.systemEmployeeType ?? []);
+      console.log('systemEmployeeType:', this.systemEmployeeType);
 
       console.groupEnd(); // dropdowns
       console.groupEnd(); // backend data

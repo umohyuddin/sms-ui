@@ -13,13 +13,11 @@
           (ngSubmit)="onSubmit()">
 
         <div class="kt-portlet__body">
-
-            <!-- ================= Base Information ================= -->
             <h4>Base Information</h4>
 
             <div class="form-group row form-group-marginless kt-margin-t-20">
                 <!-- School Name -->
-                <label class="col-lg-1 col-form-label">School Name:</label>
+                <label class="col-lg-1 col-form-label required">School Name:</label>
                 <div class="col-lg-3">
                     <input type="text"
                            class="form-control"
@@ -37,7 +35,7 @@
                 </div>
 
                 <!-- Email -->
-                <label class="col-lg-1 col-form-label">Email:</label>
+                <label class="col-lg-1 col-form-label required">Email:</label>
                 <div class="col-lg-3">
                     <input type="email"
                            class="form-control"
@@ -89,25 +87,15 @@
                            [class.is-invalid]="tagLine?.invalid && (tagLine?.touched || tagLine?.dirty)">
                     <span class="form-text text-muted">Optional: tagline or motto</span>
                 </div>
-
-                <!-- Established Date -->
-                <!-- <label class="col-lg-1 col-form-label">Established:</label>
-                <div class="col-lg-3">
-                    <input type="date"
-                           class="form-control"
-                           formControlName="establishedDate">
-                    <span class="form-text text-muted">Select the establishment date</span>
-                </div> -->
             </div>
 
             <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
 
-            <!-- ================= Address Information ================= -->
             <h4 class="kt-margin-b-20">Address Information</h4>
 
             <div class="form-group row">
                 <!-- Country -->
-                <label class="col-lg-1 col-form-label">Country:</label>
+                <label class="col-lg-1 col-form-label required">Country:</label>
                 <div class="col-lg-3">
                     <select class="form-control"
                             formControlName="countryId"
@@ -125,7 +113,7 @@
                 </div>
 
                 <!-- Province -->
-                <label class="col-lg-1 col-form-label">Province:</label>
+                <label class="col-lg-1 col-form-label required">Province:</label>
                 <div class="col-lg-3">
                     <select class="form-control"
                             formControlName="provinceId"
@@ -143,7 +131,7 @@
                 </div>
 
                 <!-- City -->
-                <label class="col-lg-1 col-form-label">City:</label>
+                <label class="col-lg-1 col-form-label required">City:</label>
                 <div class="col-lg-3">
                     <select class="form-control"
                             formControlName="cityId"

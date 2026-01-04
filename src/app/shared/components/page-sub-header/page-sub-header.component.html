@@ -15,7 +15,7 @@
     <div class="kt-subheader__toolbar"  *ngIf="showButton && buttonText">
       <div class="kt-subheader__wrapper">
         <button type="button" [class]="buttonClass" (click)="onButtonClick()">
-          <i class="la la-edit"></i> {{ buttonText }}
+          <i [class]="buttonIcon"></i> {{ buttonText }}
         </button>
       </div>
     </div>

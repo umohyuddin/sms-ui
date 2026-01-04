@@ -1,3 +1,4 @@
+import { Router } from "@angular/router";
 import { KeyValueOption } from "../models/KeyValueOption";
 
 export class SmsUtil {
@@ -25,8 +26,7 @@ export class SmsUtil {
   }
 
 
-
   static mapToKeyValue(obj: Record<string, any>): KeyValueOption[] {
-  return Object.entries(obj).map(([key, label]) => ({ key, label: label as string }));
-}
+    return Object.entries(obj).map(([key, label]) => ({ key, label: label as string }));
+  }
 }

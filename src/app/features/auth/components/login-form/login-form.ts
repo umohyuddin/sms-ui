@@ -25,7 +25,7 @@ export class LoginForm {
   ) { }
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      email: ['admin@example.com', [Validators.required]],
+      email: ['admin@gmail.com', [Validators.required]],
       password: ['123456', [Validators.required]]
     });
   }

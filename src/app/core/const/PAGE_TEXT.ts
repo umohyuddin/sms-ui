@@ -31,6 +31,7 @@ export const PageTexts = {
     }
   },
   campus: {
+    Module: 'Campus',
     icon: 'kt-font-dark flaticon-squares',
     header: 'Departments Listing',
     buttons: {
