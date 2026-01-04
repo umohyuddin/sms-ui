@@ -47,6 +47,13 @@ export class ConcessionRateManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_RATES.SEARCH}`, { observeResponse: true, params: params });
   }
 
+    save(id: string | null, payload: any): Observable<any> {
+    const isUpdate = !!id;
+    const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
+    const url = isUpdate ? `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_RATES.UPDATE(id)}` : `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_RATES.CREATE}`;
+    return this.http.request(method, url, { observeResponse: true, body: payload });
+  }
+
   // deleteCampus(id: number): Observable<any> {
   //   return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}/${id}`, { observeResponse: true });
   // }
