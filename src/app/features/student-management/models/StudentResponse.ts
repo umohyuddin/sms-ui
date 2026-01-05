@@ -22,6 +22,8 @@ export interface StudentResponse {
   campusId: number;
   standardId: number;
   sectionId: number;
+  academicYearId:number
+  feeAssigned:boolean
 }
 
 /* ---------------------- CAMPUS ---------------------- */
@@ -43,6 +45,7 @@ export interface Campus {
   province: Province;
   city: City;
   active: boolean;
+
 }
 
 export interface Province {

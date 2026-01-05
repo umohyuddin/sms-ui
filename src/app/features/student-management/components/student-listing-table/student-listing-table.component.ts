@@ -96,7 +96,7 @@ export class StudentListingTableComponent {
     });
   }
 
-    onCampusChange() {
+  onCampusChange() {
     this.studentSearchForm.get('campusId')?.valueChanges.subscribe(campusId => {
       console.log("Campus changed:", campusId);
       this.loadStandardByCampusId(campusId);
@@ -178,11 +178,25 @@ export class StudentListingTableComponent {
     this.router.navigate(ROUTES.STUDENT.DETAILS(student.id.toString()));
   }
 
-  editStudentDetails(student: StudentResponse, event: Event): void {
+  quickFeeAssignment(student: StudentResponse, event: Event): void {
     event.preventDefault();  // prevents anchor default behavior
     console.log('Editing Student ID:', student.id);
-    this.router.navigate(ROUTES.CAMPUS.SECTION.EDIT(student.id.toString()));
+    this.router.navigate(ROUTES.STUDENT.STUDENT_FEE_CALCULATOR.DETAILS, {
+      queryParams: {
+        studentId: student.id,
+        academicYearId: student.academicYearId,
+        campusId: student.campusId,
+        standardId: student.standardId
+      }
+    })
   }
+
+
+  editStudentDetails(student: StudentResponse, event: Event): void {
+      event.preventDefault();  // prevents anchor default behavior
+      console.log('Editing Student ID:', student.id);
+      this.router.navigate(ROUTES.CAMPUS.SECTION.EDIT(student.id.toString()));
+    }
 
   // deleteStandard(standardId: any, event: Event): void {
   //   event.stopPropagation();
@@ -209,33 +223,33 @@ export class StudentListingTableComponent {
   // }
 
   onPageSizeChange(event: any) {
-    const newSize = +event.target.value;
-    this.pagination.changePageSize(newSize);
-  }
+      const newSize = +event.target.value;
+      this.pagination.changePageSize(newSize);
+    }
   onSubmitSearch(): void {
-    console.log('  Student Search Form Data:', this.studentSearchForm.getRawValue());
-    let formValues = this.studentSearchForm.value;
-    let params = {
-      campusId: formValues.campusId,
-      standardId: formValues.standardId,
-      keyword: formValues.keyword?.trim() || ''
-    };
+      console.log('  Student Search Form Data:', this.studentSearchForm.getRawValue());
+      let formValues = this.studentSearchForm.value;
+      let params = {
+        campusId: formValues.campusId,
+        standardId: formValues.standardId,
+        keyword: formValues.keyword?.trim() || ''
+      };
 
-    this.studentManagementService.searchStudents(params).subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.studentsResponse = response.body;
-        this.pagination = new Pagination(this.studentsResponse, 10);
-      },
-      error: (error) => {
-        console.error('❌ Post Error Status:', error.status);
-        console.error('Message:', error.message);
-        this.router.navigate(['/Campuss']);
-      },
-      complete: () => {
-        console.log('🔚 Post Complete');
-      }
-    })
-  }
+      this.studentManagementService.searchStudents(params).subscribe({
+        next: (response) => {
+          console.log('  Success Status:', response.status);
+          console.log('📦 Response Body:', response.body);
+          this.studentsResponse = response.body;
+          this.pagination = new Pagination(this.studentsResponse, 10);
+        },
+        error: (error) => {
+          console.error('❌ Post Error Status:', error.status);
+          console.error('Message:', error.message);
+          this.router.navigate(['/Campuss']);
+        },
+        complete: () => {
+          console.log('🔚 Post Complete');
+        }
+      })
+    }
 }

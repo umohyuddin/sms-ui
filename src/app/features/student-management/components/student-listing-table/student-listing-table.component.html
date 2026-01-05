@@ -125,6 +125,10 @@
                             class="la la-edit"></i> Edit Details</a>
                         <a class="dropdown-item" href="#" (click)="viewStudentDetails(item,$event)">
                           <i class="la la-eye"></i> View Details</a>
+                        @if(item.feeAssigned){
+                        <a class="dropdown-item" href="#" (click)="quickFeeAssignment(item,$event)">
+                          <i class="la la-money"></i>Quick Fee Assignment</a>
+                        }
                         <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
                       </div>
                     </span>

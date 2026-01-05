@@ -56,7 +56,7 @@ export class StudentFeeCaculator implements OnInit {
 
   getAmount(comp: any): string {
     const rate = comp.rates?.[0]; // take first rate
-    return rate ? `${rate.amount} ${rate.currency}` : '';
+    return rate ? `${rate.amount}` : '';
   }
   ngOnInit(): void {
 
@@ -178,6 +178,10 @@ export class StudentFeeCaculator implements OnInit {
   }
 
 
+  private updateTotals() {
+    this.totalAmountBeforeDiscount = this.getTotalSelectedFee();
+    this.calculateDiscount();
+  }
   // toggleDiscountSelection(type: ActiveDiscountRateFullResponse, subType: DiscountComponent, event: any) {
   //   this.selectedDiscounts = {};
   //   if (!this.selectedDiscounts[type.id]) this.selectedDiscounts[type.id] = [];
@@ -198,6 +202,7 @@ export class StudentFeeCaculator implements OnInit {
       this.selectedDiscounts[type.id] = [subType];
     }
     this.calculateDiscount();
+    this.updateTotals();
   }
 
   isDiscountSelected(type: ActiveDiscountRateFullResponse, subType: DiscountComponent): boolean {
@@ -215,6 +220,7 @@ export class StudentFeeCaculator implements OnInit {
       if (this.selectedComponents[fee.id].length === 0) delete this.selectedComponents[fee.id];
     }
     this.calculateDiscount();
+    this.updateTotals();
   }
 
 
@@ -283,33 +289,33 @@ export class StudentFeeCaculator implements OnInit {
   // }
 
   calculateDiscount() {
-  let discountableTotal = 0;
-  this.getSelectedFeeCatalogs().forEach(fee => {
-    const comps = this.selectedComponents[fee.id] || [];
-    comps.forEach(comp => {
-      if (comp.discountable) {
-        discountableTotal += this.calculateComponentAmount(comp);
-      }
+    let discountableTotal = 0;
+    this.getSelectedFeeCatalogs().forEach(fee => {
+      const comps = this.selectedComponents[fee.id] || [];
+      comps.forEach(comp => {
+        if (comp.discountable) {
+          discountableTotal += this.calculateComponentAmount(comp);
+        }
+      });
     });
-  });
 
-  let discount = 0;
-  this.getSelectedDiscounts().forEach(type => {
-    const subTypes = this.selectedDiscounts[type.id] || [];
-    subTypes.forEach(subType => {
-      const rate = subType.rates[0];
-      if (!rate) return;
+    let discount = 0;
+    this.getSelectedDiscounts().forEach(type => {
+      const subTypes = this.selectedDiscounts[type.id] || [];
+      subTypes.forEach(subType => {
+        const rate = subType.rates[0];
+        if (!rate) return;
 
-      if (rate.isPercentage) {
-        discount = (discountableTotal * rate.value) / 100;
-      } else {
-        discount = rate.value;
-      }
+        if (rate.isPercentage) {
+          discount = (discountableTotal * rate.value) / 100;
+        } else {
+          discount = rate.value;
+        }
+      });
     });
-  });
 
-  this.discountAppliedAmount = discount;
-}
+    this.discountAppliedAmount = discount;
+  }
 
 
   getTotalAmount(): string {
@@ -422,20 +428,32 @@ export class StudentFeeCaculator implements OnInit {
   =========================== */
 
   private getRecurrenceMultiplier(rule: string): number {
-    if (!this.academicYear) return 1;
+    if (!this.academicYear || !this.academicYear.totalMonths) return 1;
+
+    const totalMonths = Math.floor(this.academicYear.totalMonths); // cast/ensure integer
 
     switch (rule) {
-      case 'ONE_TIME': return 1;
-      case 'MONTHLY': return this.academicYear.totalMonths ?? 1;
-      case 'BI_MONTHLY': return 6;
-      case 'QUARTERLY': return 4;
-      case 'HALF_YEARLY': return 2;
-      case 'YEARLY': return 1;
-      case 'TERM_WISE': return 2;
-      case 'SEMESTER_WISE': return 2;
-      default: return 1;
+      case 'ONE_TIME':
+        return 1;
+      case 'MONTHLY':
+        return totalMonths; // usually 12 or as per AcademicYearEntity
+      case 'BI_MONTHLY':
+        return Math.floor(totalMonths / 2); // every 2 months
+      case 'QUARTERLY':
+        return Math.floor(totalMonths / 4); // every 3 months
+      case 'HALF_YEARLY':
+        return Math.floor(totalMonths / 2); // twice a year
+      case 'YEARLY':
+        return 1;
+      case 'TERM_WISE':
+        return 2; // can adjust based on your system
+      case 'SEMESTER_WISE':
+        return 2; // can adjust based on your system
+      default:
+        return 1; // fallback
     }
   }
+
 }
 
 
