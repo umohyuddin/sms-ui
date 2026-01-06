@@ -12,6 +12,7 @@ import { DiscountRate } from '../../models/DiscountRate';
 import { ActiveDiscountRateFullResponse, DiscountComponent } from '../../models/DiscountRateFormatedResponse';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { AcademicYearResponse } from '../../../tenant-management/models/AcademicYearResponse';
+import { StudentDiscountAssignmentResponse } from '../../models/StudentDiscountAssignmentResponse ';
 
 
 @Component({
@@ -33,6 +34,10 @@ export class StudentFeeCaculator implements OnInit {
   activeDiscountRate_: ActiveDiscountRateFullResponse[] = [];
   discountAppliedAmount: number = 0;
   totalAmountBeforeDiscount: number = 0;
+  isEditMode = false;
+  assignmentId: number | null = null;
+  studentDiscounts: StudentDiscountAssignmentResponse[] = [];
+
   constructor(private studentManagementSerivce: StudentManagementService,
     private configService: AppConfigService,
     private router: Router,
@@ -61,6 +66,7 @@ export class StudentFeeCaculator implements OnInit {
   ngOnInit(): void {
 
     this.activatedRoute.queryParams.subscribe(params => {
+      this.isEditMode = params['mode'] === 'edit';
       const apiParams = {
         studentId: params['studentId'],
         academicYearId: params['academicYearId'],
@@ -71,9 +77,59 @@ export class StudentFeeCaculator implements OnInit {
       this.academicYear = this.configService.getAcademicYear();
       console.log("academic Year", this.academicYear)
       this.getActiveDiscounts(apiParams);
-      this.getActiveFeeRates(apiParams)
+      this.getActiveFeeRates(apiParams);
+      if (this.isEditMode) {
+        this.getStudentAssignedDiscount(apiParams.studentId, apiParams);
+      }
+
     });
   }
+
+  private getStudentAssignedDiscount(studentId: string, apiParams: any) {
+
+  console.log('📤 Fetching assigned discounts');
+  console.log('➡️ studentId:', studentId);
+  console.log('➡️ apiParams:', apiParams);
+
+  this.studentManagementSerivce
+    .getAssignedStudentDiscounts(studentId, apiParams)
+    .subscribe({
+
+      next: (response) => {
+        console.log('✅ Assigned discounts fetched successfully');
+        console.log('📦 HTTP Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+
+        this.studentDiscounts = response.body || [];
+
+        if (!this.studentDiscounts.length) {
+          console.warn('⚠️ No discounts assigned to this student');
+        } else {
+          console.table(this.studentDiscounts);
+           setTimeout(() => {
+            if (this.activeDiscountRate_ && this.activeDiscountRate_.length) {
+              this.mapAssignedDiscountsToUI();
+            } else {
+              console.warn('⚠️ Discount catalog not loaded yet, retrying in 100ms...');
+              setTimeout(() => this.mapAssignedDiscountsToUI(), 100); // small retry
+            }
+          }, 100);
+        }
+      },
+
+      error: (error) => {
+        console.error('❌ Error fetching assigned discounts');
+        console.error('Status:', error.status);
+        console.error('Message:', error.message);
+        console.error('Full Error:', error);
+      },
+
+      complete: () => {
+        console.log('🔚 getStudentAssignedDiscount completed');
+      }
+    });
+}
+
 
   private getActiveFeeRates(apiParams: any) {
     this.studentManagementSerivce.getActiveFeeRates(apiParams).subscribe({
@@ -182,17 +238,7 @@ export class StudentFeeCaculator implements OnInit {
     this.totalAmountBeforeDiscount = this.getTotalSelectedFee();
     this.calculateDiscount();
   }
-  // toggleDiscountSelection(type: ActiveDiscountRateFullResponse, subType: DiscountComponent, event: any) {
-  //   this.selectedDiscounts = {};
-  //   if (!this.selectedDiscounts[type.id]) this.selectedDiscounts[type.id] = [];
 
-  //   if (event.target.checked) {
-  //     this.selectedDiscounts[type.id].push(subType);
-  //   } else {
-  //     this.selectedDiscounts[type.id] = this.selectedDiscounts[type.id].filter(s => s.id !== subType.id);
-  //     if (this.selectedDiscounts[type.id].length === 0) delete this.selectedDiscounts[type.id];
-  //   }
-  // }
   toggleDiscountSelection(type: ActiveDiscountRateFullResponse, subType: DiscountComponent, event: any) {
 
     // Uncheck everything
@@ -268,25 +314,6 @@ export class StudentFeeCaculator implements OnInit {
     return total;
   }
 
-  // calculateDiscount() {
-  //   let total = this.getTotalSelectedFee();
-  //   let discount = 0;
-  //   this.getSelectedDiscounts().forEach(type => {
-  //     const subTypes = this.selectedDiscounts[type.id] || [];
-  //     subTypes.forEach(subType => {
-  //       const rate = subType.rates[0];
-  //       if (!rate) return;
-
-  //       if (rate.isPercentage) {
-  //         discount = (total * rate.value) / 100;
-  //       } else {
-  //         discount = rate.value;
-  //       }
-  //     });
-  //   });
-
-  //   this.discountAppliedAmount = discount;
-  // }
 
   calculateDiscount() {
     let discountableTotal = 0;
@@ -423,9 +450,42 @@ export class StudentFeeCaculator implements OnInit {
     }
   }
 
-  /* ===========================
-  RECURRENCE MULTIPLIERS
-  =========================== */
+
+  private mapAssignedDiscountsToUI(): void {
+
+  if (!this.studentDiscounts.length || !this.activeDiscountRate_.length) {
+    console.warn('⚠️ No discounts or discount catalog not loaded');
+    return;
+  }
+
+  // Reset first (important for edit → edit navigation)
+  this.selectedDiscounts = {};
+
+  this.studentDiscounts.forEach(assigned => {
+
+    const discountType = this.activeDiscountRate_.find(
+      t => t.id === assigned.discountTypeId
+    );
+    if (!discountType) return;
+
+    const subType = discountType.components.find(
+      c => c.id === assigned.discountSubTypeId
+    );
+    if (!subType) return;
+
+    // 🔑 Mark checkbox
+    this.selectedDiscounts[discountType.id] = [subType];
+
+    console.log('✅ Marked discount:', {
+      discountType: discountType.name,
+      subType: subType.name
+    });
+  });
+
+  // Recalculate totals
+  this.calculateDiscount();
+  this.updateTotals();
+}
 
   private getRecurrenceMultiplier(rule: string): number {
     if (!this.academicYear || !this.academicYear.totalMonths) return 1;

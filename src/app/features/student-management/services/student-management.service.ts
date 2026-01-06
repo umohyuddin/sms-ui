@@ -99,6 +99,13 @@ export class StudentManagementService {
       observeResponse: true
     });
   }
+  getAssignedStudentDiscounts(studentId:string,paramsObj: any): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.STUDENTS.STUDENT_ASSIGNED_DISCOUNT.GET_STUDENT_ASSIGNED_DISCOUNT(studentId)}`, {
+      params: paramsObj,
+      observeResponse: true
+    });
+  }
+  
 
 
   studentAssignFee(id: string, payload: any): Observable<any> {

@@ -214,7 +214,8 @@ export class StudentCreateFormComponent {
         studentId: resourceData.id,
         academicYearId: resourceData.academicYearId,
         campusId: resourceData.campusId,
-        standardId: resourceData.standardId
+        standardId: resourceData.standardId,
+        mode: 'create' 
       }
     })
   }

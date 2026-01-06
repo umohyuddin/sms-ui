@@ -26,7 +26,16 @@ export const API_ENDPOINTS = {
         GET_BY_ID: (id: string) => `/api/institute/students/${id}`,
         ASSIGN_STUDENT_FEE: (id: string) => `/api/students/${id}/fees/assign`,
         STUDENT_FEE_SUMMARY: '/api/students/fee/summary/filter',
-        STUDENT_FEE_PAYMENT: '/api/students/fee/payments'
+        STUDENT_FEE_PAYMENT: '/api/students/fee/payments',
+
+        STUDENT_ASSIGNED_DISCOUNT: {
+            GET_STUDENT_ASSIGNED_DISCOUNT: (id: string) => `/api/school/discounts/student/${id}/assigned`,
+            UPDATE: (id: string) => `/api/school/discounts/rates/${id}`,
+            GET_ALL: '/api/school/discounts/rates',
+            SEARCH: `/api/school/discounts/rates/search`,
+            GET_BY_ID: (id: string) => `/api/school/discounts/rates/${id}`,
+            GET_ACTIVE_DISCOUNTS: '/api/school/discounts/rates/byCampusYear'
+        }
 
     },
     EMPLOYEE: {
