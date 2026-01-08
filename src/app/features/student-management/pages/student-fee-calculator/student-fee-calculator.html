@@ -86,7 +86,8 @@
                                     <div class="d-flex align-items-center">
                                         <div class="kt-widget2__checkbox me-2">
                                             <label class="kt-checkbox kt-checkbox--solid kt-checkbox--single">
-                                                <input type="checkbox" (change)="toggleSelection(fee, comp, $event)">
+                                                <input type="checkbox" [checked]="isFeeComponentSelected(fee, comp)"
+                                                    (change)="toggleSelection(fee, comp, $event)">
                                                 <span></span>
                                             </label>
                                         </div>
@@ -349,7 +350,7 @@
                     <div class="kt-widget1__item">
                         <button type="button" class="btn btn-dark btn-elevate"
                             (click)="submitFeeAndDiscount()">Submit</button>
-                        <button type="button" class="btn btn-danger btn-elevate">Cancel</button>
+                        <button type="button" class="btn btn-danger btn-elevate" (click)="onCancel()">Cancel</button>
                     </div>
                 </div>
 

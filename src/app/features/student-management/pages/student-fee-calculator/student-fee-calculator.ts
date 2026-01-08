@@ -13,6 +13,7 @@ import { ActiveDiscountRateFullResponse, DiscountComponent } from '../../models/
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { AcademicYearResponse } from '../../../tenant-management/models/AcademicYearResponse';
 import { StudentDiscountAssignmentResponse } from '../../models/StudentDiscountAssignmentResponse ';
+import { StudentFeeAssignmentFlatDTO } from '../../models/StudentFeeAssignmentFlatDTO';
 
 
 @Component({
@@ -37,6 +38,7 @@ export class StudentFeeCaculator implements OnInit {
   isEditMode = false;
   assignmentId: number | null = null;
   studentDiscounts: StudentDiscountAssignmentResponse[] = [];
+  studentAssignedFee: StudentFeeAssignmentFlatDTO[] = [];
 
   constructor(private studentManagementSerivce: StudentManagementService,
     private configService: AppConfigService,
@@ -80,57 +82,124 @@ export class StudentFeeCaculator implements OnInit {
       this.getActiveFeeRates(apiParams);
       if (this.isEditMode) {
         this.getStudentAssignedDiscount(apiParams.studentId, apiParams);
+        this.getAssignedStudentFees(apiParams.studentId, apiParams.academicYearId);
       }
 
     });
   }
 
-  private getStudentAssignedDiscount(studentId: string, apiParams: any) {
+  private mapAssignedFeesToUI(assignments: StudentFeeAssignmentFlatDTO[]): void {
 
-  console.log('📤 Fetching assigned discounts');
-  console.log('➡️ studentId:', studentId);
-  console.log('➡️ apiParams:', apiParams);
+    if (!assignments.length || !this.activeFeeRate_.length) {
+      console.warn('⚠️ Fee catalogs not loaded or no assignments');
+      return;
+    }
 
-  this.studentManagementSerivce
-    .getAssignedStudentDiscounts(studentId, apiParams)
-    .subscribe({
+    console.log('🧩 Mapping assigned FEES to UI...');
+    console.table(assignments);
 
-      next: (response) => {
-        console.log('✅ Assigned discounts fetched successfully');
-        console.log('📦 HTTP Status:', response.status);
-        console.log('📦 Response Body:', response.body);
+    // Reset first
+    this.selectedComponents = {};
 
-        this.studentDiscounts = response.body || [];
+    assignments.forEach(assign => {
 
-        if (!this.studentDiscounts.length) {
-          console.warn('⚠️ No discounts assigned to this student');
-        } else {
-          console.table(this.studentDiscounts);
-           setTimeout(() => {
-            if (this.activeDiscountRate_ && this.activeDiscountRate_.length) {
-              this.mapAssignedDiscountsToUI();
-            } else {
-              console.warn('⚠️ Discount catalog not loaded yet, retrying in 100ms...');
-              setTimeout(() => this.mapAssignedDiscountsToUI(), 100); // small retry
-            }
-          }, 100);
-        }
-      },
+      console.log('➡️ Processing assigned fee:', assign);
 
-      error: (error) => {
-        console.error('❌ Error fetching assigned discounts');
-        console.error('Status:', error.status);
-        console.error('Message:', error.message);
-        console.error('Full Error:', error);
-      },
+      const feeCatalog = this.activeFeeRate_.find(
+        f => f.id === assign.feeCatalogId
+      );
 
-      complete: () => {
-        console.log('🔚 getStudentAssignedDiscount completed');
+      if (!feeCatalog) {
+        console.warn('❌ Fee Catalog not found:', assign.feeCatalogId);
+        return;
+      }
+
+      const component = feeCatalog.components.find(
+        c => c.id === assign.feeComponentId
+      );
+
+      if (!component) {
+        console.warn('❌ Fee Component not found:', assign.feeComponentId);
+        return;
+      }
+
+      if (!this.selectedComponents[feeCatalog.id]) {
+        this.selectedComponents[feeCatalog.id] = [];
+      }
+
+      const exists = this.selectedComponents[feeCatalog.id]
+        .some(c => c.id === component.id);
+
+      if (!exists) {
+        this.selectedComponents[feeCatalog.id].push(component);
+
+        console.log('✅ FEE COMPONENT MARKED');
+        console.log({
+          feeCatalogId: feeCatalog.id,
+          feeCatalogName: feeCatalog.name,
+          feeComponentId: component.id,
+          feeComponentName: component.name
+        });
       }
     });
-}
+
+    console.log('🎯 FINAL SELECTED FEES STATE:', this.selectedComponents);
+
+    this.calculateDiscount();
+    this.updateTotals();
+  }
 
 
+
+  private getStudentAssignedDiscount(studentId: string, apiParams: any) {
+
+    console.log('📤 Fetching assigned discounts');
+    console.log('➡️ studentId:', studentId);
+    console.log('➡️ apiParams:', apiParams);
+
+    this.studentManagementSerivce
+      .getAssignedStudentDiscounts(studentId, apiParams)
+      .subscribe({
+
+        next: (response) => {
+          console.log('✅ Assigned discounts fetched successfully');
+          console.log('📦 HTTP Status:', response.status);
+          console.log('📦 Response Body:', response.body);
+
+          this.studentDiscounts = response.body || [];
+
+          if (!this.studentDiscounts.length) {
+            console.warn('⚠️ No discounts assigned to this student');
+          } else {
+            console.table(this.studentDiscounts);
+            setTimeout(() => {
+              if (this.activeDiscountRate_ && this.activeDiscountRate_.length) {
+                this.mapAssignedDiscountsToUI();
+              } else {
+                console.warn('⚠️ Discount catalog not loaded yet, retrying in 100ms...');
+                setTimeout(() => this.mapAssignedDiscountsToUI(), 100); // small retry
+              }
+            }, 100);
+          }
+        },
+
+        error: (error) => {
+          console.error('❌ Error fetching assigned discounts');
+          console.error('Status:', error.status);
+          console.error('Message:', error.message);
+          console.error('Full Error:', error);
+        },
+
+        complete: () => {
+          console.log('🔚 getStudentAssignedDiscount completed');
+        }
+      });
+  }
+
+
+  isFeeComponentSelected(fee: ActiveFeeRateResponse, comp: FeeComponent): boolean {
+    return this.selectedComponents[fee.id]?.some(c => c.id === comp.id) || false;
+  }
   private getActiveFeeRates(apiParams: any) {
     this.studentManagementSerivce.getActiveFeeRates(apiParams).subscribe({
       next: (response) => {
@@ -385,10 +454,13 @@ export class StudentFeeCaculator implements OnInit {
       dueDate: new Date().toISOString().split('T')[0] // you can replace with actual due date
     };
 
-    console.log('StudentFeeAssignmentRequestDTO:', requestDto);
+    console.log(`${this.isEditMode ? 'Updating' : 'Assigning'} student fee:`, requestDto);
 
+    const serviceCall = this.isEditMode
+      ? this.studentManagementSerivce.updateStudentAssignFee(apiParams.studentId, requestDto)
+      : this.studentManagementSerivce.studentAssignFee(apiParams.studentId, requestDto);
     // Send to API
-    this.studentManagementSerivce.studentAssignFee(apiParams.studentId, requestDto).subscribe({
+    serviceCall.subscribe({
       next: (response) => {
         console.log('Fee assigned successfully', response);
         this.router.navigate(ROUTES.STUDENT.DETAILS(apiParams.studentId))
@@ -453,39 +525,85 @@ export class StudentFeeCaculator implements OnInit {
 
   private mapAssignedDiscountsToUI(): void {
 
-  if (!this.studentDiscounts.length || !this.activeDiscountRate_.length) {
-    console.warn('⚠️ No discounts or discount catalog not loaded');
-    return;
+    if (!this.studentDiscounts.length || !this.activeDiscountRate_.length) {
+      console.warn('⚠️ No discounts or discount catalog not loaded');
+      return;
+    }
+
+    // Reset first (important for edit → edit navigation)
+    this.selectedDiscounts = {};
+
+    this.studentDiscounts.forEach(assigned => {
+
+      const discountType = this.activeDiscountRate_.find(
+        t => t.id === assigned.discountTypeId
+      );
+      if (!discountType) return;
+
+      const subType = discountType.components.find(
+        c => c.id === assigned.discountSubTypeId
+      );
+      if (!subType) return;
+
+      // 🔑 Mark checkbox
+      this.selectedDiscounts[discountType.id] = [subType];
+
+      console.log('✅ Marked discount:', {
+        discountType: discountType.name,
+        subType: subType.name
+      });
+    });
+
+    // Recalculate totals
+    this.calculateDiscount();
+    this.updateTotals();
   }
 
-  // Reset first (important for edit → edit navigation)
-  this.selectedDiscounts = {};
 
-  this.studentDiscounts.forEach(assigned => {
+  getAssignedStudentFees(studentId: number, academicYearId: number) {
+    console.log('📤 Fetching assigned discounts');
+    console.log('➡️ studentId:', studentId);
+    const apiParams = {
+      academicYearId: academicYearId
+    }
+    this.studentManagementSerivce
+      .getAssignedStudentFee(studentId.toString(), apiParams)
+      .subscribe({
 
-    const discountType = this.activeDiscountRate_.find(
-      t => t.id === assigned.discountTypeId
-    );
-    if (!discountType) return;
+        next: (response) => {
+          console.log('✅ Assigned discounts fetched successfully');
+          console.log('📦 HTTP Status:', response.status);
+          console.log('📦 Response Body:', response.body);
 
-    const subType = discountType.components.find(
-      c => c.id === assigned.discountSubTypeId
-    );
-    if (!subType) return;
+          this.studentAssignedFee = response.body || [];
 
-    // 🔑 Mark checkbox
-    this.selectedDiscounts[discountType.id] = [subType];
+          if (!this.studentAssignedFee.length) {
+            console.warn('⚠️ No Fee assigned to this student');
+          } else {
+            console.table(this.studentAssignedFee);
+            setTimeout(() => {
+              if (this.activeFeeRate_ && this.activeFeeRate_.length) {
+                this.mapAssignedFeesToUI(this.studentAssignedFee);
+              } else {
+                console.warn('⚠️ Discount catalog not loaded yet, retrying in 100ms...');
+                setTimeout(() => this.mapAssignedFeesToUI(this.studentAssignedFee), 100); // small retry
+              }
+            }, 500);
+          }
+        },
 
-    console.log('✅ Marked discount:', {
-      discountType: discountType.name,
-      subType: subType.name
-    });
-  });
+        error: (error) => {
+          console.error('❌ Error fetching assigned discounts');
+          console.error('Status:', error.status);
+          console.error('Message:', error.message);
+          console.error('Full Error:', error);
+        },
 
-  // Recalculate totals
-  this.calculateDiscount();
-  this.updateTotals();
-}
+        complete: () => {
+          console.log('🔚 getStudentAssignedDiscount completed');
+        }
+      });
+  }
 
   private getRecurrenceMultiplier(rule: string): number {
     if (!this.academicYear || !this.academicYear.totalMonths) return 1;
@@ -514,6 +632,10 @@ export class StudentFeeCaculator implements OnInit {
     }
   }
 
+
+  onCancel() {
+    this.router.navigate(ROUTES.STUDENT.LIST)
+  }
 }
 
 

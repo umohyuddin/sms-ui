@@ -105,15 +105,26 @@ export class StudentManagementService {
       observeResponse: true
     });
   }
+
+  getAssignedStudentFee(studentId:string,paramsObj: any): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.STUDENTS.STUDENT_ASSIGNED_FEE.GET_STUDENT_ASSIGNED_FEE_FLAT(studentId)}`, {
+      params: paramsObj,
+      observeResponse: true
+    });
+  }
   
 
 
   studentAssignFee(id: string, payload: any): Observable<any> {
-
-
     const url = `${this.baseUrl}${API_ENDPOINTS.STUDENTS.ASSIGN_STUDENT_FEE(id)}`;
-
     return this.http.request(HTTP_METHOD.POST, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+    updateStudentAssignFee(id: string, payload: any): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.STUDENTS.UPDATE_STUDENT_FEE(id)}`;
+    return this.http.request(HTTP_METHOD.PUT, url, {
       observeResponse: true,
       body: payload
     });

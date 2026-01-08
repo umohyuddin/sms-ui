@@ -25,6 +25,7 @@ export const API_ENDPOINTS = {
         SEARCH: `/api/institute/students/search`,
         GET_BY_ID: (id: string) => `/api/institute/students/${id}`,
         ASSIGN_STUDENT_FEE: (id: string) => `/api/students/${id}/fees/assign`,
+        UPDATE_STUDENT_FEE: (id: string) => `/api/students/${id}/fees/update`,
         STUDENT_FEE_SUMMARY: '/api/students/fee/summary/filter',
         STUDENT_FEE_PAYMENT: '/api/students/fee/payments',
 
@@ -35,6 +36,9 @@ export const API_ENDPOINTS = {
             SEARCH: `/api/school/discounts/rates/search`,
             GET_BY_ID: (id: string) => `/api/school/discounts/rates/${id}`,
             GET_ACTIVE_DISCOUNTS: '/api/school/discounts/rates/byCampusYear'
+        },
+        STUDENT_ASSIGNED_FEE: {
+            GET_STUDENT_ASSIGNED_FEE_FLAT: (id: string) => `/api/students/${id}/fees/assigned-flat`,
         }
 
     },
