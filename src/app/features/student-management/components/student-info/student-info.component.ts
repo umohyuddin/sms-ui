@@ -8,15 +8,26 @@ import { AcademicYearResponse } from '../../../tenant-management/models/Academic
 import { StudentFeeSummaryResponse } from '../../models/StudentFeeSummaryResponse';
 import { StudentFeeAssignmentFlatDTO } from '../../models/StudentFeeAssignmentFlatDTO';
 import { StudentDiscountAssignmentResponse } from '../../models/StudentDiscountAssignmentResponse ';
-
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { KeyValueOption } from '../../../../core/models/KeyValueOption';
+import { StudentDocumentResponse } from '../../models/StudentDocumentResponse';
 @Component({
   selector: 'app-student-info',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule
+  ],
   templateUrl: './student-info.component.html',
   styleUrls: ['./student-info.component.css']
 })
 export class StudentInfoComponent {
+  docsForm!: FormGroup;
+  routedId!: string;
+  docsTypeDD: KeyValueOption[] = [];
+  selectedFile: File | null = null;
+  fileInvalid: boolean = false;
+  docsData: any;
+  documentsByType: { [key: string]: StudentDocumentResponse[] } = {};
+
   studentData?: StudentResponse;
   studentId!: string;
   activeTab: string = 'overview';
@@ -25,7 +36,9 @@ export class StudentInfoComponent {
   studentDiscounts: StudentDiscountAssignmentResponse[] = [];
   studentAssignedFee: StudentFeeAssignmentFlatDTO[] = [];
 
+
   constructor(
+    private fb: FormBuilder,
     private studentManagementService: StudentManagementService,
     private academicYearService: AcademicYearManagementService,
     private route: ActivatedRoute
@@ -35,27 +48,30 @@ export class StudentInfoComponent {
     this.studentId = this.route.snapshot.paramMap.get('id') ?? '';
     console.log(`🧑‍🎓 Student ID from route: ${this.studentId}`);
     this.getStudentDetails(this.studentId);
+    this.docsInitializeForm();
     this.getCurrentAcademicYear();
+    this.docsLookUpData()
   }
 
-STUDENT_FEE_COLUMNS: { field: keyof StudentFeeAssignmentFlatDTO, header: string }[] = [
-  { field: 'feeCatalogName', header: 'Fee Catalog' },
-  { field: 'feeCatalogCode', header: 'Fee Catalog Code' },
-  { field: 'feeComponentName', header: 'Fee Component' },
-  { field: 'feeAmount', header: 'Amount (PKR)' },
-  { field: 'feeCatalogChargeType', header: 'Charge Type' },
-  { field: 'feeCatalogRecurrenceRule', header: 'Recurrence' },
-];
 
-STUDENT_DISCOUNT_COLUMNS: { field: keyof StudentDiscountAssignmentResponse, header: string }[] = [
-  { field: 'discountTypeName', header: 'Discount Type Name' },
-  { field: 'discountSubTypeName', header: 'Discount Sub Type Name' },
-  { field: 'isPercentage', header: 'Is Percentage' },
-  { field: 'appliedAmount', header: 'Applied Amount' },
-  { field: 'appliedPercentage', header: 'Applied Percentage' },
-  { field: 'discountValue', header: 'Discount Value' },
+  STUDENT_FEE_COLUMNS: { field: keyof StudentFeeAssignmentFlatDTO, header: string }[] = [
+    { field: 'feeCatalogName', header: 'Fee Catalog' },
+    { field: 'feeCatalogCode', header: 'Fee Catalog Code' },
+    { field: 'feeComponentName', header: 'Fee Component' },
+    { field: 'feeAmount', header: 'Amount (PKR)' },
+    { field: 'feeCatalogChargeType', header: 'Charge Type' },
+    { field: 'feeCatalogRecurrenceRule', header: 'Recurrence' },
+  ];
 
-];
+  STUDENT_DISCOUNT_COLUMNS: { field: keyof StudentDiscountAssignmentResponse, header: string }[] = [
+    { field: 'discountTypeName', header: 'Discount Type Name' },
+    { field: 'discountSubTypeName', header: 'Discount Sub Type Name' },
+    { field: 'isPercentage', header: 'Is Percentage' },
+    { field: 'appliedAmount', header: 'Applied Amount' },
+    { field: 'appliedPercentage', header: 'Applied Percentage' },
+    { field: 'discountValue', header: 'Discount Value' },
+
+  ];
 
 
   getCurrentAcademicYear() {
@@ -83,6 +99,9 @@ STUDENT_DISCOUNT_COLUMNS: { field: keyof StudentDiscountAssignmentResponse, head
       } else {
         console.warn('⚠️ Cannot fetch fees: Current Academic Year is undefined.');
       }
+    }
+    if (tab === 'documents') {
+      this.getStudentAllDocs();
     }
   }
 
@@ -144,4 +163,151 @@ STUDENT_DISCOUNT_COLUMNS: { field: keyof StudentDiscountAssignmentResponse, head
       complete: () => console.log('✅ getStudentDetails completed')
     });
   }
+
+
+
+  private docsInitializeForm() {
+    this.docsForm = this.fb.group({
+      docKey: ['', Validators.required],
+      file: [null, Validators.required]
+    });
+  }
+
+  onDocsSubmit() {
+    if (this.docsForm.invalid) {
+      this.docsForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.selectedFile) {
+      this.docsForm.get('file')?.setErrors({ required: true });
+      return;
+    }
+    const formData = new FormData();
+    formData.append('docKey', this.docsForm.value.docKey);
+    formData.append('file', this.selectedFile);
+    formData.append('studentId', this.studentId);
+
+    console.log('Form submitted:');
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
+    this.studentManagementService.uploadStudentDocs(formData).subscribe({
+      next: (response) => {
+        console.log('✅ Status:', response.status);
+        console.log('📦 Body:', response.body);
+
+        // This is upload response, NOT full employee
+        // if (this.employeeData) {
+        //   this.employeeData.profilePicture = response.body.filePath;
+        // }
+         this.onDocsCancel();
+        this.getStudentAllDocs();
+      },
+      error: (error) => {
+        console.error('❌ Error:', error);
+      }
+    });
+
+  }
+
+  groupByDocumentType(docs: StudentDocumentResponse[]) {
+    return docs.reduce((acc: any, doc) => {
+      const key = doc.documentType;
+
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+
+      acc[key].push(doc);
+      return acc;
+    }, {});
+  }
+
+  getStudentAllDocs() {
+    this.studentManagementService.getStudentDocs(this.studentId).subscribe({
+      next: (response) => {
+        console.log('✅ Status:', response.status);
+        console.log('📦 Body:', response.body);
+        const docs: StudentDocumentResponse[] = response.body;
+        this.documentsByType = this.groupByDocumentType(docs);
+        console.log(this.documentsByType);
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    })
+  }
+
+  docsLookUpData() {
+    this.studentManagementService.getDocsMeta()
+      .subscribe({
+        next: (response) => {
+          console.log('  Request Success Status:', response.status);
+          console.log('📦 Response Body:', response.body);
+          this.docsTypeDD = Object.entries(response.body.docs).map(
+            ([key, label]) => ({ key, label: label as string })
+          );
+        },
+        error: (error) => {
+          console.error('❌ Request Error Status:', error.status);
+          console.error('Message:', error.message);
+        },
+        complete: () => {
+          console.log('🔚 Request Complete');
+        }
+      })
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    const fileControl = this.docsForm.get('file');
+
+    if (file) {
+      this.selectedFile = file;
+      fileControl?.setValue(file);
+    } else {
+      this.selectedFile = null;
+      fileControl?.setValue(null);
+    }
+
+    fileControl?.markAsTouched();   // ✅ REQUIRED
+    fileControl?.updateValueAndValidity();
+  }
+  getFileIcon(fileType: string): string {
+    fileType = fileType.toLowerCase();
+    switch (fileType) {
+      case 'pdf': return './assets/media/files/pdf.svg';
+      case 'jpg':
+      case 'jpeg': return './assets/media/files/jpg.svg';
+      case 'png': return './assets/media/files/png.svg';
+      case 'doc':
+      case 'docx': return './assets/media/files/doc.svg';
+      case 'js': return './assets/media/files/javascript.svg';
+      case 'zip': return './assets/media/files/zip.svg';
+      default: return './assets/media/icons/svg/Files/File.svg';
+
+    }
+  }
+  // D:\SMS-UI\sms-ui\src\assets\media\icons\svg\Files\File.svg
+
+  downloadFile(doc: StudentDocumentResponse) {
+    this.studentManagementService.downloadStudentDocument(doc.id, this.studentId, doc.fileName);
+  }
+
+  onDocsCancel(): void {
+    this.docsForm.reset();
+    this.docsForm.markAsPristine();
+    this.docsForm.markAsUntouched();
+    this.selectedFile = null;
+  }
+  //getters
+
+  get docKey() { return this.docsForm.get('docKey'); }
 }

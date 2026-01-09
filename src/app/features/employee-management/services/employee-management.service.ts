@@ -74,7 +74,6 @@ export class EmployeeManagementService {
 
   getEmployeeDocs(id: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.GET_EMPLOYEE_DOCS(id)}`, { observeResponse: true });
-
   }
 
   getEmployeeAddressById(id: any): Observable<any> {
@@ -93,26 +92,43 @@ export class EmployeeManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.PROVINCE.GET_BY_COUNTRY_ID(id)}`, { observeResponse: true });
   }
 
-  downloadEmployeeDocument(documentId: number, employeeId: string): void {
-    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DOWNLOAD_DOCS}/${documentId}?employeeId=${employeeId}`;
+  // downloadEmployeeDocument(documentId: number, employeeId: string): void {
+  //   const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DOWNLOAD_DOCS}/${documentId}?employeeId=${employeeId}`;
 
-    // Cast the request as Observable<Blob>
-    (this.http.request(HTTP_METHOD.GET, url, { responseType: 'blob' as 'json' }) as unknown as Observable<Blob>)
-      .subscribe(
-        (blob: Blob) => {
-          const link = document.createElement('a');
-          const objectUrl = window.URL.createObjectURL(blob);
-          link.href = objectUrl;
-          link.download = `document_${documentId}.pdf`; // or dynamic filename
-          link.click();
-          window.URL.revokeObjectURL(objectUrl);
-        },
-        (err) => {
-          console.error('Error downloading document', err);
-        }
-      );
-  }
+  //   // Cast the request as Observable<Blob>
+  //   (this.http.request(HTTP_METHOD.GET, url, { responseType: 'blob' }) as unknown as Observable<Blob>)
+  //     .subscribe(
+  //       (blob: Blob) => {
+  //         const link = document.createElement('a');
+  //         const objectUrl = window.URL.createObjectURL(blob);
+  //         link.href = objectUrl;
+  //         link.download = `document_${documentId}.pdf`; // or dynamic filename
+  //         link.click();
+  //         window.URL.revokeObjectURL(objectUrl);
+  //       },
+  //       (err) => {
+  //         console.error('Error downloading document', err);
+  //       }
+  //     );
+  // }
 
+downloadEmployeeDocument(documentId: number, employeeId: string, fileName: string): void {
+  const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DOWNLOAD_DOCS}/${documentId}?employeeId=${employeeId}`;
+
+  // Cast the request to Observable<Blob>
+  (this.http.request('GET', url, { responseType: 'blob' } as any) as Observable<Blob>)
+    .subscribe({
+      next: (blob) => {
+        const link = document.createElement('a');
+        const objectUrl = window.URL.createObjectURL(blob);
+        link.href = objectUrl;
+        link.download = fileName || `document_${documentId}`;
+        link.click();
+        window.URL.revokeObjectURL(objectUrl);
+      },
+      error: (err) => console.error('Error downloading document', err)
+    });
+}
 
 
 

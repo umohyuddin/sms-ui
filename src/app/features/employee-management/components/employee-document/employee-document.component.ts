@@ -170,11 +170,9 @@ onFileSelected(event: Event) {
     }
   }
 
-  downloadFile(doc: any) {
-    console.log(doc)
-    const url = `${this.appConfig.apiBaseUrl}${API_ENDPOINTS.EMPLOYEE.DOWNLOAD_DOCS}/${doc.id}?employeeId=${this.routedId}`;
-    window.open(url, '_blank');
-  }
+  downloadFile(doc: EmployeeDocumentResponseDto) {
+  this.employeeManagementService.downloadEmployeeDocument(doc.id, this.routedId, doc.fileName);
+}
 
   onDocsCancel(): void {
     this.docsForm.reset();

@@ -118,6 +118,28 @@
                                     </span>
                                 </span>
                             </a>
+                            <a [class.active]="activeTab === 'documents'" (click)="setActiveTab('documents')"
+                                class="kt-widget__item ">
+                                <span class="kt-widget__section">
+                                    <span class="kt-widget__icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                            viewBox="0 0 24 24" version="1.1" class="kt-svg-icon">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <rect id="bound" x="0" y="0" width="24" height="24" />
+                                                <path
+                                                    d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z"
+                                                    id="Combined-Shape" fill="#000000" opacity="0.3" />
+                                                <path
+                                                    d="M14.8875071,12.8306874 L12.9310336,12.8306874 L12.9310336,10.8230161 C12.9310336,10.5468737 12.707176,10.3230161 12.4310336,10.3230161 L11.4077349,10.3230161 C11.1315925,10.3230161 10.9077349,10.5468737 10.9077349,10.8230161 L10.9077349,12.8306874 L8.9512614,12.8306874 C8.67511903,12.8306874 8.4512614,13.054545 8.4512614,13.3306874 C8.4512614,13.448999 8.49321518,13.5634776 8.56966458,13.6537723 L11.5377874,17.1594334 C11.7162223,17.3701835 12.0317191,17.3963802 12.2424692,17.2179453 C12.2635563,17.2000915 12.2831273,17.1805206 12.3009811,17.1594334 L15.2691039,13.6537723 C15.4475388,13.4430222 15.4213421,13.1275254 15.210592,12.9490905 C15.1202973,12.8726411 15.0058187,12.8306874 14.8875071,12.8306874 Z"
+                                                    id="Shape" fill="#000000" />
+                                            </g>
+                                        </svg> </span>
+                                    <span class="kt-widget__desc">
+                                        Documents
+                                    </span>
+                                </span>
+                            </a>
                             <!-- <a [class.active]="activeTab === 'enrollment_administrative'"
                                 (click)="setActiveTab('enrollment_administrative')" class="kt-widget__item ">
                                 <span class="kt-widget__section">
@@ -634,39 +656,39 @@
                         </div>
                     </div>
                     <div class="kt-portlet__body">
-<div class="table-responsive-custom">
-  <table class="table table-bordered table-hover">
-    <!-- HEADER -->
-    <thead>
-      <tr>
-        <th *ngFor="let col of STUDENT_FEE_COLUMNS">
-          {{ col.header }}
-        </th>
-      </tr>
-    </thead>
+                        <div class="table-responsive-custom">
+                            <table class="table table-bordered table-hover">
+                                <!-- HEADER -->
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let col of STUDENT_FEE_COLUMNS">
+                                            {{ col.header }}
+                                        </th>
+                                    </tr>
+                                </thead>
 
-    <!-- BODY -->
-    <tbody>
-      <!-- Data Rows -->
-      <ng-container *ngIf="studentAssignedFee?.length; else noData">
-        <tr *ngFor="let item of studentAssignedFee">
-          <td *ngFor="let col of STUDENT_FEE_COLUMNS">
-            {{ item[col.field] }}
-          </td>
-        </tr>
-      </ng-container>
+                                <!-- BODY -->
+                                <tbody>
+                                    <!-- Data Rows -->
+                                    <ng-container *ngIf="studentAssignedFee?.length; else noData">
+                                        <tr *ngFor="let item of studentAssignedFee">
+                                            <td *ngFor="let col of STUDENT_FEE_COLUMNS">
+                                                {{ item[col.field] }}
+                                            </td>
+                                        </tr>
+                                    </ng-container>
 
-      <!-- Empty State -->
-      <ng-template #noData>
-        <tr>
-          <td [attr.colspan]="STUDENT_FEE_COLUMNS.length" class="text-center">
-            No fee records found
-          </td>
-        </tr>
-      </ng-template>
-    </tbody>
-  </table>
-</div>
+                                    <!-- Empty State -->
+                                    <ng-template #noData>
+                                        <tr>
+                                            <td [attr.colspan]="STUDENT_FEE_COLUMNS.length" class="text-center">
+                                                No fee records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </tbody>
+                            </table>
+                        </div>
 
 
                     </div>
@@ -675,7 +697,7 @@
                 <!--end:: Widgets/Authors Profit-->
             </div>
 
-                        <div class="col-xl-12">
+            <div class="col-xl-12">
 
                 <!--begin:: Widgets/Authors Profit-->
                 <div class="kt-portlet kt-portlet--bordered-semi kt-portlet--height-fluid">
@@ -691,39 +713,39 @@
                         </div>
                     </div>
                     <div class="kt-portlet__body">
-<div class="table-responsive-custom">
-  <table class="table table-bordered table-hover">
-    <!-- HEADER -->
-    <thead>
-      <tr>
-        <th *ngFor="let col of STUDENT_DISCOUNT_COLUMNS">
-          {{ col.header }}
-        </th>
-      </tr>
-    </thead>
+                        <div class="table-responsive-custom">
+                            <table class="table table-bordered table-hover">
+                                <!-- HEADER -->
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let col of STUDENT_DISCOUNT_COLUMNS">
+                                            {{ col.header }}
+                                        </th>
+                                    </tr>
+                                </thead>
 
-    <!-- BODY -->
-    <tbody>
-      <!-- Data Rows -->
-      <ng-container *ngIf="studentDiscounts?.length; else noData">
-        <tr *ngFor="let item of studentDiscounts">
-          <td *ngFor="let col of STUDENT_DISCOUNT_COLUMNS">
-            {{ item[col.field] }}
-          </td>
-        </tr>
-      </ng-container>
+                                <!-- BODY -->
+                                <tbody>
+                                    <!-- Data Rows -->
+                                    <ng-container *ngIf="studentDiscounts?.length; else noData">
+                                        <tr *ngFor="let item of studentDiscounts">
+                                            <td *ngFor="let col of STUDENT_DISCOUNT_COLUMNS">
+                                                {{ item[col.field] }}
+                                            </td>
+                                        </tr>
+                                    </ng-container>
 
-      <!-- Empty State -->
-      <ng-template #noData>
-        <tr>
-          <td [attr.colspan]="STUDENT_FEE_COLUMNS.length" class="text-center">
-            No fee records found
-          </td>
-        </tr>
-      </ng-template>
-    </tbody>
-  </table>
-</div>
+                                    <!-- Empty State -->
+                                    <ng-template #noData>
+                                        <tr>
+                                            <td [attr.colspan]="STUDENT_FEE_COLUMNS.length" class="text-center">
+                                                No fee records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </tbody>
+                            </table>
+                        </div>
 
 
                     </div>
@@ -735,7 +757,7 @@
         </div>
     </div>
     <!-- Guardian Details -->
-    <div *ngIf="activeTab === 'guardian'" class="tab-content full-width-tab">
+    <div *ngIf="activeTab === 'guardian'" class="tab-content full-width-tab"  style="margin-left: 10px;">
 
         <!-- Your guardian details content -->
         <div class="kt-grid__item kt-grid__item--fluid kt-app__content">
@@ -935,7 +957,7 @@
     </div>
 
     <!-- enrollment_administrative -->
-    <div *ngIf="activeTab === 'enrollment_administrative'" class="tab-content full-width-tab">
+    <div *ngIf="activeTab === 'enrollment_administrative'" class="tab-content full-width-tab"  style="margin-left: 10px;">
 
         <!-- Your guardian details content -->
         <div class="kt-grid__item kt-grid__item--fluid kt-app__content">
@@ -1132,6 +1154,111 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- documents -->
+    <div *ngIf="activeTab === 'documents'" class="tab-content full-width-tab"  style="margin-left: 10px;">
+        <div class="row">
+            <div class="col-xl-12">
+
+                <!--begin:: Widgets/Download Files-->
+                <div class="kt-portlet kt-portlet--height-fluid">
+                    <div class="kt-portlet__head">
+                        <div class="kt-portlet__head-label">
+                            <h3 class="kt-portlet__head-title">
+                                Student Documents
+                            </h3>
+                        </div>
+                        <div class="kt-portlet__head-toolbar">
+                        </div>
+                    </div>
+                    <div class="kt-portlet__body">
+
+                        <!--begin::k-widget4-->
+                        <div class="kt-widget4">
+                            <form class="kt-form kt-form--label-right" [formGroup]="docsForm"
+                                (ngSubmit)="onDocsSubmit()">
+                                <div class="kt-portlet__body">
+                                    <div class="form-group row">
+                                        <div class="col-lg-6">
+                                            <label>Doc Type:</label>
+                                            <select class="form-control" formControlName="docKey"
+                                                [class.is-invalid]="docKey?.invalid && (docKey?.touched || docKey?.dirty)"
+                                                [class.is-valid]="docKey?.valid && (docKey?.touched || docKey?.dirty)">
+                                                <option value='' selected>Select Doc Type</option>
+                                                @for (p of docsTypeDD; track p.key) {
+                                                <option [value]="p.key">{{ p.label }}</option>
+                                                }
+                                            </select>
+                                            <span class="form-text text-muted">Please select Docs Type</span>
+                                            <span class="invalid-feedback" *ngIf="docKey?.errors?.['required']">
+                                                Docs Type is required
+                                            </span>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label class="">File:</label>
+                                            <input type="file" class="form-control" (change)="onFileSelected($event)"
+                                                [class.is-invalid]="docsForm.get('file')?.invalid && docsForm.get('file')?.touched">
+                                            <span class="form-text text-muted">Please browse your file</span>
+                                            <span class="invalid-feedback"
+                                                *ngIf="docsForm.get('file')?.errors?.['required'] && (docsForm.get('file')?.touched || docsForm.get('file')?.dirty)">
+                                                File is required
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="kt-portlet__foot">
+                                    <div class="kt-form__actions">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <!-- <button type="submit" class="btn btn-primary">Save</button>
+                                                <button type="reset" class="btn btn-secondary">Cancel</button> -->
+                                            </div>
+                                            <div class="col-lg-6 kt-align-right">
+                                                <button type="submit" class="btn btn-dark"
+                                                    style="margin-right: 10px;">Save</button>
+                                                <button type="reset" class="btn btn-danger"
+                                                    (click)="onDocsCancel()">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- Document Groups -->
+                            <div *ngFor="let group of documentsByType | keyvalue">
+
+                                <!-- Document Type Heading -->
+                                <h5 class="mt-4 text-dark fw-bold">
+                                    {{ group.key.replace('_', ' ') }}
+                                </h5>
+
+                                <!-- Documents List -->
+                                <div *ngFor="let doc of group.value" class="kt-widget4__item">
+
+                                    <div class="kt-widget4__pic kt-widget4__pic--icon">
+                                        <img [src]="getFileIcon(doc.fileType)" alt="file icon">
+                                    </div>
+
+                                    <a href="javascript:void(0)" class="kt-widget4__title" (click)="downloadFile(doc)">
+                                        {{ doc.fileName }}
+                                    </a>
+
+                                    <div class="kt-widget4__tools">
+                                        <button type="button" class="btn btn-outline-brand btn-elevate btn-icon"><i
+                                                class="la la-cloud-download" (click)="downloadFile(doc)"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Widget 9-->
+                    </div>
+                </div>
+
+                <!--end:: Widgets/Download Files-->
+            </div>
+
+        </div>
+
     </div>
 
 
