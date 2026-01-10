@@ -39,23 +39,37 @@ export class SalaryStructureListingTableComponent {
   }
 
   private subscribeToSearch() {
-    this.searchControl.valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        switchMap(search => this.salaryStructureService.searchSalaryStructures(search || '')),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: (response) => {
-          this.salaryStructureResponse = response.body;
-          this.pagination = new Pagination(this.salaryStructureResponse, 10);
-        },
-        error: (error) => {
-          console.error('Search error:', error);
+  this.searchControl.valueChanges
+    .pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap(search => {
+        // Construct query params dynamically
+        const params: any = {};
+
+        if (search && search.trim() !== '') {
+          params.employeeTypeName = search.trim(); // search by employee type name
         }
-      });
-  }
+
+        // optionally, you can add more filters like minSalary, maxSalary, etc.
+        // e.g., params.minSalary = this.minSalaryControl.value;
+
+        return this.salaryStructureService.searchSalaryStructures(params);
+      }),
+      takeUntil(this.destroy$)
+    )
+    .subscribe({
+      next: (response) => {
+        // Your service returns { body, status } because of observeResponse
+        this.salaryStructureResponse = response.body;
+        this.pagination = new Pagination(this.salaryStructureResponse, 10);
+      },
+      error: (error) => {
+        console.error('Search error:', error);
+      }
+    });
+}
+
 
   getSalaryStructures() {
     this.salaryStructureService.getAllSalaryStructures().subscribe({
