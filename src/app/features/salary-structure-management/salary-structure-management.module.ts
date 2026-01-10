@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: '', component: SalaryStructureListingComponent },
   { path: 'salary-structure-create', component: SalaryStructureCreateComponent },
   { path: 'salary-structure-edit/:id', component: SalaryStructureCreateComponent },
-  { path: 'salary-structure-details', component: SalaryStructureDetailsComponent }
+  { path: 'salary-structure-details/:id', component: SalaryStructureDetailsComponent }
 ];
 
 
