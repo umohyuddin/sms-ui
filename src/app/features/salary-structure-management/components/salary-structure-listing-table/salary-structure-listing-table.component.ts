@@ -29,6 +29,7 @@ export class SalaryStructureListingTableComponent {
     { key: 'amount', label: 'Amount', sortable: true },
     { key: 'effectiveFrom', label: 'Effective From', sortable: true },
     { key: 'effectiveTo', label: 'Effective To', sortable: true },
+    { key: 'status', label: 'Status', sortable: true },
     { key: 'actions', label: 'Actions', sortable: true }
   ];
 
@@ -80,10 +81,30 @@ export class SalaryStructureListingTableComponent {
     this.router.navigate(ROUTES.SALARY_STRUCTURE.DETAILS(item.id.toString()));
   }
 
-  editSalaryStructure(item: SalaryStructureResponse, event: Event): void {
+  editSalaryStructure(item: SalaryStructureResponse, field: string, event: Event) {
     console.log('Editing Salary Structure ID:', item.id);
     event.preventDefault();
-    this.router.navigate(ROUTES.SALARY_STRUCTURE.EDIT(item.id.toString()));
+    this.router.navigate(ROUTES.SALARY_STRUCTURE.EDIT(item.id.toString()),
+      { queryParams: { field } }
+    )
+  }
+  closeSalaryStructure(item: SalaryStructureResponse, field: string, event: Event) {
+    console.log('Editing Salary Structure ID:', item.id);
+    event.preventDefault();
+    this.salaryStructureService.closeSalaryStructure(item.id.toString()).subscribe({
+      next: (response) => {
+        console.log('  Success Status:', response.status);
+        console.log('📦 Response Body:', response.body);
+        this.getSalaryStructures();
+      },
+      error: (error) => {
+        console.error('❌ Request Error Status:', error.status);
+        console.error('Message:', error.message);
+      },
+      complete: () => {
+        console.log('🔚 Request Complete');
+      }
+    });
   }
 
   onPageSizeChange(event: any) {

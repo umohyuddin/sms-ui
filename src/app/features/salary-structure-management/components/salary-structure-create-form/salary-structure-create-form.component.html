@@ -1,1 +1,124 @@
-<p>salary-structure-create-form works!</p>
+<div class="kt-portlet">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-label">
+      <h3 class="kt-portlet__head-title">
+        {{ isEditMode ? 'Update Salary Structure' : 'Add New Salary Structure' }}
+      </h3>
+    </div>
+  </div>
+
+  <!--begin::Form-->
+  <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
+    <div class="kt-portlet__body">
+      <h4>Salary Structure Information</h4>
+
+      <!-- Row 1 -->
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+
+        <!-- Employee Type -->
+        <label class="col-lg-2 col-form-label required">Employee Type:</label>
+        <div class="col-lg-4">
+          <select
+            class="form-control"
+            formControlName="employeeTypeId"
+            [class.is-invalid]="employeeTypeId?.invalid && (employeeTypeId?.touched || employeeTypeId?.dirty)"
+            [class.is-valid]="employeeTypeId?.valid && (employeeTypeId?.touched || employeeTypeId?.dirty)">
+            <option value="">Select Employee Type</option>
+            <option *ngFor="let e of employeeTypesDD" [value]="e.key">
+              {{ e.label }}
+            </option>
+          </select>
+          <span class="form-text text-muted">
+            Select employee category (Teacher, Full-Time, Part-Time, etc.)
+          </span>
+          <span class="invalid-feedback"
+            *ngIf="employeeTypeId?.invalid && (employeeTypeId?.touched || employeeTypeId?.dirty)">
+            {{ getErrorMessage('employeeTypeId') }}
+          </span>
+        </div>
+
+        <!-- Base Salary -->
+        <label class="col-lg-2 col-form-label required">Base Salary:</label>
+        <div class="col-lg-4">
+          <input
+            type="number"
+            class="form-control"
+            placeholder="Enter Base Salary"
+            formControlName="baseSalary"
+            [class.is-invalid]="baseSalary?.invalid && (baseSalary?.touched || baseSalary?.dirty)"
+            [class.is-valid]="baseSalary?.valid && (baseSalary?.touched || baseSalary?.dirty)">
+          <span class="form-text text-muted">
+            Monthly base salary for the selected employee type
+          </span>
+          <span class="invalid-feedback"
+            *ngIf="baseSalary?.invalid && (baseSalary?.touched || baseSalary?.dirty)">
+            {{ getErrorMessage('baseSalary') }}
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Row 2 -->
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+
+        <!-- Effective From -->
+        <label class="col-lg-2 col-form-label required">Effective From:</label>
+        <div class="col-lg-4">
+          <input
+            type="date"
+            class="form-control"
+            formControlName="effectiveFrom"
+            [class.is-invalid]="effectiveFrom?.invalid && (effectiveFrom?.touched || effectiveFrom?.dirty)"
+            [class.is-valid]="effectiveFrom?.valid && (effectiveFrom?.touched || effectiveFrom?.dirty)">
+          <span class="form-text text-muted">
+            Salary becomes applicable from this date
+          </span>
+          <span class="invalid-feedback"
+            *ngIf="effectiveFrom?.invalid && (effectiveFrom?.touched || effectiveFrom?.dirty)">
+            {{ getErrorMessage('effectiveFrom') }}
+          </span>
+        </div>
+
+        <!-- Effective To -->
+        <label class="col-lg-2 col-form-label">Effective To:</label>
+        <div class="col-lg-4">
+          <input
+            type="date"
+            class="form-control"
+            formControlName="effectiveTo"
+            [readonly]="!isEditMode"
+            [class.is-invalid]="effectiveTo?.invalid && (effectiveTo?.touched || effectiveTo?.dirty)"
+            [class.is-valid]="effectiveTo?.valid && (effectiveTo?.touched || effectiveTo?.dirty)">
+          <span class="form-text text-muted">
+            Leave empty to mark this as the <strong>current salary</strong>
+          </span>
+          <span class="invalid-feedback"
+            *ngIf="effectiveTo?.invalid && (effectiveTo?.touched || effectiveTo?.dirty)">
+            {{ getErrorMessage('effectiveTo') }}
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions">
+        <div class="row">
+          <div class="col-lg-5"></div>
+          <div class="col-lg-7">
+            <button type="submit" class="btn btn-dark mr-2">
+              {{ isEditMode ? 'Update Salary Structure' : 'Add Salary Structure' }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="goToSalaryStructureList()">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+  <!--end::Form-->
+</div>

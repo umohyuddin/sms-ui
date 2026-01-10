@@ -6,8 +6,9 @@ export const API_ENDPOINTS = {
         GET_ALL: '/api/institute/salary-structures',
         GET_BY_ID: (id: string) => `/api/institute/salary-structures/${id}`,
         CREATE: '/api/institute/salary-structures',
-        UPDATE: (id: string) => `/api/institute/salary-structures${id}`,
-        DELETE: (id: string) => `/api/institute/salary-structures${id}`,
+        UPDATE: (id: string) => `/api/institute/salary-structures/${id}`,
+        CLOSE: (id: string) => `/api/institute/salary-structures/${id}/close`,
+        DELETE: (id: string) => `/api/institute/salary-structures/${id}`,
         SEARCH: '/api/institute/salary-structures'
     },
     SALARY_COMPONENT: {

@@ -5,5 +5,5 @@ export interface SalaryStructureResponse {
   baseSalary: number;
   effectiveFrom: string;
   effectiveTo?: string | null;
-  active?: boolean;
+  isCurrent?: boolean;
 }

@@ -10,7 +10,7 @@ import { HttpClientService } from '../../../core/services/http-client.service';
 })
 export class SalaryStructureService {
 
- private baseUrl = '';
+  private baseUrl = '';
 
   constructor(private http: HttpClientService, private appConfig: AppConfigService) {
     this.baseUrl = appConfig.apiBaseUrl;
@@ -27,12 +27,16 @@ export class SalaryStructureService {
     return this.http.request(method, url, { observeResponse: true, body: payload });
   }
 
+  closeSalaryStructure(id: string): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.SALARY_STRUCTURE.CLOSE(id)}`;
+    return this.http.request(HTTP_METHOD.PUT, url, { observeResponse: true });
+  }
   /** Get all Salary Structures */
   getAllSalaryStructures(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.SALARY_STRUCTURE.GET_ALL}`, { observeResponse: true });
   }
 
-   
+
 
   /** Get Salary Structure by ID */
   getSalaryStructureById(id: string): Observable<any> {

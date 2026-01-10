@@ -5,7 +5,7 @@
                 <i class="kt-font-dark flaticon-squares"></i>
             </span>
             <h3 class="kt-portlet__head-title">
-                Fee Catalog Listing
+                Salary StructureListing
             </h3>
         </div>
         <div class="kt-portlet__head-toolbar">
@@ -69,12 +69,12 @@
                                 <td>{{ item.effectiveTo }}</td>
 
 
-                                <!-- <td>
+                                <td>
                                     <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                                        [ngClass]="item.active ? 'kt-badge--brand' : 'kt-badge--danger'">
-                                        {{item.active? 'Active':'Inactive'}}
+                                        [ngClass]="item.isCurrent ? 'kt-badge--brand' : 'kt-badge--danger'">
+                                        {{item.isCurrent? 'Current':'Closed'}}
                                     </span>
-                                </td> -->
+                                </td>
                                 <td nowrap="">
                                     <span class="dropdown">
                                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md"
@@ -82,17 +82,25 @@
                                             <i class="la la-ellipsis-h"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="#" (click)="editSalaryStructure(item,$event)"><i
-                                                    class="la la-edit"></i> Edit Details</a>
-                                            <a class="dropdown-item" href="#" (click)="viewSalaryStructureDetails(item,$event)">
+                                            <a class="dropdown-item" href="javascript:void(0);"
+                                                (click)="editSalaryStructure(item, 'baseSalary', $event)">
+                                                <i class="la la-money"></i> Update Base Salary
+                                            </a>
+
+                                             <a class="dropdown-item" href="javascript:void(0);"
+                                                (click)="closeSalaryStructure(item, 'close', $event)">
+                                                <i class="la la-minus-circle"></i> Close Salary
+                                            </a>
+                                             <a class="dropdown-item" href="#"
+                                                (click)="viewSalaryStructureDetails(item,$event)">
                                                 <i class="la la-eye"></i> View Details</a>
                                             <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
                                         </div>
                                     </span>
-                                    <a (click)="editSalaryStructure(item,$event)"
+                                    <!-- <a (click)="editSalaryStructure(item,$event)"
                                         class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                         <i class="la la-eye"></i>
-                                    </a>
+                                    </a> -->
                                 </td>
                             </tr>
                         </tbody>
