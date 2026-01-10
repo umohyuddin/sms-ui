@@ -1,13 +1,9 @@
 <div class="kt-portlet kt-portlet--mobile">
-  <app-portlet-header
-    [iconClass]="texts.icon"
-    [title]="texts.header"
-    >
-  </app-portlet-header>
+    <app-portlet-header [iconClass]="texts.icon" [title]="texts.header">
+    </app-portlet-header>
     <div class="kt-portlet__body">
 
-        <ng-container *ngIf="departments && departments.length > 0; else noData">
-
+     
             <!--begin: Datatable -->
             <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                 <div class="row">
@@ -36,6 +32,8 @@
                 </div>
 
                 <!-- Table -->
+                    <ng-container *ngIf="departments && departments.length > 0; else noData">
+
                 <div class="row">
                     <div class="col-sm-12">
                         <table
@@ -52,7 +50,7 @@
                                     <td>{{ department.departmentCode }}</td>
                                     <td>{{ department.description }}</td>
                                     <td>{{ department.parentDepartmentName || '-' }}</td>
-                                    <td>{{ department.headEmployeeId || '-' }}</td>
+                                    <td>{{ department.headEmployeeName }}</td>
                                     <td>
                                         <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
                                             [ngClass]="department.active ? 'kt-badge--brand' : 'kt-badge--danger'">
@@ -81,42 +79,92 @@
                                             </div>
 
                                         </span>
-                                           <a (click)="viewDepartmentDetails(department,$event)" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
-                    <i class="la la-eye"></i>
-                  </a>
+                                        <a (click)="viewDepartmentDetails(department,$event)"
+                                            class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
+                                            <i class="la la-eye"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-
+        </ng-container>
                 <!-- Pagination -->
                 <div class="row">
                     <div class="col-sm-12 col-md-5">
-                        <div class="dataTables_info">
-                            Showing {{ pagination.startItem }} to {{ pagination.endItem }} of {{ pagination.totalItems
-                            }} entries
+                        <div class="dataTables_info" id="kt_table_1_info" role="status" aria-live="polite">Showing {{
+                            pagination.startItem }} to {{ pagination.endItem }} of {{ pagination.totalItems }} entries
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-7">
-                        <div class="dataTables_paginate paging_full_numbers">
+                        <div class="dataTables_paginate paging_full_numbers" id="kt_table_1_paginate">
                             <ul class="pagination">
-                                <!-- Pagination buttons as before -->
+
+                                <!-- FIRST -->
+                                <li class="paginate_button page-item first"
+                                    [class.disabled]="pagination.pageIndex === 0">
+                                    <a class="page-link" (click)="pagination.first()">
+                                        <i class="la la-angle-double-left"></i>
+                                    </a>
+                                </li>
+
+                                <!-- PREVIOUS -->
+                                <li class="paginate_button page-item previous"
+                                    [class.disabled]="pagination.pageIndex === 0">
+                                    <a class="page-link" (click)="pagination.prev()">
+                                        <i class="la la-angle-left"></i>
+                                    </a>
+                                </li>
+
+                                <!-- LEFT ELLIPSIS -->
+                                <li class="paginate_button page-item disabled" *ngIf="pagination.showLeftEllipsis">
+                                    <a class="page-link">...</a>
+                                </li>
+
+                                <!-- PAGE NUMBERS -->
+                                <li class="paginate_button page-item" *ngFor="let page of pagination.visiblePages"
+                                    [class.active]="pagination.pageIndex === page">
+
+                                    <a class="page-link" (click)="pagination.goToPage(page)">
+                                        {{ page + 1 }}
+                                    </a>
+                                </li>
+
+                                <!-- RIGHT ELLIPSIS -->
+                                <li class="paginate_button page-item disabled" *ngIf="pagination.showRightEllipsis">
+                                    <a class="page-link">...</a>
+                                </li>
+
+                                <!-- NEXT -->
+                                <li class="paginate_button page-item next"
+                                    [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
+                                    <a class="page-link" (click)="pagination.next()">
+                                        <i class="la la-angle-right"></i>
+                                    </a>
+                                </li>
+
+                                <!-- LAST -->
+                                <li class="paginate_button page-item last"
+                                    [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
+                                    <a class="page-link" (click)="pagination.last()">
+                                        <i class="la la-angle-double-right"></i>
+                                    </a>
+                                </li>
+
                             </ul>
+
                         </div>
                     </div>
                 </div>
-
             </div>
             <!--end: Datatable -->
 
-        </ng-container>
+
 
         <!-- No Data Message -->
         <ng-template #noData>
-            <app-no-data
-                [message]="texts.messages.noData"></app-no-data>
+            <app-no-data [message]="texts.messages.noData"></app-no-data>
         </ng-template>
     </div>
 </div>

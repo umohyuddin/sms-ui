@@ -8,6 +8,7 @@ import { DepartmentManagementService } from '../../services/DepartmentManagement
 import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { EmployeeManagementService } from '../../../employee-management/services/employee-management.service';
+import { Pagination } from '../../../../core/pagar/pagination';
 @Component({
   selector: 'app-department-create-form',
   standalone: true,
@@ -16,6 +17,7 @@ import { EmployeeManagementService } from '../../../employee-management/services
   styleUrl: './department-create-form.component.css'
 })
 export class DepartmentCreateFormComponent {
+
   departmentDD: KeyValueOption[] = [];
   responseData?: DepartmentResponse
   createForm!: FormGroup;
@@ -26,15 +28,10 @@ export class DepartmentCreateFormComponent {
   showProvinceDropdown: boolean = false;
   filteredProvinces: any[] = [];
   filteredData: any[] = [];
+  searchText: string = '';
+
   private search$ = new Subject<string>();
   private destroy$ = new Subject<void>();
-
-
-  schools = [
-    { id: 1, name: 'School A' },
-    { id: 2, name: 'School B' },
-    { id: 3, name: 'School C' }
-  ];
 
   constructor(private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -86,18 +83,48 @@ export class DepartmentCreateFormComponent {
   private initializeForm() {
     this.createForm = this.fb.group({
       departmentName: ['', [Validators.required]],
-      departmentCode: [''],
+      departmentCode: ['', [
+        Validators.maxLength(20),
+        this.noWhitespaceValidator
+      ]],
       parentDepartmentId: [''],               // Optional (parent department)
-      headEmployeeId: [null],          // Optional (can be assigned later)
+      headEmployeeId: [null],                 // Optional (can be assigned later)
       description: ['', Validators.maxLength(255)],
-      active: [true]
+      active: [true],
+      employeeSearch: [''],
     });
   }
 
-
-  goToCampusList(): void {
-    this.router.navigate(ROUTES.DEPARTMENTS.LIST);
+  noWhitespaceValidator(control: any) {
+    if (control.value && !control.value.trim()) return { whitespace: true };
+    return null;
   }
+
+  validationMessages = {
+    departmentName: {
+      required: 'Department Name is required.'
+    },
+    departmentCode: {
+      maxlength: 'Department Code cannot exceed 20 characters.',
+      whitespace: 'Department Code cannot be empty or whitespace only.'
+    },
+    description: {
+      maxlength: 'Description cannot exceed 255 characters.'
+    }
+  };
+
+  getErrorMessage(controlName: keyof typeof this.validationMessages): string {
+    const control = this.createForm.get(controlName as string);
+    if (!control || !control.errors) return '';
+
+    for (const error in control.errors) {
+      const key = error as keyof typeof this.validationMessages[typeof controlName];
+      if (this.validationMessages[controlName][key]) return this.validationMessages[controlName][key];
+    }
+
+    return '';
+  }
+
   onSubmit(): void {
     console.log('  Campus Form Data:', this.createForm.getRawValue());
     if (this.createForm.invalid) {
@@ -111,7 +138,7 @@ export class DepartmentCreateFormComponent {
       next: (response) => {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.router.navigate(ROUTES.CAMPUS.LIST);
+        this.router.navigate(ROUTES.DEPARTMENTS.LIST);
       },
       error: (error) => {
         console.error('❌ Post Error Status:', error.status);
@@ -152,7 +179,19 @@ export class DepartmentCreateFormComponent {
         console.log('📦 Response Body:', response.body);
         this.responseData = response.body;
         if (this.responseData) {
-          this.createForm.patchValue(this.responseData);
+          this.createForm.patchValue({
+            departmentName: this.responseData.departmentName,
+            departmentCode: this.responseData.departmentCode,
+            parentDepartmentId: this.responseData.parentDepartmentId,
+            headEmployeeId: this.responseData.headEmployeeId,
+            description: this.responseData.description,
+            active: this.responseData.active
+          });
+           if (this.responseData.headEmployeeCode && this.responseData.headEmployeeName) {
+          this.createForm.patchValue({
+            employeeSearch: `${this.responseData.headEmployeeCode} - ${this.responseData.headEmployeeName}`
+          });
+        }
         }
 
       },
@@ -225,18 +264,17 @@ export class DepartmentCreateFormComponent {
     this.selectedCampus = campus;
     this.dropdownOpen = false;
   }
-  searchText: string = '';
-  data: string[] = ['Apple', 'Banana', 'Orange', 'Mango', 'Grapes'];
-
-  filterData() {
-    const search = this.searchText.toLowerCase();
-    this.filteredData = this.data.filter(item =>
-      item.toLowerCase().includes(search)
-    );
+  onEmployeeSearch(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.search$.next(value);
   }
 
-  selectItem(item: string) {
-    this.searchText = item;
-    this.filteredData = []; // hide dropdown after selection
+  selectEmployee(emp: any): void {
+    this.createForm.patchValue({
+      headEmployeeId: emp.id,
+      employeeSearch: `${emp.employeeCode} - ${emp.fullName}`
+    });
+    this.filteredData = [];
   }
+
 }

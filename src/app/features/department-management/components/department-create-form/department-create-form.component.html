@@ -8,11 +8,7 @@
   </div>
 
   <!-- Form -->
-  <form
-    class="kt-form kt-form--label-right"
-    [formGroup]="createForm"
-    (ngSubmit)="onSubmit()"
-  >
+  <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
 
     <div class="kt-portlet__body">
 
@@ -20,108 +16,97 @@
       <h4>Department Information</h4>
 
       <div class="form-group row kt-margin-t-20">
-
         <!-- Department Name -->
-        <label class="col-lg-1 col-form-label">
-          Department Name<span class="text-danger">*</span>
-        </label>
+        <label class="col-lg-1 col-form-label required">Department Name:</label>
         <div class="col-lg-3">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Enter department name"
-            formControlName="departmentName"
+          <input type="text" class="form-control" placeholder="Enter department name" formControlName="departmentName"
             [class.is-invalid]="departmentName?.invalid && (departmentName?.touched || departmentName?.dirty)"
-            [class.is-valid]="departmentName?.valid && (departmentName?.touched || departmentName?.dirty)"
-          />
-          <div class="invalid-feedback" *ngIf="departmentName?.errors?.['required']">
-            Department name is required
-          </div>
+            [class.is-valid]="departmentName?.valid && (departmentName?.touched || departmentName?.dirty)" />
+          <span class="invalid-feedback"
+            *ngIf="departmentName?.invalid && (departmentName?.touched || departmentName?.dirty)">
+            {{ getErrorMessage('departmentName') }}
+          </span>
         </div>
 
         <!-- Department Code -->
-        <label class="col-lg-1 col-form-label">Department Code</label>
+        <label class="col-lg-1 col-form-label">Department Code:</label>
         <div class="col-lg-3">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Enter department code"
-            formControlName="departmentCode"
-          />
+          <input type="text" class="form-control" placeholder="Enter department code" formControlName="departmentCode"
+            [class.is-invalid]="departmentCode?.invalid && (departmentCode?.touched || departmentCode?.dirty)"
+            [class.is-valid]="departmentCode?.valid && (departmentCode?.touched || departmentCode?.dirty)" />
+          <span class="invalid-feedback"
+            *ngIf="departmentCode?.invalid && (departmentCode?.touched || departmentCode?.dirty)">
+            {{ getErrorMessage('departmentCode') }}
+          </span>
+          <span class="form-text text-muted">
+            Max 20 characters. No spaces only.
+          </span>
         </div>
-         <label class="col-lg-1 col-form-label">Parent Department:</label>
+
+        <!-- Parent Department -->
+        <label class="col-lg-1 col-form-label">
+          Parent Department:
+        </label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="parentDepartmentId">
-            <option value='' selected>Parent Department</option>
-            @for (p of departmentDD; track p.key) {
-            <option [value]="p.key">{{ p.label }}</option>
-            }
+            <option value="">Select Department</option>
+            <option *ngFor="let p of departmentDD" [value]="p.key">
+              {{ p.label }}
+            </option>
           </select>
-          <span class="form-text text-muted">Please  select Parent Department</span>
-           
-        </div>
-      </div>
-
-            <div class="form-group row kt-margin-t-20">
-        <!-- Status -->
-        <label class="col-lg-1 col-form-label">Status</label>
-        <div class="col-lg-3">
-          <label class="kt-checkbox kt-margin-t-10">
-            <input type="checkbox" formControlName="active" />
-            Active
-            <span></span>
-          </label>
+          <span class="form-text text-muted">
+            Select only if this department reports to another
+          </span>
         </div>
 
       </div>
-      <!-- Description -->
-      <div class="form-group row">
-        <label class="col-lg-1 col-form-label">Description</label>
-        <div class="col-lg-11">
-          <textarea
-            class="form-control"
-            rows="3"
-            placeholder="Enter department description"
-            formControlName="description"
-          ></textarea>
-        </div>
-      </div>
 
-      <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
-
-      <!-- Address Information -->
-      <h4 class="kt-margin-b-20">Address Information</h4>
-
-      <div class="form-group row">
+      <!-- Status -->
+      <div class="form-group row kt-margin-t-20">
         <label class="col-lg-1 col-form-label">Search</label>
         <div class="col-lg-3">
 
           <div class="kt-input-icon kt-input-icon--left">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Search..."
-              (input)="filterData()"
-              id="generalSearch"
-            />
+            <input formControlName="employeeSearch" type="text" class="form-control" placeholder="Search..."
+              (input)="onEmployeeSearch($event)" id="generalSearch" />
             <span class="kt-input-icon__icon kt-input-icon__icon--left">
               <span><i class="la la-search"></i></span>
             </span>
           </div>
+          <span class="form-text text-muted">
+            Optional – assign later if unknown
+          </span>
 
           <ul *ngIf="filteredData.length > 0" class="search-results">
-            <li
-              *ngFor="let item of filteredData"
-              (click)="selectItem(item)"
-            >
-              {{ item }}
+            <li *ngFor="let item of filteredData" (click)="selectEmployee(item)">
+              {{item.employeeCode}} - {{item.fullName }}
             </li>
           </ul>
 
         </div>
+        <label class="col-lg-1 col-form-label">Status:</label>
+        <div class="col-lg-3">
+          <label class="kt-checkbox kt-margin-t-10">
+            <input type="checkbox" formControlName="active" /> Active
+            <span></span>
+          </label>
+        </div>
       </div>
 
-    </div> <!-- END kt-portlet__body -->
+      <!-- Description -->
+      <div class="form-group row">
+        <label class="col-lg-1 col-form-label">Description:</label>
+        <div class="col-lg-11">
+          <textarea class="form-control" rows="3" placeholder="Enter department description"
+            formControlName="description"
+            [class.is-invalid]="description?.invalid && (description?.touched || description?.dirty)"
+            [class.is-valid]="description?.valid && (description?.touched || description?.dirty)"></textarea>
+          <span class="invalid-feedback" *ngIf="description?.invalid && (description?.touched || description?.dirty)">
+            {{ getErrorMessage('description') }}
+          </span>
+        </div>
+      </div>
+    </div>
 
     <!-- Footer -->
     <div class="kt-portlet__foot">
@@ -131,17 +116,10 @@
             <button type="submit" class="btn btn-dark mr-2">
               {{ isEditMode ? 'Update Department' : 'Add Department' }}
             </button>
-            <button
-              type="button"
-              class="btn btn-danger"
-              (click)="goToDepartmentListing()"
-            >
-              Cancel
-            </button>
+            <button type="button" class="btn btn-danger" (click)="goToDepartmentListing()">Cancel</button>
           </div>
         </div>
       </div>
     </div>
-
   </form>
 </div>

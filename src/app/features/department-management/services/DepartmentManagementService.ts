@@ -44,7 +44,7 @@ export class DepartmentManagementService {
 
   searchDepartments(query: string): Observable<any> {
     const url = query
-      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DEPARTMENTS.GET_ALL}`
+      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DEPARTMENTS.SEARCH(query)}`
       : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DEPARTMENTS.GET_ALL}`;
 
     return this.http.request(HTTP_METHOD.GET, url, {

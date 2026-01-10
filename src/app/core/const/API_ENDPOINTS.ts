@@ -28,7 +28,7 @@ export const API_ENDPOINTS = {
         UPDATE_STUDENT_FEE: (id: string) => `/api/students/${id}/fees/update`,
         STUDENT_FEE_SUMMARY: '/api/students/fee/summary/filter',
         STUDENT_FEE_PAYMENT: '/api/students/fee/payments',
-         UPLOAD_DOCS: `/api/institute/students/upload-document`,
+        UPLOAD_DOCS: `/api/institute/students/upload-document`,
         DOWNLOAD_DOCS: `/api/institute/students/download-document`,
         GET_STUDENT_DOCS: (id: string) => `/api/institute/students/${id}/documents`,
 
@@ -53,7 +53,7 @@ export const API_ENDPOINTS = {
         DOWNLOAD_DOCS: `/api/institute/employees/download-document`,
         GET_EMPLOYEE_DOCS: (id: string) => `/api/institute/employees/${id}/documents`,
         GET_ALL: '/api/institute/employees',
-        SEARCH: (keyword: string) => `/api/fee/catalogs/search/${keyword}`,
+        SEARCH: (keyword: string) => `/api/institute/employees/search?name=${keyword}`,
         GET_BY_ID: (id: string) => `/api/institute/employees/${id}`,
 
         ADDRESS: {
@@ -101,7 +101,8 @@ export const API_ENDPOINTS = {
             GET_ALL: '/api/institute/departments',
             GET_ACTIVE: '/api/institute/departments/active',
             GET_BY_ID: (id: string | number) => `/api/institute/departments/${id}`,
-            DELETE: (id: string | number) => `/api/institute/departments/${id}`
+            DELETE: (id: string | number) => `/api/institute/departments/${id}`,
+            SEARCH: (keyword: string) => `/api/institute/departments/search?keyword=${keyword}`,
         },
         DESIGNATIONS: {
             CREATE: '/api/institute/designations',

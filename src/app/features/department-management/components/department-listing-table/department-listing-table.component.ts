@@ -37,7 +37,7 @@ export class DepartmentListingTableComponent {
     { key: 'departmentCode', label: 'Department Code', sortable: true },
     { key: 'description', label: 'Description', sortable: false },
     { key: 'parentDepartmentName', label: 'Parent Department', sortable: true },
-    { key: 'headEmployeeId', label: 'Head Employee', sortable: true },
+    { key: 'headEmployeeName', label: 'Head Employee Name', sortable: true },
     { key: 'isActive', label: 'Status', sortable: true },
     { key: 'actions', label: 'Actions', sortable: false }
   ];
