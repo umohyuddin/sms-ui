@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { Router } from '@angular/router';
 import { SalaryStructureComponentListingTableComponent } from '../../components/salary-structure-component-listing-table/salary-structure-component-listing-table.component';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
 @Component({
   selector: 'app-salary-structure-component-listing',
@@ -24,6 +25,6 @@ export class SalaryStructureComponentListingComponent implements OnInit {
 
   goToSalaryStructureComponentCreate(): void {
     // Assuming route exists
-    // this.router.navigate(ROUTES.SALARY.SALARY_STRUCTURE_COMPONENT.CREATE);
+    this.router.navigate(ROUTES.SALARY_STRUCTURE_COMPONENT.CREATE);
   }
 }

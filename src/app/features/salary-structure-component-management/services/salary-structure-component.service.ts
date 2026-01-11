@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { HTTP_METHOD } from '../../../core/const/HTTP_METHOD';
 import { API_ENDPOINTS } from '../../../core/const/API_ENDPOINTS';
 import { SalaryStructureComponent } from '../models/SalaryStructureComponent';
+import { ROUTES } from '../../../core/const/APP_ROUTES';
 
 @Injectable({
   providedIn: 'root'
@@ -357,7 +358,7 @@ export class SalaryStructureComponentService {
     return of({ body: component });
   }
 
-  saveSalaryStructureComponent(id: number | null, payload: SalaryStructureComponent): Observable<any> {
+  saveSalaryStructureComponent(id: string | null, payload: SalaryStructureComponent): Observable<any> {
     // For static data, this is a no-op. In real app, would make API call
     return of({ body: payload });
   }
@@ -373,5 +374,13 @@ export class SalaryStructureComponentService {
   getSalaryStructureComponentsByStructureId(structureId: number): Observable<any> {
     const filtered = this.salaryStructureComponents.filter(c => c.salaryStructureId === structureId);
     return of({ body: filtered });
+  }
+
+    createSalaryComponentMapping(payload: any): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.POST,
+      `${this.baseUrl}${API_ENDPOINTS.SALARY_STRUCTURE_COMPONENT.CREATE}`,
+      { observeResponse: true, body: payload }
+    );
   }
 }

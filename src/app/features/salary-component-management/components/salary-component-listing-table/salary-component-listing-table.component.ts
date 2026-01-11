@@ -24,6 +24,7 @@ export class SalaryComponentListingTableComponent implements OnInit {
   searchControl = new FormControl('');
   salaryComponents: SalaryComponentResponse[] = [];
   private destroy$ = new Subject<void>();
+  
 
   CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
   constructor(private router: Router,

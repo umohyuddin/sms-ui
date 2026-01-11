@@ -1,1 +1,88 @@
-<p>salary-structure-component-create-form works!</p>
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+                {{ isEditMode ? 'Update Salary Structure Mapping' : 'Manage Salary Structure Mapping' }}
+            </h3>
+        </div>
+    </div>
+
+    <!--begin::Form-->
+    <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
+        <div class="kt-portlet__body">
+            <h4>Salary Structure Mapping Information</h4>
+
+            <div class="form-group row form-group-marginless kt-margin-t-20">
+                <label class="col-lg-1 col-form-label required">Salary Structure:</label>
+                <div class="col-lg-3">
+                    <select class="form-control" formControlName="salaryStructureId"
+                        (change)="onSalaryStructureChange()"
+                        [class.is-invalid]="salaryStructureId?.invalid && (salaryStructureId?.touched || salaryStructureId?.dirty)"
+                        [class.is-valid]="salaryStructureId?.valid && (salaryStructureId?.touched || salaryStructureId?.dirty)">
+                        <option value="">Select Salary Structure</option>
+                        <option *ngFor="let s of salaryStructureDD" [value]="s.key">{{ s.label }}</option>
+                    </select>
+                    <span class="form-text text-muted">Please select a salary structure</span>
+                    <span class="invalid-feedback"
+                        *ngIf="salaryStructureId?.invalid && (salaryStructureId?.touched || salaryStructureId?.dirty)">
+                        Salary Structure is required.
+                    </span>
+                </div>
+            </div>
+<div class="form-group row mt-3" *ngIf="selectedSalaryStructure">
+  <label class="col-lg-1 col-form-label font-weight-bold">Base Salary:</label>
+  <div class="col-lg-3">
+    <input type="text" class="form-control" [value]="selectedSalaryStructure.baseSalary | currency:'PKR':'symbol':'1.0-0'" disabled>
+    <small class="form-text text-muted">This is the base salary of the selected structure</small>
+  </div>
+</div>
+
+
+            <div formArrayName="components" class="form-group mt-3">
+                <div *ngFor="let comp of componentsFormArray.controls; let i = index" [formGroupName]="i"
+                    class="row mb-3 p-2 align-items-center" style="background-color: #f9f9f9; border-radius: 5px;">
+
+                    <!-- Checkbox -->
+                    <div class="col-lg-4 d-flex align-items-center">
+                        <label class="kt-checkbox mb-0" style="font-weight: 500;">
+                            <input type="checkbox" formControlName="selected"> {{ comp.get('componentName')?.value }}
+                            <span></span>
+                        </label>
+                    </div>
+
+                    <!-- Input Field -->
+                    <div class="col-lg-4">
+                        <ng-container *ngIf="comp.get('isPercentage')?.value; else normalInput">
+                            <input type="number" class="form-control" formControlName="value"
+                                placeholder="Enter % value (0 - 100)" min="0" max="100">
+                            <small class="form-text text-muted">Enter percentage value for this component</small>
+                        </ng-container>
+                        <ng-template #normalInput>
+                            <input type="text" class="form-control" formControlName="value" placeholder="Enter value">
+                            <small class="form-text text-muted">Enter numeric or text value</small>
+                        </ng-template>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+                <div class="row">
+                    <div class="col-lg-6"></div>
+                    <div class="col-lg-6">
+                        <button type="submit" class="btn btn-dark mr-2">
+                            {{ isEditMode ? 'Update Mapping' : 'Save Mapping' }}
+                        </button>
+                        <button type="button" class="btn btn-danger" (click)="goToListing()">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--end::Form-->
+</div>
