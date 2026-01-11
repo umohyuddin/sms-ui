@@ -16,7 +16,7 @@ export const API_ENDPOINTS = {
         GET_BY_ID: (id: string) => `/api/institute/salary-components/${id}`,
         CREATE: '/api/institute/salary-components',
         UPDATE: (id: string) => `/api/institute/salary-components/${id}`,
-        SEARCH: (keyword: string) => `/api/institute/salary-components/${keyword}`,
+        SEARCH: (keyword: string) => `/api/institute/salary-components/search/${keyword}`,
         META: '/api/institute/salary-components'
     },
     STUDENTS: {

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { SalaryComponentCreateFormComponent } from '../../components/salary-component-create-form/salary-component-create-form.component';
 
 @Component({
   selector: 'app-salary-component-create',
   standalone: true,
-  imports: [],
+  imports: [SalaryComponentCreateFormComponent],
   templateUrl: './salary-component-create.component.html',
   styleUrl: './salary-component-create.component.css'
 })

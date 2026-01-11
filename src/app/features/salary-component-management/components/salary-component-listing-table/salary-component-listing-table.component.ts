@@ -7,6 +7,7 @@ import { Pagination } from '../../../../core/pagar/pagination';
 import { SalaryComponentResponse } from '../../models/SalaryComponent';
 import { SalaryComponentService } from '../../services/salary-component.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { CHARGE_TYPE_CLASSES } from '../../../../core/const/COLOR_CONST';
 
 @Component({
   selector: 'app-salary-component-listing-table',
@@ -24,18 +25,27 @@ export class SalaryComponentListingTableComponent implements OnInit {
   salaryComponents: SalaryComponentResponse[] = [];
   private destroy$ = new Subject<void>();
 
+  CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
   constructor(private router: Router,
     private salaryComponentService: SalaryComponentService,
   ) { }
 
   columns = [
     { key: 'name', label: 'Component Name', sortable: true },
-    { key: 'id', label: 'Component ID', sortable: true },
-    { key: 'isPercentage', label: 'Is Percentage', sortable: true },
+    { key: 'isPercentage', label: 'Charge Type', sortable: true },
     { key: 'type', label: 'Type', sortable: false },
     { key: 'actions', label: 'Actions', sortable: false }
   ];
 
+  getChargeTypeFromPercentage(item: any): string {
+  if (item?.isPercentage === true) {
+    return 'PERCENTAGE';
+  }
+  if (item?.isPercentage === false) {
+    return 'FIXED';
+  }
+  return 'NONE';
+}
   ngOnInit() {
     this.getSalaryComponents();
     this.subscribeToSearch();

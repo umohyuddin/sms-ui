@@ -1,1 +1,87 @@
-<p>salary-component-create-form works!</p>
+<div class="kt-portlet">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-label">
+      <h3 class="kt-portlet__head-title">
+        {{ isEditMode ? 'Update Salary Component' : 'Add Salary Component' }}
+      </h3>
+    </div>
+  </div>
+
+  <form class="kt-form kt-form--label-right" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="kt-portlet__body">
+      <h4>Component Information</h4>
+
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <!-- Component Name -->
+        <label class="col-lg-1 col-form-label required">Component Name:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" formControlName="name" placeholder="Component Name"
+                 [class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
+                 [class.is-valid]="name?.valid && (name?.touched || name?.dirty)">
+          <span class="form-text text-muted">Enter component name</span>
+          <span class="invalid-feedback" *ngIf="name?.invalid && (name?.touched || name?.dirty)">
+            {{ getErrorMessage('name') }}
+          </span>
+        </div>
+
+        <!-- Component Type -->
+        <label class="col-lg-1 col-form-label required">Component Type:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="type"
+                  [class.is-invalid]="type?.invalid && (type?.touched || type?.dirty)"
+                  [class.is-valid]="type?.valid && (type?.touched || type?.dirty)">
+            <option value="" selected>Select Type</option>
+            <option *ngFor="let t of componentTypes" [value]="t.key">{{ t.label }}</option>
+          </select>
+          <span class="form-text text-muted">Select component type</span>
+          <span class="invalid-feedback" *ngIf="type?.invalid && (type?.touched || type?.dirty)">
+            {{ getErrorMessage('type') }}
+          </span>
+        </div>
+
+                <label class="col-lg-1 col-form-label required">Calculation Mode:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="isPercentage"
+                  [class.is-invalid]="isPercentage?.invalid && (isPercentage?.touched || isPercentage?.dirty)"
+                  [class.is-valid]="isPercentage?.valid && (isPercentage?.touched || isPercentage?.dirty)">
+            <option value="">Select Mode</option>
+            <option *ngFor="let p of percentageOptions" [ngValue]="p.key">{{ p.label }}</option>
+          </select>
+          <span class="form-text text-muted">Select calculation mode</span>
+          <span class="invalid-feedback" *ngIf="isPercentage?.invalid && (isPercentage?.touched || isPercentage?.dirty)">
+            {{ getErrorMessage('isPercentage') }}
+          </span>
+        </div>
+
+
+      </div>
+
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <!-- Calculation Mode -->
+        <!-- Status Checkbox -->
+        <!-- <label class="col-lg-1 col-form-label">Status:</label>
+        <div class="col-lg-3">
+          <label class="kt-checkbox kt-margin-t-10">
+            <input type="checkbox" formControlName="active"> Is Active
+            <span></span>
+          </label>
+        </div> -->
+      </div>
+
+    </div>
+
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions">
+        <div class="row">
+          <div class="col-lg-5"></div>
+          <div class="col-lg-7">
+            <button type="submit" class="btn btn-dark mr-2">
+              {{ isEditMode ? 'Update Component' : 'Add Component' }}
+            </button>
+            <button type="button" class="btn btn-danger" (click)="cancel()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

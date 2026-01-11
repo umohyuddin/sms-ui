@@ -26,11 +26,11 @@ export class SalaryComponentService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.SALARY_COMPONENT.GET_ALL}`, { observeResponse: true });
   }
 
-  getSalaryComponentById(id: number): Observable<any> {
+  getSalaryComponentById(id: string): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.SALARY_COMPONENT.GET_BY_ID(id.toString())}`, { observeResponse: true });
   }
 
-  saveSalaryComponent(id: number | null, payload: SalaryComponentResponse): Observable<any> {
+  saveSalaryComponent(id: string | null, payload: SalaryComponentResponse): Observable<any> {
     const isUpdate = !!id;
     const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
     const url = isUpdate ? `${this.baseUrl}${API_ENDPOINTS.SALARY_COMPONENT.UPDATE(id.toString())}` : `${this.baseUrl}${API_ENDPOINTS.SALARY_COMPONENT.CREATE}`;
