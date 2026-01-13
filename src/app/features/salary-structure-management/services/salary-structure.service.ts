@@ -52,4 +52,9 @@ export class SalaryStructureService {
   deleteSalaryStructure(id: string): Observable<any> {
     return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}${API_ENDPOINTS.SALARY_STRUCTURE.DELETE(id)}`, { observeResponse: true });
   }
+
+    getSalaryStructureByEmployeeType(employeeTypeId: string): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.SALARY_STRUCTURE.DETAIL_BY_EMPLOYEE_TYPE(employeeTypeId)}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
+  }
 }

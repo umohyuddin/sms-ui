@@ -4,23 +4,25 @@ import { Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
-import { SalaryStructureComponent } from '../../models/SalaryStructureComponent';
 import { SalaryStructureComponentService } from '../../services/salary-structure-component.service';
+import { A11yModule } from "@angular/cdk/a11y";
+import { SalaryStructureDetails } from '../../models/SalaryStructureDetails';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
 @Component({
   selector: 'app-salary-structure-component-listing-table',
   standalone: true,
   imports: [CommonModule,
     ReactiveFormsModule,
-    RouterModule
-  ],
+    RouterModule, A11yModule],
   templateUrl: './salary-structure-component-listing-table.component.html',
   styleUrls: ['./salary-structure-component-listing-table.component.css']
 })
 export class SalaryStructureComponentListingTableComponent implements OnInit {
-  pagination: Pagination<SalaryStructureComponent> = new Pagination([], 10);
+  //pagination: Pagination<SalaryStructureComponent> = new Pagination([], 10);
   searchControl = new FormControl('');
-  salaryStructureComponents: SalaryStructureComponent[] = [];
+  // salaryStructureComponents: SalaryStructureComponent[] = [];
+  salaryStructureDetails: SalaryStructureDetails[] = [];
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router,
@@ -39,7 +41,7 @@ export class SalaryStructureComponentListingTableComponent implements OnInit {
 
   ngOnInit() {
     this.getSalaryStructureComponents();
-    this.subscribeToSearch();
+    //this.subscribeToSearch();
   }
 
   ngOnDestroy() {
@@ -47,32 +49,34 @@ export class SalaryStructureComponentListingTableComponent implements OnInit {
     this.destroy$.complete();
   }
 
-  private subscribeToSearch() {
-    this.searchControl.valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        switchMap(search => this.salaryStructureComponentService.searchSalaryStructureComponents(search || '')),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: (response) => {
-          this.salaryStructureComponents = response.body;
-          this.pagination = new Pagination(this.salaryStructureComponents, 10);
-        },
-        error: (error) => {
-          console.error('Search error:', error);
-        }
-      });
-  }
+  // private subscribeToSearch() {
+  //   this.searchControl.valueChanges
+  //     .pipe(
+  //       debounceTime(400),
+  //       distinctUntilChanged(),
+  //       switchMap(search => this.salaryStructureComponentService.searchSalaryStructureComponents(search || '')),
+  //       takeUntil(this.destroy$)
+  //     )
+  //     .subscribe({
+  //       next: (response) => {
+  //         this.salaryStructureComponents = response.body;
+  //         this.pagination = new Pagination(this.salaryStructureComponents, 10);
+  //       },
+  //       error: (error) => {
+  //         console.error('Search error:', error);
+  //       }
+  //     });
+  // }
 
   getSalaryStructureComponents() {
     this.salaryStructureComponentService.getAllSalaryStructureComponents().subscribe({
       next: (response) => {
         console.log('Success Status:', response.status);
         console.log('Response Body:', response.body);
-        this.salaryStructureComponents = response.body;
-        this.pagination = new Pagination(this.salaryStructureComponents, 10);
+        //this.salaryStructureComponents = response.body;
+
+        this.salaryStructureDetails = response.body;
+        //this.pagination = new Pagination(this.salaryStructureComponents, 10);
       },
       error: (error) => {
         console.error('Request Error Status:', error.status);
@@ -84,21 +88,21 @@ export class SalaryStructureComponentListingTableComponent implements OnInit {
     })
   }
 
-  viewDetails(item: SalaryStructureComponent, event: Event): void {
-    console.log('Viewing details for Component ID:', item.id);
-    event.preventDefault();
-    // Assuming routes are defined
-    // this.router.navigate(ROUTES.SALARY.SALARY_STRUCTURE_COMPONENT.DETAILS(item.id.toString()));
-  }
+  // viewDetails(item: SalaryStructureComponent, event: Event): void {
+  //   console.log('Viewing details for Component ID:', item.id);
+  //   event.preventDefault();
+  //   // Assuming routes are defined
+  //   // this.router.navigate(ROUTES.SALARY.SALARY_STRUCTURE_COMPONENT.DETAILS(item.id.toString()));
+  // }
 
-  editDetails(item: SalaryStructureComponent, event: Event): void {
+  editDetails(item: SalaryStructureDetails, event: Event): void {
     event.preventDefault();
     console.log('Editing Component ID:', item.id);
-    // this.router.navigate(ROUTES.SALARY.SALARY_STRUCTURE_COMPONENT.EDIT(item.id.toString()));
+    this.router.navigate(ROUTES.SALARY_STRUCTURE_COMPONENT.EDIT(item.id.toString()));
   }
 
-  onPageSizeChange(event: any) {
-    const newSize = +event.target.value;
-    this.pagination.changePageSize(newSize);
-  }
+  // onPageSizeChange(event: any) {
+  //   const newSize = +event.target.value;
+  //   this.pagination.changePageSize(newSize);
+  // }
 }

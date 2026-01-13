@@ -52,9 +52,6 @@ getConcessionComponentsByTypeId(id: string): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_SUB_TYPE.GET_ALL}`, { observeResponse: true });
   }
 
-  
-
-
   searchConcessionComponents(params: any): Observable<any> {
     console.log(this.baseUrl)
     console.log('🔗 Search URL:', this.baseUrl);

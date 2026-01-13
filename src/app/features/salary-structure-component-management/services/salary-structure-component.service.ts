@@ -344,13 +344,11 @@ export class SalaryStructureComponentService {
   }
 
   getSalaryStructureComponentMeta(): Observable<any> {
-    // For now, return static data. In real app, this would be an API call
-    return of({ body: this.salaryStructureComponents });
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.SALARY_STRUCTURE_COMPONENT.GET_ALL}`, { observeResponse: true });
   }
 
   getAllSalaryStructureComponents(): Observable<any> {
-    // Return static data wrapped in response format
-    return of({ body: this.salaryStructureComponents });
+     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.SALARY_STRUCTURE.DETAIL}`, { observeResponse: true });
   }
 
   getSalaryStructureComponentById(id: number): Observable<any> {
@@ -376,10 +374,17 @@ export class SalaryStructureComponentService {
     return of({ body: filtered });
   }
 
-    createSalaryComponentMapping(payload: any): Observable<any> {
+  createSalaryComponentMapping(payload: any): Observable<any> {
     return this.http.request(
       HTTP_METHOD.POST,
       `${this.baseUrl}${API_ENDPOINTS.SALARY_STRUCTURE_COMPONENT.CREATE}`,
+      { observeResponse: true, body: payload }
+    );
+  }
+  updateSalaryComponentMapping(id:string,payload: any): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.PUT,
+      `${this.baseUrl}${API_ENDPOINTS.SALARY_STRUCTURE_COMPONENT.UPDATE(id)}`,
       { observeResponse: true, body: payload }
     );
   }

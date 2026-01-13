@@ -1,173 +1,155 @@
 <div class="kt-portlet kt-portlet--mobile">
-  <div class="kt-portlet__head kt-portlet__head--lg">
-    <div class="kt-portlet__head-label">
-      <span class="kt-portlet__head-icon">
-        <i class="kt-font-dark flaticon-squares"></i>
-      </span>
-      <h3 class="kt-portlet__head-title">
-        Salary Structure Component Listing
-      </h3>
-    </div>
-    <div class="kt-portlet__head-toolbar">
-      <div class="kt-portlet__head-wrapper">
-        <div class="kt-portlet__head-actions">
+	<div class="kt-portlet__head kt-portlet__head--lg">
+		<div class="kt-portlet__head-label">
+			<span class="kt-portlet__head-icon">
+				<i class="kt-font-dark flaticon-squares"></i>
+			</span>
+			<h3 class="kt-portlet__head-title">
+				Salary Structure Component Listing
+			</h3>
+		</div>
+		<div class="kt-portlet__head-toolbar">
+			<div class="kt-portlet__head-wrapper">
+				<div class="kt-portlet__head-actions">
 
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="kt-portlet__body">
+				</div>
+			</div>
+		</div>
+	</div>
 
+	<div class="row">
+		<div class="col-6" *ngFor="let structure of salaryStructureDetails; let i = index">
+			<div class="kt-portlet kt-portlet--height-fluid">
+				<!-- Header -->
+				<div class="kt-portlet__head">
+					<div class="kt-portlet__head-label">
+						<h3 class="kt-portlet__head-title">
+							{{ structure.employeeTypeName }}
+						</h3>
+					</div>
+					<div class="kt-portlet__head-toolbar">
+						<div class="kt-portlet__head-wrapper">
+							<div class="kt-portlet__head-actions">
 
-    <!--begin: Datatable -->
+								<a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle"
+									data-toggle="dropdown">
+									Actions
+								</a>
+								<div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
 
-    <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-      <div class="row">
-        <div class="col-sm-12 col-md-6">
-          <div class="dataTables_length" id="kt_table_1_length">
-            <label>Show <select (change)="onPageSizeChange($event)" name="kt_table_1_length" aria-controls="kt_table_1"
-                class="custom-select custom-select-sm form-control form-control-sm">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select> entries</label>
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-6">
-          <div id="kt_table_1_filter" class="dataTables_filter">
-            <label>Search:
-              <input [formControl]="searchControl" type="search" class="form-control form-control-sm" placeholder=""
-                aria-controls="kt_table_1">
-            </label>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          @if(salaryStructureComponents && salaryStructureComponents.length > 0){
-          <table class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
-            id="kt_table_1" role="grid" aria-describedby="kt_table_1_info" style="width: 1162px;">
-            <thead>
-              <tr role="row">
-                <th tabindex="0" aria-controls="kt_table_1" rowspan="1" colspan="1" aria-sort="ascending"
-                  aria-label="ID: activate to sort column descending" *ngFor="let col of columns">{{ col.label }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
+									<!--begin::Nav-->
+									<ul class="kt-nav">
+										<!-- <li class="kt-nav__head">
+											Export Options
+											<span data-toggle="kt-tooltip" data-placement="right" title=""
+												data-original-title="Click to learn more...">
+												<svg xmlns="http://www.w3.org/2000/svg"
+													xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+													height="24px" viewBox="0 0 24 24" version="1.1"
+													class="kt-svg-icon kt-svg-icon--brand kt-svg-icon--md1">
+													<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+														<rect id="bound" x="0" y="0" width="24" height="24"></rect>
+														<circle id="Oval-5" fill="#000000" opacity="0.3" cx="12" cy="12"
+															r="10"></circle>
+														<rect id="Rectangle-9" fill="#000000" x="11" y="10" width="2"
+															height="7" rx="1"></rect>
+														<rect id="Rectangle-9-Copy" fill="#000000" x="11" y="7"
+															width="2" height="2" rx="1"></rect>
+													</g>
+												</svg> </span>
+										</li>
+										<li class="kt-nav__separator"></li>
+										<li class="kt-nav__item">
+											<a href="#" class="kt-nav__link">
+												<i class="kt-nav__link-icon flaticon2-drop"></i>
+												<span class="kt-nav__link-text">Activity</span>
+											</a>
+										</li>
+										<li class="kt-nav__item">
+											<a href="#" class="kt-nav__link">
+												<i class="kt-nav__link-icon flaticon2-calendar-8"></i>
+												<span class="kt-nav__link-text">FAQ</span>
+											</a>
+										</li> -->
+										<li class="kt-nav__item">
+											<a class="kt-nav__link">
+												<i class="kt-nav__link-icon flaticon2-link"></i>
+												<span class="kt-nav__link-text" (click)="editDetails(structure,$event)">Update</span>
+											</a>
+										</li>
+										<!-- <li class="kt-nav__item">
+											<a href="#" class="kt-nav__link">
+												<i class="kt-nav__link-icon flaticon2-new-email"></i>
+												<span class="kt-nav__link-text">Support</span>
+												<span class="kt-nav__link-badge">
+													<span class="kt-badge kt-badge--success kt-badge--rounded">5</span>
+												</span>
+											</a>
+										</li>
+										<li class="kt-nav__separator"></li>
+										<li class="kt-nav__foot">
+											<a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
+											<a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="kt-tooltip"
+												data-placement="right" title=""
+												data-original-title="Click to learn more...">Learn more</a>
+										</li> -->
+									</ul>
 
-              <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
-                <td>{{ item.id }}</td>
-                <td>{{ item.salaryStructureId }}</td>
-                <td>{{ item.componentName }}</td>
-                <td>
-                  <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                  [ngClass]="item.componentType === 'EARNING' ? 'kt-badge--success' : 'kt-badge--warning'">
-                  {{ item.componentType }}</span>
-                </td>
-                <td>{{ item.value }}</td>
-                <td>
-                  <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                  [ngClass]="item.isPercentage ? 'kt-badge--brand' : 'kt-badge--secondary'">
-                  {{ item.isPercentage ? 'Percentage' : 'Fixed' }}</span>
-                </td>
-                <td nowrap="">
-                  <span class="dropdown">
-                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown"
-                      aria-expanded="true">
-                      <i class="la la-ellipsis-h"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item" href="#" (click)="editDetails(item,$event)"><i
-                          class="la la-edit"></i> Edit Details</a>
-                      <a class="dropdown-item" href="#" (click)="viewDetails(item,$event)">
-                        <i class="la la-eye"></i> View Details</a>
-                    </div>
-                  </span>
-                  <a (click)="viewDetails(item,$event)" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
-                    <i class="la la-eye"></i>
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          }
-          @else{
-          <div class="alert alert-dark" role="alert">
-            <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
-            <div class="alert-text">Please check back later or add a new Salary Structure Component.
-            </div>
-          </div>
-          }
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-5">
-          <div class="dataTables_info" id="kt_table_1_info" role="status" aria-live="polite">Showing {{
-            pagination.startItem }} to {{ pagination.endItem }} of {{ pagination.totalItems }} entries</div>
-        </div>
-        <div class="col-sm-12 col-md-7">
-          <div class="dataTables_paginate paging_full_numbers" id="kt_table_1_paginate">
-            <ul class="pagination">
+									<!--end::Nav-->
+								</div>
 
-              <!-- FIRST -->
-              <li class="paginate_button page-item first" [class.disabled]="pagination.pageIndex === 0">
-                <a class="page-link" (click)="pagination.first()">
-                  <i class="la la-angle-double-left"></i>
-                </a>
-              </li>
+							</div>
+						</div>
+					</div>
+				</div>
 
-              <!-- PREVIOUS -->
-              <li class="paginate_button page-item previous" [class.disabled]="pagination.pageIndex === 0">
-                <a class="page-link" (click)="pagination.prev()">
-                  <i class="la la-angle-left"></i>
-                </a>
-              </li>
+				<!-- Body -->
+				<div class="kt-portlet__body">
+					<!-- Base salary info -->
+					<div class="mb-3">
+						<strong>Base Salary:</strong>
+						{{ structure.baseSalary | number }}
+						<br />
+						<strong>Effective From:</strong>
+						{{ structure.effectiveFrom | date }}
+					</div>
 
-              <!-- LEFT ELLIPSIS -->
-              <li class="paginate_button page-item disabled" *ngIf="pagination.showLeftEllipsis">
-                <a class="page-link">...</a>
-              </li>
+					<!-- Components -->
+					<div class="kt-widget4" *ngIf="structure.components.length > 0; else noComponents">
+						<div class="kt-widget4__item" *ngFor="let comp of structure.components">
+							<div class="kt-widget4__info">
+								<a href="#" class="kt-widget4__title">
+									{{ comp.componentName }}
+								</a>
+								<span class="kt-widget4__sub">
+									{{ comp.componentType }}
+									•
+									{{ comp.isPercentage ? 'Percentage' : 'Fixed' }}
+								</span>
+							</div>
 
-              <!-- PAGE NUMBERS -->
-              <li class="paginate_button page-item" *ngFor="let page of pagination.visiblePages"
-                [class.active]="pagination.pageIndex === page">
+							<div class="kt-widget4__tools">
+								<span>
+									{{ comp.value }}{{ comp.isPercentage ? '%' : '' }}
+								</span>
+							</div>
+						</div>
+					</div>
 
-                <a class="page-link" (click)="pagination.goToPage(page)">
-                  {{ page + 1 }}
-                </a>
-              </li>
-
-              <!-- RIGHT ELLIPSIS -->
-              <li class="paginate_button page-item disabled" *ngIf="pagination.showRightEllipsis">
-                <a class="page-link">...</a>
-              </li>
-
-              <!-- NEXT -->
-              <li class="paginate_button page-item next"
-                [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
-                <a class="page-link" (click)="pagination.next()">
-                  <i class="la la-angle-right"></i>
-                </a>
-              </li>
-
-              <!-- LAST -->
-              <li class="paginate_button page-item last"
-                [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
-                <a class="page-link" (click)="pagination.last()">
-                  <i class="la la-angle-double-right"></i>
-                </a>
-              </li>
-
-            </ul>
-
-          </div>
-        </div>
-      </div>
-    </div>
+					<!-- No components -->
+					<ng-template #noComponents>
+						<div class="text-muted text-center">
+							No salary components defined
+						</div>
+					</ng-template>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
-    <!--end: Datatable -->
-  </div>
+	<!--begin:: Widgets/New Users-->
+
+	<!--end:: Widgets/New Users-->
+
 </div>

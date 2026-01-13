@@ -29,13 +29,14 @@
                     </span>
                 </div>
             </div>
-<div class="form-group row mt-3" *ngIf="selectedSalaryStructure">
-  <label class="col-lg-1 col-form-label font-weight-bold">Base Salary:</label>
-  <div class="col-lg-3">
-    <input type="text" class="form-control" [value]="selectedSalaryStructure.baseSalary | currency:'PKR':'symbol':'1.0-0'" disabled>
-    <small class="form-text text-muted">This is the base salary of the selected structure</small>
-  </div>
-</div>
+            <div class="form-group row mt-3" *ngIf="selectedSalaryStructure">
+                <label class="col-lg-1 col-form-label font-weight-bold">Base Salary:</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control"
+                        [value]="selectedSalaryStructure.baseSalary | currency:'PKR':'symbol':'1.0-0'">
+                    <small class="form-text text-muted">This is the base salary of the selected structure</small>
+                </div>
+            </div>
 
 
             <div formArrayName="components" class="form-group mt-3">
@@ -45,23 +46,47 @@
                     <!-- Checkbox -->
                     <div class="col-lg-4 d-flex align-items-center">
                         <label class="kt-checkbox mb-0" style="font-weight: 500;">
-                            <input type="checkbox" formControlName="selected"> {{ comp.get('componentName')?.value }}
+                            <input (change)="onComponentToggle(i)" type="checkbox" formControlName="selected"> {{
+                            comp.get('componentName')?.value }}
                             <span></span>
                         </label>
                     </div>
 
                     <!-- Input Field -->
+                    <!-- Input Field -->
                     <div class="col-lg-4">
                         <ng-container *ngIf="comp.get('isPercentage')?.value; else normalInput">
                             <input type="number" class="form-control" formControlName="value"
-                                placeholder="Enter % value (0 - 100)" min="0" max="100">
-                            <small class="form-text text-muted">Enter percentage value for this component</small>
+                                placeholder="Enter % value (0 - 100)" min="0" max="100"
+                                
+                            (blur)="onComponentToggle(i)">
+                            <small class="form-text text-muted">
+                                Enter percentage value for this component
+                            </small>
+                            <div class="text-danger mt-1"
+                                *ngIf="comp.get('value')?.invalid && comp.get('value')?.touched">
+                                <span *ngIf="comp.get('value')?.errors?.['required']">Value is required</span>
+                                <span *ngIf="comp.get('value')?.errors?.['min'] || comp.get('value')?.errors?.['max']">
+                                    Value must be between 0 and 100
+                                </span>
+                            </div>
                         </ng-container>
+
                         <ng-template #normalInput>
-                            <input type="text" class="form-control" formControlName="value" placeholder="Enter value">
-                            <small class="form-text text-muted">Enter numeric or text value</small>
+                            <input type="text" class="form-control" formControlName="value" placeholder="Enter value"
+                                 (blur)="onComponentToggle(i)">
+                            <small class="form-text text-muted">
+                                Enter numeric or text value
+                            </small>
+                            <div class="text-danger mt-1"
+                                *ngIf="comp.get('value')?.invalid && comp.get('value')?.touched">
+                                <span *ngIf="comp.get('value')?.errors?.['required']">Value is required</span>
+                                <span *ngIf="comp.get('value')?.errors?.['pattern']">Must be a valid number</span>
+                            </div>
                         </ng-template>
                     </div>
+
+
 
                 </div>
             </div>

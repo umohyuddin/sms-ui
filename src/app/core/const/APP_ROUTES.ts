@@ -77,6 +77,7 @@ export const ROUTES = {
     CREATE: ['salary/structure', 'salary-structure-create'],
     EDIT: (id: string) => ['salary/structure', 'salary-structure-edit', id],
     DETAILS: (id: string) => ['salary/structure', 'salary-structure-details', id],
+    
   },
   SALARY_COMPONENT: {
     LIST: ['salary/component'],
