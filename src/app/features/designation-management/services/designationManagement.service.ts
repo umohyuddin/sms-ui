@@ -60,4 +60,13 @@ export class DesignationManagementService {
     { observeResponse: true }
   );
 }
+
+ assignDesignation(payload: { employeeId: number, designationId: number, departmentId?: number, createdBy?: number }): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DESIGNATIONS.ASSIGN}`;
+    return this.http.request(HTTP_METHOD.POST, url, {
+      body: payload,
+      observeResponse: true,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
 }

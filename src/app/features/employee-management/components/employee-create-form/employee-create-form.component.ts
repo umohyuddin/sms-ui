@@ -37,6 +37,7 @@ export class EmployeeCreateFormComponent {
   currentStepIndex = 0;
   createForm!: FormGroup;
   departmentForm!: FormGroup;
+  designationForm!: FormGroup;
   response?: EmployeeResponse;
   docsTypeDD: KeyValueOption[] = [];
   nationalityDD: KeyValueOption[] = [];
@@ -55,14 +56,26 @@ export class EmployeeCreateFormComponent {
     private employeeManagementSerivce: EmployeeManagementService,
     private departmentService: DepartmentManagementService,
     private designationService: DesignationManagementService,
+
     private fb: FormBuilder,
     private router: Router,
   ) { }
 
   ngOnInit() {
+
+      this.response = {
+    id: 1
+  } as EmployeeResponse;
     this.employeeLookUpData()
     this.getDepartments();
     this.initializeForm();
+     this.initializeDepartmentForm();
+
+     this.designationForm = this.fb.group({
+  designationId: ['', Validators.required]
+});
+
+
     this.steps = [
       {
         title: 'Employee Details',
@@ -74,22 +87,27 @@ export class EmployeeCreateFormComponent {
         title: 'Assign Department',
         formGroup: this.departmentForm,
         completed: false,
-        action: this.onDepartmentSubmit.bind(this)
+        action: this.saveDepartment.bind(this)
       },
-
-
-      {
-        title: 'Assign Designation',
-        completed: false,
-        action: this.saveDesignation.bind(this)
-      },
+ {
+    title: 'Assign Designation',
+    formGroup: this.designationForm,
+    completed: false,
+    action: this.saveDesignation.bind(this)
+  }
       // future steps can be added here easily
       // { title: 'Assign Roles', completed: false, action: this.saveRoles.bind(this) }
     ];
     this.createForm.patchValue(this.dummyData);
-
+   
   }
 
+
+  private initializeDepartmentForm() {
+  this.departmentForm = this.fb.group({
+    departmentId: ['', Validators.required]
+  });
+}
   onDepartmentSubmit() {
     this.designationService.getDesignationsByDepartment(1).subscribe({
       next: response => {
@@ -155,8 +173,10 @@ export class EmployeeCreateFormComponent {
           console.info('✅ Employee saved successfully', {
             status: response.status,
             employee: response.body
+
           });
           this.response = response.body;
+          
 
           this.createForm.disable();
           this.currentStep.completed = true;
@@ -232,15 +252,80 @@ export class EmployeeCreateFormComponent {
       })
   }
 
-  saveDepartment(departmentId?: number) {
-    // this.employeeService.assignDepartment({ employeeId: this.employeeId, departmentId }).subscribe(() => {
-    //   this.currentStep.completed = true;
-    //   this.nextStep();
-    // });
-    this.currentStep.completed = true;
-       this.nextStep();
+  // saveDepartment(departmentId?: number) {
+  //   // this.employeeService.assignDepartment({ employeeId: this.employeeId, departmentId }).subscribe(() => {
+  //   //   this.currentStep.completed = true;
+  //   //   this.nextStep();
+  //   // });
+  //   this.currentStep.completed = true;
+  //      this.nextStep();
 
+  // }
+
+
+saveDepartment() {
+  if (!this.response?.id) {
+    console.error('❌ Employee ID not found. Cannot assign department.');
+    return;
   }
+
+  if (this.departmentForm.invalid) {
+    this.departmentForm.markAllAsTouched();
+    console.warn('❌ Department form is invalid');
+    return;
+  }
+
+  const payload = {
+    employeeId: Number(this.response?.id),                        
+    departmentId: Number(this.departmentForm.value.departmentId),
+    createdBy: 1
+  };
+
+  console.group('➡️ Assign Department');
+  console.info('Payload:', payload);
+
+  this.departmentService.assignDepartment(payload).subscribe({
+    next: (response) => {
+      console.info('✅ Department assigned successfully', response.body);
+
+      // Disable form and mark step completed
+      this.departmentForm.disable();
+      this.currentStep.completed = true;
+
+      // Fetch designations for this department
+      this.loadDesignationsByDepartment(payload.departmentId);
+
+      // Go to next step
+      this.nextStep();
+    },
+    error: (error) => {
+      console.error('❌ Failed to assign department', {
+        status: error.status,
+        message: error.message,
+        payload
+      });
+    },
+    complete: () => {
+      console.log('🔚 Department assignment completed');
+      console.groupEnd();
+    }
+  });
+}
+
+
+private loadDesignationsByDepartment(departmentId: number) {
+  this.designationService.getDesignationsByDepartment(departmentId).subscribe({
+    next: response => {
+      this.designations = response.body;
+      this.designationDD = this.designations.map(d => ({
+        key: d.id.toString(),
+        label: d.designationName
+      }));
+      console.info(`✅ Loaded ${this.designations.length} designations for department ID ${departmentId}`);
+    },
+    error: error => console.error('❌ Failed to load designations', error)
+  });
+}
 
 
   getDepartments() {
@@ -254,19 +339,56 @@ export class EmployeeCreateFormComponent {
       },
       error: error => console.error('Request Error:', error)
     });
-    // this.currentStep.completed = true;
-    // this.nextStep();
   }
 
   saveDesignation(designationId?: number) {
-    // this.employeeService.assignDesignation({ employeeId: this.employeeId, designationId }).subscribe(() => {
-    //   this.currentStep.completed = true;
-    //   this.nextStep();
-    // });
-
-    this.currentStep.completed = true;
-    this.nextStep();
+  if (!this.response?.id) {
+    console.error('❌ Employee ID not found. Cannot assign designation.');
+    return;
   }
+
+  // Use the selected designationId if provided, otherwise pick from first in dropdown
+  const selectedDesignationId = designationId || Number(this.designationDD[0]?.key);
+  if (!selectedDesignationId) {
+    console.warn('❌ No designation selected');
+    return;
+  }
+
+  // Build payload
+  const payload = {
+    employeeId: Number(this.response.id),
+    designationId: selectedDesignationId,
+    departmentId: Number(this.departmentForm.value.departmentId),
+    createdBy: 1 // replace with logged-in user ID if available
+  };
+
+  console.group('➡️ Assign Designation');
+  console.info('Payload:', payload);
+
+  this.designationService.assignDesignation(payload).subscribe({
+    next: (response) => {
+      console.info('✅ Designation assigned successfully', response.body);
+
+      // Mark step completed and disable any related form if you have one
+      this.currentStep.completed = true;
+
+      // Move to next step
+      this.nextStep();
+    },
+    error: (error) => {
+      console.error('❌ Failed to assign designation', {
+        status: error.status,
+        message: error.message,
+        payload
+      });
+    },
+    complete: () => {
+      console.log('🔚 Designation assignment completed');
+      console.groupEnd();
+    }
+  });
+}
+
   //getters
   get firstName() { return this.createForm.get('firstName'); }
   get lastName() { return this.createForm.get('lastName'); }

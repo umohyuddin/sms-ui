@@ -59,4 +59,43 @@ export class DepartmentManagementService {
       { observeResponse: true }
     );
   }
+
+
+  //   assignDepartment(payload: any): Observable<any> {
+  //   return this.http.request(
+  //     HTTP_METHOD.POST,
+  //     `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DEPARTMENTS.ASSIGN}`,
+  //     { body: payload, observeResponse: true ,
+  //        headers: { 'Content-Type': 'application/json' }
+  //     }
+  //   );
+  // }
+
+    assignDepartment(payload: any): Observable<any> {
+
+  const url =  `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DEPARTMENTS.ASSIGN}`;
+
+  return this.http.request(HTTP_METHOD.POST, url, {
+    observeResponse: true,
+    body: payload
+  });
+}
+
+  /** Get current department of an employee */
+  getCurrentDepartment(employeeId: number | string): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DEPARTMENTS.CURRENT(employeeId)}`,
+      { observeResponse: true }
+    );
+  }
+
+  /** Get full department history of an employee */
+  getDepartmentHistory(employeeId: number | string): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DEPARTMENTS.HISTORY(employeeId)}`,
+      { observeResponse: true }
+    );
+  }
 }

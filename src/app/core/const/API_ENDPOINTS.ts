@@ -85,6 +85,17 @@ export const API_ENDPOINTS = {
         SEARCH: (keyword: string) => `/api/institute/employees/search?name=${keyword}`,
         GET_BY_ID: (id: string) => `/api/institute/employees/${id}`,
 
+
+        DEPARTMENTS: {
+            ASSIGN: '/api/employees/departments', // POST to assign
+            CURRENT: (employeeId: string | number) => `/api/employees/departments/current/${employeeId}`, // GET current department
+            HISTORY: (employeeId: string | number) => `/api/employees/departments/history/${employeeId}`, // GET full history
+        },
+        DESIGNATIONS: {
+            ASSIGN: '/api/employees/designations/assign',
+            CURRENT: (employeeId: string | number) => `/api/employees/${employeeId}/designation/current`,
+            HISTORY: (employeeId: string | number) => `/api/employees/${employeeId}/designation/history`
+        },
         ADDRESS: {
             GET_EMPLOYEE_ID: (id: string) => `/api/institute/employees/${id}/addresses`,
             GET_BY_ID: (id: string) => `/api/institute/employees/addresses/${id}`,
