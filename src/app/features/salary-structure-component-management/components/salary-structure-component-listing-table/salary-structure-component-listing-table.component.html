@@ -11,7 +11,7 @@
 		<div class="kt-portlet__head-toolbar">
 			<div class="kt-portlet__head-wrapper">
 				<div class="kt-portlet__head-actions">
-
+					<!-- Actions remain the same -->
 				</div>
 			</div>
 		</div>
@@ -30,74 +30,26 @@
 					<div class="kt-portlet__head-toolbar">
 						<div class="kt-portlet__head-wrapper">
 							<div class="kt-portlet__head-actions">
-
 								<a href="#" class="btn btn-label-brand btn-bold btn-sm dropdown-toggle"
 									data-toggle="dropdown">
 									Actions
 								</a>
 								<div class="dropdown-menu dropdown-menu-fit dropdown-menu-right">
-
-									<!--begin::Nav-->
 									<ul class="kt-nav">
-										<!-- <li class="kt-nav__head">
-											Export Options
-											<span data-toggle="kt-tooltip" data-placement="right" title=""
-												data-original-title="Click to learn more...">
-												<svg xmlns="http://www.w3.org/2000/svg"
-													xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-													height="24px" viewBox="0 0 24 24" version="1.1"
-													class="kt-svg-icon kt-svg-icon--brand kt-svg-icon--md1">
-													<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-														<rect id="bound" x="0" y="0" width="24" height="24"></rect>
-														<circle id="Oval-5" fill="#000000" opacity="0.3" cx="12" cy="12"
-															r="10"></circle>
-														<rect id="Rectangle-9" fill="#000000" x="11" y="10" width="2"
-															height="7" rx="1"></rect>
-														<rect id="Rectangle-9-Copy" fill="#000000" x="11" y="7"
-															width="2" height="2" rx="1"></rect>
-													</g>
-												</svg> </span>
-										</li>
-										<li class="kt-nav__separator"></li>
-										<li class="kt-nav__item">
-											<a href="#" class="kt-nav__link">
-												<i class="kt-nav__link-icon flaticon2-drop"></i>
-												<span class="kt-nav__link-text">Activity</span>
-											</a>
-										</li>
-										<li class="kt-nav__item">
-											<a href="#" class="kt-nav__link">
-												<i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-												<span class="kt-nav__link-text">FAQ</span>
-											</a>
-										</li> -->
 										<li class="kt-nav__item">
 											<a class="kt-nav__link">
 												<i class="kt-nav__link-icon flaticon2-link"></i>
-												<span class="kt-nav__link-text" (click)="editDetails(structure,$event)">Update</span>
+												<span class="kt-nav__link-text"
+													(click)="editDetails(structure,$event)">Update</span>
+											</a>
+											<a class="kt-nav__link">
+												<i class="kt-nav__link-icon flaticon2-link"></i>
+												<span class="kt-nav__link-text"
+													(click)="assignToEmployee(structure,$event)">Assign To Employees</span>
 											</a>
 										</li>
-										<!-- <li class="kt-nav__item">
-											<a href="#" class="kt-nav__link">
-												<i class="kt-nav__link-icon flaticon2-new-email"></i>
-												<span class="kt-nav__link-text">Support</span>
-												<span class="kt-nav__link-badge">
-													<span class="kt-badge kt-badge--success kt-badge--rounded">5</span>
-												</span>
-											</a>
-										</li>
-										<li class="kt-nav__separator"></li>
-										<li class="kt-nav__foot">
-											<a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>
-											<a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="kt-tooltip"
-												data-placement="right" title=""
-												data-original-title="Click to learn more...">Learn more</a>
-										</li> -->
 									</ul>
-
-									<!--end::Nav-->
 								</div>
-
 							</div>
 						</div>
 					</div>
@@ -107,11 +59,10 @@
 				<div class="kt-portlet__body">
 					<!-- Base salary info -->
 					<div class="mb-3">
-						<strong>Base Salary:</strong>
-						{{ structure.baseSalary | number }}
-						<br />
-						<strong>Effective From:</strong>
-						{{ structure.effectiveFrom | date }}
+						<strong>Base Salary:</strong> {{ structure.baseSalary | number }}<br />
+						<strong>Effective From:</strong> {{ structure.effectiveFrom | date }}<br />
+						<strong>Effective To:</strong> {{ structure.effectiveTo ? (structure.effectiveTo | date) : 'N/A'
+						}}
 					</div>
 
 					<!-- Components -->
@@ -127,15 +78,33 @@
 									{{ comp.isPercentage ? 'Percentage' : 'Fixed' }}
 								</span>
 							</div>
-
 							<div class="kt-widget4__tools">
 								<span>
 									{{ comp.value }}{{ comp.isPercentage ? '%' : '' }}
 								</span>
 							</div>
 						</div>
-					</div>
 
+						<!-- Totals -->
+						<!-- Totals -->
+<div class="kt-widget4__item font-weight-bold border-top mt-2 pt-2">
+  <div class="kt-widget4__info">Total Earnings:</div>
+  <div class="kt-widget4__tools">{{ structure.totalEarnings | number }}</div>
+</div>
+<div class="kt-widget4__item font-weight-bold">
+  <div class="kt-widget4__info">Total Deductions:</div>
+  <div class="kt-widget4__tools">{{ structure.totalDeductions | number }}</div>
+</div>
+<div class="kt-widget4__item font-weight-bold">
+  <div class="kt-widget4__info">Gross Total:</div>
+  <div class="kt-widget4__tools">{{ structure.totalWithoutDeduction | number }}</div>
+</div>
+<div class="kt-widget4__item font-weight-bold">
+  <div class="kt-widget4__info">Net Salary:</div>
+  <div class="kt-widget4__tools">{{ structure.netSalary | number }}</div>
+</div>
+
+					</div>
 					<!-- No components -->
 					<ng-template #noComponents>
 						<div class="text-muted text-center">
@@ -146,10 +115,4 @@
 			</div>
 		</div>
 	</div>
-
-
-	<!--begin:: Widgets/New Users-->
-
-	<!--end:: Widgets/New Users-->
-
 </div>

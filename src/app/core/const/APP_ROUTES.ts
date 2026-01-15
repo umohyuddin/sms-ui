@@ -77,7 +77,7 @@ export const ROUTES = {
     CREATE: ['salary/structure', 'salary-structure-create'],
     EDIT: (id: string) => ['salary/structure', 'salary-structure-edit', id],
     DETAILS: (id: string) => ['salary/structure', 'salary-structure-details', id],
-    
+
   },
   SALARY_COMPONENT: {
     LIST: ['salary/component'],
@@ -89,6 +89,7 @@ export const ROUTES = {
     LIST: ['/salary/structure/component'],
     CREATE: ['/salary/structure/component', 'salary-structure-component-create'],
     EDIT: (id: string) => ['/salary/structure/component', 'salary-structure-component-edit', id],
+    ASSIGN_TO_EMPLOYEE: (id: string) => ['/salary/structure/component', 'assing-employee-salary', id],
     DETAILS: (id: string) => ['/salary/structure/component', 'salary-structure-component-details', id],
   },
   FEE: {

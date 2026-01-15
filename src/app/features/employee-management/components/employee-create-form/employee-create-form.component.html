@@ -1,15 +1,15 @@
-<div class="kt-portlet">
+<div *ngFor="let step of steps; let i = index" class="kt-portlet mb-3">
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
-      <h3 class="kt-portlet__head-title">
-        Create Employee Profile
-      </h3>
+      <h3 class="kt-portlet__head-title">{{ step.title }}</h3>
+      <span *ngIf="step.completed" class="text-success ml-2">✔ Completed</span>
     </div>
   </div>
 
-  <!--begin::Form-->
-  <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
-    <div class="kt-portlet__body">
+  <div class="kt-portlet__body">
+
+    <!-- Step Form -->
+    <form  *ngIf="step.formGroup" [formGroup]="step.formGroup" (ngSubmit)="step.action()">
       <h4>Personal Information → Employee Details</h4>
 
       <div class="form-group row form-group-marginless kt-margin-t-20">
@@ -19,65 +19,56 @@
             [class.is-invalid]="firstName?.invalid && (firstName?.touched || firstName?.dirty)"
             [class.is-valid]="firstName?.valid && (firstName?.touched || firstName?.dirty)">
           <span class="form-text text-muted">Enter employee's first name</span>
-          <span class="invalid-feedback" *ngIf="firstName?.errors?.['required']">
-            First name is required
-          </span>
+          <span class="invalid-feedback" *ngIf="firstName?.errors?.['required']">First name is required</span>
         </div>
 
         <label class="col-lg-1 col-form-label">Last Name:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Enter last name" formControlName="lastName"
             [class.is-invalid]="lastName?.invalid && (lastName?.touched || lastName?.dirty)"
-            [class.is-valid]="lastName?.valid && (firstName?.touched || lastName?.dirty)">
+            [class.is-valid]="lastName?.valid && (lastName?.touched || lastName?.dirty)">
           <span class="form-text text-muted">Enter employee's last name</span>
-          <span class="invalid-feedback" *ngIf="lastName?.errors?.['required']">
-            Last name is required
-          </span>
+          <span class="invalid-feedback" *ngIf="lastName?.errors?.['required']">Last name is required</span>
         </div>
 
         <label class="col-lg-1 col-form-label">Middle Name:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="Enter middle name (optional)"
-            formControlName="middleName">
+          <input type="text" class="form-control" placeholder="Enter middle name (optional)" formControlName="middleName">
           <span class="form-text text-muted">Enter middle name if applicable</span>
         </div>
       </div>
 
       <div class="form-group row form-group-marginless kt-margin-t-20">
-
-
         <label class="col-lg-1 col-form-label">Primary Phone:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Enter primaryPhone number" formControlName="primaryPhone"
             [class.is-invalid]="primaryPhone?.invalid && (primaryPhone?.touched || primaryPhone?.dirty)"
             [class.is-valid]="primaryPhone?.valid && (primaryPhone?.touched || primaryPhone?.dirty)">
           <span class="form-text text-muted">Enter employee's primary number</span>
-          <span class="invalid-feedback" *ngIf="primaryPhone?.errors?.['required']">
-            Primary Phone is required
-          </span>
+          <span class="invalid-feedback" *ngIf="primaryPhone?.errors?.['required']">Primary Phone is required</span>
         </div>
 
-        <label class="col-lg-1 col-form-label"> Secondary Phone:</label>
+        <label class="col-lg-1 col-form-label">Secondary Phone:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Enter phone number" formControlName="secondaryPhone">
           <span class="form-text text-muted">Enter employee's secondary number</span>
         </div>
+
         <label class="col-lg-1 col-form-label">Work Phone:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Enter workPhone number" formControlName="workPhone">
           <span class="form-text text-muted">Enter employee's workPhone number</span>
         </div>
       </div>
+
       <div class="form-group row form-group-marginless kt-margin-t-20">
         <label class="col-lg-1 col-form-label">DOB:</label>
         <div class="col-lg-3">
-          <input type="date" class="form-control" placeholder="Select date of birth" formControlName="dateOfBirth"
+          <input type="date" class="form-control" formControlName="dateOfBirth"
             [class.is-invalid]="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)"
             [class.is-valid]="dateOfBirth?.valid && (dateOfBirth?.touched || dateOfBirth?.dirty)">
           <span class="form-text text-muted">Select employee's date of birth</span>
-          <span class="invalid-feedback" *ngIf="dateOfBirth?.errors?.['required']">
-            DOB is required
-          </span>
+          <span class="invalid-feedback" *ngIf="dateOfBirth?.errors?.['required']">DOB is required</span>
         </div>
 
         <label class="col-lg-1 col-form-label">Email:</label>
@@ -86,9 +77,7 @@
             [class.is-invalid]="email?.invalid && (email?.touched || email?.dirty)"
             [class.is-valid]="email?.valid && (email?.touched || email?.dirty)">
           <span class="form-text text-muted">Enter a valid email</span>
-          <span class="invalid-feedback" *ngIf="email?.errors?.['required']">
-            Email is required
-          </span>
+          <span class="invalid-feedback" *ngIf="email?.errors?.['required']">Email is required</span>
         </div>
 
         <label class="col-lg-1 col-form-label">Gender:</label>
@@ -97,84 +86,103 @@
             [class.is-invalid]="gender?.invalid && (gender?.touched || gender?.dirty)"
             [class.is-valid]="gender?.valid && (gender?.touched || gender?.dirty)">
             <option value='' selected>Select gender</option>
-            @for (p of genderDD; track p.key) {
-            <option [value]="p.key">{{ p.label }}</option>
-            }
+            <option *ngFor="let p of genderDD" [value]="p.key">{{ p.label }}</option>
           </select>
           <span class="form-text text-muted">Select employee's gender</span>
-          <span class="invalid-feedback" *ngIf="gender?.errors?.['required']">
-            Gender is required
-          </span>
+          <span class="invalid-feedback" *ngIf="gender?.errors?.['required']">Gender is required</span>
         </div>
       </div>
 
       <div class="form-group row form-group-marginless kt-margin-t-20">
-
-
         <label class="col-lg-1 col-form-label">Religion:</label>
         <div class="col-lg-3">
-          <select class="form-control" formControlName="religion"
-            [class.is-invalid]="religion?.invalid && (religion?.touched || religion?.dirty)"
-            [class.is-valid]="religion?.valid && (religion?.touched || religion?.dirty)">
+          <select class="form-control" formControlName="religion">
             <option value='' selected>Select religion</option>
-            @for (p of religionDD; track p.key) {
-            <option [value]="p.key">{{ p.label }}</option>
-            }
+            <option *ngFor="let p of religionDD" [value]="p.key">{{ p.label }}</option>
           </select>
-          <span class="form-text text-muted">Select employee's religion</span>
-          <span class="invalid-feedback" *ngIf="religion?.errors?.['required']">
-            Religion is required
-          </span>
-        </div>
-                <label class="col-lg-1 col-form-label">Marital Status:</label>
-        <div class="col-lg-3">
-          <select class="form-control" formControlName="maritalStatus"
-            [class.is-invalid]="maritalStatus?.invalid && (maritalStatus?.touched || maritalStatus?.dirty)"
-            [class.is-valid]="maritalStatus?.valid && (maritalStatus?.touched || maritalStatus?.dirty)">
-            <option value='' selected>Select marital status</option>
-            @for (p of maritalStatusDD; track p.key) {
-            <option [value]="p.key">{{ p.label }}</option>
-            }
-          </select>
-          <span class="form-text text-muted">Select employee's marital status</span>
-          <span class="invalid-feedback" *ngIf="maritalStatus?.errors?.['required']">
-            Marital Status is required
-          </span>
         </div>
 
+        <label class="col-lg-1 col-form-label">Marital Status:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="maritalStatus">
+            <option value='' selected>Select marital status</option>
+            <option *ngFor="let p of maritalStatusDD" [value]="p.key">{{ p.label }}</option>
+          </select>
+        </div>
 
         <label class="col-lg-1 col-form-label">Blood Group:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="bloodGroup">
             <option value='' selected>Select blood group</option>
-            @for (p of bloodGroupDD; track p.key) {
-            <option [value]="p.key">{{ p.label }}</option>
-            }
+            <option *ngFor="let p of bloodGroupDD" [value]="p.key">{{ p.label }}</option>
           </select>
-          <span class="form-text text-muted">Select employee's blood group</span>
         </div>
       </div>
 
       <div class="form-group row kt-margin-t-40">
         <label class="col-lg-1 col-form-label">Employee Bio/Notes:</label>
         <div class="col-lg-11">
-          <div class="kt-input-icon">
-            <textarea class="form-control" id="exampleTextarea" rows="3" formControlName="bio"></textarea>
-          </div>
+          <textarea class="form-control" rows="3" formControlName="bio"></textarea>
         </div>
       </div>
-    </div>
-    <div class="kt-portlet__foot">
-      <div class="kt-form__actions">
-        <div class="row">
-          <div class="col-lg-5"></div>
-          <div class="col-lg-7">
-            <button type="submit" class="btn btn-dark mr-2">Save Employee Profile</button>
-            <button type="button" class="btn btn-secondary" (click)="goToEmployeeList()">Discard Changes</button>
-          </div>
+
+      <div class="form-group row kt-margin-t-20">
+        <div class="col-lg-12">
+          <button type="submit" class="btn btn-dark">Save Employee Profile</button>
         </div>
       </div>
+    </form>
+
+    <!-- Step without FormGroup (Department / Designation etc.) -->
+<ng-container *ngIf="!step.formGroup">
+
+  <!-- Assign Department -->
+  <div *ngIf="step.title === 'Assign Department'">
+    <div class="form-group row">
+      <label class="col-lg-1 col-form-label">Department:</label>
+      <div class="col-lg-3">
+        <select class="form-control" #deptSelect>
+          <option value="">Select department</option>
+          <option *ngFor="let d of departmentDD" [value]="d.key">
+            {{ d.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-lg-3">
+        <button
+          class="btn btn-dark"
+          (click)="step.action(deptSelect.value)">
+          Save Department
+        </button>
+      </div>
     </div>
-  </form>
-  <!--end::Form-->
+  </div>
+
+  <!-- Assign Designation -->
+  <div *ngIf="step.title === 'Assign Designation'">
+    <div class="form-group row">
+      <label class="col-lg-1 col-form-label">Designation:</label>
+      <div class="col-lg-3">
+        <select class="form-control" #desigSelect>
+          <option value="">Select designation</option>
+          <option *ngFor="let d of designationDD" [value]="d.key">
+            {{ d.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-lg-3">
+        <button
+          class="btn btn-dark"
+          (click)="step.action(desigSelect.value)">
+          Save Designation
+        </button>
+      </div>
+    </div>
+  </div>
+
+</ng-container>
+
+</div>
 </div>

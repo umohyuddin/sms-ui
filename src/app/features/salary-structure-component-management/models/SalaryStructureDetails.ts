@@ -5,6 +5,10 @@
   effectiveFrom: string;
   effectiveTo: string | null;
   components: SalaryComponent[];
+   totalEarnings: number;
+  totalDeductions: number;
+  netSalary: number;
+  totalWithoutDeduction:number
 }
 
 interface SalaryComponent {

@@ -52,4 +52,12 @@ export class DesignationManagementService {
       : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DESIGNATIONS.GET_ALL}`;
     return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
   }
+
+  getDesignationsByDepartment(departmentId: string | number): Observable<any> {
+  return this.http.request(
+    HTTP_METHOD.GET,
+    `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DESIGNATIONS.GET_BY_DEPARTMENT(departmentId)}`,
+    { observeResponse: true }
+  );
+}
 }

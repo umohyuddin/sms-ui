@@ -1,0 +1,41 @@
+<div class="kt-subheader  kt-grid__item" id="kt_subheader">
+  <div class="kt-container  kt-container--fluid ">
+    <div class="kt-subheader__main">
+      <h3 class="kt-subheader__title">Assign Employee Salary</h3>
+      <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+    </div>
+    <div class="kt-subheader__toolbar">
+      <div class="kt-subheader__wrapper">
+        <!-- <button type="button" class="btn btn-dark active" (click)="goToCreateTenant()">
+          <i class="la la-plus"></i>
+          Add New Academic Year</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<form [formGroup]="employeeForm">
+  <div formArrayName="employees" class="form-group mt-3">
+    <div *ngFor="let emp of employeesFormArray.controls; let i = index" [formGroupName]="i"
+         class="row mb-3 p-2 align-items-center" style="background-color: #f9f9f9; border-radius: 5px;">
+      
+      <!-- Checkbox -->
+      <div class="col-lg-4 d-flex align-items-center">
+        <label class="kt-checkbox mb-0" style="font-weight: 500;">
+          <input type="checkbox" formControlName="selected" (change)="onEmployeeToggle(i)">
+          {{ emp.get('fullName')?.value }} ({{ emp.get('email')?.value }})
+          <span></span>
+        </label>
+      </div>
+
+      <!-- Optional: Display other info -->
+      <div class="col-lg-4">
+        <small class="form-text text-muted">
+          Employee ID: {{ emp.get('id')?.value }}
+        </small>
+      </div>
+
+    </div>
+  </div>
+</form>

@@ -8,7 +8,19 @@ import { EmployeeManagementService } from '../../services/employee-management.se
 import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { EmployeeResponse } from '../../models/EmployeeResponse';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
+import { DepartmentManagementService } from '../../../department-management/services/DepartmentManagementService';
+import { DepartmentResponse } from '../../../department-management/models/DepartmentResponse';
+import { DesignationManagementService } from '../../../designation-management/services/designationManagement.service';
+import { DesignationResponse } from '../../../designation-management/components/models/DesignationResponse';
 
+
+interface EmployeeStep {
+  title: string;
+  formGroup?: FormGroup;      // if this step has its own form
+  completed: boolean;         // has this step been completed?
+  action: (...args: any[]) => void; // Function to call when saving this step
+  templateRef?: any;
+}
 
 
 @Component({
@@ -21,7 +33,10 @@ import { SmsUtil } from '../../../../core/utils/smsUtil';
   styleUrls: ['./employee-create-form.component.css']
 })
 export class EmployeeCreateFormComponent {
+  steps: EmployeeStep[] = [];
+  currentStepIndex = 0;
   createForm!: FormGroup;
+  departmentForm!: FormGroup;
   response?: EmployeeResponse;
   docsTypeDD: KeyValueOption[] = [];
   nationalityDD: KeyValueOption[] = [];
@@ -30,21 +45,67 @@ export class EmployeeCreateFormComponent {
   genderDD: KeyValueOption[] = [];
   maritalStatusDD: KeyValueOption[] = [];
   religionsDD: KeyValueOption[] = [];
+  departmentDD: KeyValueOption[] = [];
+  departments: DepartmentResponse[] = [];
+
+  designationDD: KeyValueOption[] = [];
+  designations: DesignationResponse[] = [];
 
   constructor(
     private employeeManagementSerivce: EmployeeManagementService,
+    private departmentService: DepartmentManagementService,
+    private designationService: DesignationManagementService,
     private fb: FormBuilder,
     private router: Router,
   ) { }
 
   ngOnInit() {
     this.employeeLookUpData()
+    this.getDepartments();
     this.initializeForm();
+    this.steps = [
+      {
+        title: 'Employee Details',
+        formGroup: this.createForm,
+        completed: true,
+        action: this.onEmployeeSubmit.bind(this)
+      },
+      {
+        title: 'Assign Department',
+        formGroup: this.departmentForm,
+        completed: false,
+        action: this.onDepartmentSubmit.bind(this)
+      },
+
+
+      {
+        title: 'Assign Designation',
+        completed: false,
+        action: this.saveDesignation.bind(this)
+      },
+      // future steps can be added here easily
+      // { title: 'Assign Roles', completed: false, action: this.saveRoles.bind(this) }
+    ];
     this.createForm.patchValue(this.dummyData);
 
   }
 
+  onDepartmentSubmit() {
+    this.designationService.getDesignationsByDepartment(1).subscribe({
+      next: response => {
+        this.designations = response.body;
+        this.designationDD = this.designations.map(d => ({
+          key: d.id.toString(),
+          label: d.designationName // or whatever property contains the department name
+        }));
+      },
+      error: error => console.error('Request Error:', error)
+    });
+  }
 
+  get currentStep(): EmployeeStep {
+    return this.steps[this.currentStepIndex];
+  }
 
   private initializeForm() {
     const today = new Date();
@@ -71,7 +132,7 @@ export class EmployeeCreateFormComponent {
   goToEmployeeList(): void {
     this.router.navigate(ROUTES.EMPLOYEE.LIST);
   }
-  onSubmit(): void {
+  onEmployeeSubmit(): void {
     // Construct fullName before submitting
     this.createForm.get('fullName')?.setValue(
       `${this.createForm.get('firstName')?.value} ${this.createForm.get('middleName')?.value || ''} ${this.createForm.get('lastName')?.value}`.trim()
@@ -96,6 +157,10 @@ export class EmployeeCreateFormComponent {
             employee: response.body
           });
           this.response = response.body;
+
+          this.createForm.disable();
+          this.currentStep.completed = true;
+          this.nextStep();
           console.log(`Navigating to Employee Details: ID = ${this.response?.id}`);
           if (this.response?.id) {
             this.goToEmployeeDetail(this.response.id.toString());
@@ -113,6 +178,14 @@ export class EmployeeCreateFormComponent {
           console.groupEnd();
         }
       })
+  }
+
+  nextStep() {
+    if (this.currentStepIndex < this.steps.length - 1) {
+      this.currentStepIndex++;
+    } else {
+      console.log('✅ All steps completed');
+    }
   }
   goToEmployeeDetail(id: string) {
     this.router.navigate(ROUTES.EMPLOYEE.DETAILS(id.toString()))
@@ -157,6 +230,42 @@ export class EmployeeCreateFormComponent {
           console.groupEnd();
         }
       })
+  }
+
+  saveDepartment(departmentId?: number) {
+    // this.employeeService.assignDepartment({ employeeId: this.employeeId, departmentId }).subscribe(() => {
+    //   this.currentStep.completed = true;
+    //   this.nextStep();
+    // });
+    this.currentStep.completed = true;
+       this.nextStep();
+
+  }
+
+
+  getDepartments() {
+    this.departmentService.getAllDepartments().subscribe({
+      next: response => {
+        this.departments = response.body;
+        this.departmentDD = this.departments.map(d => ({
+          key: d.id.toString(),
+          label: d.departmentName // or whatever property contains the department name
+        }));
+      },
+      error: error => console.error('Request Error:', error)
+    });
+    // this.currentStep.completed = true;
+    // this.nextStep();
+  }
+
+  saveDesignation(designationId?: number) {
+    // this.employeeService.assignDesignation({ employeeId: this.employeeId, designationId }).subscribe(() => {
+    //   this.currentStep.completed = true;
+    //   this.nextStep();
+    // });
+
+    this.currentStep.completed = true;
+    this.nextStep();
   }
   //getters
   get firstName() { return this.createForm.get('firstName'); }

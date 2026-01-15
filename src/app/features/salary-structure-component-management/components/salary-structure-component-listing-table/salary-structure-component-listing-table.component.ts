@@ -21,6 +21,7 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
 export class SalaryStructureComponentListingTableComponent implements OnInit {
   //pagination: Pagination<SalaryStructureComponent> = new Pagination([], 10);
   searchControl = new FormControl('');
+  searchText = '';
   // salaryStructureComponents: SalaryStructureComponent[] = [];
   salaryStructureDetails: SalaryStructureDetails[] = [];
   private destroy$ = new Subject<void>();
@@ -88,21 +89,17 @@ export class SalaryStructureComponentListingTableComponent implements OnInit {
     })
   }
 
-  // viewDetails(item: SalaryStructureComponent, event: Event): void {
-  //   console.log('Viewing details for Component ID:', item.id);
-  //   event.preventDefault();
-  //   // Assuming routes are defined
-  //   // this.router.navigate(ROUTES.SALARY.SALARY_STRUCTURE_COMPONENT.DETAILS(item.id.toString()));
-  // }
-
   editDetails(item: SalaryStructureDetails, event: Event): void {
     event.preventDefault();
     console.log('Editing Component ID:', item.id);
     this.router.navigate(ROUTES.SALARY_STRUCTURE_COMPONENT.EDIT(item.id.toString()));
   }
 
-  // onPageSizeChange(event: any) {
-  //   const newSize = +event.target.value;
-  //   this.pagination.changePageSize(newSize);
-  // }
+  assignToEmployee(item: SalaryStructureDetails, event: Event): void {
+    event.preventDefault();
+    console.log('Editing Component ID:', item.id);
+    this.router.navigate(ROUTES.SALARY_STRUCTURE_COMPONENT.ASSIGN_TO_EMPLOYEE(item.id.toString()));
+  }
+
+
 }

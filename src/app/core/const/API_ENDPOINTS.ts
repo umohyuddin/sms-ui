@@ -11,8 +11,8 @@ export const API_ENDPOINTS = {
         DELETE: (id: string) => `/api/institute/salary-structures/${id}`,
         SEARCH: '/api/institute/salary-structures/search',
         DETAIL: '/api/institute/salary-structures/detail',
-        DETAIL_BY_EMPLOYEE_TYPE:(id:string)=>`/api/institute/salary-structures/by-employee-type/${id}`
-        
+        DETAIL_BY_EMPLOYEE_TYPE: (id: string) => `/api/institute/salary-structures/by-employee-type/${id}`
+
     },
     SALARY_STRUCTURE_COMPONENT: {
 
@@ -141,6 +141,7 @@ export const API_ENDPOINTS = {
             GET_BY_ID: (id: string | number) => `/api/institute/designations/${id}`,
             DELETE: (id: string | number) => `/api/institute/designations/${id}`,
             SEARCH: (keyword: string) => `/api/institute/designations/${keyword}`,
+            GET_BY_DEPARTMENT: (departmentId: string | number) => `/api/institute/designations/by-department/${departmentId}`
         },
         EMPLOYEE_TYPE: {
             CREATE: '/api/institute/employee-types',
