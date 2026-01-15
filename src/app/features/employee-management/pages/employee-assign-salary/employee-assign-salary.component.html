@@ -1,0 +1,96 @@
+    <div class="kt-subheader  kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+        <h3 class="kt-subheader__title">Assign Salary</h3>
+        <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+
+        <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+        </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+        <div class="kt-subheader__wrapper">
+            <!-- <button type="button" class="btn btn-outline-success">
+            <i class="la la-edit"></i>
+            Update Details</button> -->
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+
+    <div *ngIf="salaryStructureResponse as structure">
+        <div class="kt-portlet kt-portlet--height-fluid">
+
+        <!-- Header -->
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+                {{ structure.employeeTypeName }}
+            </h3>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="kt-portlet__body">
+
+            <div class="mb-3">
+            <strong>Base Salary:</strong> {{ structure.baseSalary | number }}<br />
+            <strong>Effective From:</strong> {{ structure.effectiveFrom | date }}<br />
+            <strong>Effective To:</strong>
+            {{ structure.effectiveTo ? (structure.effectiveTo | date) : 'N/A' }}
+            </div>
+
+            <!-- Components -->
+<div class="kt-widget4"
+     *ngIf="(structure.components?.length ?? 0) > 0; else noComponents">
+            <div class="kt-widget4__item"
+                *ngFor="let comp of structure.components">
+
+                <div class="kt-widget4__info">
+                <a href="#" class="kt-widget4__title">
+                    {{ comp.componentName }}
+                </a>
+                <span class="kt-widget4__sub">
+                    {{ comp.componentType }}
+                    •
+                    {{ comp.isPercentage ? 'Percentage' : 'Fixed' }}
+                </span>
+                </div>
+
+                <div class="kt-widget4__tools">
+                {{ comp.value }}{{ comp.isPercentage ? '%' : '' }}
+                </div>
+            </div>
+
+            <!-- Totals -->
+            <div class="kt-widget4__item font-weight-bold border-top mt-2 pt-2">
+                <div class="kt-widget4__info">Total Earnings:</div>
+                <div class="kt-widget4__tools">{{ structure.totalEarnings | number }}</div>
+            </div>
+            <div class="kt-widget4__item font-weight-bold">
+                <div class="kt-widget4__info">Total Deductions:</div>
+                <div class="kt-widget4__tools">{{ structure.totalDeductions | number }}</div>
+            </div>
+            <div class="kt-widget4__item font-weight-bold">
+                <div class="kt-widget4__info">Gross Total:</div>
+                <div class="kt-widget4__tools">{{ structure.totalWithoutDeduction | number }}</div>
+            </div>
+            <div class="kt-widget4__item font-weight-bold">
+                <div class="kt-widget4__info">Net Salary:</div>
+                <div class="kt-widget4__tools">{{ structure.netSalary | number }}</div>
+            </div>
+
+            </div>
+
+            <ng-template #noComponents>
+            <div class="text-muted text-center">
+                No salary components defined
+            </div>
+            </ng-template>
+
+        </div>
+        </div>
+    </div>
+
+

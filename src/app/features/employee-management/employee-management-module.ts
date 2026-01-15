@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { EmployeeListing } from './pages/employee-listing/employee-listing';
 import { EmployeeDetails } from './pages/employee-details/employee-details';
 import { EmployeeCreate } from './pages/employee-create/employee-create';
+import { EmployeeAssignSalaryComponent } from './pages/employee-assign-salary/employee-assign-salary.component';
 
 
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'employee-details/:id', component: EmployeeDetails },
   { path: 'employee-edit/:id', component: EmployeeCreate },
   { path: 'employee-create', component: EmployeeCreate },
+    { path: 'employee-assign-salary/:id', component: EmployeeAssignSalaryComponent },
 ];
 
 

@@ -22,5 +22,7 @@ export interface EmployeeResponse {
   bio?: string;
   active: boolean;
   email: string;
+  employeeTypeId:number;
+  employeeTypeName:string
 }
 

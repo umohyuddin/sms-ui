@@ -63,7 +63,8 @@ export const ROUTES = {
     LIST: ['employee'],
     CREATE: ['employee', 'employee-create'],
     EDIT: (id: string) => ['employees', 'employee-edit', id],
-    DETAILS: (id: string) => ['employee', 'employee-details', id]
+    DETAILS: (id: string) => ['employee', 'employee-details', id],
+    ASSIGN_SALARY: (id: string) => ['employee', 'employee-assign-salary', id]
   },
   EMPLOYEE_TYPE: {
     LIST: ['employee'],

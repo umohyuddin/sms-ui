@@ -204,8 +204,5 @@ downloadEmployeeDocument(documentId: number, employeeId: string, fileName: strin
     });
   }
 
-  // deleteCampus(id: number): Observable<any> {
-  //   return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}/${id}`, { observeResponse: true });
-  // }
 
 }

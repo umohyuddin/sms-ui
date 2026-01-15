@@ -64,7 +64,7 @@ export class EmployeeListingTableComponent {
   // Employment Info
   { key: 'joiningDate', label: 'Joining Date', type: 'date' },
   { key: 'probationEndDate', label: 'Probation End Date', type: 'date' },
-
+  { key: 'employeeType', label: 'Employee Type' },
   // Status
   { key: 'active', label: 'Active', type: 'boolean' },
     { key: 'action', label: 'Actions', type: 'boolean' }
@@ -131,5 +131,10 @@ export class EmployeeListingTableComponent {
   onPageSizeChange(event: any) {
     const newSize = +event.target.value;
     this.pagination.changePageSize(newSize);
+  }
+
+  assignEmoloyeeSalary(employee: EmployeeResponse, event: Event){
+    event.preventDefault();
+    this.router.navigate(ROUTES.EMPLOYEE.ASSIGN_SALARY(employee.employeeTypeId.toString()))
   }
 }
