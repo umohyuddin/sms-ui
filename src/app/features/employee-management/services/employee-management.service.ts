@@ -92,26 +92,7 @@ export class EmployeeManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.PROVINCE.GET_BY_COUNTRY_ID(id)}`, { observeResponse: true });
   }
 
-  // downloadEmployeeDocument(documentId: number, employeeId: string): void {
-  //   const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DOWNLOAD_DOCS}/${documentId}?employeeId=${employeeId}`;
-
-  //   // Cast the request as Observable<Blob>
-  //   (this.http.request(HTTP_METHOD.GET, url, { responseType: 'blob' }) as unknown as Observable<Blob>)
-  //     .subscribe(
-  //       (blob: Blob) => {
-  //         const link = document.createElement('a');
-  //         const objectUrl = window.URL.createObjectURL(blob);
-  //         link.href = objectUrl;
-  //         link.download = `document_${documentId}.pdf`; // or dynamic filename
-  //         link.click();
-  //         window.URL.revokeObjectURL(objectUrl);
-  //       },
-  //       (err) => {
-  //         console.error('Error downloading document', err);
-  //       }
-  //     );
-  // }
-
+ 
 downloadEmployeeDocument(documentId: number, employeeId: string, fileName: string): void {
   const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DOWNLOAD_DOCS}/${documentId}?employeeId=${employeeId}`;
 
@@ -162,47 +143,16 @@ downloadEmployeeDocument(documentId: number, employeeId: string, fileName: strin
   }
 
 
-
-
   searchEmployee(query: string): Observable<any> {
     const url = query ? `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.SEARCH(query)}` : `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.GET_ALL}`;
     return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
   }
-  getStudentFeeSummary(params: any): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.STUDENTS.STUDENT_FEE_SUMMARY}`,
-      {
-        observeResponse: true,
-        params: params
-      }
-    );
-  }
 
-  getActiveFeeRates(paramsObj: any): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_RATES.GET_ACTIVE_RATES}`, {
-      params: paramsObj,
-      observeResponse: true
-    });
-  }
-
-  getActiveDiscounts(paramsObj: any): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_RATES.GET_ACTIVE_DISCOUNTS}`, {
-      params: paramsObj,
-      observeResponse: true
-    });
-  }
-
-
-  studentAssignFee(id: string, payload: any): Observable<any> {
-
-
-    const url = `${this.baseUrl}${API_ENDPOINTS.STUDENTS.ASSIGN_STUDENT_FEE(id)}`;
-
-    return this.http.request(HTTP_METHOD.POST, url, {
-      observeResponse: true,
-      body: payload
-    });
-  }
-
-
+  createEmployeeSalary(payload: any): Observable<any> {
+  const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.EMPLOYEE_SALARY.CREATE}`;
+  return this.http.request(HTTP_METHOD.POST, url, {
+    observeResponse: true,
+    body: payload
+  });
+}
 }

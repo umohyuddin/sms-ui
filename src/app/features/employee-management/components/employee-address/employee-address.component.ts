@@ -57,26 +57,6 @@ export class EmployeeAddressComponent {
   }
 
 
-  // loadProvinceByCountryId(countryId: any) {
-  //   this.addressForm.get('provinceId')?.setValue('')
-  //   this.employeeManagementService.getProvinceByCountryId(countryId).subscribe({
-  //     next: (response) => {
-  //       console.log('  Success Status:', response.status);
-  //       console.log('📦 Response Body:', response.body);
-  //       this.provinceDD = response.body.map((item: any) => ({
-  //         key: item.id,   // unique key (IMPORTANT for trackBy)
-  //         label: item.name
-  //       }));
-  //     },
-  //     error: (error) => {
-  //       console.error('❌ Request Error Status:', error.status);
-  //       console.error('Message:', error.message);
-  //     },
-  //     complete: () => {
-  //       console.log('🔚 Request Complete');
-  //     }
-  //   });
-  // }
   togglePersonalForm(id: any) {
     console.log('received Id', id);
 

@@ -1,0 +1,293 @@
+<div class="kt-grid__item kt-grid__item--fluid kt-app__content">
+    <div class="kt-portlet">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">
+                    Personal Information
+                </h3>
+            </div>
+            <div class="kt-portlet__head-toolbar">
+                <div class="kt-portlet__head-actions">
+                    <div class="dropdown dropdown-inline">
+                        <a href="#" class="btn btn-outline-success btn-sm btn-icon btn-icon-md" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="flaticon2-add-1"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="kt-nav">
+                                <li class="kt-nav__item">
+                                    <a class="kt-nav__link" (click)="toggleStudentForm(studentId)">
+                                        <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                                        <span class="kt-nav__link-text">Update Personal Information</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+
+            <div *ngIf="!showStudentForm">
+                <div class="form-group row kt-margin-t-10">
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">First Name :
+                        </span> {{studentData?.firstName}}
+                    </div>
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Last Name :
+                        </span> {{studentData?.lastName}}
+                    </div>
+
+                </div>
+                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                </div>
+                <div class="form-group row kt-margin-t-10">
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Full Name :
+                        </span> {{studentData?.fullName}}
+                    </div>
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">DOB :
+                        </span> {{studentData?.dateOfBirth}}
+                    </div>
+                </div>
+                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                </div>
+                <div class="form-group row kt-margin-t-10">
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Gender :
+                        </span> {{studentData?.gender}}
+                    </div>
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">CRC/CNIC :
+                        </span> {{studentData?.cnic}}
+                    </div>
+                </div>
+                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                </div>
+                <div class="form-group row kt-margin-t-10">
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Email :
+                        </span> {{studentData?.email}}
+                    </div>
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Contact # :
+                        </span> {{studentData?.phone}}
+                    </div>
+                </div>
+                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                </div>
+                <div class="form-group row kt-margin-t-10">
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Religion :
+                        </span> {{studentData?.religion}}
+                    </div>
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Nationality :
+                        </span> {{studentData?.nationality}}
+                    </div>
+                </div>
+                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
+                </div>
+                <div class="form-group row kt-margin-t-10">
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Blood_Group :
+                        </span> {{studentData?.bloodGroup}}
+                    </div>
+                    <div class="col-6">
+                        <!-- <label class="col-form-label">Name:</label> -->
+                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Place Of Birth
+                            # :
+                        </span> {{studentData?.phone}}
+                    </div>
+                </div>
+
+            </div>
+            <div *ngIf="showStudentForm">
+                <form class="kt-form" [formGroup]="createForm" (ngSubmit)="onStudentSubmit()">
+
+
+                    <div class="form-group row form-group-marginless kt-margin-t-20">
+                        <label class="col-lg-1 col-form-label required">First Name:</label>
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control" placeholder="First Name" formControlName="firstName"
+                                [class.is-invalid]="firstName?.invalid && (firstName?.touched || firstName?.dirty)"
+                                [class.is-valid]="firstName?.valid && (firstName?.touched || firstName?.dirty)">
+                            <span class="form-text text-muted">Please enter First Name</span>
+                            <span class="invalid-feedback"
+                                *ngIf="firstName?.invalid && (firstName?.touched || firstName?.dirty)">
+                                {{ getErrorMessage('firstName') }}
+                            </span>
+                        </div>
+
+                        <label class="col-lg-1 col-form-label required">Last Name:</label>
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control" placeholder="Last Name" formControlName="lastName"
+                                [class.is-invalid]="lastName?.invalid && (lastName?.touched || lastName?.dirty)"
+                                [class.is-valid]="lastName?.valid && (lastName?.touched || lastName?.dirty)">
+                            <span class="form-text text-muted">Please enter Last Name</span>
+                            <span class="invalid-feedback"
+                                *ngIf="lastName?.invalid && (lastName?.touched || lastName?.dirty)">
+                                {{ getErrorMessage('lastName') }}
+                            </span>
+                        </div>
+
+                        <label class="col-lg-1 col-form-label">Middle Name:</label>
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control" placeholder="Middle Name"
+                                formControlName="middleName">
+                            <span class="form-text text-muted">Please enter Middle Name</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row form-group-marginless kt-margin-t-20">
+                        <!-- <label class="col-lg-1 col-form-label">Student Code:</label>
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control" placeholder="Student Code"
+                                formControlName="studentCode">
+                        </div> -->
+
+                        <label class="col-lg-1 col-form-label required">National Id:</label>
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control" placeholder="B-Form/CNIC" formControlName="cnic"
+                                [class.is-invalid]="cnic?.invalid && (cnic?.touched || cnic?.dirty)"
+                                [class.is-valid]="cnic?.valid && (cnic?.touched || cnic?.dirty)">
+                            <span class="form-text text-muted">Please enter National Id</span>
+                            <span class="invalid-feedback" *ngIf="cnic?.invalid && (cnic?.touched || cnic?.dirty)">
+                                {{ getErrorMessage('cnic') }}
+                            </span>
+                        </div>
+
+                        <label class="col-lg-1 col-form-label required">DOB:</label>
+                        <div class="col-lg-3">
+                            <input type="date" class="form-control" placeholder="DOB" formControlName="dateOfBirth"
+                                [class.is-invalid]="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)"
+                                [class.is-valid]="dateOfBirth?.valid && (dateOfBirth?.touched || dateOfBirth?.dirty)">
+                            <span class="form-text text-muted">Please enter DOB</span>
+                            <span class="invalid-feedback"
+                                *ngIf="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)">
+                                {{ getErrorMessage('dateOfBirth') }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row form-group-marginless kt-margin-t-20">
+                        <label class="col-lg-1 col-form-label required">Phone:</label>
+                        <div class="col-lg-3">
+                            <input type="tel" class="form-control" placeholder="+923205500003" formControlName="phone"
+                                [class.is-invalid]="phone?.invalid && (phone?.touched || phone?.dirty)"
+                                [class.is-valid]="phone?.valid && (phone?.touched || phone?.dirty)">
+                            <span class="form-text text-muted">Please enter Phone Number</span>
+                            <span class="invalid-feedback" *ngIf="phone?.invalid && (phone?.touched || phone?.dirty)">
+                                {{ getErrorMessage('phone') }}
+                            </span>
+                        </div>
+
+                        <label class="col-lg-1 col-form-label required">Email:</label>
+                        <div class="col-lg-3">
+                            <input type="email" class="form-control" placeholder="example@mail.com"
+                                formControlName="email"
+                                [class.is-invalid]="email?.invalid && (email?.touched || email?.dirty)"
+                                [class.is-valid]="email?.valid && (email?.touched || email?.dirty)">
+                            <span class="form-text text-muted">Please enter Email</span>
+                            <span class="invalid-feedback" *ngIf="email?.invalid && (email?.touched || email?.dirty)">
+                                {{ getErrorMessage('email') }}
+                            </span>
+                        </div>
+
+                        <label class="col-lg-1 col-form-label required">Gender:</label>
+                        <div class="col-lg-3">
+                            <select class="form-control" formControlName="gender"
+                                [class.is-invalid]="gender?.invalid && (gender?.touched || gender?.dirty)"
+                                [class.is-valid]="gender?.valid && (gender?.touched || gender?.dirty)">
+                                <option value='' selected>Select Gender</option>
+                                @for (p of genderDD; track p.key) {
+                                <option [value]="p.key">{{ p.label }}</option>
+                                }
+                            </select>
+                            <span class="form-text text-muted">Please select Gender</span>
+                            <span class="invalid-feedback"
+                                *ngIf="gender?.invalid && (gender?.touched || gender?.dirty)">
+                                {{ getErrorMessage('gender') }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row form-group-marginless kt-margin-t-20">
+                        <label class="col-lg-1 col-form-label required">Religion:</label>
+                        <div class="col-lg-3">
+                            <select class="form-control" formControlName="religion"
+                                [class.is-invalid]="religion?.invalid && (religion?.touched || religion?.dirty)"
+                                [class.is-valid]="religion?.valid && (religion?.touched || religion?.dirty)">
+                                <option value='' selected>Select Religion</option>
+                                @for (p of religionDD; track p.key) {
+                                <option [value]="p.key">{{ p.label }}</option>
+                                }
+                            </select>
+                            <span class="form-text text-muted">Please select Religion</span>
+                            <span class="invalid-feedback"
+                                *ngIf="religion?.invalid && (religion?.touched || religion?.dirty)">
+                                {{ getErrorMessage('religion') }}
+                            </span>
+                        </div>
+
+                        <label class="col-lg-1 col-form-label">Blood Group:</label>
+                        <div class="col-lg-3">
+                            <select class="form-control" formControlName="bloodGroup">
+                                <option value='' selected>Select Blood Group</option>
+                                @for (p of bloodGroupDD; track p.key) {
+                                <option [value]="p.key">{{ p.label }}</option>
+                                }
+                            </select>
+                            <span class="form-text text-muted">Please select Blood Group</span>
+                        </div>
+
+                        <label class="col-lg-1 col-form-label required">Nationality:</label>
+                        <div class="col-lg-3">
+                            <select class="form-control" formControlName="nationality"
+                                [class.is-invalid]="nationality?.invalid && (nationality?.touched || nationality?.dirty)"
+                                [class.is-valid]="nationality?.valid && (nationality?.touched || nationality?.dirty)">
+                                <option value='' selected>Select Nationality</option>
+                                <option *ngFor="let p of nationalityDD" [value]="p.key">{{ p.label }}</option>
+                            </select>
+                            <span class="form-text text-muted">Please select Nationality</span>
+                            <span class="invalid-feedback"
+                                *ngIf="nationality?.invalid && (nationality?.touched || nationality?.dirty)">
+                                {{ getErrorMessage('nationality') }}
+                            </span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="kt-portlet__foot">
+                        <div class="kt-form__actions">
+                            <div class="row">
+                                <div class="col-lg-5"></div>
+                                <div class="col-lg-7">
+                                    <button type="submit" class="btn btn-dark mr-2">
+                                        Update
+                                    </button>
+                                    <button type="button" class="btn btn-danger" (click)="toggleStudentForm()">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

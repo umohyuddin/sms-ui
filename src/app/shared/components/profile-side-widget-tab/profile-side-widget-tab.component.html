@@ -1,0 +1,6 @@
+<a [class.active]="activeTab === tabKey" (click)="onClick()" class="kt-widget__item">
+  <span class="kt-widget__section">
+    <span class="kt-widget__icon" [innerHTML]="safeSvg"></span>
+    <span class="kt-widget__desc">{{ label }}</span>
+  </span>
+</a>

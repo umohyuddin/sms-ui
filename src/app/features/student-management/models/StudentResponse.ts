@@ -2,6 +2,7 @@ export interface StudentResponse {
   id: number;
   firstName: string;
   fullName: string;
+  middleName:string,
   lastName: string;
   studentCode: string;
   dateOfBirth: string;
@@ -24,7 +25,27 @@ export interface StudentResponse {
   sectionId: number;
   academicYearId:number
   feeAssigned:boolean
+
+  cnic: string;
+  passportNumber: string | null;
+
+  religion: string;
+  nationality: string;
+  bloodGroup: string;
+
+  campusName: string;
+
+  standardName: string;
+
+  sectionName: string;
+
+  admissionTypeId: number;
+  admissionTypeName: string;
+
+  academicYearName: string;
+
 }
+
 
 /* ---------------------- CAMPUS ---------------------- */
 export interface Campus {

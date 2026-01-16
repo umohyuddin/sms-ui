@@ -85,6 +85,16 @@ export const API_ENDPOINTS = {
         SEARCH: (keyword: string) => `/api/institute/employees/search?name=${keyword}`,
         GET_BY_ID: (id: string) => `/api/institute/employees/${id}`,
 
+        EMPLOYEE_SALARY: {
+            GET_ALL: '/api/institute/employee-salaries',
+            GET_BY_ID: (id: string) => `/api/institute/employee-salaries/${id}`,
+            CREATE: '/api/institute/employee-salaries',
+            UPDATE: (id: string) => `/api/institute/employee-salaries/${id}`,
+            DELETE: (id: string) => `/api/institute/employee-salaries/${id}`,
+            GET_BY_EMPLOYEE: (employeeId: string) => `/api/institute/employee-salaries/employee/${employeeId}`,
+            GET_BY_STATUS: (status: string) => `/api/institute/employee-salaries/status/${status}`,
+            GET_BY_EMPLOYEE_AND_MONTH: (employeeId: string, year: number, month: number) => `/api/institute/employee-salaries/employee/${employeeId}/month?year=${year}&month=${month}`
+        },
 
         DEPARTMENTS: {
             ASSIGN: '/api/employees/departments', // POST to assign

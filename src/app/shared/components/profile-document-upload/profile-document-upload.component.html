@@ -1,0 +1,37 @@
+<form class="kt-form kt-form--label-right" [formGroup]="docsForm" (ngSubmit)="onSubmit()">
+  <div class="kt-portlet__body">
+    <div class="form-group row">
+      <div class="col-lg-6">
+        <label>Doc Type:</label>
+        <select class="form-control" formControlName="docKey"
+          [class.is-invalid]="docKey?.invalid && (docKey?.touched || docKey?.dirty)"
+          [class.is-valid]="docKey?.valid && (docKey?.touched || docKey?.dirty)">
+          <option value='' selected>Select Doc Type</option>
+          <option *ngFor="let p of docsTypeDD" [value]="p.key">{{ p.label }}</option>
+        </select>
+        <span class="form-text text-muted">Please select Docs Type</span>
+        <span class="invalid-feedback" *ngIf="docKey?.errors?.['required']">Docs Type is required</span>
+      </div>
+      <div class="col-lg-6">
+        <label>File:</label>
+        <input type="file" class="form-control" (change)="onFileChange($event)"
+          [class.is-invalid]="docsForm.get('file')?.invalid && docsForm.get('file')?.touched">
+        <span class="form-text text-muted">Please browse your file</span>
+        <span class="invalid-feedback" *ngIf="docsForm.get('file')?.errors?.['required'] && (docsForm.get('file')?.touched || docsForm.get('file')?.dirty)">
+          File is required
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="kt-portlet__foot">
+    <div class="kt-form__actions">
+      <div class="row">
+        <div class="col-lg-6"></div>
+        <div class="col-lg-6 kt-align-right">
+          <button type="submit" class="btn btn-dark" style="margin-right: 10px;">Save</button>
+          <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

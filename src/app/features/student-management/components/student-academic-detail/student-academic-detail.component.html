@@ -1,0 +1,79 @@
+<div class="kt-grid__item kt-grid__item--fluid kt-app__content">
+    <div class="kt-portlet">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">
+                    Academic Details
+                </h3>
+            </div>
+            <div class="kt-portlet__head-toolbar">
+                <div class="kt-portlet__head-actions"></div>
+            </div>
+        </div>
+
+        <div class="kt-portlet__body">
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <span class="form-control-plaintext kt-font-bolder"  style="display: inline;">Student Code :</span>
+                    {{ studentData?.studentCode }}
+                </div>
+                <div class="col-6">
+                    <span class="form-control-plaintext kt-font-bolder"  style="display: inline;">Status :</span>
+                    {{ studentData?.status }}
+                </div>
+            </div>
+
+            <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit"></div>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <span class="form-control-plaintext kt-font-bolder"  style="display: inline;">Campus :</span>
+                    {{ studentData?.campusName }}
+                </div>
+                <div class="col-6">
+                    <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Academic Year :</span>
+                    {{ studentData?.academicYearName }}
+                </div>
+            </div>
+
+            <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit"></div>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Class / Standard :</span>
+                    {{ studentData?.standardName }}
+                </div>
+                <div class="col-6">
+                    <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Section :</span>
+                    {{ studentData?.sectionName }}
+                </div>
+            </div>
+
+            <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit"></div>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Admission Type :</span>
+                    {{ studentData?.admissionTypeName }}
+                </div>
+                <div class="col-6">
+                    <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Enrollment Date :</span>
+                    {{ studentData?.enrollmentDate }}
+                </div>
+            </div>
+
+            <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit"></div>
+
+            <div class="form-group row">
+                <div class="col-6">
+                    <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Active :</span>
+                    <span [ngClass]="studentData?.isActive ? 'kt-font-success' : 'kt-font-danger'">
+                        {{ studentData?.isActive ? 'Yes' : 'No' }}
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

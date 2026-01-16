@@ -162,6 +162,14 @@ getDocsMeta(): Observable<any> {
     });
   }
 
+  updateStudent(id: string, payload: any): Observable<any>{
+    const url = `${this.baseUrl}${API_ENDPOINTS.STUDENTS.UPDATE(id)}`;
+    return this.http.request(HTTP_METHOD.PUT, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
   // deleteCampus(id: number): Observable<any> {
   //   return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}/${id}`, { observeResponse: true });
   // }

@@ -1,0 +1,35 @@
+<div *ngIf="activeTab === 'documents'" class="tab-content full-width-tab" style="margin-left: 10px;">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="kt-portlet kt-portlet--height-fluid">
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Student Documents</h3>
+          </div>
+        </div>
+        <div class="kt-portlet__body">
+
+          <!-- Document Upload Form -->
+          <app-profile-document-upload 
+            [docsForm]="docsForm" 
+            [docsTypeDD]="docsTypeDD" 
+            (fileSelected)="onFileSelected($event)"
+            (formSubmit)="onDocsSubmit()"
+            (formCancel)="onDocsCancel()">
+          </app-profile-document-upload>
+
+          <!-- Document Groups -->
+          <div *ngFor="let group of documentsByType | keyvalue">
+            <app-profile-document-group
+              [groupKey]="group.key"
+              [docs]="group.value"
+              [getFileIcon]="getFileIcon"
+              (download)="downloadFile($event)">
+            </app-profile-document-group>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

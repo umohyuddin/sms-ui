@@ -1,0 +1,4 @@
+<h5 class="mt-4 text-dark fw-bold">{{ groupKey.replace('_', ' ') }}</h5>
+<div *ngFor="let doc of docs">
+  <app-profile-document-list [doc]="doc" [getFileIcon]="getFileIcon" (download)="onDownload($event)"></app-profile-document-list>
+</div>
