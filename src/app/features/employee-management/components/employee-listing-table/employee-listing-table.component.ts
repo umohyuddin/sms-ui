@@ -27,7 +27,7 @@ export class EmployeeListingTableComponent {
   employeeResponse: EmployeeResponse[] = [];
   genderClasses = GENDER_CLASSES;
   martial_Status = MARITAL_STATUS_CLASSES;
-  
+
   searchControl = new FormControl('');
   private destroy$ = new Subject<void>();
 
@@ -39,36 +39,36 @@ export class EmployeeListingTableComponent {
   ) { }
 
 
-  columns =[
-  // Basic Info
-  { key: 'employeeCode', label: 'Employee Code' },
-  { key: 'fullName', label: 'Full Name' },
-  { key: 'firstName', label: 'First Name' },
-  { key: 'middleName', label: 'Middle Name' },
-  { key: 'lastName', label: 'Last Name' },
+  columns = [
+    // Basic Info
+    { key: 'employeeCode', label: 'Employee Code' },
+    { key: 'fullName', label: 'Full Name' },
+    { key: 'firstName', label: 'First Name' },
+    { key: 'middleName', label: 'Middle Name' },
+    { key: 'lastName', label: 'Last Name' },
 
     // Contact Info
-  { key: 'email', label: 'Email' },
-  { key: 'primaryPhone', label: 'Primary Phone' },
-  { key: 'secondaryPhone', label: 'Secondary Phone' },
-  { key: 'workPhone', label: 'Work Phone' },
+    { key: 'email', label: 'Email' },
+    { key: 'primaryPhone', label: 'Primary Phone' },
+    { key: 'secondaryPhone', label: 'Secondary Phone' },
+    { key: 'workPhone', label: 'Work Phone' },
 
-  // Personal Info
-  { key: 'gender', label: 'Gender' },
-  { key: 'dateOfBirth', label: 'Date of Birth', type: 'date' },
-  { key: 'maritalStatus', label: 'Marital Status' },
-  { key: 'bloodGroup', label: 'Blood Group' },
-  { key: 'religion', label: 'Religion' },
+    // Personal Info
+    { key: 'gender', label: 'Gender' },
+    { key: 'dateOfBirth', label: 'Date of Birth', type: 'date' },
+    { key: 'maritalStatus', label: 'Marital Status' },
+    { key: 'bloodGroup', label: 'Blood Group' },
+    { key: 'religion', label: 'Religion' },
 
 
-  // Employment Info
-  { key: 'joiningDate', label: 'Joining Date', type: 'date' },
-  { key: 'probationEndDate', label: 'Probation End Date', type: 'date' },
-  { key: 'employeeType', label: 'Employee Type' },
-  // Status
-  { key: 'active', label: 'Active', type: 'boolean' },
+    // Employment Info
+    { key: 'joiningDate', label: 'Joining Date', type: 'date' },
+    { key: 'probationEndDate', label: 'Probation End Date', type: 'date' },
+    { key: 'employeeType', label: 'Employee Type' },
+    // Status
+    { key: 'active', label: 'Active', type: 'boolean' },
     { key: 'action', label: 'Actions', type: 'boolean' }
-];
+  ];
 
 
   ngOnInit() {
@@ -133,8 +133,9 @@ export class EmployeeListingTableComponent {
     this.pagination.changePageSize(newSize);
   }
 
-  assignEmoloyeeSalary(employee: EmployeeResponse, event: Event){
+  assignEmoloyeeSalary(employee: EmployeeResponse, event: Event) {
     event.preventDefault();
-    this.router.navigate(ROUTES.EMPLOYEE.ASSIGN_SALARY(employee.employeeTypeId.toString()))
+    this.router.navigate(ROUTES.EMPLOYEE.ASSIGN_SALARY(employee.employeeTypeId.toString()),
+      { queryParams: { employeeId: employee.id } })
   }
 }

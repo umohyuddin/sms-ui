@@ -1,5 +1,7 @@
 // src/app/modules/employee/models/EmployeeSalaryFullResponse.ts
 
+import { SalaryStructureComponent } from "../../salary-structure-component-management/models/SalaryStructureComponent";
+
 export interface EmployeeSalaryFullResponse {
   id?: number;
   salaryId?: number;
@@ -9,6 +11,7 @@ export interface EmployeeSalaryFullResponse {
   employeeType?: string | null;
   grossSalary?: number;
   totalDeductions?: number;
+  baseSalary: number;
   netSalary?: number;
   effectiveDate?: string; // ISO string
   salaryStructureId?: number;
@@ -18,6 +21,7 @@ export interface EmployeeSalaryFullResponse {
   employee?: EmployeeMasterResponseDto | null;
   designation?: DesignationResponseDTO | null;
   department?: DepartmentResponseDTO | null;
+  components: SalaryStructureComponent[]
 }
 
 

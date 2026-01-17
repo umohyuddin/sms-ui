@@ -7,4 +7,5 @@ export interface SalaryStructureComponent {
   componentType: string;
   isPercentage?: boolean | null;
   value: number;
+  calculatedAmount:number
 }

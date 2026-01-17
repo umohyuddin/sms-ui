@@ -1,1 +1,105 @@
-<p>employee-salary-info works!</p>
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-dark flaticon-squares"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                Campuese Listing
+            </h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__body" style="position: relative; min-height: 400px;">
+
+        <!-- Salary Header -->
+        <div class="mb-3">
+            <strong>Base Salary:</strong> {{ employeeSalaryData?.baseSalary| number }}<br />
+            <strong>Effective From:</strong> {{ employeeSalaryData?.effectiveDate| date }}<br />
+            <strong>Effective To:</strong>
+            <!-- {{ employeeSalaryData?.effectiveTo ? (structure.effectiveTo | date) : 'N/A' }} -->
+        </div>
+
+        <!-- Components -->
+        <div class="kt-widget4" *ngIf="(employeeSalaryData?.components?.length ?? 0) > 0; else noComponents">
+
+            <div class="kt-widget4__item" *ngFor="let comp of employeeSalaryData?.components">
+
+                <div class="kt-widget4__info">
+                    <a href="#" class="kt-widget4__title" onclick="return false;">
+                        {{ comp.componentName }}
+                    </a>
+
+                    <span class="kt-widget4__sub" [ngClass]="{
+                        'kt-font-success': comp.componentType === 'EARNING',
+                        'kt-font-danger': comp.componentType === 'DEDUCTION'
+                    }">
+                        <i class="la" [ngClass]="{
+                            'la-plus-circle': comp.componentType === 'EARNING',
+                            'la-minus-circle': comp.componentType === 'DEDUCTION'
+                        }"></i>
+
+                        {{ comp.componentType }}
+                        •
+                        {{ comp.isPercentage ? 'Percentage' : 'Fixed' }}
+                    </span>
+                </div>
+
+                <div class="kt-widget4__tools">
+                    {{ comp.calculatedAmount | number }}
+                </div>
+            </div>
+
+            <!-- Totals -->
+            <div class="kt-widget4__item font-weight-bold mt-2 pt-2">
+                <div class="kt-widget4__info">Total Earnings:</div>
+                <div class="kt-widget4__tools">{{ employeeSalaryData?.grossSalary | number }}</div>
+            </div>
+
+            <div class="kt-widget4__item font-weight-bold">
+                <div class="kt-widget4__info">Total Deductions:</div>
+                <div class="kt-widget4__tools">{{ employeeSalaryData?.totalDeductions | number }}</div>
+            </div>
+
+            <div class="kt-widget4__item font-weight-bold">
+                <div class="kt-widget4__info">Gross Total:</div>
+                <div class="kt-widget4__tools">{{ employeeSalaryData?.grossSalary | number }}</div>
+            </div>
+
+            <div class="kt-widget4__item font-weight-bold">
+                <div class="kt-widget4__info">Net Salary:</div>
+                <div class="kt-widget4__tools">{{ employeeSalaryData?.netSalary | number }}</div>
+            </div>
+
+        </div>
+
+        <ng-template #noComponents>
+            <div class="text-muted text-center">
+                No salary components defined
+            </div>
+        </ng-template>
+
+    </div>
+
+    <div class="kt-portlet__foot">
+        <div class="kt-form__actions">
+            <div class="row">
+                <div class="col-lg-5"></div>
+                <div class="col-lg-7">
+                    <button class="btn btn-dark mr-2">
+                        Apply
+                    </button>
+                    <button type="button" class="btn btn-danger">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

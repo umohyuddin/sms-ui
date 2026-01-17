@@ -100,12 +100,12 @@ columns = [
   payNow(item: EmployeeSalaryFullResponse, event: Event): void {
     event.preventDefault();
     console.log('Editing Salary ID:', item.salaryId);
-  if (!item.salaryId) {
+  if (!item.employeeId) {
     console.error('Salary ID is missing!');
     return;
   }
   console.log('Editing Salary ID:', item.salaryId);
-  this.router.navigate(ROUTES.EMPLOYEE_SALARY.DETAILS(item.salaryId.toString()));
+  this.router.navigate(ROUTES.EMPLOYEE_SALARY.DETAILS(item.employeeId.toString()));
   }
 
   onPageSizeChange(event: any) {

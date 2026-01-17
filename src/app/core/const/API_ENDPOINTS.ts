@@ -85,9 +85,11 @@ export const API_ENDPOINTS = {
         SEARCH: (keyword: string) => `/api/institute/employees/search?name=${keyword}`,
         GET_BY_ID: (id: string) => `/api/institute/employees/${id}`,
 
+       
         EMPLOYEE_SALARY: {
             GET_ALL: '/api/institute/employee-salaries',
             GET_BY_ID: (id: string) => `/api/institute/employee-salaries/${id}`,
+            GET_BY_EMP_ID: (id: string) => `/api/institute/employee-salaries/by-employeeId/${id}`,
             CREATE: '/api/institute/employee-salaries',
             UPDATE: (id: string) => `/api/institute/employee-salaries/${id}`,
             DELETE: (id: string) => `/api/institute/employee-salaries/${id}`,

@@ -12,14 +12,14 @@ import { EmployeeManagementService } from '../../services/employee-management.se
 @Component({
   selector: 'app-employee-assign-salary',
   standalone: true,
-  imports: [
-    CommonModule],
+  imports: [CommonModule],
   templateUrl: './employee-assign-salary.component.html',
   styleUrl: './employee-assign-salary.component.css'
 })
 export class EmployeeAssignSalaryComponent {
   salaryStructureResponse?: SalaryStructureDetails;
   routedId!: string;
+  employeeId!: string;
   constructor(
     private router: Router,
     private salaryStructureService: SalaryStructureService,
@@ -31,6 +31,7 @@ export class EmployeeAssignSalaryComponent {
   ngOnInit(): void {
 
     this.routedId = this.route.snapshot.paramMap.get('id') ?? '';
+    this.employeeId = this.route.snapshot.queryParamMap.get('employeeId') ?? '';
     console.log('ID from route:', this.routedId);
     this.getSalaryStructureDetails(this.routedId);
   }
@@ -67,7 +68,7 @@ export class EmployeeAssignSalaryComponent {
     }
 
     const payload = {
-      employeeId: Number(this.routedId),
+      employeeId: Number(this.employeeId),
       salaryStructureId: structure.id,
       grossSalary: structure.totalWithoutDeduction,
       totalDeductions: structure.totalDeductions,

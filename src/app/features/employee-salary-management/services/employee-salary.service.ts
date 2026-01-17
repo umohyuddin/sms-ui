@@ -36,10 +36,10 @@ export class EmployeeSalaryService {
   // -------------------------
   // GET SALARY BY ID
   // -------------------------
-  getEmployeeSalaryById(id: number): Observable<any> {
+  getEmployeeSalaryById(id: string): Observable<any> {
     return this.http.request(
       HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.EMPLOYEE_SALARY.GET_BY_ID(id.toString())}`,
+      `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.EMPLOYEE_SALARY.GET_BY_EMP_ID(id.toString())}`,
       { observeResponse: true }
     );
   }
