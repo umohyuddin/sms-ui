@@ -4,8 +4,10 @@ import { Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
-import { EmployeeSalary } from '../../models/EmployeeSalary';
+
 import { EmployeeSalaryService } from '../../services/employee-salary.service';
+import { EmployeeSalaryFullResponse } from '../../models/EmployeeSalary';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
 @Component({
   selector: 'app-employee-salary-listing-table',
@@ -18,28 +20,32 @@ import { EmployeeSalaryService } from '../../services/employee-salary.service';
   styleUrls: ['./employee-salary-listing-table.component.css']
 })
 export class EmployeeSalaryListingTableComponent implements OnInit {
-  pagination: Pagination<EmployeeSalary> = new Pagination([], 10);
+  pagination: Pagination<EmployeeSalaryFullResponse> = new Pagination([], 10);
   searchControl = new FormControl('');
-  employeeSalaries: EmployeeSalary[] = [];
+  employeeSalaries: EmployeeSalaryFullResponse[] = [];
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router,
     private employeeSalaryService: EmployeeSalaryService,
   ) { }
 
-  columns = [
-    { key: 'employeeCode', label: 'Employee Code', sortable: true },
-    { key: 'employeeName', label: 'Employee Name', sortable: true },
-    { key: 'grossSalary', label: 'Gross Salary', sortable: true },
-    { key: 'totalDeductions', label: 'Total Deductions', sortable: true },
-    { key: 'netSalary', label: 'Net Salary', sortable: true },
-    { key: 'effectiveDate', label: 'Effective Date', sortable: false },
-    { key: 'actions', label: 'Actions', sortable: false }
-  ];
+columns = [
+  { key: 'employeeCode', label: 'Employee Code', sortable: true },
+  { key: 'employeeName', label: 'Employee Name', sortable: true },
+  { key: 'employeeType', label: 'Employee Type', sortable: true },
+  { key: 'designation', label: 'Designation', sortable: true },
+  { key: 'department', label: 'Department', sortable: true },
+  { key: 'grossSalary', label: 'Gross Salary', sortable: true },
+  { key: 'totalDeductions', label: 'Total Deductions', sortable: true },
+  { key: 'netSalary', label: 'Net Salary', sortable: true },
+  { key: 'status', label: 'Status', sortable: true },
+  { key: 'effectiveDate', label: 'Effective Date', sortable: true },
+  { key: 'actions', label: 'Actions', sortable: false }
+];
 
   ngOnInit() {
     this.getEmployeeSalaries();
-    this.subscribeToSearch();
+    //this.subscribeToSearch();
   }
 
   ngOnDestroy() {
@@ -47,24 +53,24 @@ export class EmployeeSalaryListingTableComponent implements OnInit {
     this.destroy$.complete();
   }
 
-  private subscribeToSearch() {
-    this.searchControl.valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        switchMap(search => this.employeeSalaryService.searchEmployeeSalaries(search || '')),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: (response) => {
-          this.employeeSalaries = response.body;
-          this.pagination = new Pagination(this.employeeSalaries, 10);
-        },
-        error: (error) => {
-          console.error('Search error:', error);
-        }
-      });
-  }
+  // private subscribeToSearch() {
+  //   this.searchControl.valueChanges
+  //     .pipe(
+  //       debounceTime(400),
+  //       distinctUntilChanged(),
+  //       switchMap(search => this.employeeSalaryService.searchEmployeeSalaries(search || '')),
+  //       takeUntil(this.destroy$)
+  //     )
+  //     .subscribe({
+  //       next: (response) => {
+  //         this.employeeSalaries = response.body;
+  //         this.pagination = new Pagination(this.employeeSalaries, 10);
+  //       },
+  //       error: (error) => {
+  //         console.error('Search error:', error);
+  //       }
+  //     });
+  // }
 
   getEmployeeSalaries() {
     this.employeeSalaryService.getAllEmployeeSalaries().subscribe({
@@ -84,17 +90,22 @@ export class EmployeeSalaryListingTableComponent implements OnInit {
     })
   }
 
-  viewDetails(item: EmployeeSalary, event: Event): void {
+  viewDetails(item: EmployeeSalaryFullResponse, event: Event): void {
     console.log('Viewing details for Salary ID:', item.salaryId);
     event.preventDefault();
     // Assuming routes are defined
     // this.router.navigate(ROUTES.EMPLOYEE.EMPLOYEE_SALARY.DETAILS(item.salaryId.toString()));
   }
 
-  editDetails(item: EmployeeSalary, event: Event): void {
+  payNow(item: EmployeeSalaryFullResponse, event: Event): void {
     event.preventDefault();
     console.log('Editing Salary ID:', item.salaryId);
-    // this.router.navigate(ROUTES.EMPLOYEE.EMPLOYEE_SALARY.EDIT(item.salaryId.toString()));
+  if (!item.salaryId) {
+    console.error('Salary ID is missing!');
+    return;
+  }
+  console.log('Editing Salary ID:', item.salaryId);
+  this.router.navigate(ROUTES.EMPLOYEE_SALARY.DETAILS(item.salaryId.toString()));
   }
 
   onPageSizeChange(event: any) {
