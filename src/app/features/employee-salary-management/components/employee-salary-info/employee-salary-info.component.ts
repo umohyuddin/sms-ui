@@ -133,6 +133,7 @@ export class EmployeeSalaryInfoComponent {
       next: (res) => {
         console.log('✅ Salary Payment Successful:', res.body);
         this.createCampusForm.disable();
+             this.getSalaryPayments(this.routedId);
       },
       error: (err) => {
         console.error('❌ Salary Payment Failed:', err);

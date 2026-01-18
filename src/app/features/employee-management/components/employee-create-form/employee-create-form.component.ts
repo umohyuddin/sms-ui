@@ -39,48 +39,35 @@ export class EmployeeCreateFormComponent {
   departmentForm!: FormGroup;
   designationForm!: FormGroup;
   response?: EmployeeResponse;
+
+  // Dynamic dropdowns
   docsTypeDD: KeyValueOption[] = [];
-  nationalityDD: KeyValueOption[] = [];
-  religionDD: KeyValueOption[] = [];
-  bloodGroupDD: KeyValueOption[] = [];
   genderDD: KeyValueOption[] = [];
   maritalStatusDD: KeyValueOption[] = [];
-  religionsDD: KeyValueOption[] = [];
+  bloodGroupDD: KeyValueOption[] = [];
+  religionDD: KeyValueOption[] = [];
   departmentDD: KeyValueOption[] = [];
-  departments: DepartmentResponse[] = [];
-
   designationDD: KeyValueOption[] = [];
+
+  departments: DepartmentResponse[] = [];
   designations: DesignationResponse[] = [];
 
   constructor(
-    private employeeManagementSerivce: EmployeeManagementService,
-    private departmentService: DepartmentManagementService,
-    private designationService: DesignationManagementService,
-
     private fb: FormBuilder,
     private router: Router,
+    private employeeManagementSerivce: EmployeeManagementService,
+    private departmentService: DepartmentManagementService,
+    private designationService: DesignationManagementService
   ) { }
 
   ngOnInit() {
-
-      this.response = {
-    id: 1
-  } as EmployeeResponse;
-    this.employeeLookUpData()
-    this.getDepartments();
     this.initializeForm();
-     this.initializeDepartmentForm();
-
-     this.designationForm = this.fb.group({
-  designationId: ['', Validators.required]
-});
-
 
     this.steps = [
       {
         title: 'Employee Details',
         formGroup: this.createForm,
-        completed: true,
+        completed: false,
         action: this.onEmployeeSubmit.bind(this)
       },
       {
@@ -89,40 +76,26 @@ export class EmployeeCreateFormComponent {
         completed: false,
         action: this.saveDepartment.bind(this)
       },
- {
-    title: 'Assign Designation',
-    formGroup: this.designationForm,
-    completed: false,
-    action: this.saveDesignation.bind(this)
-  }
+      {
+        title: 'Assign Designation',
+        formGroup: this.designationForm,
+        completed: false,
+        action: this.saveDesignation.bind(this)
+      }
+
+
       // future steps can be added here easily
       // { title: 'Assign Roles', completed: false, action: this.saveRoles.bind(this) }
     ];
-    this.createForm.patchValue(this.dummyData);
-   
-  }
-
-
-  private initializeDepartmentForm() {
-  this.departmentForm = this.fb.group({
-    departmentId: ['', Validators.required]
-  });
-}
-  onDepartmentSubmit() {
-    this.designationService.getDesignationsByDepartment(1).subscribe({
-      next: response => {
-        this.designations = response.body;
-        this.designationDD = this.designations.map(d => ({
-          key: d.id.toString(),
-          label: d.designationName // or whatever property contains the department name
-        }));
-      },
-      error: error => console.error('Request Error:', error)
+    this.steps.forEach((step, index) => {
+      if (step.formGroup) {
+        if (index === 0) step.formGroup.enable();
+        else step.formGroup.disable();
+      }
     });
-  }
-
-  get currentStep(): EmployeeStep {
-    return this.steps[this.currentStepIndex];
+    this.employeeLookUpData();
+    this.getDepartments();
+     this.createForm.patchValue(this.dummyData);
   }
 
   private initializeForm() {
@@ -139,90 +112,40 @@ export class EmployeeCreateFormComponent {
       workPhone: [''],
       email: ['', Validators.required],
       religion: ['', Validators.required],
-      nationality: ['', Validators.required],
+      // nationality: ['', Validators.required],
       maritalStatus: ['', Validators.required],
       bloodGroup: [''],
       bio: [],
       joiningDate: [today, Validators.required],
     });
-  }
 
-  goToEmployeeList(): void {
-    this.router.navigate(ROUTES.EMPLOYEE.LIST);
-  }
-  onEmployeeSubmit(): void {
-    // Construct fullName before submitting
-    this.createForm.get('fullName')?.setValue(
-      `${this.createForm.get('firstName')?.value} ${this.createForm.get('middleName')?.value || ''} ${this.createForm.get('lastName')?.value}`.trim()
-    );
+    this.departmentForm = this.fb.group({
+      departmentId: ['', Validators.required]
+    });
 
-    console.group('➡️ Submitting Employee Form');
-    console.info('Form Data:', this.createForm.getRawValue());
+    this.designationForm = this.fb.group({
+      designationId: ['', Validators.required]
+    });
 
-    if (this.createForm.invalid) {
-      this.createForm.markAllAsTouched();
-      console.warn('❌ Employee form is invalid', {
-        invalidControls: this.getInvalidControls(),
-        formValue: this.createForm.getRawValue()
-      });
-      return;
-    }
-    this.employeeManagementSerivce.save(this.createForm.getRawValue())
-      .subscribe({
-        next: (response) => {
-          console.info('✅ Employee saved successfully', {
-            status: response.status,
-            employee: response.body
+    this.departmentForm.disable();
+    this.designationForm.disable();
 
-          });
-          this.response = response.body;
-          
-
-          this.createForm.disable();
-          this.currentStep.completed = true;
-          this.nextStep();
-          console.log(`Navigating to Employee Details: ID = ${this.response?.id}`);
-          if (this.response?.id) {
-            this.goToEmployeeDetail(this.response.id.toString());
-          }
-        },
-        error: (error) => {
-          console.error('❌ Failed to save employee', {
-            status: error.status,
-            message: error.message,
-            formData: this.createForm.getRawValue()
-          });
-        },
-        complete: () => {
-          console.log('🔚 Employee form submission complete');
-          console.groupEnd();
-        }
-      })
-  }
-
-  nextStep() {
-    if (this.currentStepIndex < this.steps.length - 1) {
-      this.currentStepIndex++;
-    } else {
-      console.log('✅ All steps completed');
-    }
-  }
-  goToEmployeeDetail(id: string) {
-    this.router.navigate(ROUTES.EMPLOYEE.DETAILS(id.toString()))
   }
 
 
-  private getInvalidControls(): string[] {
+  checkInvalidFields() {
     const invalid: string[] = [];
     const controls = this.createForm.controls;
     for (const name in controls) {
       if (controls[name].invalid) {
         invalid.push(name);
+        console.log(`${name} is invalid`, controls[name].errors);
       }
     }
     return invalid;
   }
-  employeeLookUpData() {
+
+  private employeeLookUpData() {
     console.group('📦 Fetching Employee Lookup Data');
     this.employeeManagementSerivce.getDocsMeta()
       .subscribe({
@@ -252,83 +175,7 @@ export class EmployeeCreateFormComponent {
       })
   }
 
-  // saveDepartment(departmentId?: number) {
-  //   // this.employeeService.assignDepartment({ employeeId: this.employeeId, departmentId }).subscribe(() => {
-  //   //   this.currentStep.completed = true;
-  //   //   this.nextStep();
-  //   // });
-  //   this.currentStep.completed = true;
-  //      this.nextStep();
-
-  // }
-
-
-saveDepartment() {
-  if (!this.response?.id) {
-    console.error('❌ Employee ID not found. Cannot assign department.');
-    return;
-  }
-
-  if (this.departmentForm.invalid) {
-    this.departmentForm.markAllAsTouched();
-    console.warn('❌ Department form is invalid');
-    return;
-  }
-
-  const payload = {
-    employeeId: Number(this.response?.id),                        
-    departmentId: Number(this.departmentForm.value.departmentId),
-    createdBy: 1
-  };
-
-  console.group('➡️ Assign Department');
-  console.info('Payload:', payload);
-
-  this.departmentService.assignDepartment(payload).subscribe({
-    next: (response) => {
-      console.info('✅ Department assigned successfully', response.body);
-
-      // Disable form and mark step completed
-      this.departmentForm.disable();
-      this.currentStep.completed = true;
-
-      // Fetch designations for this department
-      this.loadDesignationsByDepartment(payload.departmentId);
-
-      // Go to next step
-      this.nextStep();
-    },
-    error: (error) => {
-      console.error('❌ Failed to assign department', {
-        status: error.status,
-        message: error.message,
-        payload
-      });
-    },
-    complete: () => {
-      console.log('🔚 Department assignment completed');
-      console.groupEnd();
-    }
-  });
-}
-
-
-private loadDesignationsByDepartment(departmentId: number) {
-  this.designationService.getDesignationsByDepartment(departmentId).subscribe({
-    next: response => {
-      this.designations = response.body;
-      this.designationDD = this.designations.map(d => ({
-        key: d.id.toString(),
-        label: d.designationName
-      }));
-      console.info(`✅ Loaded ${this.designations.length} designations for department ID ${departmentId}`);
-    },
-    error: error => console.error('❌ Failed to load designations', error)
-  });
-}
-
-
-  getDepartments() {
+  private getDepartments() {
     this.departmentService.getAllDepartments().subscribe({
       next: response => {
         this.departments = response.body;
@@ -341,53 +188,157 @@ private loadDesignationsByDepartment(departmentId: number) {
     });
   }
 
-  saveDesignation(designationId?: number) {
-  if (!this.response?.id) {
-    console.error('❌ Employee ID not found. Cannot assign designation.');
+  onEmployeeSubmit(): void {
+    // Construct fullName before submitting
+    this.createForm.get('fullName')?.setValue(
+      `${this.createForm.get('firstName')?.value} ${this.createForm.get('middleName')?.value || ''} ${this.createForm.get('lastName')?.value}`.trim()
+    );
+
+    console.group('➡️ Submitting Employee Form');
+    console.info('Form Data:', this.createForm.getRawValue());
+
+    if (this.createForm.invalid) {
+      this.createForm.markAllAsTouched();
+      console.warn('❌ Employee form is invalid', {
+        invalidControls: this.getInvalidControls(),
+        formValue: this.createForm.getRawValue()
+      });
+      return;
+    }
+    if (this.currentStep.formGroup) this.currentStep.formGroup.enable();  
+      this.employeeManagementSerivce.save(this.createForm.getRawValue())
+        .subscribe({
+          next: (response) => {
+            console.info('✅ Employee saved successfully', {
+              status: response.status,
+              employee: response.body
+            });
+            this.response = response.body
+            this.createForm.disable();            // disable current step
+ this.currentStep.completed = true;     // mark step completed
+      this.nextStep();    
+     if (this.currentStep.formGroup) this.currentStep.formGroup.enable();
+          },
+          error: (error) => {
+            console.error('❌ Failed to save employee', {
+              status: error.status,
+              message: error.message,
+              formData: this.createForm.getRawValue()
+            });
+          },
+          complete: () => {
+            console.log('🔚 Employee form submission complete');
+            console.groupEnd();
+          }
+        })
+  }
+
+  saveDepartment() {
+  if (!this.response?.id) return console.error('❌ Employee ID missing');
+
+  if (this.departmentForm.invalid) {
+    this.departmentForm.markAllAsTouched();
     return;
   }
 
-  // Use the selected designationId if provided, otherwise pick from first in dropdown
-  const selectedDesignationId = designationId || Number(this.designationDD[0]?.key);
-  if (!selectedDesignationId) {
-    console.warn('❌ No designation selected');
-    return;
-  }
-
-  // Build payload
   const payload = {
-    employeeId: Number(this.response.id),
-    designationId: selectedDesignationId,
+    employeeId: this.response.id,
     departmentId: Number(this.departmentForm.value.departmentId),
-    createdBy: 1 // replace with logged-in user ID if available
+    createdBy: 1
   };
 
-  console.group('➡️ Assign Designation');
-  console.info('Payload:', payload);
-
-  this.designationService.assignDesignation(payload).subscribe({
-    next: (response) => {
-      console.info('✅ Designation assigned successfully', response.body);
-
-      // Mark step completed and disable any related form if you have one
-      this.currentStep.completed = true;
-
-      // Move to next step
-      this.nextStep();
+  this.departmentService.assignDepartment(payload).subscribe({
+    next: (res) => {
+      console.info('✅ Department assigned', res.body);
+      this.currentStep.completed = true;  // mark step completed
+      this.loadDesignationsByDepartment(payload.departmentId); // preload designations
+      this.nextStep();                     // enable next step form
     },
-    error: (error) => {
-      console.error('❌ Failed to assign designation', {
-        status: error.status,
-        message: error.message,
-        payload
-      });
-    },
-    complete: () => {
-      console.log('🔚 Designation assignment completed');
-      console.groupEnd();
-    }
+    error: (err) => console.error('❌ Failed to assign department', err)
   });
 }
+
+
+  private loadDesignationsByDepartment(departmentId: number) {
+    this.designationService.getDesignationsByDepartment(departmentId).subscribe({
+      next: response => {
+        this.designations = response.body;
+        this.designationDD = this.designations.map(d => ({
+          key: d.id.toString(),
+          label: d.designationName
+        }));
+        console.info(`✅ Loaded ${this.designations.length} designations for department ID ${departmentId}`);
+      },
+      error: error => console.error('❌ Failed to load designations', error)
+    });
+  }
+
+  saveDesignation() {
+  if (!this.response?.id) return console.error('❌ Employee ID missing');
+
+  if (this.designationForm.invalid) {
+    this.designationForm.markAllAsTouched();
+    return;
+  }
+
+  const payload = {
+    employeeId: this.response.id,
+    designationId: Number(this.designationForm.value.designationId),
+    departmentId: Number(this.departmentForm.value.departmentId),
+    createdBy: 1
+  };
+
+  this.designationService.assignDesignation(payload).subscribe({
+    next: (res) => {
+      console.info('✅ Designation assigned', res.body);
+      this.currentStep.completed = true;
+      this.nextStep();
+      this.router.navigate(ROUTES.EMPLOYEE.LIST) // move to next step if exists
+    },
+    error: (err) => console.error('❌ Failed to assign designation', err)
+  });
+}
+
+
+  get currentStep(): EmployeeStep {
+    return this.steps[this.currentStepIndex];
+  }
+
+  goToEmployeeList(): void {
+    this.router.navigate(ROUTES.EMPLOYEE.LIST);
+  }
+
+
+  nextStep() {
+  // Disable current step's form
+  const currentForm = this.currentStep.formGroup;
+  if (currentForm) currentForm.disable();
+
+  // Move to next step if available
+  if (this.currentStepIndex < this.steps.length - 1) {
+    this.currentStepIndex++;
+  }
+
+  // Enable the next step's form
+  const nextForm = this.currentStep.formGroup;
+  if (nextForm) nextForm.enable();
+}
+
+  goToEmployeeDetail(id: string) {
+    this.router.navigate(ROUTES.EMPLOYEE.DETAILS(id.toString()))
+  }
+
+
+  private getInvalidControls(): string[] {
+    const invalid: string[] = [];
+    const controls = this.createForm.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    return invalid;
+  }
 
   //getters
   get firstName() { return this.createForm.get('firstName'); }
@@ -426,4 +377,66 @@ private loadDesignationsByDepartment(departmentId: number) {
     joiningDate: '2022-01-15',
     maritalStatus: 'SINGLE'
   };
+
+  noWhitespaceValidator(control: any) {
+    if (control.value && !control.value.trim()) return { whitespace: true };
+    return null;
+  }
+
+  getErrorMessage(controlName: keyof typeof this.validationMessages): string {
+    const control = this.createForm.get(controlName) ||
+      this.departmentForm.get(controlName) ||
+      this.designationForm.get(controlName);
+    if (!control || !control.errors) return '';
+
+    for (const error in control.errors) {
+      const key = error as keyof typeof this.validationMessages[typeof controlName];
+      if (this.validationMessages[controlName][key]) return this.validationMessages[controlName][key];
+    }
+
+    return '';
+  }
+
+
+
+  validationMessages = {
+    firstName: {
+      required: 'First Name is required.'
+    },
+    lastName: {
+      required: 'Last Name is required.'
+    },
+    dateOfBirth: {
+      required: 'Date of Birth is required.'
+    },
+    gender: {
+      required: 'Gender is required.'
+    },
+    primaryPhone: {
+      required: 'Primary Phone is required.'
+    },
+    email: {
+      required: 'Email is required.',
+      email: 'Email must be valid.'
+    },
+    religion: {
+      required: 'Religion is required.'
+    },
+    nationality: {
+      required: 'Nationality is required.'
+    },
+    maritalStatus: {
+      required: 'Marital Status is required.'
+    },
+    joiningDate: {
+      required: 'Joining Date is required.'
+    },
+    departmentId: {
+      required: 'Department is required.'
+    },
+    designationId: {
+      required: 'Designation is required.'
+    }
+  };
+
 }
