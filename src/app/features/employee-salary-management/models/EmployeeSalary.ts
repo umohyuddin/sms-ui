@@ -8,6 +8,7 @@ export interface EmployeeSalaryFullResponse {
   employeeId?: number;
   employeeCode?: string;
   employeeName?: string;
+  effectiveFrom:string
   employeeType?: string | null;
   grossSalary?: number;
   totalDeductions?: number;

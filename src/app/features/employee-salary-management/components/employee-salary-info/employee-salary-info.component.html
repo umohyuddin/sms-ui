@@ -5,7 +5,7 @@
                 <i class="kt-font-dark flaticon-squares"></i>
             </span>
             <h3 class="kt-portlet__head-title">
-                Campuese Listing
+                {{employeeSalaryData?.employeeName}} | {{employeeSalaryData?.employeeCode}}
             </h3>
         </div>
         <div class="kt-portlet__head-toolbar">
@@ -21,7 +21,7 @@
         <!-- Salary Header -->
         <div class="mb-3">
             <strong>Base Salary:</strong> {{ employeeSalaryData?.baseSalary| number }}<br />
-            <strong>Effective From:</strong> {{ employeeSalaryData?.effectiveDate| date }}<br />
+            <strong>Effective From:</strong> {{ employeeSalaryData?.effectiveFrom| date }}<br />
             <strong>Effective To:</strong>
             <!-- {{ employeeSalaryData?.effectiveTo ? (structure.effectiveTo | date) : 'N/A' }} -->
         </div>
@@ -53,6 +53,9 @@
 
                 <div class="kt-widget4__tools">
                     {{ comp.calculatedAmount | number }}
+                    <small class="text-muted" *ngIf="comp.isPercentage">
+                        ({{ comp.value }}%)
+                    </small>
                 </div>
             </div>
 
@@ -77,6 +80,8 @@
                 <div class="kt-widget4__tools">{{ employeeSalaryData?.netSalary | number }}</div>
             </div>
 
+
+
         </div>
 
         <ng-template #noComponents>
@@ -88,18 +93,169 @@
     </div>
 
     <div class="kt-portlet__foot">
-        <div class="kt-form__actions">
-            <div class="row">
-                <div class="col-lg-5"></div>
-                <div class="col-lg-7">
-                    <button class="btn btn-dark mr-2">
-                        Apply
-                    </button>
-                    <button type="button" class="btn btn-danger">
-                        Cancel
-                    </button>
+        <!--begin::Form-->
+        <form class="kt-form kt-form--label-right" [formGroup]="createCampusForm" (ngSubmit)="onSubmit()">
+            <div class="kt-portlet__body">
+                <h4 class="kt-margin-b-20">Payment Information</h4>
+
+                <div class="form-group row">
+
+                    <label class="col-lg-1 col-form-label required">Payment Method:</label>
+                    <div class="col-lg-3">
+                        <select class="form-control" formControlName="paymentMode"
+                            [class.is-invalid]="paymentMode?.invalid && (paymentMode?.touched || paymentMode?.dirty)"
+                            [class.is-valid]="paymentMode?.valid && (paymentMode?.touched || paymentMode?.dirty)">
+                            <option value='' disabled>Payment Method</option>
+                            <option *ngFor="let c of paymentModeDD" [value]="c.key">{{ c.label }}</option>
+                        </select>
+                        <span class="form-text text-muted">Please select your payment method</span>
+                        <span class="invalid-feedback"
+                            *ngIf="paymentMode?.invalid && (paymentMode?.touched || paymentMode?.dirty)">
+                            {{ getErrorMessage('paymentMode') }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-lg-1 col-form-label">Address:</label>
+                    <div class="col-lg-11">
+                        <textarea class="form-control" placeholder="Enter full remarks" id="exampleTextarea" rows="3"
+                            formControlName="remarks"
+                            [class.is-invalid]="createCampusForm.get('remarks')?.invalid && (createCampusForm.get('remarks')?.touched || createCampusForm.get('remarks')?.dirty)"
+                            [class.is-valid]="createCampusForm.get('remarks')?.valid && (createCampusForm.get('remarks')?.touched || createCampusForm.get('remarks')?.dirty)"></textarea>
+                        <span class="invalid-feedback"
+                            *ngIf="createCampusForm.get('remarks')?.invalid && (createCampusForm.get('remarks')?.touched || createCampusForm.get('remarks')?.dirty)">
+                            {{ getErrorMessage('remarks') }}
+                        </span>
+                    </div>
                 </div>
             </div>
+
+            <div class="kt-portlet__foot">
+                <div class="kt-form__actions">
+                    <div class="row">
+                        <div class="col-lg-5"></div>
+                        <div class="col-lg-7">
+                            <button type="submit" class="btn btn-dark mr-2" [disabled]="createCampusForm.invalid">
+                                Pay Now
+                            </button>
+                            <button type="button" class="btn btn-danger">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!--end::Form-->
+
+    </div>
+</div>
+
+
+
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-dark flaticon-squares"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                Salary Payments
+            </h3>
         </div>
+    </div>
+
+    <div class="kt-portlet__body" style="position: relative; min-height: 400px;">
+
+        <!-- Datatable Controls -->
+        <div class="row mb-3">
+            <!-- <div class="col-md-6">
+        <label>Show
+          <select (change)="onPageSizeChange($event)" class="custom-select custom-select-sm">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select> entries
+        </label>
+      </div>
+      <div class="col-md-6 text-right">
+        <label>Search:
+          <input [formControl]="searchControl" type="search" class="form-control form-control-sm" placeholder="">
+        </label>
+      </div> -->
+        </div>
+
+        <!-- Table -->
+        <div *ngIf="payments && payments.length > 0; else noPayments">
+            <table class="table table-striped table-bordered table-hover table-checkable">
+                <thead>
+                    <tr>
+                        <th *ngFor="let col of columns">{{ col.label }}</th>
+                        <!-- <th>Actions</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let payment of payments">
+                        <td>{{ payment.paymentDate}}</td> <!-- Full month name -->
+
+                        <td>{{ payment.paymentDate | date:'MMMM' }}</td> <!-- Full month name -->
+                        <td>{{ payment.paymentDate | date:'yyyy' }}</td> <!-- Year -->
+                        <td>{{ payment.paymentMode }}</td>
+                        <td>{{ payment.transactionReference }}</td>
+                        <td>{{ payment.amountPaid | currency:'PKR ':'symbol':'1.2-2' }}</td>
+                        <td>{{ payment.remarks }}</td>
+                        <!-- <td>
+              <a (click)="viewPayment(payment)" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
+                <i class="la la-eye"></i>
+              </a>
+              <a (click)="editPayment(payment)" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit">
+                <i class="la la-edit"></i>
+              </a>
+            </td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- No Payments -->
+        <ng-template #noPayments>
+            <div class="alert alert-dark" role="alert">
+                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
+                <div class="alert-text">
+                    No salary payments available for this employee.
+                </div>
+            </div>
+        </ng-template>
+
+        <!-- Pagination -->
+        <!-- <div class="row mt-2">
+      <div class="col-md-5">
+        <div>Showing {{ pagination.startItem }} to {{ pagination.endItem }} of {{ pagination.totalItems }} entries</div>
+      </div>
+      <div class="col-md-7">
+        <ul class="pagination justify-content-end">
+          <li class="page-item" [class.disabled]="pagination.pageIndex === 0">
+            <a class="page-link" (click)="pagination.first()"><i class="la la-angle-double-left"></i></a>
+          </li>
+          <li class="page-item" [class.disabled]="pagination.pageIndex === 0">
+            <a class="page-link" (click)="pagination.prev()"><i class="la la-angle-left"></i></a>
+          </li>
+
+          <li class="page-item" *ngFor="let page of pagination.visiblePages" [class.active]="pagination.pageIndex === page">
+            <a class="page-link" (click)="pagination.goToPage(page)">{{ page + 1 }}</a>
+          </li>
+
+          <li class="page-item" [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
+            <a class="page-link" (click)="pagination.next()"><i class="la la-angle-right"></i></a>
+          </li>
+          <li class="page-item" [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
+            <a class="page-link" (click)="pagination.last()"><i class="la la-angle-double-right"></i></a>
+          </li>
+        </ul>
+      </div>
+    </div> -->
+
     </div>
 </div>
