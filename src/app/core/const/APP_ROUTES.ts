@@ -67,7 +67,7 @@ export const ROUTES = {
     ASSIGN_SALARY: (id: string) => ['employee', 'employee-assign-salary', id],
   },
   EMPLOYEE_SALARY:{
-
+    LIST:  ['employee/salary'],
     DETAILS: (id: string) => ['employee/salary', 'employee-salary-details', id],
   },
   EMPLOYEE_TYPE: {

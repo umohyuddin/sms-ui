@@ -29,19 +29,19 @@ export class EmployeeSalaryListingTableComponent implements OnInit {
     private employeeSalaryService: EmployeeSalaryService,
   ) { }
 
-columns = [
-  { key: 'employeeCode', label: 'Employee Code', sortable: true },
-  { key: 'employeeName', label: 'Employee Name', sortable: true },
-  { key: 'employeeType', label: 'Employee Type', sortable: true },
-  { key: 'designation', label: 'Designation', sortable: true },
-  { key: 'department', label: 'Department', sortable: true },
-  { key: 'grossSalary', label: 'Gross Salary', sortable: true },
-  { key: 'totalDeductions', label: 'Total Deductions', sortable: true },
-  { key: 'netSalary', label: 'Net Salary', sortable: true },
-  { key: 'status', label: 'Status', sortable: true },
-  { key: 'effectiveDate', label: 'Effective Date', sortable: true },
-  { key: 'actions', label: 'Actions', sortable: false }
-];
+  columns = [
+    { key: 'employeeCode', label: 'Employee Code', sortable: true },
+    { key: 'employeeName', label: 'Employee Name', sortable: true },
+    { key: 'employeeType', label: 'Employee Type', sortable: true },
+    { key: 'designation', label: 'Designation', sortable: true },
+    { key: 'department', label: 'Department', sortable: true },
+    { key: 'grossSalary', label: 'Gross Salary', sortable: true },
+    { key: 'totalDeductions', label: 'Total Deductions', sortable: true },
+    { key: 'netSalary', label: 'Net Salary', sortable: true },
+    { key: 'status', label: 'Status', sortable: true },
+    { key: 'effectiveDate', label: 'Effective Date', sortable: true },
+    { key: 'actions', label: 'Actions', sortable: false }
+  ];
 
   ngOnInit() {
     this.getEmployeeSalaries();
@@ -93,19 +93,35 @@ columns = [
   viewDetails(item: EmployeeSalaryFullResponse, event: Event): void {
     console.log('Viewing details for Salary ID:', item.salaryId);
     event.preventDefault();
-    // Assuming routes are defined
-    // this.router.navigate(ROUTES.EMPLOYEE.EMPLOYEE_SALARY.DETAILS(item.salaryId.toString()));
+    if (!item.employeeId) {
+      console.error('Salary ID is missing!');
+      return;
+    }
+
+    this.router.navigate(ROUTES.EMPLOYEE_SALARY.DETAILS(item.employeeId.toString()),
+      {
+        queryParams: {
+          salaryId: item.salaryId,
+          mode: 'view'
+        }
+      });
   }
 
   payNow(item: EmployeeSalaryFullResponse, event: Event): void {
     event.preventDefault();
     console.log('Editing Salary ID:', item.salaryId);
-  if (!item.employeeId) {
-    console.error('Salary ID is missing!');
-    return;
-  }
-  console.log('Editing Salary ID:', item.salaryId);
-  this.router.navigate(ROUTES.EMPLOYEE_SALARY.DETAILS(item.employeeId.toString()));
+    if (!item.employeeId) {
+      console.error('Salary ID is missing!');
+      return;
+    }
+    console.log('Editing Salary ID:', item.salaryId);
+    this.router.navigate(ROUTES.EMPLOYEE_SALARY.DETAILS(item.employeeId.toString()),
+      {
+        queryParams: {
+          salaryId: item.salaryId,
+          mode: 'pay'
+        }
+      });
   }
 
   onPageSizeChange(event: any) {

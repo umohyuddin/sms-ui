@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { EmployeeSalaryFullResponse } from '../../models/EmployeeSalary';
 import { EmployeeSalaryService } from '../../services/employee-salary.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
@@ -9,6 +9,7 @@ import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 import { SalaryPaymentService } from '../../../salary-payment-management/services/salary-payment.service';
 import { SalaryPayment } from '../../models/SalaryPayment';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
 @Component({
   selector: 'app-employee-salary-info',
@@ -20,16 +21,19 @@ import { SalaryPayment } from '../../models/SalaryPayment';
 export class EmployeeSalaryInfoComponent {
   employeeSalaryData?: EmployeeSalaryFullResponse;
   routedId!: string;
-  payments? : SalaryPayment[]=[];
+  payments?: SalaryPayment[] = [];
   createCampusForm!: FormGroup;
   paymentModeDD: KeyValueOption[] = [];
   private readonly MODULE = 'Campus';
   private readonly COMPONENT = 'CampusForm';
+  isViewMode = false;
+  isPayMode = false;
   constructor(
     private fb: FormBuilder,
     private salaryPayment: SalaryPaymentService,
     private employeeSalaryManagementService: EmployeeSalaryService,
     private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   private loadPaymentModes(): void {
@@ -39,27 +43,40 @@ export class EmployeeSalaryInfoComponent {
   }
 
   columns = [
-  { key: 'paymentDate', label: 'Payment Date' },    
-  { key: 'paymentDate', label: 'Payment Month' },
+    { key: 'paymentDate', label: 'Payment Date' },
+    { key: 'paymentDate', label: 'Payment Month' },
     { key: 'paymentDate', label: 'Payment year' },
-  { key: 'paymentMode', label: 'Payment Mode' },
-  { key: 'transactionReference', label: 'Transaction Ref' },
-  { key: 'amountPaid', label: 'Amount Paid' },
-  { key: 'remarks', label: 'Remarks' }
-];
+    { key: 'paymentMode', label: 'Payment Mode' },
+    { key: 'transactionReference', label: 'Transaction Ref' },
+    { key: 'amountPaid', label: 'Amount Paid' },
+    { key: 'remarks', label: 'Remarks' }
+  ];
   ngOnInit(): void {
 
     this.routedId = this.route.snapshot.paramMap.get('id') ?? '';
 
+    this.route.queryParams.subscribe(params => {
+      const salaryId = params['salaryId'];
+      const mode = params['mode'];
+
+      console.log('Salary ID:', salaryId);
+      console.log('Mode:', mode);
+      this.isViewMode = mode === 'view';
+      this.isPayMode = mode === 'pay';
+
+      if (this.isViewMode) {
+        this.createCampusForm?.disable();
+      }
+    });
     console.log('Employee ID from route:', this.routedId);
     this.loadPaymentModes();
     this.initializeForm();
     this.getEmployeeSalaryDetails(this.routedId);
-     this.getSalaryPayments(this.routedId);
+    this.getSalaryPayments(this.routedId);
   }
 
 
-    getSalaryPayments(employeeId: string): void {
+  getSalaryPayments(employeeId: string): void {
     this.salaryPayment.getPaymentsByEmployeeId(Number(employeeId)).subscribe({
       next: (res) => {
         this.payments = res.body ?? [];
@@ -104,6 +121,9 @@ export class EmployeeSalaryInfoComponent {
   isSubmitting = false;
 
   onSubmit(): void {
+    if (this.isViewMode) {
+      return; // ⛔ never allow submit in view mode
+    }
     // Validate form
     if (this.createCampusForm.invalid) {
       this.createCampusForm.markAllAsTouched();
@@ -116,15 +136,15 @@ export class EmployeeSalaryInfoComponent {
     }
     this.isSubmitting = true;
 
-     const formData = this.createCampusForm.getRawValue();
+    const formData = this.createCampusForm.getRawValue();
 
-  const payload = {
-    employeeId: Number(formData.employeeId),
-    paymentDate: formData.paymentDate,
-    paymentMode: formData.paymentMode,
-    amountPaid: Number(this.employeeSalaryData?.netSalary), // comes from salary
-    remarks: formData.remarks
-  };
+    const payload = {
+      employeeId: Number(formData.employeeId),
+      paymentDate: formData.paymentDate,
+      paymentMode: formData.paymentMode,
+      amountPaid: Number(this.employeeSalaryData?.netSalary), // comes from salary
+      remarks: formData.remarks
+    };
 
     console.log('💰 Salary Payment Payload:', payload);
 
@@ -133,7 +153,7 @@ export class EmployeeSalaryInfoComponent {
       next: (res) => {
         console.log('✅ Salary Payment Successful:', res.body);
         this.createCampusForm.disable();
-             this.getSalaryPayments(this.routedId);
+        this.getSalaryPayments(this.routedId);
       },
       error: (err) => {
         console.error('❌ Salary Payment Failed:', err);
@@ -145,7 +165,9 @@ export class EmployeeSalaryInfoComponent {
       }
     });
   }
-
+  goToListing() {
+    this.router.navigate(ROUTES.EMPLOYEE_SALARY.LIST)
+}
 
   get paymentMode() {
     return this.createCampusForm.get('paymentMode');
