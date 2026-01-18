@@ -1,1 +1,105 @@
-<p>designation-create-form works!</p>
+<div class="kt-portlet">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-label">
+      <h3 class="kt-portlet__head-title">
+        {{ isEditMode ? 'Update Designation' : 'Add Designation' }}
+      </h3>
+    </div>
+  </div>
+
+  <!--begin::Form-->
+  <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
+    <div class="kt-portlet__body">
+      <h4>Designation Information</h4>
+
+      <!-- Row 1: Name, Code, Status -->
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label required">Name:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="Designation Name" formControlName="designationName"
+            [class.is-invalid]="designationName?.invalid && (designationName?.touched || designationName?.dirty)"
+            [class.is-valid]="designationName?.valid && (designationName?.touched || designationName?.dirty)">
+          <span class="invalid-feedback" *ngIf="designationName?.invalid && (designationName?.touched || designationName?.dirty)">
+            Name is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label required">Code:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="Designation Code" formControlName="designationCode"
+            [class.is-invalid]="designationCode?.invalid && (designationCode?.touched || designationCode?.dirty)"
+            [class.is-valid]="designationCode?.valid && (designationCode?.touched || designationCode?.dirty)">
+          <span class="invalid-feedback" *ngIf="designationCode?.invalid && (designationCode?.touched || designationCode?.dirty)">
+            Code is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label">Status:</label>
+        <div class="col-lg-3">
+          <label class="kt-checkbox kt-margin-t-10">
+            <input type="checkbox" formControlName="active"> Is Active
+            <span></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Row 2: Department, Employee Type -->
+      <div class="form-group row kt-margin-t-20">
+        <label class="col-lg-1 col-form-label required">Department:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="departmentId"
+            [class.is-invalid]="departmentId?.invalid && (departmentId?.touched || departmentId?.dirty)"
+            [class.is-valid]="departmentId?.valid && (departmentId?.touched || departmentId?.dirty)">
+            <option value=''>Select Department</option>
+            <option *ngFor="let d of departmentDD" [value]="d.key">{{ d.label }}</option>
+          </select>
+          <span class="invalid-feedback" *ngIf="departmentId?.invalid && (departmentId?.touched || departmentId?.dirty)">
+            Department is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label required">Employee Type:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="employeeTypeId"
+            [class.is-invalid]="employeeTypeId?.invalid && (employeeTypeId?.touched || employeeTypeId?.dirty)"
+            [class.is-valid]="employeeTypeId?.valid && (employeeTypeId?.touched || employeeTypeId?.dirty)">
+            <option value=''>Select Employee Type</option>
+            <option *ngFor="let e of employeeTypeDD" [value]="e.key">{{ e.label }}</option>
+          </select>
+          <span class="invalid-feedback" *ngIf="employeeTypeId?.invalid && (employeeTypeId?.touched || employeeTypeId?.dirty)">
+            Employee Type is required
+          </span>
+        </div>
+      </div>
+
+      <!-- Row 3: Description -->
+      <div class="form-group row kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Description:</label>
+        <div class="col-lg-11">
+          <textarea class="form-control" rows="3" placeholder="Enter description" formControlName="description"
+            [class.is-invalid]="description?.invalid && (description?.touched || description?.dirty)"
+            [class.is-valid]="description?.valid && (description?.touched || description?.dirty)"></textarea>
+          <span class="invalid-feedback" *ngIf="description?.invalid && (description?.touched || description?.dirty)">
+            Description cannot exceed 500 characters
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions">
+        <div class="row">
+          <div class="col-lg-5"></div>
+          <div class="col-lg-7">
+            <button type="submit" class="btn btn-dark mr-2">
+              {{ isEditMode ? 'Update Designation' : 'Add Designation' }}
+            </button>
+            <button type="button" class="btn btn-danger" (click)="goToDesignationList()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!--end::Form-->
+</div>
