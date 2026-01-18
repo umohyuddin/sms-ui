@@ -1,1 +1,63 @@
-<p>designation-info works!</p>
+<div class="kt-portlet kt-portlet--mobile">
+  <div class="kt-portlet__head kt-portlet__head--lg">
+    <div class="kt-portlet__head-label">
+      <span class="kt-portlet__head-icon">
+        <i class="kt-font-dark flaticon-squares"></i>
+      </span>
+      <h3 class="kt-portlet__head-title">
+        Designation Details
+      </h3>
+    </div>
+    <div class="kt-portlet__head-toolbar">
+      <div class="kt-portlet__head-wrapper">
+        <!-- You can add buttons like Edit/Delete here -->
+      </div>
+    </div>
+  </div>
+
+  <div class="kt-portlet__body">
+    <div class="kt-widget kt-widget--user-profile-3">
+      <div class="kt-widget__top">
+        <!-- Initials Circle -->
+        <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-bolder kt-font-light">
+          {{ getInitials(responseData?.designationName) }}
+        </div>
+
+        <!-- Content -->
+        <div class="kt-widget__content">
+          <div class="kt-widget__head">
+            <div class="kt-widget__user">
+              <a href="#" class="kt-widget__username">
+                {{ responseData?.designationName }}
+              </a>
+              <span class="ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
+                    [ngClass]="responseData?.active ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">
+                {{ responseData?.active ? 'Active' : 'Inactive' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Basic Info -->
+          <div class="kt-widget__subhead row">
+            <div class="col-4">
+              <a><b>Designation Code:</b> {{ responseData?.designationCode }}</a>
+            </div>
+            <div class="col-4">
+              <a><b>Department:</b> {{ responseData?.departmentName || '-' }}</a>
+            </div>
+            <div class="col-4">
+              <a><b>Employee Type:</b> {{ responseData?.employeeTypeName }}</a>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="kt-widget__info">
+            <div class="kt-widget__desc">
+              <b>Description:</b> {{ responseData?.description || 'No description available' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

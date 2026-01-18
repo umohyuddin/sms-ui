@@ -48,14 +48,11 @@
         <label class="col-lg-1 col-form-label required">Department:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="departmentId"
-            [class.is-invalid]="departmentId?.invalid && (departmentId?.touched || departmentId?.dirty)"
-            [class.is-valid]="departmentId?.valid && (departmentId?.touched || departmentId?.dirty)">
+           >
             <option value=''>Select Department</option>
             <option *ngFor="let d of departmentDD" [value]="d.key">{{ d.label }}</option>
           </select>
-          <span class="invalid-feedback" *ngIf="departmentId?.invalid && (departmentId?.touched || departmentId?.dirty)">
-            Department is required
-          </span>
+    
         </div>
 
         <label class="col-lg-1 col-form-label required">Employee Type:</label>

@@ -67,7 +67,7 @@ export class DesignationCreateFormComponent {
       designationName: ['', [Validators.required, this.noWhitespaceValidator]],
       designationCode: ['', [Validators.maxLength(20), this.noWhitespaceValidator]],
       active: [true],
-      departmentId: ['', Validators.required],
+      departmentId: [''],
       employeeTypeId: ['', Validators.required],
       description: ['', [Validators.maxLength(500), this.noWhitespaceValidator]]
     });
