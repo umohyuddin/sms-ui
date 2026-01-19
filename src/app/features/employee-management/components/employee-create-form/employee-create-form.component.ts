@@ -95,7 +95,7 @@ export class EmployeeCreateFormComponent {
     });
     this.employeeLookUpData();
     this.getDepartments();
-     this.createForm.patchValue(this.dummyData);
+     //this.createForm.patchValue(this.dummyData);
   }
 
   private initializeForm() {
