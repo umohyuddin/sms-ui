@@ -9,6 +9,7 @@ import { StudentManagementService } from '../../services/student-management.serv
 import { AcademicYearManagementService } from '../../../tenant-management/services/academic-year-management.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AppConfigService } from '../../../../core/services/app-config.service';
 
 @Component({
   selector: 'app-student-fee-summary',
@@ -31,6 +32,7 @@ export class StudentFeeSummaryComponent {
     private fb: FormBuilder,
     private studentManagementService: StudentManagementService,
     private academicYearService: AcademicYearManagementService,
+    private appCofig : AppConfigService,
     private route: ActivatedRoute
   ) { }
 
@@ -43,19 +45,23 @@ export class StudentFeeSummaryComponent {
 
    private loadFeeData() {
     // Fetch Fee Summary
-    this.studentManagementService.getStudentFeeSummary({ studentId: this.studentId }).subscribe({
+    this.studentManagementService.getStudentFeeSummary(
+      { studentId: this.studentId,
+        academicYearId:this.appCofig.getAcademicYear()?.id
+       }
+    ).subscribe({
       next: (res) => this.feeSummary = res.body,
       error: (err) => console.error('Error fetching fee summary', err)
     });
 
     // Fetch Assigned Fees
-    this.studentManagementService.getAssignedStudentFee(this.studentId, {}).subscribe({
+    this.studentManagementService.getAssignedStudentFee(this.studentId, {academicYearId:this.appCofig.getAcademicYear()?.id}).subscribe({
       next: (res) => this.studentAssignedFee = res.body || [],
       error: (err) => console.error('Error fetching assigned fees', err)
     });
 
     // Fetch Assigned Discounts
-    this.studentManagementService.getAssignedStudentDiscounts(this.studentId, {}).subscribe({
+    this.studentManagementService.getAssignedStudentDiscounts(this.studentId, {academicYearId:this.appCofig.getAcademicYear()?.id}).subscribe({
       next: (res) => this.studentDiscounts = res.body || [],
       error: (err) => console.error('Error fetching discounts', err)
     });

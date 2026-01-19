@@ -173,7 +173,7 @@ export const API_ENDPOINTS = {
             GET_ACTIVE: '/api/institute/designations/active',
             GET_BY_ID: (id: string | number) => `/api/institute/designations/${id}`,
             DELETE: (id: string | number) => `/api/institute/designations/${id}`,
-            SEARCH: (keyword: string) => `/api/institute/designations/${keyword}`,
+            SEARCH: (keyword: string) => `/api/institute/designations/search/${keyword}`,
             GET_BY_DEPARTMENT: (departmentId: string | number) => `/api/institute/designations/by-department/${departmentId}`
         },
         EMPLOYEE_TYPE: {

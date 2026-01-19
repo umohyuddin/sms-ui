@@ -148,7 +148,7 @@
                   <td>{{item.gender}}</td>
                   <td>{{item.dateOfBirth}}</td>
                   <td>3310427306979</td>
-                  <td>cnic</td>
+                  <td>{{item.cnic}}</td>
                   <td>
                     <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
                       [ngClass]="item.isActive ? 'kt-badge--brand' : 'kt-badge--danger'">
@@ -321,9 +321,9 @@
               <div class="kt-widget27">
                 <div class="kt-widget27__visual">
                   <img src="/assets/media/bg/bg-4.jpg" alt="">
-                  <h3 class="kt-widget27__title">
-                    <span>PKR {{ feeSummary?.totalAssignedFee | number:'1.0-0' }}</span>
-                  </h3>
+                  <h4 class="kt-widget27__title">
+                    <span>Total PKR {{ feeSummary?.totalAssignedFee | number:'1.0-0' }}</span>
+                  </h4>
                   <div class="kt-widget27__btn">
                     <a class="btn btn-pill btn-light btn-elevate btn-bold" (click)="toggleFeeSubmissionForm()">Click
                       here to Collect Fee</a>

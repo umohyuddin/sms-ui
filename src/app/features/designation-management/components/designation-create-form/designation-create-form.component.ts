@@ -107,7 +107,7 @@ export class DesignationCreateFormComponent {
           this.createForm.patchValue({
             designationName: data.designationName,
             designationCode: data.designationCode,
-            isActive: data.active,
+            active: data.active,
             departmentId: data.departmentId?.toString(),
             employeeTypeId: data.employeeTypeId?.toString(),
             description: data.description
