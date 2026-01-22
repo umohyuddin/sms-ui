@@ -25,7 +25,7 @@ export class EmployeeManagementService {
   }
 
 
-  
+
   update(payload: any, id: string): Observable<any> {
     const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.UPDATE(id)}`;
     return this.http.request(HTTP_METHOD.PUT, url, {
@@ -88,28 +88,28 @@ export class EmployeeManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.EMPLOYEE_DOCS_META}`, { observeResponse: true });
   }
 
-    getProvinceByCountryId(id:any): Observable<any> {
+  getProvinceByCountryId(id: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.PROVINCE.GET_BY_COUNTRY_ID(id)}`, { observeResponse: true });
   }
 
- 
-downloadEmployeeDocument(documentId: number, employeeId: string, fileName: string): void {
-  const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DOWNLOAD_DOCS}/${documentId}?employeeId=${employeeId}`;
 
-  // Cast the request to Observable<Blob>
-  (this.http.request('GET', url, { responseType: 'blob' } as any) as Observable<Blob>)
-    .subscribe({
-      next: (blob) => {
-        const link = document.createElement('a');
-        const objectUrl = window.URL.createObjectURL(blob);
-        link.href = objectUrl;
-        link.download = fileName || `document_${documentId}`;
-        link.click();
-        window.URL.revokeObjectURL(objectUrl);
-      },
-      error: (err) => console.error('Error downloading document', err)
-    });
-}
+  downloadEmployeeDocument(documentId: number, employeeId: string, fileName: string): void {
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DOWNLOAD_DOCS}/${documentId}?employeeId=${employeeId}`;
+
+    // Cast the request to Observable<Blob>
+    (this.http.request('GET', url, { responseType: 'blob' } as any) as Observable<Blob>)
+      .subscribe({
+        next: (blob) => {
+          const link = document.createElement('a');
+          const objectUrl = window.URL.createObjectURL(blob);
+          link.href = objectUrl;
+          link.download = fileName || `document_${documentId}`;
+          link.click();
+          window.URL.revokeObjectURL(objectUrl);
+        },
+        error: (err) => console.error('Error downloading document', err)
+      });
+  }
 
 
 
@@ -149,10 +149,29 @@ downloadEmployeeDocument(documentId: number, employeeId: string, fileName: strin
   }
 
   createEmployeeSalary(payload: any): Observable<any> {
-  const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.EMPLOYEE_SALARY.CREATE}`;
-  return this.http.request(HTTP_METHOD.POST, url, {
-    observeResponse: true,
-    body: payload
-  });
-}
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.EMPLOYEE_SALARY.CREATE}`;
+    return this.http.request(HTTP_METHOD.POST, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
+  getEmployeeDepartment(employeeId: string): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DEPARTMENTS.CURRENT(employeeId)}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
+  }
+  getEmployeeDesignation(employeeId: string): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DESIGNATIONS.CURRENT(employeeId)}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
+  }
+
+  getEmployeeDepartmentHistory(employeeId: string): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DEPARTMENTS.HISTORY(employeeId)}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
+  }
+
+  getEmployeeDesignationHistory(employeeId: string): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DEPARTMENTS.HISTORY(employeeId)}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
+  }
 }

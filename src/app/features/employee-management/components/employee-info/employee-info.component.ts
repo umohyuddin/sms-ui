@@ -13,6 +13,15 @@ import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { EmployeePersonalInformationComponent } from '../employee-personal-information/employee-personal-information.component';
 import { EmployeeDocumentComponent } from '../employee-document/employee-document.component';
 import { EmployeeAddressComponent } from '../employee-address/employee-address.component';
+import { DepartmentManagementService } from '../../../department-management/services/DepartmentManagementService';
+import { EmployeeDepartmentHistoryResponse } from '../../models/EmployeeDepartmentHistoryResponse';
+
+export interface TimelineItem {
+  time: string;
+  text: string;
+  subText?: string;
+  type: 'success' | 'brand' | 'warning';
+}
 
 
 @Component({
@@ -23,11 +32,12 @@ import { EmployeeAddressComponent } from '../employee-address/employee-address.c
   styleUrls: ['./employee-info.component.css']
 })
 export class EmployeeInfoComponent {
+  departmentTimeline: TimelineItem[] = [];
   docsForm!: FormGroup;
   selectedAvatar!: File;
   employeeData?: EmployeeResponse;
   routedId!: string;
-  activeTab: string = 'overview';
+  activeTab: string = 'personal';
   currentAcademicYear?: AcademicYearResponse;
   feeSummary?: StudentFeeSummaryResponse;
   avatarPreview: string = './assets/media/users/default.jpg';
@@ -39,9 +49,11 @@ export class EmployeeInfoComponent {
   personalForm!: FormGroup;
   showPersonalForm: boolean = false;
 
+  organizationalDetails:EmployeeDepartmentHistoryResponse[]=[];
   constructor(
     private fb: FormBuilder,
     private employeeManagementService: EmployeeManagementService,
+    private departmentSerivce :DepartmentManagementService,
     private route: ActivatedRoute,
     private appConfig: AppConfigService
   ) { }
@@ -131,6 +143,9 @@ export class EmployeeInfoComponent {
         this.docsLookUpData();
         this.getEmployeeAllDocs()
         break;
+        case 'organizational':
+          this.getOrgDetailsEmployee(this.routedId);
+        break;
     }
   }
 
@@ -192,6 +207,36 @@ export class EmployeeInfoComponent {
       }
     });
   }
+
+  getOrgDetailsEmployee(id: string): void {
+  this.departmentSerivce.getDepartmentHistory(id).subscribe({
+    next: (response) => {
+      this.organizationalDetails = response.body;
+
+      this.departmentTimeline = this.organizationalDetails
+        .sort(
+          (a, b) =>
+            new Date(b.startDate).getTime() -
+            new Date(a.startDate).getTime()
+        )
+        .map(item => ({
+          time: this.formatYear(item.startDate),
+          //time: this.formatTime(item.startDate),
+          text: item.isCurrent
+            ? `Currently working in ${item.departmentName}`
+            : `Transferred from ${item.departmentName}`,
+          subText: item.isCurrent
+            ? 'Current Department'
+            : `Till ${this.formatDate(item.endDate)}`,
+          type: item.isCurrent ? 'success' : 'brand'
+        }));
+    },
+    error: (error) => {
+      console.error('❌ Request Failed', error);
+    }
+  });
+}
+
 
   uploadAvatar() {
     if (!this.selectedAvatar) {
@@ -287,6 +332,25 @@ export class EmployeeInfoComponent {
   }
 
 
+ formatDate(date?: string | null): string {
+  if (!date) return '';
+  return new Date(date).toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  });
+}
+
+formatTime(date: string): string {
+  return new Date(date).toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+formatYear(date: string): string {
+  return new Date(date).getFullYear().toString();
+}
 
   //getters
 

@@ -52,7 +52,7 @@
                         </div>
                         <div class="kt-widget__items">
 
-                            <a [class.active]="activeTab === 'overview'" (click)="setActiveTab('overview')"
+                            <!-- <a [class.active]="activeTab === 'overview'" (click)="setActiveTab('overview')"
                                 class="kt-widget__item kt-widget__item--active">
                                 <span class="kt-widget__section">
                                     <span class="kt-widget__icon">
@@ -73,7 +73,7 @@
                                         Profile Overview
                                     </span>
                                 </span>
-                            </a>
+                            </a> -->
                             <a [class.active]="activeTab === 'personal'" (click)="setActiveTab('personal')"
                                 class="kt-widget__item ">
                                 <span class="kt-widget__section">
@@ -115,6 +115,28 @@
                                     </span>
                                 </span>
                             </a>
+
+                            <a [class.active]="activeTab === 'organizational'" (click)="setActiveTab('organizational')"
+                                class="kt-widget__item">
+                                <span class="kt-widget__section">
+                                    <span class="kt-widget__icon">
+                                        <!-- Example SVG icon, you can replace it -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                            viewBox="0 0 24 24" class="kt-svg-icon">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <rect x="0" y="0" width="24" height="24" />
+                                                <path d="M12,2 L22,7 L12,12 L2,7 L12,2 Z" fill="#000000"
+                                                    opacity="0.3" />
+                                                <path d="M12,12 L22,7 L12,22 L2,7 L12,12 Z" fill="#000000" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    <span class="kt-widget__desc">
+                                        Organizational Info
+                                    </span>
+                                </span>
+                            </a>
+
 
                             <a [class.active]="activeTab === 'docs'" (click)="setActiveTab('docs')"
                                 class="kt-widget__item">
@@ -667,7 +689,99 @@
 
     <div *ngIf="activeTab === 'docs'" class="tab-content full-width-tab" style="margin-left: 10px;">
         <app-employee-document></app-employee-document>
-    </div>  
+    </div>
+
+    <div *ngIf="activeTab === 'organizational'" class="tab-content full-width-tab" style="margin-left: 10px;">
+        <div class="row">
+            <div class="col-6">
+                <div class="kt-grid__item kt-grid__item--fluid kt-app__content">
+                    <div class="kt-portlet">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">
+                                    Organizational Information - Department Timeline
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="kt-portlet__body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="kt_widget2_tab1_content">
+                                    <div class="kt-timeline-v3">
+                                        <div class="kt-timeline-v3__items">
+
+                                            <div *ngFor="let item of departmentTimeline" class="kt-timeline-v3__item"
+                                                [ngClass]="'kt-timeline-v3__item--' + item.type">
+                                                <span class="kt-timeline-v3__item-time">
+                                                    {{ item.time }}
+                                                </span>
+
+                                                <div class="kt-timeline-v3__item-desc">
+                                                    <span class="kt-timeline-v3__item-text">
+                                                        {{ item.text }}
+                                                    </span>
+                                                    <br>
+                                                    <span class="kt-timeline-v3__item-user-name text-muted">
+                                                        {{ item.subText }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="kt-grid__item kt-grid__item--fluid kt-app__content">
+                    <div class="kt-portlet">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">
+                                    Organizational Information - Desingation Timeline
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="kt-portlet__body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="kt_widget2_tab1_content">
+                                    <div class="kt-timeline-v3">
+                                        <div class="kt-timeline-v3__items">
+
+                                            <div *ngFor="let item of departmentTimeline" class="kt-timeline-v3__item"
+                                                [ngClass]="'kt-timeline-v3__item--' + item.type">
+                                                <span class="kt-timeline-v3__item-time">
+                                                    {{ item.time }}
+                                                </span>
+
+                                                <div class="kt-timeline-v3__item-desc">
+                                                    <span class="kt-timeline-v3__item-text">
+                                                        {{ item.text }}
+                                                    </span>
+                                                    <br>
+                                                    <span class="kt-timeline-v3__item-user-name text-muted">
+                                                        {{ item.subText }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
 
     <!--End:: App Content-->

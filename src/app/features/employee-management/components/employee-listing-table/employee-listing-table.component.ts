@@ -138,4 +138,11 @@ export class EmployeeListingTableComponent {
     this.router.navigate(ROUTES.EMPLOYEE.ASSIGN_SALARY(employee.employeeTypeId.toString()),
       { queryParams: { employeeId: employee.id } })
   }
+
+  manageEmployeeDepartment(employee: EmployeeResponse, event: Event){
+    event.preventDefault();
+    this.router.navigate(ROUTES.EMPLOYEE.ASSIGN_DEPARTMENT(employee.id.toString()),
+      { queryParams: { employeeId: employee.id } })
+
+  }
 }

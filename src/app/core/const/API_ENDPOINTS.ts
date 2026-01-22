@@ -115,7 +115,7 @@ export const API_ENDPOINTS = {
         },
         DESIGNATIONS: {
             ASSIGN: '/api/employees/designations/assign',
-            CURRENT: (employeeId: string | number) => `/api/employees/${employeeId}/designation/current`,
+            CURRENT: (employeeId: string | number) => `/api/employees/designations/current/${employeeId}`,
             HISTORY: (employeeId: string | number) => `/api/employees/${employeeId}/designation/history`
         },
         ADDRESS: {

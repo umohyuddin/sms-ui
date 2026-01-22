@@ -1,0 +1,89 @@
+<div class="kt-subheader  kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Manage Employee Department</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+
+            <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
+                <input type="text" class="form-control" placeholder="Search order..." id="generalSearch">
+                <span class="kt-input-icon__icon kt-input-icon__icon--right">
+                    <span><i class="flaticon2-search-1"></i></span>
+                </span>
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+        <div class="kt-portlet">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">
+                    Desingations
+                </h3>
+            </div>
+        </div>
+
+        <!--begin::Form-->
+        <form class="kt-form kt-form--label-right" [formGroup]="departmentForm" (ngSubmit)="onSubmit()">
+            <div class="kt-portlet__body">
+                <h4>Designation Information</h4>
+                <div class="form-group row form-group-marginless kt-margin-t-20">
+
+                    <!-- Campus Dropdown -->
+                    <label class="col-lg-1 col-form-label required">Department:</label>
+                    <div class="col-lg-3">
+                        <select class="form-control" formControlName="departmentId"
+                            [class.is-invalid]="departmentId?.invalid && (departmentId?.touched || departmentId?.dirty)"
+                            [class.is-valid]="departmentId?.valid && (departmentId?.touched || departmentId?.dirty)">
+                            <option value="">Select Department</option>
+                            <option *ngFor="let c of departmentDD" [value]="c.key">{{ c.label }}</option>
+                        </select>
+                        <span class="form-text text-muted">Please select a Department</span>
+                        <span class="invalid-feedback"
+                            *ngIf="departmentId?.invalid && (departmentId?.touched || departmentId?.dirty)">
+                            {{ getErrorMessage('departmentId') }}
+                        </span>
+                    </div>
+
+                    <label class="col-lg-1 col-form-label required">Designation:</label>
+                    <div class="col-lg-3">
+                        <select class="form-control" formControlName="designationId"
+                            [class.is-invalid]="designationId?.invalid && (designationId?.touched || designationId?.dirty)"
+                            [class.is-valid]="designationId?.valid && (designationId?.touched || designationId?.dirty)">
+                            <option value="">Select Department</option>
+                            <option *ngFor="let c of designationDD" [value]="c.key">{{ c.label }}</option>
+                        </select>
+                        <span class="form-text text-muted">Please select a Designation</span>
+                        <span class="invalid-feedback"
+                            *ngIf="designationId?.invalid && (designationId?.touched || designationId?.dirty)">
+                            {{ getErrorMessage('designationId') }}
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Form Actions -->
+            <div class="kt-portlet__foot">
+                <div class="kt-form__actions">
+                    <div class="row">
+                        <div class="col-lg-5"></div>
+                        <div class="col-lg-7">
+                            <button type="submit" class="btn btn-dark mr-2">
+                                Set Employee Department
+                            </button>
+                            <button type="button" class="btn btn-secondary" (click)="goToEmployeeList()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!--end::Form-->
+    </div>
