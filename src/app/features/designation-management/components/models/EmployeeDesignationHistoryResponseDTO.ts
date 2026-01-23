@@ -3,6 +3,10 @@ export interface EmployeeDesignationHistoryResponseDTO {
   employeeId: number;
   designationId: number;
   designationName: string;
-  departmentId?: number;   // optional (can be null)
-  isCurrent: boolean;
+  departmentId?: number;   // optional (can be null)  
+  startDate: string; // ISO LocalDateTime
+  endDate: string | null;
+  createdBy: number;
+  createdAt: string; 
+    isCurrent: boolean;
 }

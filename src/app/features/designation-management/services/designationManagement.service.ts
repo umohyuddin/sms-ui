@@ -69,4 +69,12 @@ export class DesignationManagementService {
       headers: { 'Content-Type': 'application/json' }
     });
   }
+
+  getDesignationHistory(employeeId: number | string): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.EMPLOYEE.DESIGNATIONS.HISTORY(employeeId)}`,
+      { observeResponse: true }
+    );
+  }
 }

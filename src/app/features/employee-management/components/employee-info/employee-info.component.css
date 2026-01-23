@@ -45,3 +45,9 @@
 
 
 
+.kt-timeline-scroll {
+    max-height: 300px;          /* adjust as needed */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;        /* prevents scrollbar overlap */
+}

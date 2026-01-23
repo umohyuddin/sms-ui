@@ -15,6 +15,8 @@ import { EmployeeDocumentComponent } from '../employee-document/employee-documen
 import { EmployeeAddressComponent } from '../employee-address/employee-address.component';
 import { DepartmentManagementService } from '../../../department-management/services/DepartmentManagementService';
 import { EmployeeDepartmentHistoryResponse } from '../../models/EmployeeDepartmentHistoryResponse';
+import { DesignationManagementService } from '../../../designation-management/services/designationManagement.service';
+import { EmployeeDesignationHistoryResponseDTO } from '../../../designation-management/components/models/EmployeeDesignationHistoryResponseDTO';
 
 export interface TimelineItem {
   time: string;
@@ -27,12 +29,13 @@ export interface TimelineItem {
 @Component({
   selector: 'app-employee-info',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,EmployeePersonalInformationComponent,EmployeeDocumentComponent,EmployeeAddressComponent],
+  imports: [CommonModule, ReactiveFormsModule, EmployeePersonalInformationComponent, EmployeeDocumentComponent, EmployeeAddressComponent],
   templateUrl: './employee-info.component.html',
   styleUrls: ['./employee-info.component.css']
 })
 export class EmployeeInfoComponent {
   departmentTimeline: TimelineItem[] = [];
+  designationTimeline: TimelineItem[] = [];
   docsForm!: FormGroup;
   selectedAvatar!: File;
   employeeData?: EmployeeResponse;
@@ -49,11 +52,14 @@ export class EmployeeInfoComponent {
   personalForm!: FormGroup;
   showPersonalForm: boolean = false;
 
-  organizationalDetails:EmployeeDepartmentHistoryResponse[]=[];
+  organizationalDetails: EmployeeDepartmentHistoryResponse[] = [];
+  employeeDesignationResponse: EmployeeDesignationHistoryResponseDTO[] = [];
+  oDetails: EmployeeDepartmentHistoryResponse[] = [];
   constructor(
     private fb: FormBuilder,
     private employeeManagementService: EmployeeManagementService,
-    private departmentSerivce :DepartmentManagementService,
+    private departmentSerivce: DepartmentManagementService,
+    private desingationService: DesignationManagementService,
     private route: ActivatedRoute,
     private appConfig: AppConfigService
   ) { }
@@ -131,7 +137,7 @@ export class EmployeeInfoComponent {
     });
 
   }
- 
+
 
   setActiveTab(tab: string) {
     this.activeTab = tab;
@@ -143,8 +149,8 @@ export class EmployeeInfoComponent {
         this.docsLookUpData();
         this.getEmployeeAllDocs()
         break;
-        case 'organizational':
-          this.getOrgDetailsEmployee(this.routedId);
+      case 'organizational':
+        this.getOrgDetailsEmployee(this.routedId);
         break;
     }
   }
@@ -209,33 +215,66 @@ export class EmployeeInfoComponent {
   }
 
   getOrgDetailsEmployee(id: string): void {
-  this.departmentSerivce.getDepartmentHistory(id).subscribe({
-    next: (response) => {
-      this.organizationalDetails = response.body;
+    this.departmentSerivce.getDepartmentHistory(id).subscribe({
+      next: (response) => {
+        this.organizationalDetails = response.body;
 
-      this.departmentTimeline = this.organizationalDetails
-        .sort(
-          (a, b) =>
-            new Date(b.startDate).getTime() -
-            new Date(a.startDate).getTime()
-        )
-        .map(item => ({
-          time: this.formatYear(item.startDate),
-          //time: this.formatTime(item.startDate),
-          text: item.isCurrent
-            ? `Currently working in ${item.departmentName}`
-            : `Transferred from ${item.departmentName}`,
-          subText: item.isCurrent
-            ? 'Current Department'
-            : `Till ${this.formatDate(item.endDate)}`,
-          type: item.isCurrent ? 'success' : 'brand'
-        }));
-    },
-    error: (error) => {
-      console.error('❌ Request Failed', error);
-    }
-  });
-}
+        this.departmentTimeline = this.organizationalDetails
+          .sort(
+            (a, b) =>
+              new Date(b.startDate).getTime() -
+              new Date(a.startDate).getTime()
+          )
+          .map(item => ({
+            time: this.formatYear(item.startDate),
+            //time: this.formatTime(item.startDate),
+            text: item.isCurrent
+              ? `Currently working in ${item.departmentName}`
+              : `Transferred from ${item.departmentName}`,
+            subText: item.isCurrent
+              ? 'Current Department'
+              : `Till ${this.formatDate(item.endDate)}`,
+            type: item.isCurrent ? 'success' : 'brand'
+          }));
+      },
+      error: (error) => {
+        console.error('❌ Request Failed', error);
+      }
+    });
+
+
+    this.desingationService.getDesignationHistory(id).subscribe({
+      next: (response) => {
+        this.employeeDesignationResponse = response.body;
+
+        this.designationTimeline = this.employeeDesignationResponse
+          .sort(
+            (a, b) =>
+              new Date(b.startDate).getTime() -
+              new Date(a.startDate).getTime()
+          )
+          .map(item => ({
+            time: this.formatYear(item.startDate),
+
+            text: item.isCurrent
+              ? `Currently working as ${item.designationName}`
+              : `Previously worked as ${item.designationName}`,
+
+            subText: item.isCurrent
+              ? 'Current Designation'
+              : item.endDate
+                ? `Till ${this.formatDate(item.endDate)}`
+                : '',
+
+            type: item.isCurrent ? 'success' : 'brand'
+          }));
+
+      },
+      error: (error) => {
+        console.error('❌ Request Failed', error);
+      }
+    });
+  }
 
 
   uploadAvatar() {
@@ -332,25 +371,25 @@ export class EmployeeInfoComponent {
   }
 
 
- formatDate(date?: string | null): string {
-  if (!date) return '';
-  return new Date(date).toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  });
-}
+  formatDate(date?: string | null): string {
+    if (!date) return '';
+    return new Date(date).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  }
 
-formatTime(date: string): string {
-  return new Date(date).toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-}
+  formatTime(date: string): string {
+    return new Date(date).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
 
-formatYear(date: string): string {
-  return new Date(date).getFullYear().toString();
-}
+  formatYear(date: string): string {
+    return new Date(date).getFullYear().toString();
+  }
 
   //getters
 

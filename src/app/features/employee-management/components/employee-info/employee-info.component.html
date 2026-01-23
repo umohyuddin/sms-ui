@@ -706,7 +706,7 @@
                         <div class="kt-portlet__body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="kt_widget2_tab1_content">
-                                    <div class="kt-timeline-v3">
+                                    <div class="kt-timeline-v3 kt-timeline-scroll">
                                         <div class="kt-timeline-v3__items">
 
                                             <div *ngFor="let item of departmentTimeline" class="kt-timeline-v3__item"
@@ -749,10 +749,10 @@
                         <div class="kt-portlet__body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="kt_widget2_tab1_content">
-                                    <div class="kt-timeline-v3">
+                                    <div class="kt-timeline-v3 kt-timeline-scroll">
                                         <div class="kt-timeline-v3__items">
 
-                                            <div *ngFor="let item of departmentTimeline" class="kt-timeline-v3__item"
+                                            <div *ngFor="let item of designationTimeline" class="kt-timeline-v3__item"
                                                 [ngClass]="'kt-timeline-v3__item--' + item.type">
                                                 <span class="kt-timeline-v3__item-time">
                                                     {{ item.time }}
