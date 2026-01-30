@@ -145,6 +145,9 @@ export const API_ENDPOINTS = {
             SEARCH: `/api/school/academic/search`,
             CREATE: '/api/school/academic',
             UPDATE: (id: string) => `/api/school/academic/${id}`,
+            ACTIVATE: (id: string) => `/api/school/academic/${id}/activate`,
+            DELETE: (id: string) => `/api/school/academic/${id}`
+
         },
         ADMISSION_TYPES: {
             GET_ALL: '/api/admission/types',

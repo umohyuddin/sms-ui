@@ -1,0 +1,29 @@
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 280px;
+  padding: 14px 18px;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  animation: slideIn 0.3s ease;
+  z-index: 10000;
+}
+
+.success { background: #34bfa3; }
+.error   { background: #f64e60; }
+.info    { background: #5867dd; }
+.warning { background: #ffa800; }
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,15 +7,19 @@ import { AppConfigService } from '../../../../core/services/app-config.service';
 import { AcademicYearManagementService } from '../../services/academic-year-management.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-tenant-create-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, ToasterComponent, LoaderComponent],
   templateUrl: './tenant-create-form.component.html',
   styleUrls: ['./tenant-create-form.component.css']
 })
 export class TenantCreateFormComponent {
+  @ViewChild('toaster') toaster!: ToasterComponent;
+  loading: boolean = false;
   academicYearForm!: FormGroup;
   academicYearId: string | null = null;
   isEditMode = false;
@@ -29,7 +33,7 @@ export class TenantCreateFormComponent {
     private router: Router,
     private academicYearService: AcademicYearManagementService,
     private appConfig: AppConfigService
-  ) {}
+  ) { }
 
   ngOnInit() {
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);
@@ -57,6 +61,9 @@ export class TenantCreateFormComponent {
       name: ['', [Validators.required, Validators.maxLength(20), this.noWhitespaceValidator]],
       startDate: ['', [Validators.required, this.validateStartDate]],
       endDate: ['', [Validators.required, this.validateEndDate.bind(this)]],
+      code: ['', [Validators.required, Validators.maxLength(20), this.noWhitespaceValidator]],
+      remarks: [''],
+      setAsCurrent: [false],
       isCurrent: [false]
     });
     LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Form initialized');
@@ -81,24 +88,34 @@ export class TenantCreateFormComponent {
   onSubmit() {
     LoggerUtil.group(`🚀 [${this.MODULE}] Submit`);
     LoggerUtil.log(this.MODULE, this.COMPONENT, '📋 Submit triggered');
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '📤 Submitting form data', this.academicYearForm.getRawValue());
 
     if (this.academicYearForm.invalid) {
       this.academicYearForm.markAllAsTouched();
       LoggerUtil.error(this.MODULE, this.COMPONENT, '❌ Form validation failed', this.academicYearForm.errors);
+      this.toaster.show('Please fix validation errors before submitting', 'error');
       LoggerUtil.groupEnd();
       return;
     }
 
-    LoggerUtil.log(this.MODULE, this.COMPONENT, '📤 Submitting form data', this.academicYearForm.getRawValue());
-
+    this.loading = true;
     this.academicYearService.saveAcademicYear(this.academicYearId, this.academicYearForm.getRawValue()).subscribe({
       next: (response) => {
         LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Save successful', response.body);
         LoggerUtil.log(this.MODULE, this.COMPONENT, '➡️ Redirecting to list');
+        this.toaster.show('Academic Year saved successfully!', 'success');
         this.router.navigate(ROUTES.ACADEMIC_YEAR.LIST);
       },
-      error: (error) => LoggerUtil.error(this.MODULE, this.COMPONENT, '❌ Save failed', error),
-      complete: () => LoggerUtil.groupEnd()
+      error: (error) => {
+        this.loading = false;
+        LoggerUtil.error(this.MODULE, this.COMPONENT, '❌ Save failed', error)
+                this.toaster.show('Failed to save Academic Year. Please try again.','error');
+
+      },
+      complete: () => {
+        this.loading = false; // hide loader
+        LoggerUtil.groupEnd();
+      }
     });
   }
 
@@ -137,34 +154,68 @@ export class TenantCreateFormComponent {
   private generateAcademicYearName() {
     const start = this.academicYearForm.get('startDate')?.value;
     const end = this.academicYearForm.get('endDate')?.value;
-    if (start && end) {
-      const name = `${new Date(start).getFullYear()}-${new Date(end).getFullYear()}`;
-      this.academicYearForm.get('name')?.setValue(name);
-    }
+
+    if (!start || !end) return;
+
+    const startYear = new Date(start).getFullYear();
+    const endYear = new Date(end).getFullYear();
+
+    // Name → 2024-2025
+    const name = `${startYear}-${endYear}`;
+
+    // Code → AY-2024-25
+    const code = `AY-${startYear}-${String(endYear).slice(-2)}`;
+
+    this.academicYearForm.patchValue(
+      { name, code },
+      { emitEvent: false } // 🚨 avoid infinite loops
+    );
   }
+
 
   // Getters for easy access
   get name() { return this.academicYearForm.get('name'); }
+  get code() { return this.academicYearForm.get('code'); }
   get startDate() { return this.academicYearForm.get('startDate'); }
   get endDate() { return this.academicYearForm.get('endDate'); }
+  get remarks() { return this.academicYearForm.get('remarks'); }
   get isCurrent() { return this.academicYearForm.get('isCurrent'); }
 
   validationMessages = {
     name: {
-      required: 'Academic Year Name is required.',
-      maxlength: 'Academic Year Name cannot exceed 20 characters.',
-      whitespace: 'Academic Year Name cannot be empty or whitespace only.'
+      required: 'Academic Year name is required.',
+      maxlength: 'Academic Year name cannot exceed 50 characters.',
+      whitespace: 'Academic Year name cannot be empty or whitespace only.'
     },
+
+    code: {
+      required: 'Academic Year code is required.',
+      maxlength: 'Academic Year code cannot exceed 20 characters.',
+      whitespace: 'Academic Year code cannot be empty or whitespace only.'
+    },
+
     startDate: {
-      required: 'Start Date is required.',
-      pastDate: 'Start Date cannot be in the past.'
+      required: 'Start date is required.',
+      pastDate: 'Start date cannot be in the past.'
     },
+
     endDate: {
-      required: 'End Date is required.',
-      beforeStartDate: 'End Date must be after Start Date.',
-      exceeds12Months: 'Academic Year cannot be longer than 12 months.'
+      required: 'End date is required.',
+      beforeStartDate: 'End date must be after the start date.',
+      exceedsMaxDuration: 'Academic year duration cannot exceed the allowed limit.'
+    },
+
+    totalMonths: {
+      required: 'Total months is required.',
+      min: 'Academic year must be at least 1 month.',
+      max: 'Academic year cannot exceed 24 months.'
+    },
+
+    remarks: {
+      maxlength: 'Remarks cannot exceed 255 characters.'
     }
   };
+
 
   getErrorMessage(controlName: keyof typeof this.validationMessages): string {
     const control = this.academicYearForm.get(controlName as string);

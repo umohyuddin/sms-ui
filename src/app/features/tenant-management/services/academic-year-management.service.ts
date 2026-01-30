@@ -58,4 +58,20 @@ export class AcademicYearManagementService {
     );
   }
 
+  activateAcademicYear(id: string): Observable<any> {
+    return this.http.request(HTTP_METHOD.PUT, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.ACTIVATE(id)}`,
+      {
+        observeResponse: true
+      }
+    );
+  }
+
+  deleteAcademicYear(id: string): Observable<any> {
+  return this.http.request(
+    HTTP_METHOD.DELETE,
+    `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.DELETE(id)}`,
+    { observeResponse: true }
+  );
+}
+
 }

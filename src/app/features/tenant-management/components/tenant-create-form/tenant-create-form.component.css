@@ -1,0 +1,15 @@
+/* Read-only fields visual effect */
+.readonly-field {
+  background-color: #f5f5f5;   /* Light gray background */
+  color: #6c757d;              /* Gray text color */
+  border: 1px solid #dcdcdc;   /* Lighter border */
+  cursor: not-allowed;          /* Show "not-allowed" cursor */
+  font-style: italic;           /* Optional: italic to indicate auto-generated */
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.readonly-field:focus {
+  background-color: #f5f5f5;   /* Prevent focus change color */
+  border-color: #dcdcdc;
+  box-shadow: none;             /* Remove focus shadow */
+}

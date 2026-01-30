@@ -1,3 +1,9 @@
+<app-toaster #toaster></app-toaster>
+<app-loader *ngIf="loading" type="pulse" size="lg" color="primary" message="Creating..." [overlay]="true"
+  [fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
+</app-loader>
+
+
 <div class="kt-portlet">
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
@@ -16,11 +22,23 @@
         <!-- Name -->
         <label class="col-lg-1 col-form-label">Name:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="e.g., 2024-2025" formControlName="name"
-            [class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
+          <input readonly type="text" class="form-control readonly-field" placeholder="e.g., 2024-2025"
+            formControlName="name" [class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
             [class.is-valid]="name?.valid && (name?.touched || name?.dirty)" />
           <span class="form-text text-muted">Provide the academic year name.</span>
           <div class="invalid-feedback" *ngIf="name?.invalid && (name?.touched || name?.dirty)">
+            {{ getErrorMessage('name') }}
+          </div>
+        </div>
+
+        <!-- code -->
+        <label class="col-lg-1 col-form-label">Code:</label>
+        <div class="col-lg-3">
+          <input readonly type="text" class="form-control readonly-field" placeholder="e.g., ay-2024-2025"
+            formControlName="code" [class.is-invalid]="code?.invalid && (code?.touched || code?.dirty)"
+            [class.is-valid]="code?.valid && (code?.touched || code?.dirty)" />
+          <span class="form-text text-muted">Academic year Code.</span>
+          <div class="invalid-feedback" *ngIf="code?.invalid && (code?.touched || code?.dirty)">
             {{ getErrorMessage('name') }}
           </div>
         </div>
@@ -36,6 +54,8 @@
             {{ getErrorMessage('startDate') }}
           </div>
         </div>
+      </div>
+      <div class="form-group row form-group-marginless kt-margin-t-20">
 
         <!-- End Date -->
         <label class="col-lg-1 col-form-label">End Date:</label>
@@ -48,17 +68,31 @@
             {{ getErrorMessage('endDate') }}
           </div>
         </div>
-
-        <!-- Is Current -->
         <label class="col-lg-1 col-form-label">Status:</label>
         <div class="col-lg-3">
           <div class="kt-checkbox-inline">
-            <label class="kt-checkbox kt-checkbox--solid kt-checkbox--brand">
+            <label class="kt-checkbox kt-checkbox kt-checkbox--brand">
               <input type="checkbox" formControlName="isCurrent"> Is Current
               <span></span>
             </label>
           </div>
         </div>
+      </div>
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <!-- Remarks -->
+        <!-- Remarks -->
+        <label class="col-lg-1 col-form-label">Remarks:</label>
+        <div class="col-lg-11">
+          <textarea class="form-control" rows="3" placeholder="Enter remarks" formControlName="remarks"
+            [class.is-invalid]="remarks?.invalid && (remarks?.touched || remarks?.dirty)"
+            [class.is-valid]="remarks?.valid && (remarks?.touched || remarks?.dirty)">
+  </textarea>
+          <span class="form-text text-muted">Enter Remarks (max 255 characters)</span>
+          <div class="invalid-feedback" *ngIf="remarks?.invalid && (remarks?.touched || remarks?.dirty)">
+            {{ getErrorMessage('remarks') }}
+          </div>
+        </div>
+
       </div>
     </div>
 
