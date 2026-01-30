@@ -91,10 +91,35 @@
 											</g>
 										</svg> </span>
 									<span class="kt-widget17__subtitle">
-										Total Teachers
+										Total By Employee Typee
 									</span>
 									<span class="kt-widget17__subtitle">
-										--
+										<!-- Loop first 2 items directly -->
+										<span class="kt-widget17__subtitle"
+											*ngFor="let emp of employeeCountsByType | slice:0:2; let i = index">
+											{{ emp.employeeTypeName }} {{ emp.totalEmployees }}<span
+												*ngIf="i < 1"></span>
+										</span>
+										<span class="kt-widget17__subtitle">
+  <a class="kt-font-success" (click)="showMoreModal.open()">
+	  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       class="feather feather-more-horizontal">
+    <circle cx="12" cy="12" r="1"></circle>
+    <circle cx="19" cy="12" r="1"></circle>
+    <circle cx="5" cy="12" r="1"></circle>
+  </svg> Show More</a>
+</span>
+
+<app-show-more-pop
+ #showMoreModal
+  [items]="employeeCountsByType"
+  [sliceCount]="2"
+  [displayFn]="formatEmployee">
+</app-show-more-pop>
+
+										<!-- Show More link -->
+										<!-- <a href="javascript:void(0)" *ngIf="employeeCountsByType.length > 2" (click)="openFullListModal()">Show More</a> -->
 									</span>
 								</div>
 								<div class="kt-widget17__item">
@@ -274,7 +299,7 @@
 						</span>
 
 						<h3 class="kt-portlet__head-title">
-							School Fee Dashboard 
+							School Fee Dashboard
 							<small>Financial performance for {{ dashBoardFinancials?.academicYearName }}</small>
 						</h3>
 					</div>
@@ -404,5 +429,3 @@
 
 	<!--End::Dashboard 1-->
 </div>
-
-

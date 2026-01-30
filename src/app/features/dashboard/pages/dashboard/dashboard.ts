@@ -7,17 +7,22 @@ import { DiscountRate } from '../../../student-management/models/DiscountRate';
 import { DashboardManagementService } from '../../services/dashboard-management.service';
 import { DashboardStudentStats } from '../../models/DashboardStudentStats';
 import { DashboardFinancial } from '../../models/DashboardFinancial';
+import { EmployeeCountByType } from '../../models/EmployeeCountByType';
+import { ShowMorePopComponent } from '../../../../shared/components/show-more-pop/show-more-pop.component';
 
 @Component({
   selector: 'app-dashboard',
   imports: [FormsModule,
     CommonModule,
+    ShowMorePopComponent
   ],
   standalone: true,
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
 export class Dashboard {
+  totalEmployees = 0;
+   employeeCountsByType: EmployeeCountByType[] = [];
   dashboardStudentStats?: DashboardStudentStats
   dashBoardCount: any;
   dashBoardFinancials?:DashboardFinancial
@@ -29,6 +34,7 @@ export class Dashboard {
     this.getStudentCounts();
     this.getDashBoardCounts();
     this.getDashBoardFinancials();
+     this.getEmployeeCountsByType();
   }
 
 
@@ -97,5 +103,30 @@ export class Dashboard {
         console.log('🔚 Request Complete');
       }
     });
+  }
+
+  
+   private getEmployeeCountsByType() {
+  this.dashboardManagementService.getEmployeeCountByType().subscribe({
+    next: (response) => {
+
+      const body = response.body ?? [];
+
+      this.employeeCountsByType = body as EmployeeCountByType[];
+
+      this.totalEmployees = this.employeeCountsByType
+        .reduce((sum, item) => sum + Number(item.totalEmployees), 0);
+
+      console.log('👥 Employee count by type:', this.employeeCountsByType);
+      console.log('✅ Total Employees:', this.totalEmployees);
+    },
+    error: (error) => {
+      console.error('❌ Employee count error:', error);
+    }
+  });
+}
+
+ formatEmployee(emp: any): string {
+    return `${emp.employeeTypeName} (${emp.totalEmployees})`;
   }
 }

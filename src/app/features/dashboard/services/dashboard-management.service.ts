@@ -28,5 +28,12 @@ export class DashboardManagementService {
    getDashboardFinancials(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DASHBOARD.GET_DASHBOARD_FINANCIAL}`, { observeResponse: true });
   }
+  getEmployeeCountByType(): Observable<any> {
+  return this.http.request(
+    HTTP_METHOD.GET,
+    `${this.baseUrl}${API_ENDPOINTS.DASHBOARD.GET_EMPLOYEE_COUNT_BY_TYPE}`,
+    { observeResponse: true }
+  );
+}
 
 }
