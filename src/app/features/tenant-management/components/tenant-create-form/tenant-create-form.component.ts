@@ -20,6 +20,7 @@ import { LoaderComponent } from '../../../../shared/components/loader/loader.com
 export class TenantCreateFormComponent {
   @ViewChild('toaster') toaster!: ToasterComponent;
   loading: boolean = false;
+  loaderMessage = 'Processing...';
   academicYearForm!: FormGroup;
   academicYearId: string | null = null;
   isEditMode = false;
@@ -72,7 +73,7 @@ export class TenantCreateFormComponent {
 
   private loadAcademicYear(id: string) {
     LoggerUtil.group(`📦 [${this.MODULE}] Load Academic Year`);
-    this.academicYearService.getAcademicYearId(id).subscribe({
+    this.academicYearService.getAcademicYearById(id).subscribe({
       next: (response) => {
         LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Academic year loaded', response.body);
         this.academicYearForm.patchValue(response.body, { emitEvent: false });
@@ -99,6 +100,7 @@ export class TenantCreateFormComponent {
     }
 
     this.loading = true;
+    this.loaderMessage = this.isEditMode ? 'Updating Academic Year...' : 'Creating Academic Year...';
     this.academicYearService.saveAcademicYear(this.academicYearId, this.academicYearForm.getRawValue()).subscribe({
       next: (response) => {
         LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Save successful', response.body);
@@ -109,7 +111,7 @@ export class TenantCreateFormComponent {
       error: (error) => {
         this.loading = false;
         LoggerUtil.error(this.MODULE, this.COMPONENT, '❌ Save failed', error)
-                this.toaster.show('Failed to save Academic Year. Please try again.','error');
+        this.toaster.show('Failed to save Academic Year. Please try again.', 'error');
 
       },
       complete: () => {

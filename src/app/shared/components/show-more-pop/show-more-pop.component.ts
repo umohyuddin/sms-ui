@@ -9,6 +9,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './show-more-pop.component.css'
 })
 export class ShowMorePopComponent {
+    @Input() title: string = 'Details'; 
 @Input() items: any[] = []; // List of items to show
   @Input() displayFn: (item: any) => string = (item) => item; // How to display each item
   @Input() sliceCount: number = 2; // How many items to show inline

@@ -25,7 +25,7 @@ export class AcademicYearManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.GET_CURRENT}`, { observeResponse: true });
   }
 
-  getAcademicYearId(id: string): Observable<any> {
+  getAcademicYearById(id: string): Observable<any> {
     return this.http.request(
       HTTP_METHOD.GET,
       `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.GET_BY_ID(id)}`,
@@ -67,11 +67,33 @@ export class AcademicYearManagementService {
   }
 
   deleteAcademicYear(id: string): Observable<any> {
-  return this.http.request(
-    HTTP_METHOD.DELETE,
-    `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.DELETE(id)}`,
-    { observeResponse: true }
-  );
-}
+    return this.http.request(
+      HTTP_METHOD.DELETE,
+      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.DELETE(id)}`,
+      { observeResponse: true }
+    );
+  }
+
+  makeYearLocked(id: string, payload: any): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.PUT,
+      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.MARK_LOCKED(id)}`,
+      {
+        observeResponse: true,
+        body: payload
+      }
+    );
+  }
+
+  archiveAcademicYear(id: string, payload: any): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.PUT,
+      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.ARCHIVE(id)}`,
+      {
+        observeResponse: true,
+        body: payload
+      }
+    );
+  }
 
 }

@@ -147,6 +147,8 @@ export const API_ENDPOINTS = {
             CREATE: '/api/school/academic',
             UPDATE: (id: string) => `/api/school/academic/${id}`,
             ACTIVATE: (id: string) => `/api/school/academic/${id}/activate`,
+            ARCHIVE: (id: string) => `/api/school/academic-years/${id}/archive`,
+            MARK_LOCKED: (id: string) => `/api/school/academic/${id}/lock`,
             DELETE: (id: string) => `/api/school/academic/${id}`
 
         },

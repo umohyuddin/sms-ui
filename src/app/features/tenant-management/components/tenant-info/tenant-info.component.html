@@ -1,0 +1,184 @@
+
+<app-toaster #toaster></app-toaster>
+<app-loader *ngIf="loading" type="pulse" size="lg" color="primary"  [message]="loaderMessage" [overlay]="true"
+  [fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
+</app-loader>
+
+<div class="kt-portlet kt-portlet--mobile">
+  <div class="kt-portlet__head kt-portlet__head--lg">
+    <div class="kt-portlet__head-label">
+      <span class="kt-portlet__head-icon">
+        <i class="kt-font-dark flaticon-calendar"></i>
+      </span>
+      <h3 class="kt-portlet__head-title">
+        Academic Year Details
+      </h3>
+    </div>
+    <div class="kt-portlet__head-toolbar">
+      <div class="dropdown dropdown-inline">
+        <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <i class="flaticon-more-1"></i>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-md dropdown-menu-fit" x-placement="bottom-end"
+          style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(32px, 32px, 0px);">
+
+          <!--begin::Nav-->
+          <ul class="kt-nav">
+            <li class="kt-nav__head">
+              Quick Actions
+              <span data-toggle="kt-tooltip" data-placement="right" title=""
+                data-original-title="Click to learn more...">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                  height="24px" viewBox="0 0 24 24" version="1.1"
+                  class="kt-svg-icon kt-svg-icon--brand kt-svg-icon--md1">
+                  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <rect id="bound" x="0" y="0" width="24" height="24"></rect>
+                    <circle id="Oval-5" fill="#000000" opacity="0.3" cx="12" cy="12" r="10"></circle>
+                    <rect id="Rectangle-9" fill="#000000" x="11" y="10" width="2" height="7" rx="1"></rect>
+                    <rect id="Rectangle-9-Copy" fill="#000000" x="11" y="7" width="2" height="2" rx="1"></rect>
+                  </g>
+                </svg> </span>
+            </li>
+            <li class="kt-nav__separator"></li>
+            <li class="kt-nav__item">
+              <a href="javascript:return 0;" class="kt-nav__link" (click)="toggleLock()">
+                <i class="kt-nav__link-icon flaticon2-lock"></i>
+                <span class="kt-nav__link-text">Lock Year</span>
+              </a>
+            </li>
+            <!-- <li class="kt-nav__separator"></li> -->
+                        <li class="kt-nav__item">
+              <a href="javascript:return 0;" class="kt-nav__link" (click)="makeArchive()">
+                <i class="kt-nav__link-icon flaticon2-folder"></i>
+                <span class="kt-nav__link-text">Archive Year</span>
+              </a>
+            </li>
+            <!-- <li class="kt-nav__separator"></li> -->
+            
+          </ul>
+
+          <!--end::Nav-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kt-portlet__body" *ngIf="academicYearData">
+    <div class="kt-widget kt-widget--user-profile-3">
+      <div class="kt-widget__top">
+        <div class="kt-widget__pic kt-widget__pic--success kt-font-success kt-font-bolder kt-font-light">
+          {{ getInitials(academicYearData.name) }}
+        </div>
+
+        <div class="kt-widget__content">
+          <div class="kt-widget__head">
+            <div class="kt-widget__user">
+              <a href="#" class="kt-widget__username">
+                {{ academicYearData?.name ?? 'N/A' }}
+              </a>
+              <span class="ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
+                [ngClass]="academicYearData.isCurrent ? 'kt-badge--unified-success' : 'kt-badge--unified-secondary'">
+                {{ academicYearData.isCurrent ? 'Current Year' : 'Inactive' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Academic Year Info -->
+          <div class="kt-widget__subhead row mt-2">
+            <div class="col-4">
+              <b>Code:</b> {{ academicYearData.code ?? 'N/A' }}
+            </div>
+            <div class="col-4">
+              <b>Start Date:</b> {{ academicYearData.startDate | date:'mediumDate' }}
+            </div>
+            <div class="col-4">
+              <b>End Date:</b> {{ academicYearData.endDate | date:'mediumDate' }}
+            </div>
+          </div>
+
+          <div class="kt-widget__subhead row mt-2">
+            <div class="col-4">
+              <b>Total Months:</b> {{ academicYearData?.totalMonths ?? 'N/A' }}
+            </div>
+            <div class="col-4">
+              <b>Status:</b> {{ academicYearData.status ?? 'N/A' }}
+            </div>
+            <div class="col-4">
+              <b>Locked:</b> {{ academicYearData.isLocked ? 'Yes' : 'No' }}
+            </div>
+          </div>
+
+          <!-- Remarks -->
+          <div class="kt-widget__info mt-3">
+            <div class="kt-widget__desc">
+              <i class="flaticon-info mr-2" style="font-size: 1.5rem;"></i>
+              <b>{{ academicYearData.remarks ?? 'No remarks' }}</b>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="kt-portlet kt-portlet--mobile">
+  <div class="kt-portlet__head kt-portlet__head--lg">
+    <div class="kt-portlet__head-label">
+      <span class="kt-portlet__head-icon">
+        <i class="kt-font-dark flaticon-calendar"></i>
+      </span>
+      <h3 class="kt-portlet__head-title">
+        Academic Year Life Cycle
+      </h3>
+    </div>
+    <div class="kt-portlet__head-toolbar">
+      
+    </div>
+  </div>
+
+  <div class="kt-portlet__body">
+<div class="lifecycle-container">
+  <div class="lifecycle-step completed" title="Year is in draft state">
+    <div class="circle">
+      <i class="fas fa-pencil-alt"></i>
+    </div>
+    <div class="label">DRAFT</div>
+  </div>
+  <div class="arrow">→</div>
+
+  <div class="lifecycle-step completed" title="Year is active">
+    <div class="circle">
+      <i class="fas fa-play"></i>
+    </div>
+    <div class="label">ACTIVE</div>
+  </div>
+  <div class="arrow">→</div>
+
+  <div class="lifecycle-step completed" title="Year is closed">
+    <div class="circle">
+      <i class="fas fa-lock-open"></i>
+    </div>
+    <div class="label">CLOSED</div>
+  </div>
+  <div class="arrow">→</div>
+
+  <div class="lifecycle-step completed" title="Year is locked">
+    <div class="circle">
+      <i class="fas fa-lock"></i>
+    </div>
+    <div class="label">LOCKED</div>
+  </div>
+  <div class="arrow">→</div>
+
+  <div class="lifecycle-step current" title="Year is archived">
+    <div class="circle">
+      <i class="fas fa-archive"></i>
+    </div>
+    <div class="label">ARCHIVED</div>
+  </div>
+</div>    
+  </div>
+</div>
+
+

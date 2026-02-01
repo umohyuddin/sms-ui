@@ -73,11 +73,17 @@ export class TenantListingTableComponent {
     });
   }
 
-  viewAcademicYear(academicYear: AcademicYearResponse, event: Event) {
+  viewAcademicYear(academicYear: AcademicYearResponse | undefined | null, event: Event) {
     event.preventDefault();
+
+    if (!academicYear?.id) { // check if academicYear or id is undefined/null
+        console.warn('Cannot view Academic Year: academicYear is undefined or missing id');
+        return;
+    }
+
     console.log('Viewing Academic Year ID:', academicYear.id);
-    //this.router.navigate(ROUTES.DETAILS(academicYear.id.toString()));
-  }
+    this.router.navigate(ROUTES.ACADEMIC_YEAR.DETAILS(academicYear.id.toString()));
+}
 
   editAcademicYear(academicYear: AcademicYearResponse, event: Event) {
     event.preventDefault();

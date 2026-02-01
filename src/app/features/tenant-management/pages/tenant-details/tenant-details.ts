@@ -3,9 +3,10 @@ import { TenantInfoComponent } from '../../components/tenant-info/tenant-info.co
 import { HttpClientService } from '../../../../core/services/http-client.service';
 import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
 import { HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { AppConfigService } from '../../../../core/services/app-config.service';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
 @Component({
   selector: 'app-tenant-details',
   imports: [TenantInfoComponent, LoaderComponent],
@@ -14,20 +15,26 @@ import { AppConfigService } from '../../../../core/services/app-config.service';
   standalone: true,
 })
 export class TenantDetails {
-  spinner = true;
-
-  tenantId!: string;
-  isActive = true;
-  URL = '';
-
-  constructor(
-    private appConfig: AppConfigService
-  ) { }
-
-  ngOnInit(): void {
-    console.log('API Base URL:', this.appConfig.apiBaseUrl);
-    this.URL = this.appConfig.apiBaseUrl;
-  }
+  routedId: number | null = null;
+ 
+   constructor(private route: ActivatedRoute,
+     private router: Router
+   ) { }
+ 
+   ngOnInit() {
+     this.route.paramMap.subscribe(params => {
+       const id = params.get('id');
+       this.routedId = id ? +id : null; // convert string to number
+       console.log('Resource ID from URL:', this.routedId);
+     });
+   }
+   goToUpdatePage() {
+     if (this.routedId) {
+       this.router.navigate(ROUTES.ACADEMIC_YEAR.EDIT(this.routedId.toString()));
+     } else {
+       console.log('Resource ID from URL Not Found:');
+     }
+   }
 }
 
 
