@@ -147,9 +147,11 @@ export const API_ENDPOINTS = {
             CREATE: '/api/school/academic',
             UPDATE: (id: string) => `/api/school/academic/${id}`,
             ACTIVATE: (id: string) => `/api/school/academic/${id}/activate`,
-            ARCHIVE: (id: string) => `/api/school/academic-years/${id}/archive`,
+            ARCHIVE: (id: string) => `/api/school/academic/${id}/archive`,
+            CLOSE: (id: string) => `/api/school/academic/${id}/close`,
             MARK_LOCKED: (id: string) => `/api/school/academic/${id}/lock`,
-            DELETE: (id: string) => `/api/school/academic/${id}`
+            DELETE: (id: string) => `/api/school/academic/${id}`,
+            CREATE_DEFAULT: `/api/school/academic/default`
 
         },
         ADMISSION_TYPES: {

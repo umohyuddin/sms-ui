@@ -120,6 +120,9 @@
               <div class="alert-text">
                 No academic years available at the moment. Please add a new academic year.
               </div>
+               <button class="btn btn-sm btn-primary ml-2" (click)="createDefaultYear()" [disabled]="loading">
+                Create Default Year
+              </button>
             </div>
           </ng-template>
         </div>

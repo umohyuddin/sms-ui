@@ -47,6 +47,12 @@
                 <span class="kt-nav__link-text">Lock Year</span>
               </a>
             </li>
+            <li class="kt-nav__item">
+              <a href="javascript:return 0;" class="kt-nav__link" (click)="closeYear()">
+                <i class="kt-nav__link-icon flaticon2-calendar-5"></i>
+                <span class="kt-nav__link-text">Close Year</span>
+              </a>
+            </li>
             <!-- <li class="kt-nav__separator"></li> -->
                         <li class="kt-nav__item">
               <a href="javascript:return 0;" class="kt-nav__link" (click)="makeArchive()">
@@ -55,7 +61,19 @@
               </a>
             </li>
             <!-- <li class="kt-nav__separator"></li> -->
-            
+             <li class="kt-nav__item">
+              <a href="javascript:return 0;" class="kt-nav__link" (click)="activateYear()">
+                <i class="kt-nav__link-icon flaticon2-check-mark"></i>
+                <span class="kt-nav__link-text">Activate Year</span>
+              </a>
+            </li>
+
+            <li class="kt-nav__item">
+              <a href="javascript:return 0;" class="kt-nav__link" (click)="deleteYear()">
+                <i class="kt-nav__link-icon flaticon2-trash"></i>
+                <span class="kt-nav__link-text">Delete Year</span>
+              </a>
+            </li>
           </ul>
 
           <!--end::Nav-->

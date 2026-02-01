@@ -192,6 +192,26 @@ delete(academicYear: AcademicYearResponse, event: Event): void {
     });
 
   }
+    createDefaultYear(): void {
+    this.loading = true;
+
+    this.academicYearService.createDefaultAcademicYear().subscribe({
+      next: () => {
+        this.toaster.show('Default Academic Year created successfully', 'success');
+        this.getAcademicYears();
+      },
+      error: (error) => {
+        const message =
+          error?.error?.message ||
+          'Failed to create default Academic Year. Please try again.';
+        this.toaster.show(message, 'error');
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
+  }
 
   viewDetails(academicYear: AcademicYearResponse, event: Event) {
 

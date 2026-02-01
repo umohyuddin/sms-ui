@@ -95,5 +95,22 @@ export class AcademicYearManagementService {
       }
     );
   }
+    createDefaultAcademicYear(): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.PUT,
+      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.CREATE_DEFAULT}`,
+      { observeResponse: true }
+    );
+  }
 
+   closeAcademicYear(id: string, payload: any): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.PUT,
+      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACADEMIC_YEAR.CLOSE(id)}`,
+      {
+        observeResponse: true,
+        body: payload
+      }
+    );
+  }
 }
