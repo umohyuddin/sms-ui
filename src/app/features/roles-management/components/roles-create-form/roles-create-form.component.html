@@ -1,0 +1,54 @@
+<div class="kt-portlet">
+	<div class="kt-portlet__head">
+		<div class="kt-portlet__head-label">
+			<h3 class="kt-portlet__head-title">
+				{{ isEditMode ? 'Update Role Details' : 'Add New Role' }}
+			</h3>
+		</div>
+	</div>
+
+	<form class="kt-form kt-form--label-right" [formGroup]="createRoleForm" (ngSubmit)="onSubmit()">
+		<div class="kt-portlet__body">
+			<h4>Role Information</h4>
+
+			<div class="form-group row form-group-marginless kt-margin-t-20">
+				<label class="col-lg-2 col-form-label required">Role Name:</label>
+				<div class="col-lg-6">
+					<input type="text" class="form-control" placeholder="Role name" formControlName="roleName"
+						[class.is-invalid]="roleName?.invalid && (roleName?.touched || roleName?.dirty)"
+						[class.is-valid]="roleName?.valid && (roleName?.touched || roleName?.dirty)">
+					<span class="form-text text-muted">Please enter role name</span>
+					<span class="invalid-feedback" *ngIf="roleName?.invalid && (roleName?.touched || roleName?.dirty)">
+						{{ getErrorMessage('roleName') }}
+					</span>
+				</div>
+			</div>
+
+			<div class="form-group row form-group-marginless kt-margin-t-20">
+				<label class="col-lg-2 col-form-label">Description:</label>
+				<div class="col-lg-6">
+					<textarea class="form-control" rows="3" placeholder="Role description" formControlName="description"
+						[class.is-invalid]="description?.invalid && (description?.touched || description?.dirty)"
+						[class.is-valid]="description?.valid && (description?.touched || description?.dirty)"></textarea>
+					<span class="invalid-feedback" *ngIf="description?.invalid && (description?.touched || description?.dirty)">
+						{{ getErrorMessage('description') }}
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="kt-portlet__foot">
+			<div class="kt-form__actions">
+				<div class="row">
+					<div class="col-lg-5"></div>
+					<div class="col-lg-7">
+						<button type="submit" class="btn btn-dark mr-2">
+							{{ isEditMode ? 'Update Role Details' : 'Add New Role' }}
+						</button>
+						<button type="button" class="btn btn-danger" (click)="goToRolesListing()">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

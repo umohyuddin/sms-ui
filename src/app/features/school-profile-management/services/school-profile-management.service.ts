@@ -55,4 +55,61 @@ private baseUrl = '';
     });
   }
 
+  createInstituteContact(payload: any): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.CREATE}`;
+    return this.http.request(HTTP_METHOD.POST, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
+  updateInstituteContact(id: string | number, payload: any, instituteId?: string | number): Observable<any> {
+    const baseUrl = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.UPDATE(id)}`;
+    const url = instituteId ? `${baseUrl}?instituteId=${instituteId}` : baseUrl;
+    return this.http.request(HTTP_METHOD.PUT, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
+  getInstituteContacts(): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.GET_ALL}`;
+    return this.http.request(HTTP_METHOD.GET, url, {
+      observeResponse: true
+    });
+  }
+
+  getInstituteContactsByInstituteId(instituteId: string | number): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.GET_BY_INSTITUTE_ID(instituteId)}`;
+    return this.http.request(HTTP_METHOD.GET, url, {
+      observeResponse: true
+    });
+  }
+
+  getInstituteContactById(id: string | number, instituteId?: string | number): Observable<any> {
+    const baseUrl = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.GET_BY_ID(id)}`;
+    const url = instituteId ? `${baseUrl}?instituteId=${instituteId}` : baseUrl;
+    return this.http.request(HTTP_METHOD.GET, url, {
+      observeResponse: true
+    });
+  }
+
+  deleteInstituteContact(id: string | number, organizationId?: string | number): Observable<any> {
+    const baseUrl = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.DELETE(id)}`;
+    const url = organizationId ? `${baseUrl}?organizationId=${organizationId}` : baseUrl;
+    return this.http.request(HTTP_METHOD.DELETE, url, {
+      observeResponse: true
+    });
+  }
+
+  searchInstituteContacts(keyword: string): Observable<any> {
+    const url = keyword
+      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.SEARCH(keyword)}`
+      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.GET_ALL}`;
+
+    return this.http.request(HTTP_METHOD.GET, url, {
+      observeResponse: true
+    });
+  }
+
 }

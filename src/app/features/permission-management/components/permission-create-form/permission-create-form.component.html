@@ -1,0 +1,78 @@
+<div class="kt-portlet">
+	<div class="kt-portlet__head">
+		<div class="kt-portlet__head-label">
+			<h3 class="kt-portlet__head-title">
+				{{ isEditMode ? 'Update Permission Details' : 'Add New Permission' }}
+			</h3>
+		</div>
+	</div>
+
+	<form class="kt-form kt-form--label-right" [formGroup]="createPermissionForm" (ngSubmit)="onSubmit()">
+		<div class="kt-portlet__body">
+			<h4>Permission Information</h4>
+
+			<div class="form-group row form-group-marginless kt-margin-t-20">
+				<label class="col-lg-2 col-form-label required">Permission Name:</label>
+				<div class="col-lg-6">
+					<input type="text" class="form-control" placeholder="Permission name" formControlName="permissionName"
+						[class.is-invalid]="permissionName?.invalid && (permissionName?.touched || permissionName?.dirty)"
+						[class.is-valid]="permissionName?.valid && (permissionName?.touched || permissionName?.dirty)">
+					<span class="form-text text-muted">Please enter permission name</span>
+					<span class="invalid-feedback" *ngIf="permissionName?.invalid && (permissionName?.touched || permissionName?.dirty)">
+						{{ getErrorMessage('permissionName') }}
+					</span>
+				</div>
+			</div>
+
+			<div class="form-group row form-group-marginless kt-margin-t-20">
+				<label class="col-lg-2 col-form-label">Code:</label>
+				<div class="col-lg-6">
+					<input type="text" class="form-control" placeholder="Permission code" formControlName="code"
+						[class.is-invalid]="code?.invalid && (code?.touched || code?.dirty)"
+						[class.is-valid]="code?.valid && (code?.touched || code?.dirty)">
+					<span class="invalid-feedback" *ngIf="code?.invalid && (code?.touched || code?.dirty)">
+						{{ getErrorMessage('code') }}
+					</span>
+				</div>
+			</div>
+
+			<div class="form-group row form-group-marginless kt-margin-t-20">
+				<label class="col-lg-2 col-form-label">Module:</label>
+				<div class="col-lg-6">
+					<input type="text" class="form-control" placeholder="Module" formControlName="module"
+						[class.is-invalid]="module?.invalid && (module?.touched || module?.dirty)"
+						[class.is-valid]="module?.valid && (module?.touched || module?.dirty)">
+					<span class="invalid-feedback" *ngIf="module?.invalid && (module?.touched || module?.dirty)">
+						{{ getErrorMessage('module') }}
+					</span>
+				</div>
+			</div>
+
+			<div class="form-group row form-group-marginless kt-margin-t-20">
+				<label class="col-lg-2 col-form-label">Description:</label>
+				<div class="col-lg-6">
+					<textarea class="form-control" rows="3" placeholder="Permission description" formControlName="description"
+						[class.is-invalid]="description?.invalid && (description?.touched || description?.dirty)"
+						[class.is-valid]="description?.valid && (description?.touched || description?.dirty)"></textarea>
+					<span class="invalid-feedback" *ngIf="description?.invalid && (description?.touched || description?.dirty)">
+						{{ getErrorMessage('description') }}
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="kt-portlet__foot">
+			<div class="kt-form__actions">
+				<div class="row">
+					<div class="col-lg-5"></div>
+					<div class="col-lg-7">
+						<button type="submit" class="btn btn-dark mr-2">
+							{{ isEditMode ? 'Update Permission Details' : 'Add New Permission' }}
+						</button>
+						<button type="button" class="btn btn-danger" (click)="goToPermissionsListing()">Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

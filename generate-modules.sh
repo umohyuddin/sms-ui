@@ -2,7 +2,7 @@
 #"salary-structure-component" "employee-salary" "employee-deduction" "salary-payment" \
 #"payroll-period" "employee-bonus" "employee-advance" "salary-slip")
 
-entities=("employee-type")
+entities=("roles" "permission")
 
 BASE_PATH="src/app/features"
 

@@ -163,6 +163,12 @@
                                 <i class="flaticon2-gear"></i> Settings
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_6" role="tab"
+                                aria-selected="false">
+                                <i class="flaticon2-user-outline-symbol"></i> Contact Info
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -200,6 +206,19 @@
                     <!--Begin:: Tab Content-->
                     <div class="tab-pane" id="kt_apps_contacts_view_tab_5" role="tabpanel">
                                  <h2>Under Development- You will get update soon</h2>
+                    </div>
+
+                    <!--End:: Tab Content-->
+
+                    <!--Begin:: Tab Content-->
+                    <div class="tab-pane" id="kt_apps_contacts_view_tab_6" role="tabpanel">
+                        <ng-container *ngIf="instituteId as id">
+                            <app-institute-contact-create-form [instituteId]="id" [contactId]="selectedContactId" (contactSaved)="onContactSaved()"></app-institute-contact-create-form>
+                            <div class="mt-4"></div>
+                            <div class="kt-margin-t-20">
+                                <app-institute-contact-listing-table [instituteId]="id" (contactEdit)="onContactEdit($event)"></app-institute-contact-listing-table>
+                            </div>
+                        </ng-container>
                     </div>
 
                     <!--End:: Tab Content-->

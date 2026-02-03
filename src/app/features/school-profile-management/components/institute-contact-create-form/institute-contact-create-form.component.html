@@ -1,0 +1,73 @@
+<form class="kt-form kt-form--label-right" [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+    <app-toaster #toaster></app-toaster>
+    <div class="kt-portlet__body">
+        <h4>Contact Information</h4>
+
+        <div class="form-group row form-group-marginless kt-margin-t-20">
+
+
+            <label class="col-lg-1 col-form-label required">Contact Person:</label>
+            <div class="col-lg-3">
+                <input type="text" class="form-control" placeholder="Contact person name"
+                    formControlName="contactPersonName"
+                    [class.is-invalid]="contactPersonName?.invalid && (contactPersonName?.touched || contactPersonName?.dirty)"
+                    [class.is-valid]="contactPersonName?.valid && (contactPersonName?.touched || contactPersonName?.dirty)">
+                <span class="invalid-feedback"
+                    *ngIf="contactPersonName?.invalid && (contactPersonName?.touched || contactPersonName?.dirty)">
+                    {{ getErrorMessage('contactPersonName') }}
+                </span>
+            </div>
+
+            <label class="col-lg-1 col-form-label">Role:</label>
+            <div class="col-lg-3">
+                <select class="form-control" formControlName="role"
+                    [class.is-invalid]="role?.invalid && (role?.touched || role?.dirty)"
+                    [class.is-valid]="role?.valid && (role?.touched || role?.dirty)">
+                    <option value="">Select role</option>
+                    <option *ngFor="let r of roles" [value]="r.name">{{ r.name }}</option>
+                </select>
+                <span class="invalid-feedback" *ngIf="role?.invalid && (role?.touched || role?.dirty)">
+                    {{ getErrorMessage('role') }}
+                </span>
+            </div>
+
+            <label class="col-lg-1 col-form-label required">Phone:</label>
+            <div class="col-lg-3">
+                <input type="text" class="form-control" placeholder="Phone" formControlName="phone"
+                    [class.is-invalid]="phone?.invalid && (phone?.touched || phone?.dirty)"
+                    [class.is-valid]="phone?.valid && (phone?.touched || phone?.dirty)">
+                <span class="invalid-feedback" *ngIf="phone?.invalid && (phone?.touched || phone?.dirty)">
+                    {{ getErrorMessage('phone') }}
+                </span>
+            </div>
+
+        </div>
+
+        <div class="form-group row form-group-marginless kt-margin-t-20">
+
+            <label class="col-lg-1 col-form-label required">Email:</label>
+            <div class="col-lg-3">
+                <input type="email" class="form-control" placeholder="Email" formControlName="email"
+                    [class.is-invalid]="email?.invalid && (email?.touched || email?.dirty)"
+                    [class.is-valid]="email?.valid && (email?.touched || email?.dirty)">
+                <span class="invalid-feedback" *ngIf="email?.invalid && (email?.touched || email?.dirty)">
+                    {{ getErrorMessage('email') }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__foot">
+        <div class="kt-form__actions">
+            <div class="row">
+                <div class="col-lg-5"></div>
+                <div class="col-lg-7">
+                    <button type="submit" class="btn btn-dark mr-2">
+                        {{ contactId ? 'Update Contact' : 'Save Contact' }}
+                    </button>
+                       <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

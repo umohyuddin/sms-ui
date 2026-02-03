@@ -45,6 +45,34 @@ export const PageTexts = {
       deleteConfirmation: 'Are you sure you want to delete this department?'
     }
   },
+  roles: {
+    icon: 'kt-font-dark flaticon-squares',
+    header: 'Roles Listing',
+    buttons: {
+      add: 'Add Role',
+      edit: 'Edit Role',
+      delete: 'Delete Role',
+      view: 'View Role'
+    },
+    messages: {
+      noData: 'No roles available at the moment. Please check back later or add a new role.',
+      deleteConfirmation: 'Are you sure you want to delete this role?'
+    }
+  },
+  permissions: {
+    icon: 'kt-font-dark flaticon-squares',
+    header: 'Permissions Listing',
+    buttons: {
+      add: 'Add Permission',
+      edit: 'Edit Permission',
+      delete: 'Delete Permission',
+      view: 'View Permission'
+    },
+    messages: {
+      noData: 'No permissions available at the moment. Please check back later or add a new permission.',
+      deleteConfirmation: 'Are you sure you want to delete this permission?'
+    }
+  },
 
   employees: {
     header: 'Employees Listing',

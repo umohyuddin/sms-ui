@@ -137,6 +137,18 @@ export const ROUTES = {
       EDIT: (id: string) => ['concession/component/rate', 'concession-rate-edit', id],
       DETAILS: (id: string) => ['concession/rate', 'concession-rate-details', id],
     },
+  },
+  ROLES: {
+    LIST: ['roles'],
+    CREATE: ['roles', 'roles-create'],
+    EDIT: (id: string) => ['roles', 'roles-edit', id],
+    DETAILS: (id: string) => ['roles', 'roles-details', id]
+  },
+  PERMISSIONS: {
+    LIST: ['permissions'],
+    CREATE: ['permissions', 'permission-create'],
+    EDIT: (id: string) => ['permissions', 'permission-edit', id],
+    DETAILS: (id: string) => ['permissions', 'permission-details', id]
   }
 
 

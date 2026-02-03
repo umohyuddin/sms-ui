@@ -263,6 +263,32 @@ export const routes: Routes = [
       }
     ]
   },
+    {
+    path: 'roles',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/roles-management/roles-management.module')
+            .then(m => m.RolesManagementModule)
+      }
+    ]
+  },
+  {
+    path: 'permissions',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/permission-management/permission-management.module')
+            .then(m => m.PermissionManagementModule)
+      }
+    ]
+  },
 
   // Default redirect
   {

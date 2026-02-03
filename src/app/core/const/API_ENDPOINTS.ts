@@ -2,6 +2,25 @@ export const API_ENDPOINTS = {
     AUTH: {
         CREATE: '/sms/auth',
     },
+    USERS: {
+        ROLES: {
+            CREATE: '/api/users/roles',
+            UPDATE: (id: string | number) => `/api/users/roles/${id}`,
+            GET_ALL: '/api/users/roles',
+            GET_BY_ID: (id: string | number) => `/api/users/roles/${id}`,
+            GET_BY_ORGANIZATION: (organizationId: string | number) => `/api/users/roles/organization/${organizationId}`,
+            DELETE: (id: string | number) => `/api/users/roles/${id}`,
+            SEARCH: (keyword: string) => `/api/users/roles/search?keyword=${keyword}`
+        },
+        PERMISSIONS: {
+            CREATE: '/api/users/permissions',
+            UPDATE: (id: string | number) => `/api/users/permissions/${id}`,
+            GET_ALL: '/api/users/permissions',
+            GET_BY_ID: (id: string | number) => `/api/users/permissions/${id}`,
+            DELETE: (id: string | number) => `/api/users/permissions/${id}`,
+            SEARCH: (keyword: string) => `/api/users/permissions/search?keyword=${keyword}`
+        }
+    },
     SALARY_STRUCTURE: {
         GET_ALL: '/api/institute/salary-structures',
         GET_BY_ID: (id: string) => `/api/institute/salary-structures/${id}`,
@@ -138,6 +157,15 @@ export const API_ENDPOINTS = {
             GET: '/api/institute',
             CREATE: '/api/institute',
             UPDATE: '/api/institute'
+        },
+        CONTACTS: {
+            CREATE: '/api/institute/contacts',
+            UPDATE: (id: string | number) => `/api/institute/contacts/${id}`,
+            GET_ALL: '/api/institute/contacts',
+            GET_BY_ID: (id: string | number) => `/api/institute/contacts/${id}`,
+            GET_BY_INSTITUTE_ID: (instituteId: string | number) => `/api/institute/contacts/institute/${instituteId}`,
+            DELETE: (id: string | number) => `/api/institute/contacts/${id}`,
+            SEARCH: (keyword: string) => `/api/institute/contacts/search?keyword=${keyword}`
         },
         ACADEMIC_YEAR: {
             GET_BY_ID: (id: string) => `/api/school/academic/${id}`,
