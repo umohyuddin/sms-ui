@@ -1,14 +1,14 @@
- <app-toaster #toaster></app-toaster>
- <app-delete-popup
-   [show]="isDeletePopupOpen"
-   title="Delete Contact"
-   message="Are you sure you want to delete this contact?"
-   confirmText="Delete"
-   cancelText="Cancel"
-   (confirm)="confirmDelete()"
-   (cancel)="cancelDelete()">
- </app-delete-popup>
-    
+<app-toaster #toaster></app-toaster>
+<app-delete-popup
+  [show]="isDeletePopupOpen"
+  title="Delete Social Link"
+  message="Are you sure you want to delete this social link?"
+  confirmText="Delete"
+  cancelText="Cancel"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()">
+</app-delete-popup>
+
 <div class="kt-portlet kt-portlet--mobile">
   <div class="kt-portlet__head kt-portlet__head--lg">
     <div class="kt-portlet__head-label">
@@ -16,7 +16,7 @@
         <i class="kt-font-dark flaticon-squares"></i>
       </span>
       <h3 class="kt-portlet__head-title">
-        Institute Contacts
+        Institute Social Links
       </h3>
     </div>
     <div class="kt-portlet__head-toolbar">
@@ -26,12 +26,12 @@
     </div>
   </div>
   <div class="kt-portlet__body" style="position: relative; min-height: 400px;">
-    <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+    <div id="kt_table_social_links_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
       <div class="row">
         <div class="col-sm-12 col-md-6">
-          <div class="dataTables_length" id="kt_table_1_length">
-            <label>Show <select (change)="onPageSizeChange($event)" name="kt_table_1_length"
-                aria-controls="kt_table_1" class="custom-select custom-select-sm form-control form-control-sm">
+          <div class="dataTables_length" id="kt_table_social_links_length">
+            <label>Show <select (change)="onPageSizeChange($event)" name="kt_table_social_links_length"
+                aria-controls="kt_table_social_links" class="custom-select custom-select-sm form-control form-control-sm">
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
@@ -40,33 +40,30 @@
           </div>
         </div>
         <div class="col-sm-12 col-md-6">
-          <div id="kt_table_1_filter" class="dataTables_filter">
+          <div id="kt_table_social_links_filter" class="dataTables_filter">
             <label>Search:
               <input [formControl]="searchControl" type="search" class="form-control form-control-sm" placeholder=""
-                aria-controls="kt_table_1">
+                aria-controls="kt_table_social_links">
             </label>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-sm-12">
-          @if(contacts && contacts.length > 0){
+          @if(socialLinks && socialLinks.length > 0){
           <table class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
-            id="kt_table_1" role="grid" aria-describedby="kt_table_1_info" style="width: 1162px;">
+            id="kt_table_social_links" role="grid" aria-describedby="kt_table_social_links_info" style="width: 1162px;">
             <thead>
               <tr role="row">
-                <th tabindex="0" aria-controls="kt_table_1" rowspan="1" colspan="1" aria-sort="ascending"
+                <th tabindex="0" aria-controls="kt_table_social_links" rowspan="1" colspan="1" aria-sort="ascending"
                   aria-label="Record ID: activate to sort column descending" *ngFor="let col of columns">{{ col.label }}
                 </th>
               </tr>
             </thead>
             <tbody>
-              <tr role="row" class="odd" *ngFor="let contact of pagination.paginatedItems">
-                <td>{{ contact.contactPersonName }}</td>
-                <td>{{ contact.role }}</td>
-                <td>{{ contact.phone }}</td>
-                <td>{{ contact.email }}</td>
-                
+              <tr role="row" class="odd" *ngFor="let link of pagination.paginatedItems">
+                <td>{{ link.platform }}</td>
+                <td>{{ link.url }}</td>
                 <td nowrap="">
                   <span class="dropdown">
                     <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown"
@@ -74,9 +71,9 @@
                       <i class="la la-ellipsis-h"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item" href="javascript:void(0)" (click)="editContact(contact.id, $event)"><i
+                      <a class="dropdown-item" href="#" (click)="editSocialLink(link.id, $event)"><i
                           class="la la-edit"></i> Update</a>
-                      <a class="dropdown-item" href="javascript:void(0)" (click)="deleteContact(contact.id, $event)"><i
+                      <a class="dropdown-item" href="#" (click)="deleteSocialLink(link.id, $event)"><i
                           class="la la-trash"></i> Delete</a>
                     </div>
                   </span>
@@ -88,18 +85,18 @@
           @else{
           <div class="alert alert-dark" role="alert">
             <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
-            <div class="alert-text">No contacts available at the moment.</div>
+            <div class="alert-text">No social links available at the moment.</div>
           </div>
           }
         </div>
       </div>
       <div class="row">
         <div class="col-sm-12 col-md-5">
-          <div class="dataTables_info" id="kt_table_1_info" role="status" aria-live="polite">Showing {{
+          <div class="dataTables_info" id="kt_table_social_links_info" role="status" aria-live="polite">Showing {{
             pagination.startItem }} to {{ pagination.endItem }} of {{ pagination.totalItems }} entries</div>
         </div>
         <div class="col-sm-12 col-md-7">
-          <div class="dataTables_paginate paging_full_numbers" id="kt_table_1_paginate">
+          <div class="dataTables_paginate paging_full_numbers" id="kt_table_social_links_paginate">
             <ul class="pagination">
               <li class="paginate_button page-item first" [class.disabled]="pagination.pageIndex === 0">
                 <a class="page-link" (click)="pagination.first()">

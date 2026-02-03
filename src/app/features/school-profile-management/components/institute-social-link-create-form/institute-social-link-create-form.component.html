@@ -1,0 +1,48 @@
+<form class="kt-form kt-form--label-right" [formGroup]="socialLinkForm" (ngSubmit)="onSubmit()">
+    <app-toaster #toaster></app-toaster>
+    <div class="kt-portlet__body">
+        <h4>Social Links</h4>
+
+        <div class="form-group row form-group-marginless kt-margin-t-20">
+            <label class="col-lg-1 col-form-label required">Platform:</label>
+            <div class="col-lg-3">
+                <input type="text" class="form-control" placeholder="Platform"
+                    formControlName="platform"
+                    [class.is-invalid]="platform?.invalid && (platform?.touched || platform?.dirty)"
+                    [class.is-valid]="platform?.valid && (platform?.touched || platform?.dirty)">
+                <span class="invalid-feedback"
+                    *ngIf="platform?.invalid && (platform?.touched || platform?.dirty)">
+                    {{ getErrorMessage('platform') }}
+                </span>
+            </div>
+
+            <label class="col-lg-1 col-form-label required">URL:</label>
+            <div class="col-lg-7">
+                <input type="text" class="form-control" placeholder="URL"
+                    formControlName="url"
+                    [class.is-invalid]="url?.invalid && (url?.touched || url?.dirty)"
+                    [class.is-valid]="url?.valid && (url?.touched || url?.dirty)">
+                <span class="invalid-feedback"
+                    *ngIf="url?.invalid && (url?.touched || url?.dirty)">
+                    {{ getErrorMessage('url') }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__foot">
+        <div class="kt-form__actions">
+            <div class="row">
+                <div class="col-lg-5"></div>
+                <div class="col-lg-7">
+                    <button type="submit" class="btn btn-dark mr-2">
+                        {{ socialLinkId ? 'Update Social Link' : 'Save Social Link' }}
+                    </button>
+                    <button type="button" class="btn btn-secondary" (click)="onCancel()">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -3,29 +3,30 @@ import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
-import { InstituteContactResponse } from '../../models/InstituteContactResponse';
+import { InstituteSocialLinkResponse } from '../../models/InstituteSocialLinkResponse';
 import { SchoolProfileManagementService } from '../../services/school-profile-management.service';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 import { DeletePopupComponent } from '../../../../shared/components/delete-popup/delete-popup.component';
 
 @Component({
-  selector: 'app-institute-contact-listing-table',
+  selector: 'app-institute-social-link-listing-table',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, LoaderComponent, ToasterComponent, DeletePopupComponent],
-  templateUrl: './institute-contact-listing-table.component.html',
-  styleUrl: './institute-contact-listing-table.component.css'
+  templateUrl: './institute-social-link-listing-table.component.html',
+  styleUrl: './institute-social-link-listing-table.component.css'
 })
-export class InstituteContactListingTableComponent implements OnChanges {
+export class InstituteSocialLinkListingTableComponent implements OnChanges {
   @Input() instituteId?: number;
   @Input() organizationId?: number;
-  @Output() contactEdit = new EventEmitter<number>();
+  @Output() socialLinkEdit = new EventEmitter<number>();
   @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
-  pagination: Pagination<InstituteContactResponse> = new Pagination([], 10);
+
+  pagination: Pagination<InstituteSocialLinkResponse> = new Pagination([], 10);
   searchControl = new FormControl('');
-  contacts: InstituteContactResponse[] = [];
-  //instituteId: number | null = null;
+  socialLinks: InstituteSocialLinkResponse[] = [];
   isLoading = false;
+
   isDeletePopupOpen = false;
   pendingDeleteId?: number;
 
@@ -34,38 +35,36 @@ export class InstituteContactListingTableComponent implements OnChanges {
   constructor(private schoolProfileManagementService: SchoolProfileManagementService) {}
 
   columns = [
-    { key: 'contactPersonName', label: 'Contact Person', sortable: true },
-    { key: 'role', label: 'Role', sortable: true },
-    { key: 'phone', label: 'Phone', sortable: false },
-    { key: 'email', label: 'Email', sortable: false },
+    { key: 'platform', label: 'Platform', sortable: true },
+    { key: 'url', label: 'URL', sortable: false },
     { key: 'actions', label: 'Actions', sortable: true }
   ];
 
   ngOnInit() {
-    this.refreshContacts();
+    this.refreshSocialLinks();
     this.subscribeToSearch();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['instituteId']) {
-      this.refreshContacts();
+      this.refreshSocialLinks();
     }
   }
 
-  private refreshContacts() {
+  private refreshSocialLinks() {
     this.isLoading = true;
     if (this.instituteId) {
-      this.getContactsByInstituteId(this.instituteId);
+      this.getSocialLinksByInstituteId(this.instituteId);
     } else {
-      this.schoolProfileManagementService.getInstituteContacts().subscribe({
+      this.schoolProfileManagementService.getInstituteSocialLinks().subscribe({
         next: (response) => {
-          this.applyContactsResponse(response.body);
+          this.applySocialLinksResponse(response.body);
         },
         error: (error: any) => {
           this.isLoading = false;
           console.error('❌ Request Error Status:', error.status);
           console.error('Message:', error.message);
-          this.toaster?.show('Failed to load contacts.', 'error');
+          this.toaster?.show('Failed to load social links.', 'error');
         },
         complete: () => {
           this.isLoading = false;
@@ -74,8 +73,8 @@ export class InstituteContactListingTableComponent implements OnChanges {
     }
   }
 
-  reloadContacts(): void {
-    this.refreshContacts();
+  reloadSocialLinks(): void {
+    this.refreshSocialLinks();
   }
 
   private subscribeToSearch() {
@@ -87,18 +86,18 @@ export class InstituteContactListingTableComponent implements OnChanges {
           const keyword = search || '';
           this.isLoading = true;
           if (keyword) {
-            return this.schoolProfileManagementService.searchInstituteContacts(keyword);
+            return this.schoolProfileManagementService.searchInstituteSocialLinks(keyword);
           }
           if (this.instituteId) {
-            return this.schoolProfileManagementService.getInstituteContactsByInstituteId(this.instituteId);
+            return this.schoolProfileManagementService.getInstituteSocialLinksByInstituteId(this.instituteId);
           }
-          return this.schoolProfileManagementService.getInstituteContacts();
+          return this.schoolProfileManagementService.getInstituteSocialLinks();
         }),
         takeUntil(this.destroy$)
       )
       .subscribe({
         next: (response) => {
-          this.applyContactsResponse(response.body);
+          this.applySocialLinksResponse(response.body);
           this.isLoading = false;
         },
         error: (error: any) => {
@@ -109,16 +108,16 @@ export class InstituteContactListingTableComponent implements OnChanges {
       });
   }
 
-  private getContactsByInstituteId(instituteId: number) {
-    this.schoolProfileManagementService.getInstituteContactsByInstituteId(instituteId).subscribe({
+  private getSocialLinksByInstituteId(instituteId: number) {
+    this.schoolProfileManagementService.getInstituteSocialLinksByInstituteId(instituteId).subscribe({
       next: (response) => {
-        this.applyContactsResponse(response.body);
+        this.applySocialLinksResponse(response.body);
       },
       error: (error: any) => {
         this.isLoading = false;
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
-        this.toaster?.show('Failed to load contacts.', 'error');
+        this.toaster?.show('Failed to load social links.', 'error');
       },
       complete: () => {
         this.isLoading = false;
@@ -126,15 +125,20 @@ export class InstituteContactListingTableComponent implements OnChanges {
     });
   }
 
-  private applyContactsResponse(body: any) {
+  private applySocialLinksResponse(body: any) {
     const data = body?.content ?? body ?? [];
-    this.contacts = data;
-    this.pagination = new Pagination(this.contacts, 10);
+    this.socialLinks = data;
+    this.pagination = new Pagination(this.socialLinks, 10);
   }
 
-  deleteContact(contactId: number, event: Event): void {
+  editSocialLink(id: number, event: Event): void {
     event.stopPropagation();
-    this.pendingDeleteId = contactId;
+    this.socialLinkEdit.emit(id);
+  }
+
+  deleteSocialLink(id: number, event: Event): void {
+    event.stopPropagation();
+    this.pendingDeleteId = id;
     this.isDeletePopupOpen = true;
   }
 
@@ -147,16 +151,16 @@ export class InstituteContactListingTableComponent implements OnChanges {
     this.isDeletePopupOpen = false;
     this.isLoading = true;
     const orgId = this.organizationId ?? this.instituteId;
-    this.schoolProfileManagementService.deleteInstituteContact(this.pendingDeleteId, orgId).subscribe({
+    this.schoolProfileManagementService.deleteInstituteSocialLink(this.pendingDeleteId, orgId).subscribe({
       next: () => {
-        this.refreshContacts();
-        this.toaster?.show('Contact deleted successfully.', 'success');
+        this.refreshSocialLinks();
+        this.toaster?.show('Social link deleted successfully.', 'success');
       },
       error: (error: any) => {
         this.isLoading = false;
         console.error('❌ Delete Error Status:', error.status);
         console.error('Message:', error.message);
-        this.toaster?.show('Failed to delete contact.', 'error');
+        this.toaster?.show('Failed to delete social link.', 'error');
       }
     });
   }
@@ -164,11 +168,6 @@ export class InstituteContactListingTableComponent implements OnChanges {
   cancelDelete(): void {
     this.isDeletePopupOpen = false;
     this.pendingDeleteId = undefined;
-  }
-
-  editContact(contactId: number, event: Event): void {
-    event.stopPropagation();
-    this.contactEdit.emit(contactId);
   }
 
   onPageSizeChange(event: any) {

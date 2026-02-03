@@ -7,19 +7,40 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CommonModule } from '@angular/common';
 import { InstituteContactCreateFormComponent } from '../institute-contact-create-form/institute-contact-create-form.component';
 import { InstituteContactListingTableComponent } from '../institute-contact-listing-table/institute-contact-listing-table.component';
+import { InstituteSocialLinkCreateFormComponent } from '../institute-social-link-create-form/institute-social-link-create-form.component';
+import { InstituteSocialLinkListingTableComponent } from '../institute-social-link-listing-table/institute-social-link-listing-table.component';
+import { InstituteBoardMemberCreateFormComponent } from '../institute-board-member-create-form/institute-board-member-create-form.component';
+import { InstituteBoardMemberListingTableComponent } from '../institute-board-member-listing-table/institute-board-member-listing-table.component';
+import { InstituteDocumentComponent } from '../institute-document/institute-document.component';
 
 @Component({
   selector: 'app-school-profile-listing-table',
   standalone: true,
-  imports: [CommonModule, RouterLink, InstituteContactCreateFormComponent, InstituteContactListingTableComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    InstituteContactCreateFormComponent,
+    InstituteContactListingTableComponent,
+    InstituteSocialLinkCreateFormComponent,
+    InstituteSocialLinkListingTableComponent,
+    InstituteBoardMemberCreateFormComponent,
+    InstituteBoardMemberListingTableComponent,
+    InstituteDocumentComponent
+  ],
   templateUrl: './school-profile-listing-table.component.html',
   styleUrl: './school-profile-listing-table.component.css'
 })
 export class SchoolProfileListingTableComponent {
 instituteId?: number;
   selectedContactId?: number;
+  selectedSocialLinkId?: number;
+  selectedBoardMemberId?: number;
   @ViewChild(InstituteContactListingTableComponent)
   private contactListingTable?: InstituteContactListingTableComponent;
+  @ViewChild(InstituteSocialLinkListingTableComponent)
+  private socialLinkListingTable?: InstituteSocialLinkListingTableComponent;
+  @ViewChild(InstituteBoardMemberListingTableComponent)
+  private boardMemberListingTable?: InstituteBoardMemberListingTableComponent;
 
   texts = PageTexts.SCHOOL_PROFILE;
 
@@ -64,8 +85,26 @@ instituteId?: number;
     this.selectedContactId = undefined;
   }
 
+  onSocialLinkSaved(): void {
+    this.socialLinkListingTable?.reloadSocialLinks();
+    this.selectedSocialLinkId = undefined;
+  }
+
+  onBoardMemberSaved(): void {
+    this.boardMemberListingTable?.reloadBoardMembers();
+    this.selectedBoardMemberId = undefined;
+  }
+
   onContactEdit(contactId: number): void {
     this.selectedContactId = contactId;
+  }
+
+  onSocialLinkEdit(linkId: number): void {
+    this.selectedSocialLinkId = linkId;
+  }
+
+  onBoardMemberEdit(memberId: number): void {
+    this.selectedBoardMemberId = memberId;
   }
 }
 

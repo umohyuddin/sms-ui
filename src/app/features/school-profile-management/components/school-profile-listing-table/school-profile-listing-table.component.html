@@ -177,7 +177,20 @@
 
                     <!--Begin:: Tab Content-->
                     <div class="tab-pane active" id="kt_apps_contacts_view_tab_1" role="tabpanel">
-                        <h2>Under Development- You will get update soon</h2>
+                        <ng-container *ngIf="instituteId as id">
+                            <app-institute-social-link-create-form
+                                [instituteId]="id"
+                                [socialLinkId]="selectedSocialLinkId"
+                                (socialLinkSaved)="onSocialLinkSaved()">
+                            </app-institute-social-link-create-form>
+                            <div class="mt-4"></div>
+                            <div class="kt-margin-t-20">
+                                <app-institute-social-link-listing-table
+                                    [instituteId]="id"
+                                    (socialLinkEdit)="onSocialLinkEdit($event)">
+                                </app-institute-social-link-listing-table>
+                            </div>
+                        </ng-container>
                     </div>
 
                     <!--End:: Tab Content-->
@@ -191,14 +204,29 @@
 
                     <!--Begin:: Tab Content-->
                     <div class="tab-pane" id="kt_apps_contacts_view_tab_3" role="tabpanel">
-                                     <h2>Under Development- You will get update soon</h2>
+                        <ng-container *ngIf="instituteId as id">
+                            <app-institute-board-member-create-form
+                                [instituteId]="id"
+                                [boardMemberId]="selectedBoardMemberId"
+                                (boardMemberSaved)="onBoardMemberSaved()">
+                            </app-institute-board-member-create-form>
+                            <div class="mt-4"></div>
+                            <div class="kt-margin-t-20">
+                                <app-institute-board-member-listing-table
+                                    [instituteId]="id"
+                                    (boardMemberEdit)="onBoardMemberEdit($event)">
+                                </app-institute-board-member-listing-table>
+                            </div>
+                        </ng-container>
                     </div>
 
                     <!--End:: Tab Content-->
 
                     <!--Begin:: Tab Content-->
                     <div class="tab-pane" id="kt_apps_contacts_view_tab_4" role="tabpanel">
-                                     <h2>Under Development- You will get update soon</h2>
+                        <ng-container *ngIf="instituteId as id">
+                            <app-institute-document [instituteId]="id"></app-institute-document>
+                        </ng-container>
                     </div>
 
                     <!--End:: Tab Content-->

@@ -1,0 +1,91 @@
+<form class="kt-form kt-form--label-right" [formGroup]="boardMemberForm" (ngSubmit)="onSubmit()">
+    <app-toaster #toaster></app-toaster>
+    <div class="kt-portlet__body">
+        <h4>Board Members</h4>
+
+        <div class="form-group row form-group-marginless kt-margin-t-20">
+            <label class="col-lg-1 col-form-label required">Full Name:</label>
+            <div class="col-lg-3">
+                <input type="text" class="form-control" placeholder="Full name"
+                    formControlName="fullName"
+                    [class.is-invalid]="fullName?.invalid && (fullName?.touched || fullName?.dirty)"
+                    [class.is-valid]="fullName?.valid && (fullName?.touched || fullName?.dirty)">
+                <span class="invalid-feedback"
+                    *ngIf="fullName?.invalid && (fullName?.touched || fullName?.dirty)">
+                    {{ getErrorMessage('fullName') }}
+                </span>
+            </div>
+
+            <label class="col-lg-1 col-form-label required">Role:</label>
+            <div class="col-lg-3">
+                <select class="form-control" formControlName="roleId"
+                    [class.is-invalid]="roleId?.invalid && (roleId?.touched || roleId?.dirty)"
+                    [class.is-valid]="roleId?.valid && (roleId?.touched || roleId?.dirty)">
+                    <option value="">Select role</option>
+                    <option *ngFor="let r of roles" [value]="r.id">{{ r.name }}</option>
+                </select>
+                <span class="invalid-feedback" *ngIf="roleId?.invalid && (roleId?.touched || roleId?.dirty)">
+                    {{ getErrorMessage('roleId') }}
+                </span>
+            </div>
+
+            <label class="col-lg-1 col-form-label">Email:</label>
+            <div class="col-lg-3">
+                <input type="email" class="form-control" placeholder="Email" formControlName="email"
+                    [class.is-invalid]="email?.invalid && (email?.touched || email?.dirty)"
+                    [class.is-valid]="email?.valid && (email?.touched || email?.dirty)">
+                <span class="invalid-feedback" *ngIf="email?.invalid && (email?.touched || email?.dirty)">
+                    {{ getErrorMessage('email') }}
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row form-group-marginless kt-margin-t-20">
+            <label class="col-lg-1 col-form-label">Contact Number:</label>
+            <div class="col-lg-3">
+                <input type="text" class="form-control" placeholder="Contact number" formControlName="contactNumber"
+                    [class.is-invalid]="contactNumber?.invalid && (contactNumber?.touched || contactNumber?.dirty)"
+                    [class.is-valid]="contactNumber?.valid && (contactNumber?.touched || contactNumber?.dirty)">
+                <span class="invalid-feedback" *ngIf="contactNumber?.invalid && (contactNumber?.touched || contactNumber?.dirty)">
+                    {{ getErrorMessage('contactNumber') }}
+                </span>
+            </div>
+
+            <label class="col-lg-1 col-form-label">Term Start:</label>
+            <div class="col-lg-3">
+                <input type="date" class="form-control" formControlName="termStart">
+            </div>
+
+            <label class="col-lg-1 col-form-label">Term End:</label>
+            <div class="col-lg-3">
+                <input type="date" class="form-control" formControlName="termEnd">
+            </div>
+        </div>
+
+        <div class="form-group row form-group-marginless kt-margin-t-20">
+            <label class="col-lg-1 col-form-label">Active:</label>
+            <div class="col-lg-3">
+                <label class="kt-checkbox kt-checkbox--brand">
+                    <input type="checkbox" formControlName="isActive"> Active
+                    <span></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__foot">
+        <div class="kt-form__actions">
+            <div class="row">
+                <div class="col-lg-5"></div>
+                <div class="col-lg-7">
+                    <button type="submit" class="btn btn-dark mr-2">
+                        {{ boardMemberId ? 'Update Board Member' : 'Save Board Member' }}
+                    </button>
+                    <button type="button" class="btn btn-secondary" (click)="onCancel()">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

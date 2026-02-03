@@ -167,6 +167,29 @@ export const API_ENDPOINTS = {
             DELETE: (id: string | number) => `/api/institute/contacts/${id}`,
             SEARCH: (keyword: string) => `/api/institute/contacts/search?keyword=${keyword}`
         },
+        SOCIAL_LINKS: {
+            CREATE: '/api/institute/social-links',
+            UPDATE: (id: string | number) => `/api/institute/social-links/${id}`,
+            GET_ALL: '/api/institute/social-links',
+            GET_BY_ID: (id: string | number) => `/api/institute/social-links/${id}`,
+            GET_BY_INSTITUTE_ID: (instituteId: string | number) => `/api/institute/social-links/institute/${instituteId}`,
+            DELETE: (id: string | number) => `/api/institute/social-links/${id}`,
+            SEARCH: (keyword: string) => `/api/institute/social-links/search?keyword=${keyword}`
+        },
+        BOARD_MEMBERS: {
+            CREATE: '/api/institute/board-members',
+            UPDATE: (id: string | number) => `/api/institute/board-members/${id}`,
+            GET_ALL: '/api/institute/board-members',
+            GET_BY_ID: (id: string | number) => `/api/institute/board-members/${id}`,
+            GET_BY_INSTITUTE_ID: (instituteId: string | number) => `/api/institute/board-members/institute/${instituteId}`,
+            DELETE: (id: string | number) => `/api/institute/board-members/${id}`,
+            SEARCH: (keyword: string) => `/api/institute/board-members/search?keyword=${keyword}`
+        },
+        DOCUMENTS: {
+            UPLOAD_DOCS: '/api/institute/documents/upload-document',
+            DOWNLOAD_DOCS: '/api/institute/documents/download-document',
+            GET_INSTITUTE_DOCS: (id: string | number) => `/api/institute/${id}/documents`
+        },
         ACADEMIC_YEAR: {
             GET_BY_ID: (id: string) => `/api/school/academic/${id}`,
             GET_ALL: '/api/school/academic',
