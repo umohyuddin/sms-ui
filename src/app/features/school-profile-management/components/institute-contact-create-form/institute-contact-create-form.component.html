@@ -20,14 +20,14 @@
 
             <label class="col-lg-1 col-form-label">Role:</label>
             <div class="col-lg-3">
-                <select class="form-control" formControlName="role"
-                    [class.is-invalid]="role?.invalid && (role?.touched || role?.dirty)"
-                    [class.is-valid]="role?.valid && (role?.touched || role?.dirty)">
+                <select class="form-control" formControlName="roleId"
+                    [class.is-invalid]="roleId?.invalid && (roleId?.touched || roleId?.dirty)"
+                    [class.is-valid]="roleId?.valid && (roleId?.touched || roleId?.dirty)">
                     <option value="">Select role</option>
-                    <option *ngFor="let r of roles" [value]="r.name">{{ r.name }}</option>
+                    <option *ngFor="let r of roles" [value]="r.id">{{ r.name }}</option>
                 </select>
-                <span class="invalid-feedback" *ngIf="role?.invalid && (role?.touched || role?.dirty)">
-                    {{ getErrorMessage('role') }}
+                <span class="invalid-feedback" *ngIf="roleId?.invalid && (roleId?.touched || roleId?.dirty)">
+                    {{ getErrorMessage('roleId') }}
                 </span>
             </div>
 

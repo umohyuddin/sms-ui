@@ -106,8 +106,8 @@ private baseUrl = '';
     });
   }
 
-  getInstituteContacts(): Observable<any> {
-    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.GET_ALL}`;
+  getInstituteContacts(instituteId: string | number): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.GET_ALL}?instituteId=${instituteId}`;
     return this.http.request(HTTP_METHOD.GET, url, {
       observeResponse: true
     });
@@ -229,10 +229,10 @@ private baseUrl = '';
       });
   }
 
-  searchInstituteContacts(keyword: string): Observable<any> {
+  searchInstituteContacts(instituteId: string | number, keyword: string): Observable<any> {
     const url = keyword
-      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.SEARCH(keyword)}`
-      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.GET_ALL}`;
+      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.SEARCH(keyword)}&instituteId=${instituteId}`
+      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.GET_ALL}?instituteId=${instituteId}`;
 
     return this.http.request(HTTP_METHOD.GET, url, {
       observeResponse: true

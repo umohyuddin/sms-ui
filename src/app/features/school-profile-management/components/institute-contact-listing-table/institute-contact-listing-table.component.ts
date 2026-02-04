@@ -21,10 +21,10 @@ export class InstituteContactListingTableComponent implements OnChanges {
   @Input() organizationId?: number;
   @Output() contactEdit = new EventEmitter<number>();
   @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+
   pagination: Pagination<InstituteContactResponse> = new Pagination([], 10);
   searchControl = new FormControl('');
   contacts: InstituteContactResponse[] = [];
-  //instituteId: number | null = null;
   isLoading = false;
   isDeletePopupOpen = false;
   pendingDeleteId?: number;
@@ -47,35 +47,36 @@ export class InstituteContactListingTableComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['instituteId']) {
+    if (changes['instituteId'] || changes['organizationId']) {
       this.refreshContacts();
     }
   }
 
   private refreshContacts() {
     this.isLoading = true;
-    if (this.instituteId) {
-      this.getContactsByInstituteId(this.instituteId);
-    } else {
-      this.schoolProfileManagementService.getInstituteContacts().subscribe({
-        next: (response) => {
-          this.applyContactsResponse(response.body);
-        },
-        error: (error: any) => {
-          this.isLoading = false;
-          console.error('❌ Request Error Status:', error.status);
-          console.error('Message:', error.message);
-          this.toaster?.show('Failed to load contacts.', 'error');
-        },
-        complete: () => {
-          this.isLoading = false;
-        }
-      });
+    const instituteId = this.instituteId;
+    if (!instituteId) {
+      this.isLoading = false;
+      return;
     }
+
+    this.getContactsByInstituteId(instituteId);
   }
 
   reloadContacts(): void {
     this.refreshContacts();
+  }
+
+  private getContactsByInstituteId(instituteId: number) {
+    this.schoolProfileManagementService.getInstituteContactsByInstituteId(instituteId).subscribe({
+      next: (response: any) => this.applyContactsResponse(response.body),
+      error: (error: any) => {
+        this.isLoading = false;
+        console.error('❌ Request Error Status:', error.status, 'Message:', error.message);
+        this.toaster?.show('Failed to load contacts.', 'error');
+      },
+      complete: () => (this.isLoading = false)
+    });
   }
 
   private subscribeToSearch() {
@@ -83,21 +84,23 @@ export class InstituteContactListingTableComponent implements OnChanges {
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
-        switchMap(search => {
+        switchMap((search) => {
           const keyword = search || '';
           this.isLoading = true;
+          const instituteId = this.instituteId;
+          if (!instituteId) {
+            this.isLoading = false;
+            return [] as any;
+          }
           if (keyword) {
-            return this.schoolProfileManagementService.searchInstituteContacts(keyword);
+            return this.schoolProfileManagementService.searchInstituteContacts(instituteId, keyword);
           }
-          if (this.instituteId) {
-            return this.schoolProfileManagementService.getInstituteContactsByInstituteId(this.instituteId);
-          }
-          return this.schoolProfileManagementService.getInstituteContacts();
+          return this.schoolProfileManagementService.getInstituteContactsByInstituteId(instituteId);
         }),
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this.applyContactsResponse(response.body);
           this.isLoading = false;
         },
@@ -109,25 +112,8 @@ export class InstituteContactListingTableComponent implements OnChanges {
       });
   }
 
-  private getContactsByInstituteId(instituteId: number) {
-    this.schoolProfileManagementService.getInstituteContactsByInstituteId(instituteId).subscribe({
-      next: (response) => {
-        this.applyContactsResponse(response.body);
-      },
-      error: (error: any) => {
-        this.isLoading = false;
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-        this.toaster?.show('Failed to load contacts.', 'error');
-      },
-      complete: () => {
-        this.isLoading = false;
-      }
-    });
-  }
-
   private applyContactsResponse(body: any) {
-    const data = body?.content ?? body ?? [];
+    const data: InstituteContactResponse[] = body?.content ?? body ?? [];
     this.contacts = data;
     this.pagination = new Pagination(this.contacts, 10);
   }
@@ -146,6 +132,7 @@ export class InstituteContactListingTableComponent implements OnChanges {
 
     this.isDeletePopupOpen = false;
     this.isLoading = true;
+
     const orgId = this.organizationId ?? this.instituteId;
     this.schoolProfileManagementService.deleteInstituteContact(this.pendingDeleteId, orgId).subscribe({
       next: () => {
@@ -154,8 +141,7 @@ export class InstituteContactListingTableComponent implements OnChanges {
       },
       error: (error: any) => {
         this.isLoading = false;
-        console.error('❌ Delete Error Status:', error.status);
-        console.error('Message:', error.message);
+        console.error('❌ Delete Error Status:', error.status, 'Message:', error.message);
         this.toaster?.show('Failed to delete contact.', 'error');
       }
     });

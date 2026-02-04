@@ -63,7 +63,7 @@
             <tbody>
               <tr role="row" class="odd" *ngFor="let contact of pagination.paginatedItems">
                 <td>{{ contact.contactPersonName }}</td>
-                <td>{{ contact.role }}</td>
+                <td>{{ contact.role?.name }}</td>
                 <td>{{ contact.phone }}</td>
                 <td>{{ contact.email }}</td>
                 

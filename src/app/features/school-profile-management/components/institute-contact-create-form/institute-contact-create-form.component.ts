@@ -63,11 +63,12 @@ export class InstituteContactCreateFormComponent implements OnChanges {
     this.contactForm = this.fb.group({
       instituteId: [null, Validators.required],
       contactPersonName: ['', [Validators.required, Validators.maxLength(150), this.noWhitespaceValidator]],
-      role: ['', [Validators.maxLength(100), this.noWhitespaceValidator]],
+      roleId: [null, Validators.required],
       phone: ['', [Validators.required, Validators.maxLength(20), Validators.pattern(/^\+?[0-9\s\-()]*$/)]],
       email: ['', [Validators.required, Validators.email]],
     });
   }
+
 
   private loadInstitute() {
     this.isLoadingInstitute = true;
@@ -119,12 +120,11 @@ export class InstituteContactCreateFormComponent implements OnChanges {
   }
 
   private loadContactForEdit(contactId?: number) {
-    if (!contactId) {
-      return;
-    }
+    if (!contactId) return;
 
     const instituteId = this.instituteId ?? this.contactForm.get('instituteId')?.value;
     this.isLoadingContact = true;
+
     this.schoolProfileManagementService.getInstituteContactById(contactId, instituteId).subscribe({
       next: (response) => {
         const contact = response.body;
@@ -132,13 +132,13 @@ export class InstituteContactCreateFormComponent implements OnChanges {
           this.contactForm.patchValue({
             instituteId: contact.instituteId ?? instituteId ?? null,
             contactPersonName: contact.contactPersonName ?? '',
-            role: contact.role ?? '',
+            roleId: contact.role?.id ?? null,
             phone: contact.phone ?? '',
             email: contact.email ?? ''
           });
         }
       },
-      error: (error: any) => {
+      error: (error) => {
         this.isLoadingContact = false;
         console.error('❌ Load Contact Error Status:', error.status);
         console.error('Message:', error.message);
@@ -149,14 +149,15 @@ export class InstituteContactCreateFormComponent implements OnChanges {
       }
     });
   }
-onCancel() {
-  this.contactForm.reset();          // clears all form fields
-  //this.contactId = null;             // reset contact ID if editing
-  // optionally reset form validation states
-  Object.keys(this.contactForm.controls).forEach(key => {
-    this.contactForm.get(key)?.setErrors(null);
-  });
-}
+
+  onCancel() {
+    this.contactForm.reset();          // clears all form fields
+    //this.contactId = null;             // reset contact ID if editing
+    // optionally reset form validation states
+    Object.keys(this.contactForm.controls).forEach(key => {
+      this.contactForm.get(key)?.setErrors(null);
+    });
+  }
 
   onSubmit(): void {
     if (this.contactForm.invalid) {
@@ -167,24 +168,26 @@ onCancel() {
     this.isSaving = true;
     const payload = this.contactForm.getRawValue();
     const instituteId = this.instituteId ?? this.contactForm.get('instituteId')?.value ?? null;
+
     const request$ = this.contactId
       ? this.schoolProfileManagementService.updateInstituteContact(this.contactId, payload, instituteId)
       : this.schoolProfileManagementService.createInstituteContact(payload);
 
     request$.subscribe({
       next: () => {
+        // Reset form keeping instituteId
         const instituteId = this.contactForm.get('instituteId')?.value ?? null;
         this.contactForm.reset({
           instituteId,
           contactPersonName: '',
-          role: '',
+          roleId: null, // ✅ reset roleId
           phone: '',
           email: ''
         });
         this.contactSaved.emit();
         this.toaster?.show(this.contactId ? 'Contact updated successfully.' : 'Contact saved successfully.', 'success');
       },
-      error: (error: any) => {
+      error: (error) => {
         this.isSaving = false;
         console.error('❌ Save Error Status:', error.status);
         console.error('Message:', error.message);
@@ -195,6 +198,7 @@ onCancel() {
       }
     });
   }
+
 
   get isLoading(): boolean {
     return this.isSaving || this.isLoadingInstitute || this.isLoadingRoles || this.isLoadingContact;
@@ -222,9 +226,8 @@ onCancel() {
       maxlength: 'Contact person name cannot exceed 150 characters.',
       whitespace: 'Contact person name cannot be empty or whitespace only.'
     },
-    role: {
-      maxlength: 'Role cannot exceed 100 characters.',
-      whitespace: 'Role cannot be empty or whitespace only.'
+    roleId: {
+      required: 'Role is required.'
     },
     phone: {
       required: 'Phone is required.',
@@ -251,7 +254,7 @@ onCancel() {
 
 
   get contactPersonName() { return this.contactForm.get('contactPersonName'); }
-  get role() { return this.contactForm.get('role'); }
+  get roleId() { return this.contactForm.get('roleId'); }
   get phone() { return this.contactForm.get('phone'); }
   get email() { return this.contactForm.get('email'); }
 }
