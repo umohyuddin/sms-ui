@@ -113,8 +113,8 @@ private baseUrl = '';
     });
   }
 
-  getInstituteSocialLinks(): Observable<any> {
-    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SOCIAL_LINKS.GET_ALL}`;
+  getInstituteSocialLinks(instituteId: string | number): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SOCIAL_LINKS.GET_ALL}?instituteId=${instituteId}`;
     return this.http.request(HTTP_METHOD.GET, url, {
       observeResponse: true
     });
@@ -180,9 +180,9 @@ private baseUrl = '';
     });
   }
 
-  deleteInstituteSocialLink(id: string | number, organizationId?: string | number): Observable<any> {
+  deleteInstituteSocialLink(id: string | number, instituteId?: string | number): Observable<any> {
     const baseUrl = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SOCIAL_LINKS.DELETE(id)}`;
-    const url = organizationId ? `${baseUrl}?organizationId=${organizationId}` : baseUrl;
+    const url = instituteId ? `${baseUrl}?instituteId=${instituteId}` : baseUrl;
     return this.http.request(HTTP_METHOD.DELETE, url, {
       observeResponse: true
     });
@@ -239,10 +239,10 @@ private baseUrl = '';
     });
   }
 
-  searchInstituteSocialLinks(keyword: string): Observable<any> {
+  searchInstituteSocialLinks(instituteId: string | number, keyword: string): Observable<any> {
     const url = keyword
-      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SOCIAL_LINKS.SEARCH(keyword)}`
-      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SOCIAL_LINKS.GET_ALL}`;
+      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SOCIAL_LINKS.SEARCH(keyword)}&instituteId=${instituteId}`
+      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SOCIAL_LINKS.GET_ALL}?instituteId=${instituteId}`;
 
     return this.http.request(HTTP_METHOD.GET, url, {
       observeResponse: true

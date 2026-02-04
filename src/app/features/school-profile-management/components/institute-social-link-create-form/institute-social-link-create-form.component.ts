@@ -22,6 +22,18 @@ export class InstituteSocialLinkCreateFormComponent implements OnChanges {
   socialLinkForm!: FormGroup;
   institute?: InstituteResponse;
 
+  socialPlatforms = [
+    { name: 'Facebook', value: 'facebook' },
+    { name: 'Instagram', value: 'instagram' },
+    { name: 'LinkedIn', value: 'linkedin' },
+    { name: 'Twitter', value: 'twitter' },
+    { name: 'YouTube', value: 'youtube' },
+    { name: 'TikTok', value: 'tiktok' },
+    { name: 'WhatsApp Business', value: 'whatsapp' },
+    { name: 'Pinterest', value: 'pinterest' },
+    { name: 'Snapchat', value: 'snapchat' }
+  ];
+
   isSaving = false;
   isLoadingInstitute = false;
   isLoadingSocialLink = false;
@@ -53,7 +65,7 @@ export class InstituteSocialLinkCreateFormComponent implements OnChanges {
   private initializeForm() {
     this.socialLinkForm = this.fb.group({
       instituteId: [null, Validators.required],
-      platform: ['', [Validators.required, Validators.maxLength(50), this.noWhitespaceValidator]],
+      platform: ['', [Validators.required, Validators.maxLength(50)]],
       url: ['', [Validators.required, Validators.maxLength(255), this.noWhitespaceValidator]]
     });
   }
@@ -183,8 +195,7 @@ export class InstituteSocialLinkCreateFormComponent implements OnChanges {
     },
     platform: {
       required: 'Platform is required.',
-      maxlength: 'Platform cannot exceed 50 characters.',
-      whitespace: 'Platform cannot be empty or whitespace only.'
+      maxlength: 'Platform cannot exceed 50 characters.'
     },
     url: {
       required: 'URL is required.',

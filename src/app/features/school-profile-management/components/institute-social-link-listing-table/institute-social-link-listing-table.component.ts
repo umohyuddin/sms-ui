@@ -53,24 +53,13 @@ export class InstituteSocialLinkListingTableComponent implements OnChanges {
 
   private refreshSocialLinks() {
     this.isLoading = true;
-    if (this.instituteId) {
-      this.getSocialLinksByInstituteId(this.instituteId);
-    } else {
-      this.schoolProfileManagementService.getInstituteSocialLinks().subscribe({
-        next: (response) => {
-          this.applySocialLinksResponse(response.body);
-        },
-        error: (error: any) => {
-          this.isLoading = false;
-          console.error('❌ Request Error Status:', error.status);
-          console.error('Message:', error.message);
-          this.toaster?.show('Failed to load social links.', 'error');
-        },
-        complete: () => {
-          this.isLoading = false;
-        }
-      });
+    const instituteId = this.instituteId;
+    if (!instituteId) {
+      this.isLoading = false;
+      return;
     }
+
+    this.getSocialLinksByInstituteId(instituteId);
   }
 
   reloadSocialLinks(): void {
@@ -85,18 +74,20 @@ export class InstituteSocialLinkListingTableComponent implements OnChanges {
         switchMap(search => {
           const keyword = search || '';
           this.isLoading = true;
+          const instituteId = this.instituteId;
+          if (!instituteId) {
+            this.isLoading = false;
+            return [] as any;
+          }
           if (keyword) {
-            return this.schoolProfileManagementService.searchInstituteSocialLinks(keyword);
+            return this.schoolProfileManagementService.searchInstituteSocialLinks(instituteId, keyword);
           }
-          if (this.instituteId) {
-            return this.schoolProfileManagementService.getInstituteSocialLinksByInstituteId(this.instituteId);
-          }
-          return this.schoolProfileManagementService.getInstituteSocialLinks();
+          return this.schoolProfileManagementService.getInstituteSocialLinksByInstituteId(instituteId);
         }),
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this.applySocialLinksResponse(response.body);
           this.isLoading = false;
         },
@@ -110,7 +101,7 @@ export class InstituteSocialLinkListingTableComponent implements OnChanges {
 
   private getSocialLinksByInstituteId(instituteId: number) {
     this.schoolProfileManagementService.getInstituteSocialLinksByInstituteId(instituteId).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.applySocialLinksResponse(response.body);
       },
       error: (error: any) => {
@@ -150,8 +141,8 @@ export class InstituteSocialLinkListingTableComponent implements OnChanges {
 
     this.isDeletePopupOpen = false;
     this.isLoading = true;
-    const orgId = this.organizationId ?? this.instituteId;
-    this.schoolProfileManagementService.deleteInstituteSocialLink(this.pendingDeleteId, orgId).subscribe({
+    const instituteId = this.instituteId;
+    this.schoolProfileManagementService.deleteInstituteSocialLink(this.pendingDeleteId, instituteId).subscribe({
       next: () => {
         this.refreshSocialLinks();
         this.toaster?.show('Social link deleted successfully.', 'success');
