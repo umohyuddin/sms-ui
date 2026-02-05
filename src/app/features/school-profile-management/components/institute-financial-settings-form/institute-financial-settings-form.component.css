@@ -1,0 +1,40 @@
+.kt-portlet {
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    background-color: #ffffff;
+}
+
+.kt-section__title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #48465b;
+}
+
+.kt-section__body {
+    padding-top: 15px;
+}
+
+.form-group label {
+    font-weight: 500;
+}
+
+.kt-separator--border-dashed {
+    border-top: 1px dashed #ebedf2;
+}
+
+.ml-2 {
+    margin-left: 0.5rem;
+}
+
+/* Micro-animations for switches */
+.kt-switch input:checked+span::after {
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    transition: transform 0.2s ease;
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}

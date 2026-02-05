@@ -10,7 +10,7 @@ import { HttpClientService } from '../../../core/services/http-client.service';
 })
 export class SchoolProfileManagementService {
 
-private baseUrl = '';
+  private baseUrl = '';
 
   constructor(
     private http: HttpClientService,
@@ -79,6 +79,14 @@ private baseUrl = '';
     });
   }
 
+  createInstituteAccreditation(payload: any): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACCREDITATIONS.CREATE}`;
+    return this.http.request(HTTP_METHOD.POST, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
   updateInstituteContact(id: string | number, payload: any, instituteId?: string | number): Observable<any> {
     const baseUrl = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.UPDATE(id)}`;
     const url = instituteId ? `${baseUrl}?instituteId=${instituteId}` : baseUrl;
@@ -99,6 +107,15 @@ private baseUrl = '';
 
   updateInstituteBoardMember(id: string | number, payload: any, instituteId?: string | number): Observable<any> {
     const baseUrl = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.BOARD_MEMBERS.UPDATE(id)}`;
+    const url = instituteId ? `${baseUrl}?instituteId=${instituteId}` : baseUrl;
+    return this.http.request(HTTP_METHOD.PUT, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
+  updateInstituteAccreditation(id: string | number, payload: any, instituteId?: string | number): Observable<any> {
+    const baseUrl = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACCREDITATIONS.UPDATE(id)}`;
     const url = instituteId ? `${baseUrl}?instituteId=${instituteId}` : baseUrl;
     return this.http.request(HTTP_METHOD.PUT, url, {
       observeResponse: true,
@@ -148,6 +165,13 @@ private baseUrl = '';
     });
   }
 
+  getInstituteAccreditationsByInstituteId(instituteId: string | number): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACCREDITATIONS.GET_BY_INSTITUTE_ID(instituteId)}`;
+    return this.http.request(HTTP_METHOD.GET, url, {
+      observeResponse: true
+    });
+  }
+
   getInstituteContactById(id: string | number, instituteId?: string | number): Observable<any> {
     const baseUrl = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CONTACTS.GET_BY_ID(id)}`;
     const url = instituteId ? `${baseUrl}?instituteId=${instituteId}` : baseUrl;
@@ -166,6 +190,14 @@ private baseUrl = '';
 
   getInstituteBoardMemberById(id: string | number, instituteId?: string | number): Observable<any> {
     const baseUrl = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.BOARD_MEMBERS.GET_BY_ID(id)}`;
+    const url = instituteId ? `${baseUrl}?instituteId=${instituteId}` : baseUrl;
+    return this.http.request(HTTP_METHOD.GET, url, {
+      observeResponse: true
+    });
+  }
+
+  getInstituteAccreditationById(id: string | number, instituteId?: string | number): Observable<any> {
+    const baseUrl = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACCREDITATIONS.GET_BY_ID(id)}`;
     const url = instituteId ? `${baseUrl}?instituteId=${instituteId}` : baseUrl;
     return this.http.request(HTTP_METHOD.GET, url, {
       observeResponse: true
@@ -191,6 +223,14 @@ private baseUrl = '';
   deleteInstituteBoardMember(id: string | number, organizationId?: string | number): Observable<any> {
     const baseUrl = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.BOARD_MEMBERS.DELETE(id)}`;
     const url = organizationId ? `${baseUrl}?organizationId=${organizationId}` : baseUrl;
+    return this.http.request(HTTP_METHOD.DELETE, url, {
+      observeResponse: true
+    });
+  }
+
+  deleteInstituteAccreditation(id: string | number, instituteId?: string | number): Observable<any> {
+    const baseUrl = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACCREDITATIONS.DELETE(id)}`;
+    const url = instituteId ? `${baseUrl}?instituteId=${instituteId}` : baseUrl;
     return this.http.request(HTTP_METHOD.DELETE, url, {
       observeResponse: true
     });
@@ -257,6 +297,63 @@ private baseUrl = '';
     return this.http.request(HTTP_METHOD.GET, url, {
       observeResponse: true
     });
+  }
+
+  searchInstituteAccreditations(instituteId: string | number, keyword: string): Observable<any> {
+    const url = keyword
+      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACCREDITATIONS.SEARCH(keyword)}&instituteId=${instituteId}`
+      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACCREDITATIONS.GET_BY_INSTITUTE_ID(instituteId)}`;
+
+    return this.http.request(HTTP_METHOD.GET, url, {
+      observeResponse: true
+    });
+  }
+
+  activateAccreditation(id: string | number): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACCREDITATIONS.ACTIVATE(id)}`;
+    return this.http.request(HTTP_METHOD.PUT, url, {
+      observeResponse: true
+    });
+  }
+
+  deactivateAccreditation(id: string | number): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.ACCREDITATIONS.DEACTIVATE(id)}`;
+    return this.http.request(HTTP_METHOD.PUT, url, {
+      observeResponse: true
+    });
+  }
+
+  getFinancialSettings(instituteId: string | number, academicYearId: string | number): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.FINANCIAL_SETTINGS.GET(instituteId, academicYearId)}`;
+    return this.http.request(HTTP_METHOD.GET, url, {
+      observeResponse: true
+    });
+  }
+
+  createFinancialSettings(payload: any): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.FINANCIAL_SETTINGS.CREATE}`;
+    return this.http.request(HTTP_METHOD.POST, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
+  updateFinancialSettings(id: string | number, payload: any): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.FINANCIAL_SETTINGS.UPDATE(id)}`;
+    return this.http.request(HTTP_METHOD.PUT, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
+  getCurrencies(): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.LOOKUP.CURRENCY.GET_ALL}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
+  }
+
+  getTaxTypes(): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.LOOKUP.TAX_TYPE.GET_ALL}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
   }
 
 }

@@ -1,0 +1,9 @@
+/* Styles for Accreditation Listing Table */
+.table thead th {
+    font-weight: 600;
+}
+
+.kt-badge--inline {
+    padding: 0.15rem 0.5rem;
+    font-weight: 500;
+}

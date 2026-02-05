@@ -1,0 +1,70 @@
+<form class="kt-form kt-form--label-right" [formGroup]="accreditationForm" (ngSubmit)="onSubmit()">
+    <app-toaster #toaster></app-toaster>
+    <div class="kt-portlet__body">
+        <h4>Institute Accreditations</h4>
+
+        <div class="form-group row kt-margin-t-20">
+            <label class="col-lg-2 col-form-label required">Authority Name:</label>
+            <div class="col-lg-4">
+                <input type="text" class="form-control" placeholder="Authority Name" formControlName="authorityName"
+                    [class.is-invalid]="authorityName?.invalid && (authorityName?.touched || authorityName?.dirty)">
+                <span class="invalid-feedback"
+                    *ngIf="authorityName?.invalid && (authorityName?.touched || authorityName?.dirty)">
+                    {{ getErrorMessage('authorityName') }}
+                </span>
+            </div>
+
+            <label class="col-lg-2 col-form-label required">License Number:</label>
+            <div class="col-lg-4">
+                <input type="text" class="form-control" placeholder="License Number" formControlName="licenseNumber"
+                    [class.is-invalid]="licenseNumber?.invalid && (licenseNumber?.touched || licenseNumber?.dirty)">
+                <span class="invalid-feedback"
+                    *ngIf="licenseNumber?.invalid && (licenseNumber?.touched || licenseNumber?.dirty)">
+                    {{ getErrorMessage('licenseNumber') }}
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-lg-2 col-form-label">Valid From:</label>
+            <div class="col-lg-4">
+                <input type="date" class="form-control" formControlName="validFrom">
+            </div>
+
+            <label class="col-lg-2 col-form-label">Valid To:</label>
+            <div class="col-lg-4">
+                <input type="date" class="form-control" formControlName="validTo">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-lg-2 col-form-label">Is Active:</label>
+            <div class="col-lg-4">
+                <span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success">
+                    <label>
+                        <input type="checkbox" formControlName="isActive">
+                        <span></span>
+                    </label>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-portlet__foot">
+        <div class="kt-form__actions">
+            <div class="row">
+                <div class="col-lg-6"></div>
+                <div class="col-lg-6 text-right">
+                    <button type="submit" class="btn btn-dark mr-2" [disabled]="isLoading">
+                        <i class="la la-save"></i> {{ accreditationId ? 'Update Accreditation' : 'Save Accreditation' }}
+                    </button>
+                    <button type="button" class="btn btn-secondary" (click)="onCancel()" [disabled]="isLoading">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<app-loader *ngIf="isLoading" [message]="loadingMessage"></app-loader>

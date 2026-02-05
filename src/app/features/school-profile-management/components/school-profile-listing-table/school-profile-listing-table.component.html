@@ -124,7 +124,7 @@
 
 
 <div class="row">
-    
+
     <div class="col-xl-12">
 
         <!--Begin:: Portlet-->
@@ -142,19 +142,19 @@
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_2" role="tab"
                                 aria-selected="false">
-                                <i class="flaticon2-time"></i> Core Information 
+                                <i class="flaticon2-time"></i> Core Information
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_3" role="tab"
                                 aria-selected="false">
-                                <i class="flaticon2-calendar-3"></i>  Leadership & Administration
+                                <i class="flaticon2-calendar-3"></i> Leadership & Administration
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_4" role="tab"
                                 aria-selected="false">
-                                <i class="flaticon2-user-outline-symbol"></i>  Legal & Compliance
+                                <i class="flaticon2-user-outline-symbol"></i> Legal & Compliance
                             </a>
                         </li>
                         <li class="nav-item">
@@ -169,6 +169,12 @@
                                 <i class="flaticon2-user-outline-symbol"></i> Contact Info
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_accreditations"
+                                role="tab" aria-selected="false">
+                                <i class="flaticon2-safe"></i> Accreditations
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -178,15 +184,12 @@
                     <!--Begin:: Tab Content-->
                     <div class="tab-pane active" id="kt_apps_contacts_view_tab_1" role="tabpanel">
                         <ng-container *ngIf="instituteId as id">
-                            <app-institute-social-link-create-form
-                                [instituteId]="id"
-                                [socialLinkId]="selectedSocialLinkId"
-                                (socialLinkSaved)="onSocialLinkSaved()">
+                            <app-institute-social-link-create-form [instituteId]="id"
+                                [socialLinkId]="selectedSocialLinkId" (socialLinkSaved)="onSocialLinkSaved()">
                             </app-institute-social-link-create-form>
                             <div class="mt-4"></div>
                             <div class="kt-margin-t-20">
-                                <app-institute-social-link-listing-table
-                                    [instituteId]="id"
+                                <app-institute-social-link-listing-table [instituteId]="id"
                                     (socialLinkEdit)="onSocialLinkEdit($event)">
                                 </app-institute-social-link-listing-table>
                             </div>
@@ -205,15 +208,12 @@
                     <!--Begin:: Tab Content-->
                     <div class="tab-pane" id="kt_apps_contacts_view_tab_3" role="tabpanel">
                         <ng-container *ngIf="instituteId as id">
-                            <app-institute-board-member-create-form
-                                [instituteId]="id"
-                                [boardMemberId]="selectedBoardMemberId"
-                                (boardMemberSaved)="onBoardMemberSaved()">
+                            <app-institute-board-member-create-form [instituteId]="id"
+                                [boardMemberId]="selectedBoardMemberId" (boardMemberSaved)="onBoardMemberSaved()">
                             </app-institute-board-member-create-form>
                             <div class="mt-4"></div>
                             <div class="kt-margin-t-20">
-                                <app-institute-board-member-listing-table
-                                    [instituteId]="id"
+                                <app-institute-board-member-listing-table [instituteId]="id"
                                     (boardMemberEdit)="onBoardMemberEdit($event)">
                                 </app-institute-board-member-listing-table>
                             </div>
@@ -233,7 +233,10 @@
 
                     <!--Begin:: Tab Content-->
                     <div class="tab-pane" id="kt_apps_contacts_view_tab_5" role="tabpanel">
-                                 <h2>Under Development- You will get update soon</h2>
+                        <ng-container *ngIf="instituteId as id">
+                            <app-institute-financial-settings-form
+                                [instituteId]="id"></app-institute-financial-settings-form>
+                        </ng-container>
                     </div>
 
                     <!--End:: Tab Content-->
@@ -241,10 +244,30 @@
                     <!--Begin:: Tab Content-->
                     <div class="tab-pane" id="kt_apps_contacts_view_tab_6" role="tabpanel">
                         <ng-container *ngIf="instituteId as id">
-                            <app-institute-contact-create-form [instituteId]="id" [contactId]="selectedContactId" (contactSaved)="onContactSaved()"></app-institute-contact-create-form>
+                            <app-institute-contact-create-form [instituteId]="id" [contactId]="selectedContactId"
+                                (contactSaved)="onContactSaved()"></app-institute-contact-create-form>
                             <div class="mt-4"></div>
                             <div class="kt-margin-t-20">
-                                <app-institute-contact-listing-table [instituteId]="id" (contactEdit)="onContactEdit($event)"></app-institute-contact-listing-table>
+                                <app-institute-contact-listing-table [instituteId]="id"
+                                    (contactEdit)="onContactEdit($event)"></app-institute-contact-listing-table>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <!--End:: Tab Content-->
+
+                    <!--Begin:: Tab Content-->
+                    <div class="tab-pane" id="kt_apps_contacts_view_tab_accreditations" role="tabpanel">
+                        <ng-container *ngIf="instituteId as id">
+                            <app-institute-accreditation-create-form [instituteId]="id"
+                                [accreditationId]="selectedAccreditationId"
+                                (accreditationSaved)="onAccreditationSaved()">
+                            </app-institute-accreditation-create-form>
+                            <div class="mt-4"></div>
+                            <div class="kt-margin-t-20">
+                                <app-institute-accreditation-listing-table [instituteId]="id"
+                                    (accreditationEdit)="onAccreditationEdit($event)">
+                                </app-institute-accreditation-listing-table>
                             </div>
                         </ng-container>
                     </div>

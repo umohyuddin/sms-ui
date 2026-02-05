@@ -1,0 +1,236 @@
+<app-loader *ngIf="isLoading" [message]="loadingMessage"></app-loader>
+<app-toaster></app-toaster>
+
+<div class="kt-portlet kt-portlet--height-fluid">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Financial & Refund Settings</h3>
+        </div>
+    </div>
+    <form [formGroup]="financialForm" (ngSubmit)="onSubmit()" class="kt-form kt-form--label-right">
+        <div class="kt-portlet__body">
+
+            <!-- Currency & Localization Section -->
+            <div class="kt-section kt-section--first">
+                <h3 class="kt-section__title">1. Currency & Localization:</h3>
+                <div class="kt-section__body">
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label">Currency:</label>
+                        <div class="col-lg-6">
+                            <select class="form-control" formControlName="currencyId">
+                                <option [ngValue]="null">Select Currency</option>
+                                <option *ngFor="let c of currencies" [value]="c.id">{{c.name}} ({{c.symbol}})</option>
+                            </select>
+                            <span class="form-text text-muted">Select the primary currency for all transactions.</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label">Locale (e.g., en-US):</label>
+                        <div class="col-lg-6">
+                            <input type="text" class="form-control" formControlName="locale">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+
+            <!-- Fee Structure Rules -->
+            <div class="kt-section">
+                <h3 class="kt-section__title">2. Fee Structure Rules:</h3>
+                <div class="kt-section__body">
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label">Fee Frequency:</label>
+                        <div class="col-lg-6">
+                            <select class="form-control" formControlName="feeFrequency">
+                                <option value="MONTHLY">Monthly</option>
+                                <option value="TERM">Term-wise</option>
+                                <option value="ANNUAL">Annual</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label">Allow Partial Payments:</label>
+                        <div class="col-lg-6">
+                            <span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--success">
+                                <label>
+                                    <input type="checkbox" formControlName="allowPartialPayments">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label">Late Fee Applicable:</label>
+                        <div class="col-lg-6">
+                            <span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--danger">
+                                <label>
+                                    <input type="checkbox" formControlName="lateFeeApplicable">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="financialForm.get('lateFeeApplicable')?.value">
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">Late Fee Type:</label>
+                            <div class="col-lg-6">
+                                <div class="kt-radio-inline">
+                                    <label class="kt-radio">
+                                        <input type="radio" value="FIXED" formControlName="lateFeeType"> Fixed
+                                        <span></span>
+                                    </label>
+                                    <label class="kt-radio">
+                                        <input type="radio" value="PERCENTAGE" formControlName="lateFeeType"> Percentage
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">Late Fee Value:</label>
+                            <div class="col-lg-6">
+                                <input type="number" class="form-control" formControlName="lateFeeValue">
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+
+            <!-- Tax Rules -->
+            <div class="kt-section">
+                <h3 class="kt-section__title">3. Tax Rules:</h3>
+                <div class="kt-section__body">
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label">Tax Applicable:</label>
+                        <div class="col-lg-6">
+                            <span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--brand">
+                                <label>
+                                    <input type="checkbox" formControlName="taxApplicable">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="financialForm.get('taxApplicable')?.value">
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">Tax Type:</label>
+                            <div class="col-lg-6">
+                                <select class="form-control" formControlName="taxTypeId">
+                                    <option [ngValue]="null">Select Tax Type</option>
+                                    <option *ngFor="let t of taxTypes" [value]="t.id">{{t.name}} ({{t.taxPercentage}}%)
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">Tax Included in Fee:</label>
+                            <div class="col-lg-6">
+                                <span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--info">
+                                    <label>
+                                        <input type="checkbox" formControlName="taxIncludedInFee">
+                                        <span></span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+
+            <!-- Refund Rules Section -->
+            <div class="kt-section">
+                <h3 class="kt-section__title">4. Refund Policy Rules:</h3>
+                <div class="kt-section__body">
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label">Refunds Allowed:</label>
+                        <div class="col-lg-6">
+                            <span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--warning">
+                                <label>
+                                    <input type="checkbox" formControlName="refundsAllowed">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="financialForm.get('refundsAllowed')?.value">
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">Refund Window (Days):</label>
+                            <div class="col-lg-6">
+                                <input type="number" class="form-control" formControlName="refundWindowDays">
+                                <span class="form-text text-muted">Number of days after payment a refund can be
+                                    requested.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">Max Refund Percentage (%):</label>
+                            <div class="col-lg-6">
+                                <input type="number" class="form-control" formControlName="maxRefundPercentage">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">Max Refund Amount:</label>
+                            <div class="col-lg-6">
+                                <input type="number" class="form-control" formControlName="maxRefundAmount">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-3 col-form-label">Policy Document URL:</label>
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control" formControlName="refundPolicyUrl"
+                                    placeholder="https://...">
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+
+            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+
+            <!-- Compliance Flags -->
+            <div class="kt-section">
+                <h3 class="kt-section__title">5. Compliance & Billing:</h3>
+                <div class="kt-section__body">
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label">Invoice Mandatory:</label>
+                        <div class="col-lg-6">
+                            <span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--primary">
+                                <label>
+                                    <input type="checkbox" formControlName="invoiceMandatory">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-lg-3 col-form-label">Receipt Mandatory:</label>
+                        <div class="col-lg-6">
+                            <span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--primary">
+                                <label>
+                                    <input type="checkbox" formControlName="receiptMandatory">
+                                    <span></span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+                <div class="row">
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg-6">
+                        <button type="submit" class="btn btn-primary"
+                            [disabled]="financialForm.invalid || isSaving">Save Changes</button>
+                        <button type="reset" class="btn btn-secondary ml-2">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

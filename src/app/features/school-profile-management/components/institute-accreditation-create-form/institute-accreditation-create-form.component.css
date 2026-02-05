@@ -1,0 +1,5 @@
+/* CSS for Institute Accreditation Create Form */
+.required:after {
+    content: " *";
+    color: red;
+}

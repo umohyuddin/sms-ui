@@ -185,10 +185,27 @@ export const API_ENDPOINTS = {
             DELETE: (id: string | number) => `/api/institute/board-members/${id}`,
             SEARCH: (keyword: string) => `/api/institute/board-members/search?keyword=${keyword}`
         },
+        ACCREDITATIONS: {
+            CREATE: '/api/institute/accreditations',
+            UPDATE: (id: string | number) => `/api/institute/accreditations/${id}`,
+            GET_ALL: '/api/institute/accreditations',
+            GET_BY_ID: (id: string | number) => `/api/institute/accreditations/${id}`,
+            GET_BY_INSTITUTE_ID: (instituteId: string | number) => `/api/institute/accreditations/institute/${instituteId}`,
+            DELETE: (id: string | number) => `/api/institute/accreditations/${id}`,
+            SEARCH: (keyword: string) => `/api/institute/accreditations/search?keyword=${keyword}`,
+            ACTIVATE: (id: string | number) => `/api/institute/accreditations/${id}/activate`,
+            DEACTIVATE: (id: string | number) => `/api/institute/accreditations/${id}/deactivate`,
+            GET_ACTIVE: '/api/institute/accreditations/active'
+        },
         DOCUMENTS: {
             UPLOAD_DOCS: '/api/institute/documents/upload-document',
             DOWNLOAD_DOCS: '/api/institute/documents/download-document',
             GET_INSTITUTE_DOCS: (id: string | number) => `/api/institute/${id}/documents`
+        },
+        FINANCIAL_SETTINGS: {
+            GET: (instituteId: string | number, academicYearId: string | number) => `/api/institute/${instituteId}/financial-settings/${academicYearId}`,
+            UPDATE: (id: string | number) => `/api/institute/financial-settings/${id}`,
+            CREATE: '/api/institute/financial-settings'
         },
         ACADEMIC_YEAR: {
             GET_BY_ID: (id: string) => `/api/school/academic/${id}`,
@@ -322,6 +339,13 @@ export const API_ENDPOINTS = {
         },
         CITY: {
             GET_BY_PROVINCE_ID: (id: number) => `/api/lookup/country/provinces/${id}/cities`
+        },
+        CURRENCY: {
+            GET_ALL: '/api/lookups/currencies'
+        },
+        TAX_TYPE: {
+            GET_ALL: '/api/lookups/tax-types',
+            GET_BY_COUNTRY: (countryId: number) => `/api/lookups/tax-types/country/${countryId}`
         }
     }
 };

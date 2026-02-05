@@ -12,6 +12,9 @@ import { InstituteSocialLinkListingTableComponent } from '../institute-social-li
 import { InstituteBoardMemberCreateFormComponent } from '../institute-board-member-create-form/institute-board-member-create-form.component';
 import { InstituteBoardMemberListingTableComponent } from '../institute-board-member-listing-table/institute-board-member-listing-table.component';
 import { InstituteDocumentComponent } from '../institute-document/institute-document.component';
+import { InstituteAccreditationCreateFormComponent } from '../institute-accreditation-create-form/institute-accreditation-create-form.component';
+import { InstituteAccreditationListingTableComponent } from '../institute-accreditation-listing-table/institute-accreditation-listing-table.component';
+import { InstituteFinancialSettingsFormComponent } from '../institute-financial-settings-form/institute-financial-settings-form.component';
 
 @Component({
   selector: 'app-school-profile-listing-table',
@@ -25,13 +28,16 @@ import { InstituteDocumentComponent } from '../institute-document/institute-docu
     InstituteSocialLinkListingTableComponent,
     InstituteBoardMemberCreateFormComponent,
     InstituteBoardMemberListingTableComponent,
-    InstituteDocumentComponent
+    InstituteDocumentComponent,
+    InstituteAccreditationCreateFormComponent,
+    InstituteAccreditationListingTableComponent,
+    InstituteFinancialSettingsFormComponent
   ],
   templateUrl: './school-profile-listing-table.component.html',
   styleUrl: './school-profile-listing-table.component.css'
 })
 export class SchoolProfileListingTableComponent {
-instituteId?: number;
+  instituteId?: number;
   selectedContactId?: number;
   selectedSocialLinkId?: number;
   selectedBoardMemberId?: number;
@@ -41,6 +47,10 @@ instituteId?: number;
   private socialLinkListingTable?: InstituteSocialLinkListingTableComponent;
   @ViewChild(InstituteBoardMemberListingTableComponent)
   private boardMemberListingTable?: InstituteBoardMemberListingTableComponent;
+  @ViewChild(InstituteAccreditationListingTableComponent)
+  private accreditationListingTable?: InstituteAccreditationListingTableComponent;
+
+  selectedAccreditationId?: number;
 
   texts = PageTexts.SCHOOL_PROFILE;
 
@@ -58,7 +68,7 @@ instituteId?: number;
     this.getProfileDetails();
   }
 
-  goToCampusSetUp(){
+  goToCampusSetUp() {
     this.router.navigate(ROUTES.CAMPUS.CREATE)
   }
 
@@ -95,6 +105,11 @@ instituteId?: number;
     this.selectedBoardMemberId = undefined;
   }
 
+  onAccreditationSaved(): void {
+    this.accreditationListingTable?.refreshAccreditations();
+    this.selectedAccreditationId = undefined;
+  }
+
   onContactEdit(contactId: number): void {
     this.selectedContactId = contactId;
   }
@@ -105,6 +120,10 @@ instituteId?: number;
 
   onBoardMemberEdit(memberId: number): void {
     this.selectedBoardMemberId = memberId;
+  }
+
+  onAccreditationEdit(accreditationId: number): void {
+    this.selectedAccreditationId = accreditationId;
   }
 }
 
