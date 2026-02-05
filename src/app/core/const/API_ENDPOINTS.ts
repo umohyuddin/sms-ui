@@ -333,6 +333,9 @@ export const API_ENDPOINTS = {
         FEE_CATALOG_META: '/api/lookup/fee-catalog/metadata',
         STUDENT_ADMISSION_META: '/api/lookup/admission/metadata',
         EMPLOYEE_DOCS_META: '/api/lookup/docs/metadata',
+        FEE_RECURRENCE_RULES: {
+            GET_ALL: '/api/lookups/fee-recurrence-rules'
+        },
         PROVINCE: {
             GET_ALL: '/api/lookup/provinces',
             GET_BY_COUNTRY_ID: (id: string) => `/api/lookup/countries/${id}/provinces`

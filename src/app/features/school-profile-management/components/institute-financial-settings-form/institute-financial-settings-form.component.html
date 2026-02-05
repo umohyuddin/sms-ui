@@ -1,12 +1,13 @@
-<app-loader *ngIf="isLoading" [message]="loadingMessage"></app-loader>
 <app-toaster></app-toaster>
 
-<div class="kt-portlet kt-portlet--height-fluid">
+<!-- <div class="kt-portlet kt-portlet--height-fluid">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-label">
             <h3 class="kt-portlet__head-title">Financial & Refund Settings</h3>
         </div>
     </div>
+
+</div> -->
     <form [formGroup]="financialForm" (ngSubmit)="onSubmit()" class="kt-form kt-form--label-right">
         <div class="kt-portlet__body">
 
@@ -42,10 +43,9 @@
                     <div class="form-group row">
                         <label class="col-lg-3 col-form-label">Fee Frequency:</label>
                         <div class="col-lg-6">
-                            <select class="form-control" formControlName="feeFrequency">
-                                <option value="MONTHLY">Monthly</option>
-                                <option value="TERM">Term-wise</option>
-                                <option value="ANNUAL">Annual</option>
+                            <select class="form-control" formControlName="feeRecurrenceRuleId">
+                                <option [ngValue]="null">Select Fee Frequency</option>
+                                <option *ngFor="let r of feeRecurrenceRules" [value]="r.id">{{ r.name }}</option>
                             </select>
                         </div>
                     </div>
@@ -233,4 +233,3 @@
             </div>
         </div>
     </form>
-</div>

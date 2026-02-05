@@ -1,8 +1,10 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { SchoolProfileManagementService } from '../../services/school-profile-management.service';
 import { InstituteFinancialSettings } from '../../models/InstituteFinancialSettings';
+import { TaxTypeResponse } from '../../models/TaxTypeResponse';
+import { FeeRecurrenceRuleResponse } from '../../models/FeeRecurrenceRuleResponse';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 
@@ -13,8 +15,9 @@ import { ToasterComponent } from '../../../../shared/components/toaster/toaster.
     templateUrl: './institute-financial-settings-form.component.html',
     styleUrl: './institute-financial-settings-form.component.css'
 })
-export class InstituteFinancialSettingsFormComponent implements OnInit {
+export class InstituteFinancialSettingsFormComponent implements OnInit, OnChanges {
     @Input() instituteId!: number;
+    @Input() countryId?: number;
     @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
 
     financialForm!: FormGroup;
@@ -25,7 +28,8 @@ export class InstituteFinancialSettingsFormComponent implements OnInit {
     isLoading = false;
 
     currencies: any[] = [];
-    taxTypes: any[] = [];
+    taxTypes: TaxTypeResponse[] = [];
+    feeRecurrenceRules: FeeRecurrenceRuleResponse[] = [];
 
     constructor(
         private fb: FormBuilder,
@@ -39,6 +43,12 @@ export class InstituteFinancialSettingsFormComponent implements OnInit {
         this.loadCurrentYearAndSettings();
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['countryId']) {
+            this.loadLookups();
+        }
+    }
+
     get loadingMessage(): string {
         if (this.isSaving) return 'Saving settings...';
         return 'Loading...';
@@ -49,7 +59,7 @@ export class InstituteFinancialSettingsFormComponent implements OnInit {
             currencyId: [null, Validators.required],
             languageId: [null],
             locale: ['en-PK', [Validators.required, Validators.maxLength(10)]],
-            feeFrequency: ['MONTHLY', Validators.required],
+            feeRecurrenceRuleId: ['MONTHLY', Validators.required],
             allowPartialPayments: [false],
             lateFeeApplicable: [false],
             lateFeeType: ['FIXED'],
@@ -64,7 +74,8 @@ export class InstituteFinancialSettingsFormComponent implements OnInit {
             maxRefundAmount: [0, Validators.min(0)],
             invoiceMandatory: [false],
             receiptMandatory: [true],
-            isActive: [true]
+            isActive: [true],
+            academicYearId:[1]
         });
     }
 
@@ -74,7 +85,17 @@ export class InstituteFinancialSettingsFormComponent implements OnInit {
             error: () => console.error('Failed to load currencies')
         });
 
-        this.schoolService.getTaxTypes().subscribe({
+        this.schoolService.getFeeRecurrenceRules().subscribe({
+            next: (res) => this.feeRecurrenceRules = res.body || [],
+            error: () => console.error('Failed to load fee recurrence rules')
+        });
+
+        if (!this.countryId) {
+            this.taxTypes = [];
+            return;
+        }
+
+        this.schoolService.getTaxTypes(this.countryId).subscribe({
             next: (res) => this.taxTypes = res.body || [],
             error: () => console.error('Failed to load tax types')
         });

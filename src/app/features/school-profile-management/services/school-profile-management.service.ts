@@ -252,6 +252,11 @@ export class SchoolProfileManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.EMPLOYEE_DOCS_META}`, { observeResponse: true });
   }
 
+  getFeeRecurrenceRules(): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.LOOKUP.FEE_RECURRENCE_RULES.GET_ALL}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
+  }
+
   downloadInstituteDocument(documentId: number, instituteId: string, fileName: string, fileType: string): void {
     const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DOCUMENTS.DOWNLOAD_DOCS}/${documentId}?instituteId=${instituteId}`;
 
@@ -351,9 +356,10 @@ export class SchoolProfileManagementService {
     return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
   }
 
-  getTaxTypes(): Observable<any> {
-    const url = `${this.baseUrl}${API_ENDPOINTS.LOOKUP.TAX_TYPE.GET_ALL}`;
+  getTaxTypes(countryId: number): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.LOOKUP.TAX_TYPE.GET_BY_COUNTRY(countryId)}`;
     return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
   }
+  
 
 }
