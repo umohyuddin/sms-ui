@@ -1,0 +1,60 @@
+<div class="kt-portlet kt-portlet--mobile">
+	<div class="kt-portlet__head kt-portlet__head--lg">
+		<div class="kt-portlet__head-label">
+			<span class="kt-portlet__head-icon">
+				<i class="kt-font-dark flaticon-squares"></i>
+			</span>
+			<h3 class="kt-portlet__head-title">
+				Module Details
+			</h3>
+		</div>
+		<div class="kt-portlet__head-toolbar">
+			<div class="kt-portlet__head-wrapper">
+			</div>
+		</div>
+	</div>
+	<div class="kt-portlet__body">
+		<div class="kt-widget kt-widget--user-profile-3">
+			<div class="kt-widget__top">
+				<div class="kt-widget__content">
+					<div class="kt-widget__head">
+						<div class="kt-widget__user">
+							<a href="#" class="kt-widget__username">
+								{{ moduleData?.name }}
+							</a>
+							<span class="ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
+								[ngClass]="moduleData?.active ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">
+								{{ moduleData?.active ? 'Active' : 'Inactive' }}
+							</span>
+						</div>
+					</div>
+					<div class="kt-widget__subhead row">
+						<div class="col-4">
+							<a><b>Module Code: </b>{{ moduleData?.code || 'N/A' }}</a>
+						</div>
+						<div class="col-4">
+							<a><b>Route: </b>{{ moduleData?.route || 'N/A' }}</a>
+						</div>
+						<div class="col-4">
+							<a><b>Display Order: </b>{{ moduleData?.displayOrder || 'N/A' }}</a>
+						</div>
+					</div>
+					<div class="kt-widget__subhead row">
+						<div class="col-4">
+							<a><b>Icon: </b>{{ moduleData?.icon || 'N/A' }}</a>
+						</div>
+						<div class="col-4">
+							<a><b>System Module: </b>{{ moduleData?.systemModule ? 'Yes' : 'No' }}</a>
+						</div>
+					</div>
+					<div class="kt-widget__subhead row">
+						<div class="col-12">
+							<a><b>Description: </b>{{ moduleData?.description || 'N/A' }}</a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

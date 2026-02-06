@@ -140,11 +140,24 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_facilities"
+                                role="tab" aria-selected="false">
+                                <i class="flaticon2-layers-1"></i> Facilities
+                            </a>
+                        </li>
+                                                <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_5" role="tab"
+                                aria-selected="false">
+                                <i class="flaticon2-gear"></i> Financial & Refund
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_2" role="tab"
                                 aria-selected="false">
                                 <i class="flaticon2-time"></i> Core Information
                             </a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_3" role="tab"
                                 aria-selected="false">
@@ -157,12 +170,7 @@
                                 <i class="flaticon2-user-outline-symbol"></i> Legal & Compliance
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_5" role="tab"
-                                aria-selected="false">
-                                <i class="flaticon2-gear"></i> Financial & Refund
-                            </a>
-                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_6" role="tab"
                                 aria-selected="false">
@@ -175,12 +183,7 @@
                                 <i class="flaticon2-safe"></i> Accreditations
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#kt_apps_contacts_view_tab_facilities"
-                                role="tab" aria-selected="false">
-                                <i class="flaticon2-layers-1"></i> Facilities
-                            </a>
-                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -240,8 +243,7 @@
                     <!--Begin:: Tab Content-->
                     <div class="tab-pane" id="kt_apps_contacts_view_tab_5" role="tabpanel">
                         <ng-container *ngIf="instituteId as id">
-                            <app-institute-financial-settings-form
-                                [instituteId]="id"
+                            <app-institute-financial-settings-form [instituteId]="id"
                                 [countryId]="school?.countryId"></app-institute-financial-settings-form>
                         </ng-container>
                     </div>
@@ -284,8 +286,7 @@
                     <!--Begin:: Tab Content-->
                     <div class="tab-pane" id="kt_apps_contacts_view_tab_facilities" role="tabpanel">
                         <ng-container *ngIf="instituteId as id">
-                            <app-institute-facility-create-form [instituteId]="id"
-                                (facilitySaved)="onFacilitySaved()">
+                            <app-institute-facility-create-form [instituteId]="id" (facilitySaved)="onFacilitySaved()">
                             </app-institute-facility-create-form>
                             <div class="mt-4"></div>
                             <div class="kt-margin-t-20">

@@ -144,6 +144,12 @@ export const ROUTES = {
     EDIT: (id: string) => ['roles', 'roles-edit', id],
     DETAILS: (id: string) => ['roles', 'roles-details', id]
   },
+  MODULES: {
+    LIST: ['modules'],
+    CREATE: ['modules', 'modules-create'],
+    EDIT: (id: string) => ['modules', 'modules-edit', id],
+    DETAILS: (id: string) => ['modules', 'modules-details', id]
+  },
   PERMISSIONS: {
     LIST: ['permissions'],
     CREATE: ['permissions', 'permission-create'],

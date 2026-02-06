@@ -277,6 +277,19 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'modules',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/modules-management/modules-management.module')
+            .then(m => m.ModulesManagementModule)
+      }
+    ]
+  },
+  {
     path: 'permissions',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
