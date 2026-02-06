@@ -8,30 +8,65 @@
 				Permission Details
 			</h3>
 		</div>
+		<div class="kt-portlet__head-toolbar">
+			<div class="kt-portlet__head-wrapper">
+			</div>
+		</div>
 	</div>
 	<div class="kt-portlet__body">
 		<div class="kt-widget kt-widget--user-profile-3">
 			<div class="kt-widget__top">
 				<div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-bolder kt-font-light">
-					{{ getInitials(permissionData?.permissionName) }}
+					{{ getInitials(permissionData?.name) }}
 				</div>
 				<div class="kt-widget__content">
 					<div class="kt-widget__head">
 						<div class="kt-widget__user">
 							<a href="#" class="kt-widget__username">
-								{{ permissionData?.permissionName }}
+								{{ permissionData?.name }}
 							</a>
+							<span class="ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
+								[ngClass]="permissionData?.active ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">
+								{{ permissionData?.active ? 'Active' : 'Inactive' }}
+							</span>
 						</div>
 					</div>
 					<div class="kt-widget__subhead row">
 						<div class="col-4">
-							<a><b>Code: </b>{{ permissionData?.code || 'N/A' }}</a>
+							<a><b>Permission Code: </b>{{ permissionData?.code || 'N/A' }}</a>
 						</div>
 						<div class="col-4">
-							<a><b>Module: </b>{{ permissionData?.module || 'N/A' }}</a>
+							<a><b>Organization ID: </b>{{ permissionData?.organizationId || 'N/A' }}</a>
+						</div>
+						<div class="col-4">
+							<a><b>System Permission: </b>{{ permissionData?.systemPermission ? 'Yes' : 'No' }}</a>
+						</div>
+					</div>
+					<div class="kt-widget__subhead row">
+						<div class="col-4">
+							<a><b>Module: </b>{{ permissionData?.module?.name || 'N/A' }}</a>
+						</div>
+						<div class="col-4">
+							<a><b>Module Code: </b>{{ permissionData?.module?.code || 'N/A' }}</a>
 						</div>
 						<div class="col-4">
 							<a><b>Description: </b>{{ permissionData?.description || 'N/A' }}</a>
+						</div>
+					</div>
+					<div class="kt-widget__subhead row">
+						<div class="col-4">
+							<a><b>Created By: </b>{{ permissionData?.createdBy || 'N/A' }}</a>
+						</div>
+						<div class="col-4">
+							<a><b>Created At: </b>{{ permissionData?.createdAt ? (permissionData?.createdAt | date:'medium') : 'N/A' }}</a>
+						</div>
+						<div class="col-4">
+							<a><b>Updated By: </b>{{ permissionData?.updatedBy || 'N/A' }}</a>
+						</div>
+					</div>
+					<div class="kt-widget__subhead row">
+						<div class="col-4">
+							<a><b>Updated At: </b>{{ permissionData?.updatedAt ? (permissionData?.updatedAt | date:'medium') : 'N/A' }}</a>
 						</div>
 					</div>
 				</div>

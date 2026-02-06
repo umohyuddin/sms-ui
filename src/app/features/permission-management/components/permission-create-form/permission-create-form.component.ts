@@ -1,33 +1,43 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PermissionService } from '../../services/permission.service';
 import { PermissionResponse } from '../../models/PermissionResponse';
+import { ModuleResponse } from '../../models/ModuleResponse';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { JwtService } from '../../../../core/services/jwt.service';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 
 @Component({
   selector: 'app-permission-create-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoaderComponent, ToasterComponent],
   templateUrl: './permission-create-form.component.html',
   styleUrl: './permission-create-form.component.css'
 })
 export class PermissionCreateFormComponent {
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+
   createPermissionForm!: FormGroup;
   isEditMode = false;
   permissionId: string | null = null;
   permissionData?: PermissionResponse;
+  isSaving = false;
+  modules: ModuleResponse[] = [];
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private permissionService: PermissionService
+    private permissionService: PermissionService,
+    private jwtService: JwtService
   ) {}
 
   ngOnInit() {
     this.initializeForm();
+    this.loadModules();
 
     this.permissionId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.permissionId;
@@ -39,10 +49,23 @@ export class PermissionCreateFormComponent {
 
   private initializeForm() {
     this.createPermissionForm = this.fb.group({
-      permissionName: ['', [Validators.required, Validators.maxLength(100), this.noWhitespaceValidator]],
-      code: ['', [Validators.maxLength(100), this.noWhitespaceValidator]],
-      module: ['', [Validators.maxLength(100), this.noWhitespaceValidator]],
-      description: ['', [Validators.maxLength(255), this.noWhitespaceValidator]]
+      code: ['', [Validators.required, Validators.maxLength(100), this.noWhitespaceValidator]],
+      name: ['', [Validators.required, Validators.maxLength(100), this.noWhitespaceValidator]],
+      moduleId: [''],
+      description: ['', [Validators.maxLength(255)]],
+      systemPermission: [false],
+      active: [true]
+    });
+  }
+
+  private loadModules() {
+    this.permissionService.getAllModules().subscribe({
+      next: (response) => {
+        this.modules = response.body || [];
+      },
+      error: (error) => {
+        console.error('❌ Error loading modules:', error);
+      }
     });
   }
 
@@ -52,13 +75,30 @@ export class PermissionCreateFormComponent {
       return;
     }
 
-    this.permissionService.savePermission(this.permissionId, this.createPermissionForm.getRawValue()).subscribe({
+    this.isSaving = true;
+    const payload = {
+      ...this.createPermissionForm.getRawValue(),
+      organizationId: this.jwtService.getOrganizationId()
+    };
+
+    this.permissionService.savePermission(this.permissionId, payload).subscribe({
       next: () => {
-        this.router.navigate(ROUTES.PERMISSIONS.LIST);
+        this.toaster?.show(
+          this.isEditMode ? 'Permission updated successfully.' : 'Permission saved successfully.',
+          'success'
+        );
+        setTimeout(() => {
+          this.router.navigate(ROUTES.PERMISSIONS.LIST);
+        }, 1000);
       },
       error: (error) => {
+        this.isSaving = false;
         console.error('❌ Save Error Status:', error.status);
         console.error('Message:', error.message);
+        this.toaster?.show('Failed to save permission.', 'error');
+      },
+      complete: () => {
+        this.isSaving = false;
       }
     });
   }
@@ -69,11 +109,15 @@ export class PermissionCreateFormComponent {
         this.permissionData = response.body;
         if (this.permissionData) {
           this.createPermissionForm.patchValue({
-            permissionName: this.permissionData.permissionName,
             code: this.permissionData.code,
-            module: this.permissionData.module,
-            description: this.permissionData.description
+            name: this.permissionData.name,
+            moduleId: this.permissionData.module?.id || '',
+            description: this.permissionData.description,
+            systemPermission: this.permissionData.systemPermission || false,
+            active: this.permissionData.active !== false
           });
+          // Disable code field in edit mode
+          this.createPermissionForm.get('code')?.disable();
         }
       },
       error: (error) => {
@@ -87,28 +131,32 @@ export class PermissionCreateFormComponent {
     this.router.navigate(ROUTES.PERMISSIONS.LIST);
   }
 
+  get isLoading(): boolean {
+    return this.isSaving;
+  }
+
+  get loadingMessage(): string {
+    return this.isSaving ? 'Saving permission...' : '';
+  }
+
   noWhitespaceValidator(control: any) {
     if (control.value && !control.value.trim()) return { whitespace: true };
     return null;
   }
 
   validationMessages = {
-    permissionName: {
+    code: {
+      required: 'Permission Code is required.',
+      maxlength: 'Permission Code cannot exceed 100 characters.',
+      whitespace: 'Permission Code cannot be empty or whitespace only.'
+    },
+    name: {
       required: 'Permission Name is required.',
       maxlength: 'Permission Name cannot exceed 100 characters.',
       whitespace: 'Permission Name cannot be empty or whitespace only.'
     },
-    code: {
-      maxlength: 'Code cannot exceed 100 characters.',
-      whitespace: 'Code cannot be empty or whitespace only.'
-    },
-    module: {
-      maxlength: 'Module cannot exceed 100 characters.',
-      whitespace: 'Module cannot be empty or whitespace only.'
-    },
     description: {
-      maxlength: 'Description cannot exceed 255 characters.',
-      whitespace: 'Description cannot be empty or whitespace only.'
+      maxlength: 'Description cannot exceed 255 characters.'
     }
   };
 
@@ -124,8 +172,10 @@ export class PermissionCreateFormComponent {
     return '';
   }
 
-  get permissionName() { return this.createPermissionForm.get('permissionName'); }
   get code() { return this.createPermissionForm.get('code'); }
-  get module() { return this.createPermissionForm.get('module'); }
+  get name() { return this.createPermissionForm.get('name'); }
+  get moduleId() { return this.createPermissionForm.get('moduleId'); }
   get description() { return this.createPermissionForm.get('description'); }
+  get systemPermission() { return this.createPermissionForm.get('systemPermission'); }
+  get active() { return this.createPermissionForm.get('active'); }
 }

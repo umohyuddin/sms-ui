@@ -15,6 +15,8 @@ import { InstituteDocumentComponent } from '../institute-document/institute-docu
 import { InstituteAccreditationCreateFormComponent } from '../institute-accreditation-create-form/institute-accreditation-create-form.component';
 import { InstituteAccreditationListingTableComponent } from '../institute-accreditation-listing-table/institute-accreditation-listing-table.component';
 import { InstituteFinancialSettingsFormComponent } from '../institute-financial-settings-form/institute-financial-settings-form.component';
+import { InstituteFacilityCreateFormComponent } from '../institute-facility-create-form/institute-facility-create-form.component';
+import { InstituteFacilityListingTableComponent } from '../institute-facility-listing-table/institute-facility-listing-table.component';
 
 @Component({
   selector: 'app-school-profile-listing-table',
@@ -31,7 +33,9 @@ import { InstituteFinancialSettingsFormComponent } from '../institute-financial-
     InstituteDocumentComponent,
     InstituteAccreditationCreateFormComponent,
     InstituteAccreditationListingTableComponent,
-    InstituteFinancialSettingsFormComponent
+    InstituteFinancialSettingsFormComponent,
+    InstituteFacilityCreateFormComponent,
+    InstituteFacilityListingTableComponent
   ],
   templateUrl: './school-profile-listing-table.component.html',
   styleUrl: './school-profile-listing-table.component.css'
@@ -49,6 +53,8 @@ export class SchoolProfileListingTableComponent {
   private boardMemberListingTable?: InstituteBoardMemberListingTableComponent;
   @ViewChild(InstituteAccreditationListingTableComponent)
   private accreditationListingTable?: InstituteAccreditationListingTableComponent;
+  @ViewChild(InstituteFacilityListingTableComponent)
+  private facilityListingTable?: InstituteFacilityListingTableComponent;
 
   selectedAccreditationId?: number;
 
@@ -124,6 +130,10 @@ export class SchoolProfileListingTableComponent {
 
   onAccreditationEdit(accreditationId: number): void {
     this.selectedAccreditationId = accreditationId;
+  }
+
+  onFacilitySaved(): void {
+    this.facilityListingTable?.reloadFacilities();
   }
 }
 

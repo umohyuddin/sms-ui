@@ -8,11 +8,13 @@ import { RolesService } from '../../services/roles.service';
 import { RoleResponse } from '../../models/RoleResponse';
 import { PageTexts } from '../../../../core/const/PAGE_TEXT';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { JwtService } from '../../../../core/services/jwt.service';
+import { DeletePopupComponent } from '../../../../shared/components/delete-popup/delete-popup.component';
 
 @Component({
   selector: 'app-roles-listing-table',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, DeletePopupComponent],
   templateUrl: './roles-listing-table.component.html',
   styleUrl: './roles-listing-table.component.css'
 })
@@ -21,12 +23,15 @@ export class RolesListingTableComponent {
   pagination: Pagination<RoleResponse> = new Pagination([], 10);
   searchControl = new FormControl('');
   roles: RoleResponse[] = [];
+  isDeletePopupOpen = false;
+  pendingDeleteId?: number;
 
   private destroy$ = new Subject<void>();
 
   constructor(
     private router: Router,
-    private rolesService: RolesService
+    private rolesService: RolesService,
+    private jwtService: JwtService
   ) {}
 
   columns = [
@@ -84,19 +89,32 @@ export class RolesListingTableComponent {
 
   deleteRole(roleId: number, event: Event): void {
     event.stopPropagation();
+    this.pendingDeleteId = roleId;
+    this.isDeletePopupOpen = true;
+  }
 
-    if (confirm(this.texts.messages.deleteConfirmation)) {
-      this.rolesService.deleteRole(roleId).subscribe({
+  onConfirmDelete(): void {
+    if (this.pendingDeleteId !== undefined) {
+      this.rolesService.deleteRole(this.pendingDeleteId).subscribe({
         next: () => {
-          this.roles = this.roles.filter(r => r.id !== roleId);
+          this.roles = this.roles.filter(r => r.id !== this.pendingDeleteId);
           this.pagination = new Pagination(this.roles, 10);
+          this.isDeletePopupOpen = false;
+          this.pendingDeleteId = undefined;
         },
         error: (error) => {
           console.error('❌ Delete Error Status:', error.status);
           console.error('Message:', error.message);
+          this.isDeletePopupOpen = false;
+          this.pendingDeleteId = undefined;
         }
       });
     }
+  }
+
+  onCancelDelete(): void {
+    this.isDeletePopupOpen = false;
+    this.pendingDeleteId = undefined;
   }
 
   onPageSizeChange(event: any) {

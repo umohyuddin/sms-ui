@@ -1,3 +1,9 @@
+
+<app-toaster #toaster></app-toaster>
+<app-loader *ngIf="isLoading" type="pulse" size="lg" color="primary" [message]="loadingMessage" [overlay]="true"
+	[fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
+</app-loader>
+		
 <div class="kt-portlet">
 	<div class="kt-portlet__head">
 		<div class="kt-portlet__head-label">
@@ -11,22 +17,56 @@
 		<div class="kt-portlet__body">
 			<h4>Role Information</h4>
 
+			<!-- Row 1: Code, Name, Status -->
 			<div class="form-group row form-group-marginless kt-margin-t-20">
-				<label class="col-lg-2 col-form-label required">Role Name:</label>
-				<div class="col-lg-6">
-					<input type="text" class="form-control" placeholder="Role name" formControlName="roleName"
-						[class.is-invalid]="roleName?.invalid && (roleName?.touched || roleName?.dirty)"
-						[class.is-valid]="roleName?.valid && (roleName?.touched || roleName?.dirty)">
-					<span class="form-text text-muted">Please enter role name</span>
-					<span class="invalid-feedback" *ngIf="roleName?.invalid && (roleName?.touched || roleName?.dirty)">
-						{{ getErrorMessage('roleName') }}
+				<label class="col-lg-1 col-form-label required">Role Code:</label>
+				<div class="col-lg-3">
+					<input type="text" class="form-control" placeholder="e.g., SUPER_ADMIN" formControlName="code"
+						[class.is-invalid]="code?.invalid && (code?.touched || code?.dirty)"
+						[class.is-valid]="code?.valid && (code?.touched || code?.dirty)"
+						[disabled]="isEditMode">
+					<span class="form-text text-muted">System role code</span>
+					<span class="invalid-feedback" *ngIf="code?.invalid && (code?.touched || code?.dirty)">
+						{{ getErrorMessage('code') }}
 					</span>
+				</div>
+
+				<label class="col-lg-1 col-form-label required">Role Name:</label>
+				<div class="col-lg-3">
+					<input type="text" class="form-control" placeholder="e.g., Super Administrator" formControlName="name"
+						[class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
+						[class.is-valid]="name?.valid && (name?.touched || name?.dirty)">
+					<span class="form-text text-muted">Human-readable name</span>
+					<span class="invalid-feedback" *ngIf="name?.invalid && (name?.touched || name?.dirty)">
+						{{ getErrorMessage('name') }}
+					</span>
+				</div>
+
+				<label class="col-lg-1 col-form-label">Status:</label>
+				<div class="col-lg-3">
+					<label class="kt-checkbox kt-margin-t-10">
+						<input type="checkbox" formControlName="active"> Active
+						<span></span>
+					</label>
 				</div>
 			</div>
 
+			<!-- Row 2: System Role Checkbox -->
 			<div class="form-group row form-group-marginless kt-margin-t-20">
-				<label class="col-lg-2 col-form-label">Description:</label>
-				<div class="col-lg-6">
+				<label class="col-lg-1 col-form-label">Type:</label>
+				<div class="col-lg-3">
+					<label class="kt-checkbox kt-margin-t-10">
+						<input type="checkbox" formControlName="systemRole"> System Role
+						<span></span>
+					</label>
+					<span class="form-text text-muted">Cannot be deleted</span>
+				</div>
+			</div>
+
+			<!-- Row 3: Description -->
+			<div class="form-group row form-group-marginless kt-margin-t-20">
+				<label class="col-lg-1 col-form-label">Description:</label>
+				<div class="col-lg-8">
 					<textarea class="form-control" rows="3" placeholder="Role description" formControlName="description"
 						[class.is-invalid]="description?.invalid && (description?.touched || description?.dirty)"
 						[class.is-valid]="description?.valid && (description?.touched || description?.dirty)"></textarea>
@@ -40,10 +80,9 @@
 		<div class="kt-portlet__foot">
 			<div class="kt-form__actions">
 				<div class="row">
-					<div class="col-lg-5"></div>
-					<div class="col-lg-7">
+					<div class="col-lg-12 text-right">
 						<button type="submit" class="btn btn-dark mr-2">
-							{{ isEditMode ? 'Update Role Details' : 'Add New Role' }}
+							{{ isEditMode ? 'Update Role' : 'Add Role' }}
 						</button>
 						<button type="button" class="btn btn-danger" (click)="goToRolesListing()">Cancel</button>
 					</div>

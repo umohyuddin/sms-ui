@@ -8,11 +8,12 @@ import { PermissionService } from '../../services/permission.service';
 import { PermissionResponse } from '../../models/PermissionResponse';
 import { PageTexts } from '../../../../core/const/PAGE_TEXT';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { DeletePopupComponent } from '../../../../shared/components/delete-popup/delete-popup.component';
 
 @Component({
   selector: 'app-permission-listing-table',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, DeletePopupComponent],
   templateUrl: './permission-listing-table.component.html',
   styleUrl: './permission-listing-table.component.css'
 })
@@ -21,6 +22,8 @@ export class PermissionListingTableComponent {
   pagination: Pagination<PermissionResponse> = new Pagination([], 10);
   searchControl = new FormControl('');
   permissions: PermissionResponse[] = [];
+  isDeletePopupOpen = false;
+  pendingDeleteId?: number;
 
   private destroy$ = new Subject<void>();
 
@@ -30,7 +33,7 @@ export class PermissionListingTableComponent {
   ) {}
 
   columns = [
-    { key: 'permissionName', label: 'Permission Name', sortable: true },
+    { key: 'name', label: 'Permission Name', sortable: true },
     { key: 'code', label: 'Code', sortable: true },
     { key: 'module', label: 'Module', sortable: true },
     { key: 'description', label: 'Description', sortable: false },
@@ -86,19 +89,32 @@ export class PermissionListingTableComponent {
 
   deletePermission(permissionId: number, event: Event): void {
     event.stopPropagation();
+    this.pendingDeleteId = permissionId;
+    this.isDeletePopupOpen = true;
+  }
 
-    if (confirm(this.texts.messages.deleteConfirmation)) {
-      this.permissionService.deletePermission(permissionId).subscribe({
+  onConfirmDelete(): void {
+    if (this.pendingDeleteId !== undefined) {
+      this.permissionService.deletePermission(this.pendingDeleteId).subscribe({
         next: () => {
-          this.permissions = this.permissions.filter(p => p.id !== permissionId);
+          this.permissions = this.permissions.filter(p => p.id !== this.pendingDeleteId);
           this.pagination = new Pagination(this.permissions, 10);
+          this.isDeletePopupOpen = false;
+          this.pendingDeleteId = undefined;
         },
         error: (error) => {
           console.error('❌ Delete Error Status:', error.status);
           console.error('Message:', error.message);
+          this.isDeletePopupOpen = false;
+          this.pendingDeleteId = undefined;
         }
       });
     }
+  }
+
+  onCancelDelete(): void {
+    this.isDeletePopupOpen = false;
+    this.pendingDeleteId = undefined;
   }
 
   onPageSizeChange(event: any) {

@@ -37,6 +37,11 @@ export class JwtService {
     return decoded ? decoded.userId : null;
   }
 
+  getOrganizationId(): string | null {
+    const decoded: any = this.getDecodedToken();
+    return decoded ? decoded.organizationId : null;
+  }
+
   getRoles(): string[] {
     const decoded: any = this.getDecodedToken();
     return decoded?.roles || [];

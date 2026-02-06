@@ -19,6 +19,14 @@ export const API_ENDPOINTS = {
             GET_BY_ID: (id: string | number) => `/api/users/permissions/${id}`,
             DELETE: (id: string | number) => `/api/users/permissions/${id}`,
             SEARCH: (keyword: string) => `/api/users/permissions/search?keyword=${keyword}`
+        },
+        MODULES: {
+            CREATE: '/api/users/modules',
+            UPDATE: (id: string | number) => `/api/users/modules/${id}`,
+            GET_ALL: '/api/users/modules',
+            GET_BY_ID: (id: string | number) => `/api/users/modules/${id}`,
+            DELETE: (id: string | number) => `/api/users/modules/${id}`,
+            SEARCH: (keyword: string) => `/api/users/modules/search?keyword=${keyword}`
         }
     },
     SALARY_STRUCTURE: {
@@ -207,6 +215,15 @@ export const API_ENDPOINTS = {
             UPDATE: (id: string | number) => `/api/institute/financial-settings/${id}`,
             CREATE: '/api/institute/financial-settings'
         },
+        FACILITIES: {
+            CREATE: '/api/institute/facilities',
+            UPDATE: (id: string | number) => `/api/institute/facilities/${id}`,
+            GET_ALL: '/api/institute/facilities',
+            GET_BY_ID: (id: string | number) => `/api/institute/facilities/${id}`,
+            GET_BY_INSTITUTE_ID: (instituteId: string | number) => `/api/institute/facilities/institute/${instituteId}`,
+            DELETE: (id: string | number) => `/api/institute/facilities/${id}`,
+            SEARCH: (keyword: string) => `/api/institute/facilities/search?keyword=${keyword}`
+        },
         ACADEMIC_YEAR: {
             GET_BY_ID: (id: string) => `/api/school/academic/${id}`,
             GET_ALL: '/api/school/academic',
@@ -349,6 +366,13 @@ export const API_ENDPOINTS = {
         TAX_TYPE: {
             GET_ALL: '/api/lookups/tax-types',
             GET_BY_COUNTRY: (countryId: number) => `/api/lookups/tax-types/country/${countryId}`
+        },
+        FACILITY_TYPES: {
+            GET_ALL: '/api/lookups/facility-types',
+            GET_BY_ID: (id: string | number) => `/api/lookups/facility-types/${id}`,
+            CREATE: '/api/lookups/facility-types',
+            UPDATE: (id: string | number) => `/api/lookups/facility-types/${id}`,
+            DELETE: (id: string | number) => `/api/lookups/facility-types/${id}`
         }
     }
 };

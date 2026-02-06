@@ -360,6 +360,65 @@ export class SchoolProfileManagementService {
     const url = `${this.baseUrl}${API_ENDPOINTS.LOOKUP.TAX_TYPE.GET_BY_COUNTRY(countryId)}`;
     return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
   }
+
+  // Facility Types methods
+  getFacilityTypes(): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.LOOKUP.FACILITY_TYPES.GET_ALL}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
+  }
+
+  // Institute Facilities methods
+  getInstituteFacilitiesByInstituteId(instituteId: string | number): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.FACILITIES.GET_BY_INSTITUTE_ID(instituteId)}`;
+    return this.http.request(HTTP_METHOD.GET, url, {
+      observeResponse: true
+    });
+  }
+
+  getInstituteFacilityById(id: string | number): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.FACILITIES.GET_BY_ID(id)}`;
+    return this.http.request(HTTP_METHOD.GET, url, {
+      observeResponse: true
+    });
+  }
+
+  createFacilities(payload: any): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.FACILITIES.CREATE}`;
+    return this.http.request(HTTP_METHOD.POST, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
+  saveFacility(id: string | number | null, payload: any): Observable<any> {
+    const isUpdate = !!id;
+    const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
+    const url = isUpdate
+      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.FACILITIES.UPDATE(id)}`
+      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.FACILITIES.CREATE}`;
+
+    return this.http.request(method, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
+  deleteFacility(id: string | number): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.FACILITIES.DELETE(id)}`;
+    return this.http.request(HTTP_METHOD.DELETE, url, {
+      observeResponse: true
+    });
+  }
+
+  searchFacilities(instituteId: string | number, keyword: string): Observable<any> {
+    const url = keyword
+      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.FACILITIES.SEARCH(keyword)}&instituteId=${instituteId}`
+      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.FACILITIES.GET_BY_INSTITUTE_ID(instituteId)}`;
+
+    return this.http.request(HTTP_METHOD.GET, url, {
+      observeResponse: true
+    });
+  }
   
 
 }

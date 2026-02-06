@@ -1,13 +1,12 @@
-import { ModuleResponse } from './ModuleResponse';
-
-export interface PermissionResponse {
+export interface ModuleResponse {
   id: number;
-  organizationId?: number;
-  name: string;
   code: string;
-  module?: ModuleResponse | null;
+  name: string;
   description?: string | null;
-  systemPermission?: boolean;
+  icon?: string | null;
+  route?: string | null;
+  displayOrder?: number;
+  systemModule?: boolean;
   active?: boolean;
   deleted?: boolean;
   createdAt?: string | null;

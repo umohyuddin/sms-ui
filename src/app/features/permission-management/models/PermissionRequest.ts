@@ -1,6 +1,9 @@
 export interface PermissionRequest {
-  permissionName: string;
-  code?: string | null;
+  organizationId?: number;
+  name: string;
+  code: string;
   module?: string | null;
   description?: string | null;
+  systemPermission?: boolean;
+  active?: boolean;
 }

@@ -8,6 +8,10 @@
 				Role Details
 			</h3>
 		</div>
+		<div class="kt-portlet__head-toolbar">
+			<div class="kt-portlet__head-wrapper">
+			</div>
+		</div>
 	</div>
 	<div class="kt-portlet__body">
 		<div class="kt-widget kt-widget--user-profile-3">
@@ -21,6 +25,18 @@
 							<a href="#" class="kt-widget__username">
 								{{ roleData?.name }}
 							</a>
+							<span class="ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
+								[ngClass]="roleData?.active ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">
+								{{ roleData?.active ? 'Active' : 'Inactive' }}
+							</span>
+						</div>
+					</div>
+					<div class="kt-widget__subhead row">
+						<div class="col-4">
+							<a><b>Role Code: </b>{{ roleData?.code || 'N/A' }}</a>
+						</div>
+						<div class="col-4">
+							<a><b>System Role: </b>{{ roleData?.systemRole ? 'Yes' : 'No' }}</a>
 						</div>
 					</div>
 					<div class="kt-widget__subhead row">
@@ -28,6 +44,7 @@
 							<a><b>Description: </b>{{ roleData?.description || 'N/A' }}</a>
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>

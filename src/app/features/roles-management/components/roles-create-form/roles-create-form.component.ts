@@ -1,29 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RolesService } from '../../services/roles.service';
 import { RoleResponse } from '../../models/RoleResponse';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { JwtService } from '../../../../core/services/jwt.service';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 
 @Component({
   selector: 'app-roles-create-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoaderComponent, ToasterComponent],
   templateUrl: './roles-create-form.component.html',
   styleUrl: './roles-create-form.component.css'
 })
 export class RolesCreateFormComponent {
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+  
   createRoleForm!: FormGroup;
   isEditMode = false;
   roleId: string | null = null;
   roleData?: RoleResponse;
+  isSaving = false;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private rolesService: RolesService
+    private rolesService: RolesService,
+    private jwtService: JwtService
   ) {}
 
   ngOnInit() {
@@ -39,8 +46,11 @@ export class RolesCreateFormComponent {
 
   private initializeForm() {
     this.createRoleForm = this.fb.group({
-      roleName: ['', [Validators.required, Validators.maxLength(100), this.noWhitespaceValidator]],
-      description: ['', [Validators.maxLength(255), this.noWhitespaceValidator]]
+      code: ['', [Validators.required, Validators.maxLength(50), this.noWhitespaceValidator]],
+      name: ['', [Validators.required, Validators.maxLength(100), this.noWhitespaceValidator]],
+      description: ['', [Validators.maxLength(255)]],
+      systemRole: [false],
+      active: [true]
     });
   }
 
@@ -50,13 +60,34 @@ export class RolesCreateFormComponent {
       return;
     }
 
-    this.rolesService.saveRole(this.roleId, this.createRoleForm.getRawValue()).subscribe({
+    this.isSaving = true;
+
+    // Get form data and add organizationId
+    const payload = {
+      ...this.createRoleForm.getRawValue(),
+      organizationId: this.jwtService.getOrganizationId()
+    };
+
+    console.log('📋 Role Payload:', payload);
+
+    this.rolesService.saveRole(this.roleId, payload).subscribe({
       next: () => {
-        this.router.navigate(ROUTES.ROLES.LIST);
+        this.toaster?.show(
+          this.isEditMode ? 'Role updated successfully.' : 'Role saved successfully.',
+          'success'
+        );
+        setTimeout(() => {
+          this.router.navigate(ROUTES.ROLES.LIST);
+        }, 1000);
       },
       error: (error) => {
+        this.isSaving = false;
         console.error('❌ Save Error Status:', error.status);
         console.error('Message:', error.message);
+        this.toaster?.show('Failed to save role.', 'error');
+      },
+      complete: () => {
+        this.isSaving = false;
       }
     });
   }
@@ -67,8 +98,11 @@ export class RolesCreateFormComponent {
         this.roleData = response.body;
         if (this.roleData) {
           this.createRoleForm.patchValue({
-            roleName: this.roleData.name,
-            description: this.roleData.description
+            code: this.roleData.code,
+            name: this.roleData.name,
+            description: this.roleData.description,
+            systemRole: this.roleData.systemRole || false,
+            active: this.roleData.active !== false
           });
         }
       },
@@ -83,20 +117,32 @@ export class RolesCreateFormComponent {
     this.router.navigate(ROUTES.ROLES.LIST);
   }
 
+  get isLoading(): boolean {
+    return this.isSaving;
+  }
+
+  get loadingMessage(): string {
+    return this.isSaving ? 'Saving role...' : '';
+  }
+
   noWhitespaceValidator(control: any) {
     if (control.value && !control.value.trim()) return { whitespace: true };
     return null;
   }
 
   validationMessages = {
-    roleName: {
+    code: {
+      required: 'Role Code is required.',
+      maxlength: 'Role Code cannot exceed 50 characters.',
+      whitespace: 'Role Code cannot be empty or whitespace only.'
+    },
+    name: {
       required: 'Role Name is required.',
       maxlength: 'Role Name cannot exceed 100 characters.',
       whitespace: 'Role Name cannot be empty or whitespace only.'
     },
     description: {
-      maxlength: 'Description cannot exceed 255 characters.',
-      whitespace: 'Description cannot be empty or whitespace only.'
+      maxlength: 'Description cannot exceed 255 characters.'
     }
   };
 
@@ -112,6 +158,9 @@ export class RolesCreateFormComponent {
     return '';
   }
 
-  get roleName() { return this.createRoleForm.get('roleName'); }
+  get code() { return this.createRoleForm.get('code'); }
+  get name() { return this.createRoleForm.get('name'); }
   get description() { return this.createRoleForm.get('description'); }
+  get systemRole() { return this.createRoleForm.get('systemRole'); }
+  get active() { return this.createRoleForm.get('active'); }
 }

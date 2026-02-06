@@ -6,6 +6,7 @@ import { LoaderComponent } from '../../../../shared/components/loader/loader.com
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../concession-rate-management/services/auth-service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { JwtService } from '../../../../core/services/jwt.service';
 
 
 @Component({
@@ -21,7 +22,8 @@ export class LoginForm {
 
   constructor(private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private jwtService: JwtService
   ) { }
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -42,9 +44,20 @@ export class LoginForm {
         console.log('  Login Success Status:', response.status);
         console.log('📦 Login Response Body:', response.body);
         const token = response.body?.accessToken
+       
         if (token) {
           localStorage.setItem('auth_token', token);
           console.log("🔐 JWT token saved:", token);
+           const decodedToken = this.jwtService.getDecodedToken();
+        console.log(decodedToken);
+         console.log('👤 User Info:', {
+          organizationId: this.jwtService.getOrganizationId(),
+          name: this.jwtService.getUserName(),
+          email: this.jwtService.getUserEmail(),
+          userId: this.jwtService.getUserId(),
+          roles: this.jwtService.getRoles(),
+          fullToken: decodedToken
+        });
           this.router.navigate(ROUTES.DASHBAORD.MAIN_DASHBOARD);
         } else {
           console.error("❌ Token not found in response");

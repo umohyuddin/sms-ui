@@ -1,0 +1,25 @@
+/* Toggle button styling */
+.btn-outline-brand.active {
+  background-color: #5867dd;
+  color: #ffffff !important;
+  border-color: #5867dd;
+}
+
+.btn-outline-brand:hover {
+  background-color: rgba(88, 103, 221, 0.1);
+}
+
+.btn-outline-brand.active:hover {
+  background-color: #4755c7;
+}
+
+/* Inline facility row */
+.facility-row .form-control:disabled {
+  background-color: #f2f3f8;
+  cursor: not-allowed;
+}
+
+.facility-row .btn {
+  white-space: normal;
+}
+
