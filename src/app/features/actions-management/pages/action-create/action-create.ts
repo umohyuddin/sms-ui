@@ -6,15 +6,22 @@ import { ActionService } from '../../services/action.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ActionCreateFormComponent } from '../../components/action-create-form/action-create-form.component';
 
 @Component({
     selector: 'app-action-create',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, ToasterComponent, LoaderComponent],
-    templateUrl: './action-create.component.html',
-    styleUrl: './action-create.component.css'
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        ToasterComponent,
+        LoaderComponent,
+        ActionCreateFormComponent
+    ],
+    templateUrl: './action-create.html',
+    styleUrl: './action-create.css'
 })
-export class ActionCreateComponent implements OnInit {
+export class ActionCreate implements OnInit {
     @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
 
     actionForm!: FormGroup;
@@ -53,7 +60,9 @@ export class ActionCreateComponent implements OnInit {
         this.actionService.getActionById(id).subscribe({
             next: (data) => {
                 this.actionForm.patchValue(data);
-                this.actionForm.get('code')?.disable();
+                if (this.isEditMode) {
+                    this.actionForm.get('code')?.disable();
+                }
             },
             error: (err) => console.error('Error loading action:', err)
         });
@@ -89,41 +98,8 @@ export class ActionCreateComponent implements OnInit {
         this.router.navigate(ROUTES.ACTIONS.LIST);
     }
 
-    // Getters
-    get code() { return this.actionForm.get('code'); }
-    get name() { return this.actionForm.get('name'); }
-    get description() { return this.actionForm.get('description'); }
-
     noWhitespaceValidator(control: any) {
         if (control.value && !control.value.trim()) return { whitespace: true };
         return null;
     }
-
-    getErrorMessage(controlName: keyof typeof this.validationMessages): string {
-        const control = this.actionForm.get(controlName as string);
-        if (!control || !control.errors) return '';
-
-        for (const error in control.errors) {
-            const key = error as keyof typeof this.validationMessages[typeof controlName];
-            if (this.validationMessages[controlName][key]) return this.validationMessages[controlName][key];
-        }
-
-        return '';
-    }
-
-    validationMessages = {
-        code: {
-            required: 'Action Code is required.',
-            maxlength: 'Action Code cannot exceed 50 characters.',
-            whitespace: 'Action Code cannot be empty or whitespace only.'
-        },
-        name: {
-            required: 'Action Name is required.',
-            maxlength: 'Action Name cannot exceed 100 characters.',
-            whitespace: 'Action Name cannot be empty or whitespace only.'
-        },
-        description: {
-            maxlength: 'Description cannot exceed 255 characters.'
-        }
-    };
 }

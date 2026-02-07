@@ -1,17 +1,13 @@
-<app-toaster #toaster></app-toaster>
-<app-loader *ngIf="isSaving" type="pulse" size="lg" color="primary" [message]="loaderMessage" [overlay]="true"
-    [fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
-</app-loader>
-
 <div class="kt-portlet">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-label">
             <h3 class="kt-portlet__head-title">
-                {{ isEditMode ? 'Edit Action' : 'Create Action' }}
+                {{ isEditMode ? 'Update Action Details' : 'Add New Action' }}
             </h3>
         </div>
     </div>
 
+    <!--begin::Form-->
     <form class="kt-form kt-form--label-right" [formGroup]="actionForm" (ngSubmit)="onSubmit()">
         <div class="kt-portlet__body">
             <h4>Action Information</h4>
@@ -21,7 +17,7 @@
                     <input type="text" class="form-control" formControlName="code" placeholder="e.g., READ"
                         [class.is-invalid]="code?.invalid && (code?.touched || code?.dirty)"
                         [class.is-valid]="code?.valid && (code?.touched || code?.dirty)"
-                        [disabled]="isEditMode">
+                        [attr.disabled]="isEditMode ? true : null">
                     <span class="form-text text-muted">Unique code for the action</span>
                     <span class="invalid-feedback" *ngIf="code?.invalid && (code?.touched || code?.dirty)">
                         {{ getErrorMessage('code') }}
@@ -42,7 +38,7 @@
                 <label class="col-lg-1 col-form-label">Status:</label>
                 <div class="col-lg-3">
                     <label class="kt-checkbox kt-margin-t-10">
-                        <input type="checkbox" formControlName="active"> Active
+                        <input type="checkbox" formControlName="active"> Is Active
                         <span></span>
                     </label>
                 </div>
@@ -51,11 +47,13 @@
             <div class="form-group row form-group-marginless kt-margin-t-20">
                 <label class="col-lg-1 col-form-label">Description:</label>
                 <div class="col-lg-11">
-                    <textarea class="form-control" formControlName="description" rows="3" placeholder="Enter action description"
+                    <textarea class="form-control" formControlName="description" rows="3"
+                        placeholder="Enter action description"
                         [class.is-invalid]="description?.invalid && (description?.touched || description?.dirty)"
                         [class.is-valid]="description?.valid && (description?.touched || description?.dirty)"></textarea>
                     <span class="form-text text-muted">Provide a brief description of the action</span>
-                    <span class="invalid-feedback" *ngIf="description?.invalid && (description?.touched || description?.dirty)">
+                    <span class="invalid-feedback"
+                        *ngIf="description?.invalid && (description?.touched || description?.dirty)">
                         {{ getErrorMessage('description') }}
                     </span>
                 </div>
@@ -63,9 +61,17 @@
         </div>
         <div class="kt-portlet__foot">
             <div class="kt-form__actions">
-                <button type="submit" class="btn btn-dark mr-2">{{ isEditMode ? 'Update' : 'Save' }}</button>
-                <button type="button" (click)="onCancel()" class="btn btn-secondary">Cancel</button>
+                <div class="row">
+                    <div class="col-lg-5"></div>
+                    <div class="col-lg-7">
+                        <button type="submit" class="btn btn-dark mr-2">
+                            {{ isEditMode ? 'Update Action Details' : 'Add New Action' }}
+                        </button>
+                        <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
+    <!--end::Form-->
 </div>

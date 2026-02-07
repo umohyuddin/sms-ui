@@ -1,54 +1,39 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ActionService } from '../../services/action.service';
 import { ActionResponse } from '../../models/ActionResponse';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-import { Pagination } from '../../../../core/pagar/pagination';
 import { DeletePopupComponent } from '../../../../shared/components/delete-popup/delete-popup.component';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ActionListingTableComponent } from '../../components/action-listing-table/action-listing-table.component';
 
 @Component({
     selector: 'app-action-listing',
     standalone: true,
-    imports: [CommonModule, RouterModule, DeletePopupComponent, ToasterComponent, LoaderComponent],
-    templateUrl: './action-listing.component.html',
-    styleUrl: './action-listing.component.css'
+    imports: [
+        CommonModule,
+        RouterModule,
+        DeletePopupComponent,
+        ToasterComponent,
+        LoaderComponent,
+        ActionListingTableComponent
+    ],
+    templateUrl: './action-listing.html',
+    styleUrl: './action-listing.css'
 })
-export class ActionListingComponent implements OnInit {
+export class ActionListing implements OnInit {
     @ViewChild('toaster') toaster!: ToasterComponent;
-    loading: boolean = false;
-    actions: ActionResponse[] = [];
-    pagination: Pagination<ActionResponse> = new Pagination([], 10);
+    @ViewChild(ActionListingTableComponent) table!: ActionListingTableComponent;
+
     isDeletePopupOpen = false;
     pendingDeleteId?: number;
+    loading = false;
 
     constructor(private actionService: ActionService, private router: Router) { }
 
     ngOnInit() {
-        this.loadActions();
-    }
-
-    loadActions() {
-        this.loading = true;
-        this.actionService.getAllActions().subscribe({
-            next: (data) => {
-                console.log('📊 API Response:', data);
-                console.log('📊 Response Type:', typeof data);
-                console.log('📊 Is Array:', Array.isArray(data));
-                this.actions = Array.isArray(data) ? data : (data?.data || []);
-                console.log('✅ Actions set:', this.actions);
-                this.pagination = new Pagination(this.actions, 10);
-                console.log('📄 Pagination initialized with', this.actions.length, 'items');
-                this.loading = false;
-            },
-            error: (err) => {
-                this.loading = false;
-                this.toaster?.show('Failed to load actions.', 'error');
-                console.error('Error loading actions:', err);
-            }
-        });
     }
 
     onAddAction() {
@@ -69,11 +54,10 @@ export class ActionListingComponent implements OnInit {
             this.loading = true;
             this.actionService.deleteAction(this.pendingDeleteId).subscribe({
                 next: () => {
-                    this.actions = this.actions.filter(a => a.id !== this.pendingDeleteId);
-                    this.pagination = new Pagination(this.actions, 10);
                     this.isDeletePopupOpen = false;
                     this.loading = false;
                     this.toaster?.show('Action deleted successfully.', 'success');
+                    this.table.loadActions();
                 },
                 error: (err) => {
                     this.loading = false;

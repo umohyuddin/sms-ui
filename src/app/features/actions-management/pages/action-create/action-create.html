@@ -1,0 +1,17 @@
+<app-toaster #toaster></app-toaster>
+<app-loader *ngIf="isSaving" type="pulse" size="lg" color="primary" [message]="loaderMessage" [overlay]="true"
+    [fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
+</app-loader>
+
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container kt-container--fluid">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Manage Actions</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        </div>
+    </div>
+</div>
+
+<app-action-create-form [actionForm]="actionForm" [isEditMode]="isEditMode" (submitForm)="onSubmit()"
+    (cancel)="onCancel()">
+</app-action-create-form>

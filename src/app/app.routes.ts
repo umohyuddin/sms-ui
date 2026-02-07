@@ -310,7 +310,7 @@ export const routes: Routes = [
       {
         path: '',
         loadChildren: () =>
-          import('./features/actions-management/actions-management.module')
+          import('./features/actions-management/actions-management-module')
             .then(m => m.ActionsManagementModule)
       }
     ]

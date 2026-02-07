@@ -1,0 +1,29 @@
+<app-toaster #toaster></app-toaster>
+<app-loader *ngIf="loading" type="pulse" size="lg" color="primary" message="Loading..." [overlay]="true"
+    [fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
+</app-loader>
+
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container kt-container--fluid">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Manage Actions</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <button type="button" class="btn btn-dark active" (click)="onAddAction()">
+                    <i class="la la-plus"></i>
+                    New Action
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-action-listing-table (edit)="onEditAction($event)" (delete)="onDeleteAction($event)">
+</app-action-listing-table>
+
+<app-delete-popup [show]="isDeletePopupOpen" title="Delete Action"
+    message="Are you sure you want to delete this action?" confirmText="Delete" (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()">
+</app-delete-popup>
