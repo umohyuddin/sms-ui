@@ -61,15 +61,31 @@ export class ActionListingTableComponent implements OnInit, OnDestroy {
                 distinctUntilChanged(),
                 takeUntil(this.destroy$)
             )
-            .subscribe((search) => {
-                const term = (search || '').toLowerCase();
-                const filtered = this.actions.filter(action =>
-                    action.name.toLowerCase().includes(term) ||
-                    action.code.toLowerCase().includes(term) ||
-                    (action.description && action.description.toLowerCase().includes(term))
-                );
-                this.pagination = new Pagination(filtered, this.pagination.pageSize);
+            .subscribe((keyword) => {
+                this.performSearch(keyword || '');
             });
+    }
+
+    private performSearch(keyword: string) {
+        this.loading = true;
+        
+        if (!keyword || keyword.trim() === '') {
+            // If search is empty, reload all actions
+            this.loadActions();
+            return;
+        }
+
+        this.actionService.searchActions(keyword).subscribe({
+            next: (data) => {
+                const results = Array.isArray(data) ? data : (data?.data || []);
+                this.pagination = new Pagination(results, this.pagination.pageSize);
+                this.loading = false;
+            },
+            error: (err) => {
+                this.loading = false;
+                console.error('Error searching actions:', err);
+            }
+        });
     }
 
     onEditAction(action: ActionResponse) {

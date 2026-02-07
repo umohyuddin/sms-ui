@@ -54,5 +54,17 @@ export class ActionService {
         const url = `${this.baseUrl}${API_ENDPOINTS.USERS.ACTIONS.DELETE(id)}`;
         return this.http.request(HTTP_METHOD.DELETE, url, { observeResponse: true });
     }
+
+    searchActions(keyword: string): Observable<any> {
+        const url = `${this.baseUrl}${API_ENDPOINTS.USERS.ACTIONS.SEARCH(keyword)}`;
+        return this.http.request(HTTP_METHOD.GET, url, {
+            observeResponse: true
+        }).pipe(
+            map((res: any) => {
+                console.log('🔍 Search Response:', res);
+                return res.body || res;
+            })
+        );
+    }
 }
 
