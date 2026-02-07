@@ -1,11 +1,11 @@
-<div *ngFor="let step of steps; let i = index" class="kt-portlet mb-3">
+﻿<div *ngFor="let step of steps; let i = index" class="kt-portlet mb-3">
 
   <!-- STEP HEADER -->
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
       <!-- <h3 class="kt-portlet__head-title">
         {{ step.title }}
-        <span *ngIf="step.completed" class="text-success ml-2">✔ Completed</span>
+        <span *ngIf="step.completed" class="text-success ml-2"> Completed</span>
       </h3> -->
     </div>
   </div>
@@ -17,28 +17,28 @@
     <!-- ========================= -->
     <form *ngIf="step.title === 'Employee Details' && step.formGroup as fg" [formGroup]="fg" (ngSubmit)="step.action()">
 
-      <h4>Personal Information → Employee Details</h4>
+      <h4>Personal Information  Employee Details</h4>
 
       <!-- Name Row -->
       <div class="form-group row kt-margin-t-20">
         <label class="col-lg-1 col-form-label required">First Name:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control"
-            formControlName="firstName"
+          <input type="text" class="form-control" formControlName="firstName"
             [class.is-invalid]="fg.get('firstName')?.invalid && (fg.get('firstName')?.touched || fg.get('firstName')?.dirty)"
             [class.is-valid]="fg.get('firstName')?.valid && (fg.get('firstName')?.touched || fg.get('firstName')?.dirty)">
-          <div class="invalid-feedback" *ngIf="fg.get('firstName')?.invalid && (fg.get('firstName')?.touched || fg.get('firstName')?.dirty)">
+          <div class="invalid-feedback"
+            *ngIf="fg.get('firstName')?.invalid && (fg.get('firstName')?.touched || fg.get('firstName')?.dirty)">
             First Name is required
           </div>
         </div>
 
         <label class="col-lg-1 col-form-label required">Last Name:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control"
-            formControlName="lastName"
+          <input type="text" class="form-control" formControlName="lastName"
             [class.is-invalid]="fg.get('lastName')?.invalid && (fg.get('lastName')?.touched || fg.get('lastName')?.dirty)"
             [class.is-valid]="fg.get('lastName')?.valid && (fg.get('lastName')?.touched || fg.get('lastName')?.dirty)">
-          <div class="invalid-feedback" *ngIf="fg.get('lastName')?.invalid && (fg.get('lastName')?.touched || fg.get('lastName')?.dirty)">
+          <div class="invalid-feedback"
+            *ngIf="fg.get('lastName')?.invalid && (fg.get('lastName')?.touched || fg.get('lastName')?.dirty)">
             Last Name is required
           </div>
         </div>
@@ -53,11 +53,11 @@
       <div class="form-group row kt-margin-t-20">
         <label class="col-lg-1 col-form-label required">Primary Phone:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control"
-            formControlName="primaryPhone"
+          <input type="text" class="form-control" formControlName="primaryPhone"
             [class.is-invalid]="fg.get('primaryPhone')?.invalid && (fg.get('primaryPhone')?.touched || fg.get('primaryPhone')?.dirty)"
             [class.is-valid]="fg.get('primaryPhone')?.valid && (fg.get('primaryPhone')?.touched || fg.get('primaryPhone')?.dirty)">
-          <div class="invalid-feedback" *ngIf="fg.get('primaryPhone')?.invalid && (fg.get('primaryPhone')?.touched || fg.get('primaryPhone')?.dirty)">
+          <div class="invalid-feedback"
+            *ngIf="fg.get('primaryPhone')?.invalid && (fg.get('primaryPhone')?.touched || fg.get('primaryPhone')?.dirty)">
             Primary Phone is required
           </div>
         </div>
@@ -77,36 +77,36 @@
       <div class="form-group row kt-margin-t-20">
         <label class="col-lg-1 col-form-label required">DOB:</label>
         <div class="col-lg-3">
-          <input type="date" class="form-control"
-            formControlName="dateOfBirth"
+          <input type="date" class="form-control" formControlName="dateOfBirth"
             [class.is-invalid]="fg.get('dateOfBirth')?.invalid && (fg.get('dateOfBirth')?.touched || fg.get('dateOfBirth')?.dirty)"
             [class.is-valid]="fg.get('dateOfBirth')?.valid && (fg.get('dateOfBirth')?.touched || fg.get('dateOfBirth')?.dirty)">
-          <div class="invalid-feedback" *ngIf="fg.get('dateOfBirth')?.invalid && (fg.get('dateOfBirth')?.touched || fg.get('dateOfBirth')?.dirty)">
+          <div class="invalid-feedback"
+            *ngIf="fg.get('dateOfBirth')?.invalid && (fg.get('dateOfBirth')?.touched || fg.get('dateOfBirth')?.dirty)">
             Date of Birth is required
           </div>
         </div>
 
         <label class="col-lg-1 col-form-label required">Email:</label>
         <div class="col-lg-3">
-          <input type="email" class="form-control"
-            formControlName="email"
+          <input type="email" class="form-control" formControlName="email"
             [class.is-invalid]="fg.get('email')?.invalid && (fg.get('email')?.touched || fg.get('email')?.dirty)"
             [class.is-valid]="fg.get('email')?.valid && (fg.get('email')?.touched || fg.get('email')?.dirty)">
-          <div class="invalid-feedback" *ngIf="fg.get('email')?.invalid && (fg.get('email')?.touched || fg.get('email')?.dirty)">
+          <div class="invalid-feedback"
+            *ngIf="fg.get('email')?.invalid && (fg.get('email')?.touched || fg.get('email')?.dirty)">
             Email is required and must be valid
           </div>
         </div>
 
         <label class="col-lg-1 col-form-label required">Gender:</label>
         <div class="col-lg-3">
-          <select class="form-control"
-            formControlName="gender"
+          <select class="form-control" formControlName="gender"
             [class.is-invalid]="fg.get('gender')?.invalid && (fg.get('gender')?.touched || fg.get('gender')?.dirty)"
             [class.is-valid]="fg.get('gender')?.valid && (fg.get('gender')?.touched || fg.get('gender')?.dirty)">
             <option value="">Select gender</option>
             <option *ngFor="let g of genderDD" [value]="g.key">{{ g.label }}</option>
           </select>
-          <div class="invalid-feedback" *ngIf="fg.get('gender')?.invalid && (fg.get('gender')?.touched || fg.get('gender')?.dirty)">
+          <div class="invalid-feedback"
+            *ngIf="fg.get('gender')?.invalid && (fg.get('gender')?.touched || fg.get('gender')?.dirty)">
             Gender is required
           </div>
         </div>
@@ -116,28 +116,28 @@
       <div class="form-group row kt-margin-t-20">
         <label class="col-lg-1 col-form-label required">Religion:</label>
         <div class="col-lg-3">
-          <select class="form-control"
-            formControlName="religion"
+          <select class="form-control" formControlName="religion"
             [class.is-invalid]="fg.get('religion')?.invalid && (fg.get('religion')?.touched || fg.get('religion')?.dirty)"
             [class.is-valid]="fg.get('religion')?.valid && (fg.get('religion')?.touched || fg.get('religion')?.dirty)">
             <option value="">Select religion</option>
             <option *ngFor="let r of religionDD" [value]="r.key">{{ r.label }}</option>
           </select>
-          <div class="invalid-feedback" *ngIf="fg.get('religion')?.invalid && (fg.get('religion')?.touched || fg.get('religion')?.dirty)">
+          <div class="invalid-feedback"
+            *ngIf="fg.get('religion')?.invalid && (fg.get('religion')?.touched || fg.get('religion')?.dirty)">
             Religion is required
           </div>
         </div>
 
         <label class="col-lg-1 col-form-label required">Marital Status:</label>
         <div class="col-lg-3">
-          <select class="form-control"
-            formControlName="maritalStatus"
+          <select class="form-control" formControlName="maritalStatus"
             [class.is-invalid]="fg.get('maritalStatus')?.invalid && (fg.get('maritalStatus')?.touched || fg.get('maritalStatus')?.dirty)"
             [class.is-valid]="fg.get('maritalStatus')?.valid && (fg.get('maritalStatus')?.touched || fg.get('maritalStatus')?.dirty)">
             <option value="">Select marital status</option>
             <option *ngFor="let m of maritalStatusDD" [value]="m.key">{{ m.label }}</option>
           </select>
-          <div class="invalid-feedback" *ngIf="fg.get('maritalStatus')?.invalid && (fg.get('maritalStatus')?.touched || fg.get('maritalStatus')?.dirty)">
+          <div class="invalid-feedback"
+            *ngIf="fg.get('maritalStatus')?.invalid && (fg.get('maritalStatus')?.touched || fg.get('maritalStatus')?.dirty)">
             Marital Status is required
           </div>
         </div>
@@ -172,7 +172,8 @@
     <!-- ========================= -->
     <!-- ASSIGN DEPARTMENT FORM -->
     <!-- ========================= -->
-    <form *ngIf="step.title === 'Assign Department' && step.formGroup as fg" [formGroup]="fg" (ngSubmit)="step.action()">
+    <form *ngIf="step.title === 'Assign Department' && step.formGroup as fg" [formGroup]="fg"
+      (ngSubmit)="step.action()">
       <div class="form-group row">
         <label class="col-lg-1 col-form-label required">Department:</label>
         <div class="col-lg-3">
@@ -182,7 +183,8 @@
             <option value="">Select department</option>
             <option *ngFor="let d of departmentDD" [value]="d.key">{{ d.label }}</option>
           </select>
-          <div class="invalid-feedback" *ngIf="fg.get('departmentId')?.invalid && (fg.get('departmentId')?.touched || fg.get('departmentId')?.dirty)">
+          <div class="invalid-feedback"
+            *ngIf="fg.get('departmentId')?.invalid && (fg.get('departmentId')?.touched || fg.get('departmentId')?.dirty)">
             Department is required
           </div>
         </div>
@@ -193,9 +195,10 @@
     </form>
 
     <!-- ========================= -->
-    <!-- ASSIGN DESIGNATION -->
+    <!-- ASSIGN DESIGNATION FORM -->
     <!-- ========================= -->
-    <form *ngIf="step.title === 'Assign Designation' && step.formGroup as fg" [formGroup]="fg" (ngSubmit)="step.action()">
+    <form *ngIf="step.title === 'Assign Designation' && step.formGroup as fg" [formGroup]="fg"
+      (ngSubmit)="step.action()">
       <div class="form-group row">
         <label class="col-lg-1 col-form-label required">Designation:</label>
         <div class="col-lg-3">
@@ -205,7 +208,8 @@
             <option value="">Select designation</option>
             <option *ngFor="let d of designationDD" [value]="d.key">{{ d.label }}</option>
           </select>
-          <div class="invalid-feedback" *ngIf="fg.get('designationId')?.invalid && (fg.get('designationId')?.touched || fg.get('designationId')?.dirty)">
+          <div class="invalid-feedback"
+            *ngIf="fg.get('designationId')?.invalid && (fg.get('designationId')?.touched || fg.get('designationId')?.dirty)">
             Designation is required
           </div>
         </div>
@@ -214,6 +218,21 @@
         </div>
       </div>
     </form>
+
+    <!-- ========================= -->
+    <!-- ASSIGN ROLES -->
+    <!-- ========================= -->
+    <!-- <div *ngIf="step.title === 'Assign Roles'">
+      <app-user-role-assignment [selectedRoleIds]="selectedRoleIds" (rolesChanged)="onRolesChanged()">
+      </app-user-role-assignment>
+      <div class="row kt-margin-t-20">
+        <div class="col-lg-12 text-right">
+          <button class="btn btn-dark" type="button" (click)="step.action()" [disabled]="step.completed">
+            Save Roles & Finish
+          </button>
+        </div>
+      </div>
+    </div> -->
 
   </div>
 </div>

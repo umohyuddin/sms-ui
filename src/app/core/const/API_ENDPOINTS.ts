@@ -4,29 +4,43 @@ export const API_ENDPOINTS = {
     },
     USERS: {
         ROLES: {
-            CREATE: '/api/users/roles',
-            UPDATE: (id: string | number) => `/api/users/roles/${id}`,
-            GET_ALL: '/api/users/roles',
-            GET_BY_ID: (id: string | number) => `/api/users/roles/${id}`,
-            GET_BY_ORGANIZATION: (organizationId: string | number) => `/api/users/roles/organization/${organizationId}`,
-            DELETE: (id: string | number) => `/api/users/roles/${id}`,
-            SEARCH: (keyword: string) => `/api/users/roles/search?keyword=${keyword}`
+            CREATE: '/api/v1/roles',
+            UPDATE: (id: string | number, orgId: string | number) => `/api/v1/roles/${id}/organization/${orgId}`,
+            GET_ALL: (orgId: string | number) => `/api/v1/roles/organization/${orgId}`,
+            GET_BY_ID: (id: string | number, orgId: string | number) => `/api/v1/roles/${id}/organization/${orgId}`,
+            DELETE: (id: string | number, orgId: string | number) => `/api/v1/roles/${id}/organization/${orgId}`,
+            SEARCH: (orgId: string | number, keyword: string) => `/api/v1/roles/search?organizationId=${orgId}&keyword=${keyword}`
         },
         PERMISSIONS: {
-            CREATE: '/api/users/permissions',
-            UPDATE: (id: string | number) => `/api/users/permissions/${id}`,
-            GET_ALL: '/api/users/permissions',
-            GET_BY_ID: (id: string | number) => `/api/users/permissions/${id}`,
-            DELETE: (id: string | number) => `/api/users/permissions/${id}`,
-            SEARCH: (keyword: string) => `/api/users/permissions/search?keyword=${keyword}`
+            CREATE: '/api/v1/permissions',
+            UPDATE: (id: string | number, orgId: string | number) => `/api/v1/permissions/${id}/organization/${orgId}`,
+            GET_ALL: (orgId: string | number) => `/api/v1/permissions/organization/${orgId}`,
+            GET_BY_ID: (id: string | number, orgId: string | number) => `/api/v1/permissions/${id}/organization/${orgId}`,
+            DELETE: (id: string | number, orgId: string | number) => `/api/v1/permissions/${id}/organization/${orgId}`,
+            SEARCH: (orgId: string | number, keyword: string) => `/api/v1/permissions/search?organizationId=${orgId}&keyword=${keyword}`
         },
         MODULES: {
-            CREATE: '/api/users/modules',
-            UPDATE: (id: string | number) => `/api/users/modules/${id}`,
-            GET_ALL: '/api/users/modules',
-            GET_BY_ID: (id: string | number) => `/api/users/modules/${id}`,
-            DELETE: (id: string | number) => `/api/users/modules/${id}`,
-            SEARCH: (keyword: string) => `/api/users/modules/search?keyword=${keyword}`
+            CREATE: '/api/v1/modules',
+            UPDATE: (id: string | number) => `/api/v1/modules/${id}`,
+            GET_ALL: '/api/v1/modules',
+            GET_BY_ID: (id: string | number) => `/api/v1/modules/${id}`,
+            DELETE: (id: string | number) => `/api/v1/modules/${id}`,
+            SEARCH: (keyword: string) => `/api/v1/modules/search?keyword=${keyword}`
+        },
+        RESOURCES: {
+            CREATE: '/api/v1/resources',
+            UPDATE: (id: string | number) => `/api/v1/resources/${id}`,
+            GET_ALL: '/api/v1/resources',
+            GET_BY_ID: (id: string | number) => `/api/v1/resources/${id}`,
+            DELETE: (id: string | number) => `/api/v1/resources/${id}`,
+            SEARCH: (keyword: string) => `/api/v1/resources/search?keyword=${keyword}`
+        },
+        ACTIONS: {
+            CREATE: '/api/v1/actions',
+            UPDATE: (id: string | number) => `/api/v1/actions/${id}`,
+            GET_ALL: '/api/v1/actions',
+            GET_BY_ID: (id: string | number) => `/api/v1/actions/${id}`,
+            DELETE: (id: string | number) => `/api/v1/actions/${id}`
         }
     },
     SALARY_STRUCTURE: {

@@ -26,14 +26,14 @@ export class RolesService {
     console.log('🔍 getAllRoles - organizationId from JWT:', organizationId);
     const decodedToken = this.jwtService.getDecodedToken();
     console.log('🔍 getAllRoles - Full decoded token:', decodedToken);
-    
+
     if (!organizationId) {
       console.error('❌ organizationId is null or undefined in JWT token');
       return new Observable(observer => {
         observer.error({ message: 'Organization ID not found in token' });
       });
     }
-    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.GET_ALL}?organizationId=${organizationId}`;
+    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.GET_ALL(organizationId)}`;
     console.log('📍 API URL:', url);
     return this.http.request(
       HTTP_METHOD.GET,
@@ -50,7 +50,7 @@ export class RolesService {
         observer.error({ message: 'Organization ID not found in token' });
       });
     }
-    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.GET_BY_ID(id)}?organizationId=${organizationId}`;
+    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.GET_BY_ID(id, organizationId)}`;
     return this.http.request(
       HTTP_METHOD.GET,
       url,
@@ -59,9 +59,10 @@ export class RolesService {
   }
 
   getRolesByOrganizationId(organizationId: string | number): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.GET_ALL(organizationId)}`;
     return this.http.request(
       HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.GET_BY_ORGANIZATION(organizationId)}`,
+      url,
       { observeResponse: true }
     );
   }
@@ -79,7 +80,7 @@ export class RolesService {
     }
 
     const url = isUpdate
-      ? `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.UPDATE(id)}?organizationId=${organizationId}`
+      ? `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.UPDATE(id, organizationId)}`
       : `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.CREATE}`;
 
     return this.http.request(method, url, {
@@ -97,8 +98,8 @@ export class RolesService {
       });
     }
     const url = keyword
-      ? `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.SEARCH(keyword)}&organizationId=${organizationId}`
-      : `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.GET_ALL}?organizationId=${organizationId}`;
+      ? `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.SEARCH(organizationId, keyword)}`
+      : `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.GET_ALL(organizationId)}`;
 
     return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
   }
@@ -111,11 +112,19 @@ export class RolesService {
         observer.error({ message: 'Organization ID not found in token' });
       });
     }
-    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.DELETE(id)}?organizationId=${organizationId}`;
+    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.ROLES.DELETE(id, organizationId)}`;
     return this.http.request(
       HTTP_METHOD.DELETE,
       url,
       { observeResponse: true }
     );
+  }
+
+  assignRolesToUser(userId: number, roleIds: number[]): Observable<any> {
+    const url = `${this.baseUrl}/api/v1/users/${userId}/roles`;
+    return this.http.request(HTTP_METHOD.PUT, url, {
+      body: roleIds,
+      observeResponse: true
+    });
   }
 }

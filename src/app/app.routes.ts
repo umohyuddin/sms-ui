@@ -263,7 +263,7 @@ export const routes: Routes = [
       }
     ]
   },
-    {
+  {
     path: 'roles',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
@@ -299,6 +299,32 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/permission-management/permission-management.module')
             .then(m => m.PermissionManagementModule)
+      }
+    ]
+  },
+  {
+    path: 'actions',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/actions-management/actions-management.module')
+            .then(m => m.ActionsManagementModule)
+      }
+    ]
+  },
+  {
+    path: 'resources',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/resources-management/resources-management.module')
+            .then(m => m.ResourcesManagementModule)
       }
     ]
   },

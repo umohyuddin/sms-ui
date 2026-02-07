@@ -1,3 +1,5 @@
+import { PermissionResponse } from '../../permission-management/models/PermissionResponse';
+
 export interface RoleResponse {
   id: number;
   organizationId?: number;
@@ -7,4 +9,5 @@ export interface RoleResponse {
   systemRole?: boolean;
   active?: boolean;
   deleted?: boolean;
+  permissions?: PermissionResponse[];
 }

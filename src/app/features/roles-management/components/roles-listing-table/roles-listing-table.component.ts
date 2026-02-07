@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -10,15 +10,20 @@ import { PageTexts } from '../../../../core/const/PAGE_TEXT';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { JwtService } from '../../../../core/services/jwt.service';
 import { DeletePopupComponent } from '../../../../shared/components/delete-popup/delete-popup.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+
 
 @Component({
   selector: 'app-roles-listing-table',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, DeletePopupComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, DeletePopupComponent, ToasterComponent, LoaderComponent],
   templateUrl: './roles-listing-table.component.html',
   styleUrl: './roles-listing-table.component.css'
 })
 export class RolesListingTableComponent {
+  @ViewChild('toaster') toaster!: ToasterComponent;
+  loading: boolean = false;
   texts = PageTexts.roles;
   pagination: Pagination<RoleResponse> = new Pagination([], 10);
   searchControl = new FormControl('');
@@ -50,27 +55,37 @@ export class RolesListingTableComponent {
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
-        switchMap(search => this.rolesService.searchRoles(search || '')),
+        switchMap(search => {
+          this.loading = true;
+          return this.rolesService.searchRoles(search || '');
+        }),
         takeUntil(this.destroy$)
       )
       .subscribe({
         next: (response) => {
           this.roles = response.body || [];
           this.pagination = new Pagination(this.roles, 10);
+          this.loading = false;
         },
         error: (error) => {
+          this.loading = false;
+          this.toaster?.show('Failed to search roles.', 'error');
           console.error('Search error:', error);
         }
       });
   }
 
   private getRoles() {
+    this.loading = true;
     this.rolesService.getAllRoles().subscribe({
       next: (response) => {
         this.roles = response.body || [];
         this.pagination = new Pagination(this.roles, 10);
+        this.loading = false;
       },
       error: (error) => {
+        this.loading = false;
+        this.toaster?.show('Failed to load roles.', 'error');
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
       }
@@ -95,14 +110,19 @@ export class RolesListingTableComponent {
 
   onConfirmDelete(): void {
     if (this.pendingDeleteId !== undefined) {
+      this.loading = true;
       this.rolesService.deleteRole(this.pendingDeleteId).subscribe({
         next: () => {
           this.roles = this.roles.filter(r => r.id !== this.pendingDeleteId);
           this.pagination = new Pagination(this.roles, 10);
           this.isDeletePopupOpen = false;
           this.pendingDeleteId = undefined;
+          this.loading = false;
+          this.toaster?.show('Role deleted successfully.', 'success');
         },
         error: (error) => {
+          this.loading = false;
+          this.toaster?.show('Failed to delete role.', 'error');
           console.error('❌ Delete Error Status:', error.status);
           console.error('Message:', error.message);
           this.isDeletePopupOpen = false;

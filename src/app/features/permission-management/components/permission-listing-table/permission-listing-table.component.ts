@@ -30,14 +30,15 @@ export class PermissionListingTableComponent {
   constructor(
     private router: Router,
     private permissionService: PermissionService
-  ) {}
+  ) { }
 
   columns = [
+    { key: 'module', label: 'Module', sortable: true },
+    { key: 'resource', label: 'Resource', sortable: true },
+    { key: 'action', label: 'Action', sortable: true },
     { key: 'name', label: 'Permission Name', sortable: true },
     { key: 'code', label: 'Code', sortable: true },
-    { key: 'module', label: 'Module', sortable: true },
-    { key: 'description', label: 'Description', sortable: false },
-    { key: 'actions', label: 'Actions', sortable: true }
+    { key: 'actions', label: 'Actions', sortable: false }
   ];
 
   ngOnInit() {
@@ -54,8 +55,8 @@ export class PermissionListingTableComponent {
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: (response) => {
-          this.permissions = response.body || [];
+        next: (data) => {
+          this.permissions = data || [];
           this.pagination = new Pagination(this.permissions, 10);
         },
         error: (error) => {
@@ -66,8 +67,8 @@ export class PermissionListingTableComponent {
 
   private getPermissions() {
     this.permissionService.getAllPermissions().subscribe({
-      next: (response) => {
-        this.permissions = response.body || [];
+      next: (data) => {
+        this.permissions = data || [];
         this.pagination = new Pagination(this.permissions, 10);
       },
       error: (error) => {

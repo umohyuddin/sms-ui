@@ -1,4 +1,9 @@
 export interface RoleRequest {
-  roleName: string;
-  description?: string | null;
+  organizationId: number;
+  code: string;
+  name: string;
+  description?: string;
+  systemRole?: boolean;
+  active?: boolean;
+  permissionIds?: number[];
 }

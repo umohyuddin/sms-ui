@@ -93,7 +93,7 @@
           <div class="kt-widget__head">
             <div class="kt-widget__user">
               <a href="#" class="kt-widget__username">
-                {{ academicYearData?.name ?? 'N/A' }}
+                {{ academicYearData.name }}
               </a>
               <span class="ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
                 [ngClass]="academicYearData.isCurrent ? 'kt-badge--unified-success' : 'kt-badge--unified-secondary'">
@@ -117,7 +117,7 @@
 
           <div class="kt-widget__subhead row mt-2">
             <div class="col-4">
-              <b>Total Months:</b> {{ academicYearData?.totalMonths ?? 'N/A' }}
+              <b>Total Months:</b> {{ academicYearData.totalMonths }}
             </div>
             <div class="col-4">
               <b>Status:</b> {{ academicYearData.status ?? 'N/A' }}

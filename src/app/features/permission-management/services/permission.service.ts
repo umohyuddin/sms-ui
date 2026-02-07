@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { HttpClientService } from '../../../core/services/http-client.service';
 import { AppConfigService } from '../../../core/services/app-config.service';
 import { JwtService } from '../../../core/services/jwt.service';
@@ -18,39 +18,24 @@ export class PermissionService {
     private jwtService: JwtService
   ) {
     this.baseUrl = appConfig.apiBaseUrl;
-    console.log('API Base URL:', this.appConfig.apiBaseUrl);
   }
 
   getAllPermissions(): Observable<any> {
     const organizationId = this.jwtService.getOrganizationId();
     if (!organizationId) {
-      console.error('❌ organizationId is null or undefined in JWT token');
-      return new Observable(observer => {
-        observer.error({ message: 'Organization ID not found in token' });
-      });
+      return new Observable(observer => observer.error({ message: 'Organization ID not found in token' }));
     }
-    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.GET_ALL}?organizationId=${organizationId}`;
-    return this.http.request(
-      HTTP_METHOD.GET,
-      url,
-      { observeResponse: true }
-    );
+    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.GET_ALL(organizationId)}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
   }
 
   getPermissionById(id: string | number): Observable<any> {
     const organizationId = this.jwtService.getOrganizationId();
     if (!organizationId) {
-      console.error('❌ organizationId is null or undefined in JWT token');
-      return new Observable(observer => {
-        observer.error({ message: 'Organization ID not found in token' });
-      });
+      return new Observable(observer => observer.error({ message: 'Organization ID not found' }));
     }
-    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.GET_BY_ID(id)}?organizationId=${organizationId}`;
-    return this.http.request(
-      HTTP_METHOD.GET,
-      url,
-      { observeResponse: true }
-    );
+    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.GET_BY_ID(id, organizationId)}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
   }
 
   savePermission(id: string | null, payload: any): Observable<any> {
@@ -58,67 +43,56 @@ export class PermissionService {
     const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
     const organizationId = this.jwtService.getOrganizationId();
 
-    if (!organizationId) {
-      console.error('❌ organizationId is null or undefined in JWT token');
-      return new Observable(observer => {
-        observer.error({ message: 'Organization ID not found in token' });
-      });
+    if (!organizationId && !isUpdate) {
+      return new Observable(observer => observer.error({ message: 'Organization ID not found' }));
     }
 
     const url = isUpdate
-      ? `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.UPDATE(id)}?organizationId=${organizationId}`
+      ? `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.UPDATE(id, organizationId!)}`
       : `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.CREATE}`;
+
+    // Ensure organizationId is in payload for create
+    if (!isUpdate) {
+      payload.organizationId = organizationId;
+    }
 
     return this.http.request(method, url, {
       observeResponse: true,
       body: payload
-    });
+    }).pipe(map((res: any) => res.body.data));
   }
 
   searchPermissions(keyword: string): Observable<any> {
     const organizationId = this.jwtService.getOrganizationId();
     if (!organizationId) {
-      console.error('❌ organizationId is null or undefined in JWT token');
-      return new Observable(observer => {
-        observer.error({ message: 'Organization ID not found in token' });
-      });
+      return new Observable(observer => observer.error({ message: 'Organization ID not found' }));
     }
-    const url = keyword
-      ? `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.SEARCH(keyword)}&organizationId=${organizationId}`
-      : `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.GET_ALL}?organizationId=${organizationId}`;
-
-    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
+    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.SEARCH(organizationId, keyword)}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
   }
 
   deletePermission(id: number): Observable<any> {
     const organizationId = this.jwtService.getOrganizationId();
     if (!organizationId) {
-      console.error('❌ organizationId is null or undefined in JWT token');
-      return new Observable(observer => {
-        observer.error({ message: 'Organization ID not found in token' });
-      });
+      return new Observable(observer => observer.error({ message: 'Organization ID not found' }));
     }
-    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.DELETE(id)}?organizationId=${organizationId}`;
-    return this.http.request(
-      HTTP_METHOD.DELETE,
-      url,
-      { observeResponse: true }
-    );
+    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.DELETE(id, organizationId)}`;
+    return this.http.request(HTTP_METHOD.DELETE, url, { observeResponse: true });
   }
 
-  getAllModules(): Observable<any> {
-    const organizationId = this.jwtService.getOrganizationId();
-    if (!organizationId) {
-      console.error('❌ organizationId is null or undefined in JWT token');
-      return new Observable(observer => {
-        observer.error({ message: 'Organization ID not found in token' });
-      });
-    }
+  // Helper methods to load triplets
+  getModules(): Observable<any> {
     const url = `${this.baseUrl}${API_ENDPOINTS.USERS.MODULES.GET_ALL}`;
-    return this.http.request(
-      HTTP_METHOD.GET,
-      url,
-      { observeResponse: true }
-    );
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
+  }
+
+  getResources(): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.RESOURCES.GET_ALL}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
+  }
+
+  getActions(): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.USERS.ACTIONS.GET_ALL}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
   }
 }

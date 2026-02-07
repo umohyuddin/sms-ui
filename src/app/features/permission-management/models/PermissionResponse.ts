@@ -1,4 +1,6 @@
 import { ModuleResponse } from './ModuleResponse';
+import { ResourceResponse } from './ResourceResponse';
+import { ActionResponse } from './ActionResponse';
 
 export interface PermissionResponse {
   id: number;
@@ -6,6 +8,8 @@ export interface PermissionResponse {
   name: string;
   code: string;
   module?: ModuleResponse | null;
+  resource?: ResourceResponse | null;
+  action?: ActionResponse | null;
   description?: string | null;
   systemPermission?: boolean;
   active?: boolean;

@@ -155,8 +155,19 @@ export const ROUTES = {
     CREATE: ['permissions', 'permission-create'],
     EDIT: (id: string) => ['permissions', 'permission-edit', id],
     DETAILS: (id: string) => ['permissions', 'permission-details', id]
+  },
+  ACTIONS: {
+    LIST: ['actions'],
+    CREATE: ['actions', 'action-create'],
+    EDIT: (id: string) => ['actions', 'action-edit', id],
+    DETAILS: (id: string) => ['actions', 'action-details', id]
+  },
+  RESOURCES: {
+    LIST: ['resources'],
+    CREATE: ['resources', 'resource-create'],
+    EDIT: (id: string) => ['resources', 'resource-edit', id],
+    DETAILS: (id: string) => ['resources', 'resource-details', id]
   }
-
 
 };
 

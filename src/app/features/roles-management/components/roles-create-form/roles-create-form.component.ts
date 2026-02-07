@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,6 +8,8 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { JwtService } from '../../../../core/services/jwt.service';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { PermissionService } from '../../../permission-management/services/permission.service';
+import { PermissionResponse } from '../../../permission-management/models/PermissionResponse';
 
 @Component({
   selector: 'app-roles-create-form',
@@ -16,25 +18,28 @@ import { ToasterComponent } from '../../../../shared/components/toaster/toaster.
   templateUrl: './roles-create-form.component.html',
   styleUrl: './roles-create-form.component.css'
 })
-export class RolesCreateFormComponent {
+export class RolesCreateFormComponent implements OnInit {
   @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
-  
+
   createRoleForm!: FormGroup;
   isEditMode = false;
   roleId: string | null = null;
   roleData?: RoleResponse;
   isSaving = false;
+  permissions: PermissionResponse[] = [];
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private rolesService: RolesService,
+    private permissionService: PermissionService,
     private jwtService: JwtService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initializeForm();
+    this.loadPermissions();
 
     this.roleId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.roleId;
@@ -50,8 +55,31 @@ export class RolesCreateFormComponent {
       name: ['', [Validators.required, Validators.maxLength(100), this.noWhitespaceValidator]],
       description: ['', [Validators.maxLength(255)]],
       systemRole: [false],
-      active: [true]
+      active: [true],
+      permissionIds: [[]]
     });
+  }
+
+  private loadPermissions() {
+    this.permissionService.getAllPermissions().subscribe({
+      next: (data) => this.permissions = data || [],
+      error: (err) => console.error('Error loading permissions:', err)
+    });
+  }
+
+  togglePermission(id: number) {
+    const current = this.createRoleForm.get('permissionIds')?.value as number[];
+    const index = current.indexOf(id);
+    if (index > -1) {
+      current.splice(index, 1);
+    } else {
+      current.push(id);
+    }
+    this.createRoleForm.get('permissionIds')?.setValue([...current]);
+  }
+
+  isPermissionSelected(id: number): boolean {
+    return (this.createRoleForm.get('permissionIds')?.value as number[]).includes(id);
   }
 
   onSubmit(): void {
@@ -95,14 +123,16 @@ export class RolesCreateFormComponent {
   getRoleDetails(roleId: string): void {
     this.rolesService.getRoleById(roleId).subscribe({
       next: (response) => {
-        this.roleData = response.body;
+        this.roleData = response.body.data;
         if (this.roleData) {
+          const permIds = this.roleData.permissions?.map(p => p.id) || [];
           this.createRoleForm.patchValue({
             code: this.roleData.code,
             name: this.roleData.name,
             description: this.roleData.description,
             systemRole: this.roleData.systemRole || false,
-            active: this.roleData.active !== false
+            active: this.roleData.active !== false,
+            permissionIds: permIds
           });
         }
       },

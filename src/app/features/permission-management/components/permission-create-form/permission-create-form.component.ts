@@ -26,6 +26,9 @@ export class PermissionCreateFormComponent {
   permissionData?: PermissionResponse;
   isSaving = false;
   modules: ModuleResponse[] = [];
+  allResources: any[] = [];
+  filteredResources: any[] = [];
+  actions: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -33,11 +36,11 @@ export class PermissionCreateFormComponent {
     private router: Router,
     private permissionService: PermissionService,
     private jwtService: JwtService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initializeForm();
-    this.loadModules();
+    this.loadInitialData();
 
     this.permissionId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.permissionId;
@@ -51,22 +54,77 @@ export class PermissionCreateFormComponent {
     this.createPermissionForm = this.fb.group({
       code: ['', [Validators.required, Validators.maxLength(100), this.noWhitespaceValidator]],
       name: ['', [Validators.required, Validators.maxLength(100), this.noWhitespaceValidator]],
-      moduleId: [''],
+      moduleId: ['', [Validators.required]],
+      resourceId: ['', [Validators.required]],
+      actionId: ['', [Validators.required]],
       description: ['', [Validators.maxLength(255)]],
       systemPermission: [false],
       active: [true]
     });
+
+    // Handle cascading resources
+    this.createPermissionForm.get('moduleId')?.valueChanges.subscribe(mid => {
+      this.onModuleChange(mid);
+    });
+
+    // Handle auto-naming
+    this.createPermissionForm.get('actionId')?.valueChanges.subscribe(() => this.suggestNameAndCode());
+    this.createPermissionForm.get('resourceId')?.valueChanges.subscribe(() => this.suggestNameAndCode());
   }
 
-  private loadModules() {
-    this.permissionService.getAllModules().subscribe({
-      next: (response) => {
-        this.modules = response.body || [];
-      },
-      error: (error) => {
-        console.error('❌ Error loading modules:', error);
-      }
+  private loadInitialData() {
+    this.permissionService.getModules().subscribe({
+      next: (data) => this.modules = data || [],
+      error: (err) => console.error('Error loading modules:', err)
     });
+
+    this.permissionService.getResources().subscribe({
+      next: (data) => {
+        this.allResources = data || [];
+        if (this.moduleId?.value) this.onModuleChange(this.moduleId.value);
+      },
+      error: (err) => console.error('Error loading resources:', err)
+    });
+
+    this.permissionService.getActions().subscribe({
+      next: (data) => this.actions = data || [],
+      error: (err) => console.error('Error loading actions:', err)
+    });
+  }
+
+  onModuleChange(moduleId: any) {
+    if (!moduleId) {
+      this.filteredResources = [];
+      return;
+    }
+    this.filteredResources = this.allResources.filter(r => r.module?.id == moduleId);
+    if (!this.filteredResources.find(r => r.id == this.createPermissionForm.get('resourceId')?.value)) {
+      this.createPermissionForm.get('resourceId')?.setValue('');
+    }
+  }
+
+  suggestNameAndCode() {
+    if (this.isEditMode) return;
+
+    const mid = this.createPermissionForm.get('moduleId')?.value;
+    const rid = this.createPermissionForm.get('resourceId')?.value;
+    const aid = this.createPermissionForm.get('actionId')?.value;
+
+    if (mid && rid && aid) {
+      const module = this.modules.find(m => m.id == mid);
+      const resource = this.allResources.find(r => r.id == rid);
+      const action = this.actions.find(a => a.id == aid);
+
+      if (module && resource && action) {
+        const generatedCode = `${module.code}_${resource.resourceName.replace(/\s+/g, '_').toUpperCase()}_${action.code}`.toUpperCase();
+        const generatedName = `${action.name} ${resource.resourceName} (${module.name})`;
+
+        this.createPermissionForm.patchValue({
+          code: generatedCode,
+          name: generatedName
+        }, { emitEvent: false });
+      }
+    }
   }
 
   onSubmit(): void {
@@ -105,17 +163,24 @@ export class PermissionCreateFormComponent {
 
   getPermissionDetails(permissionId: string): void {
     this.permissionService.getPermissionById(permissionId).subscribe({
-      next: (response) => {
-        this.permissionData = response.body;
+      next: (data) => {
+        this.permissionData = data;
         if (this.permissionData) {
           this.createPermissionForm.patchValue({
             code: this.permissionData.code,
             name: this.permissionData.name,
             moduleId: this.permissionData.module?.id || '',
+            resourceId: this.permissionData.resource?.id || '',
+            actionId: this.permissionData.action?.id || '',
             description: this.permissionData.description,
             systemPermission: this.permissionData.systemPermission || false,
             active: this.permissionData.active !== false
-          });
+          }, { emitEvent: false });
+
+          if (this.permissionData.module?.id) {
+            this.onModuleChange(this.permissionData.module.id);
+          }
+
           // Disable code field in edit mode
           this.createPermissionForm.get('code')?.disable();
         }
@@ -175,6 +240,8 @@ export class PermissionCreateFormComponent {
   get code() { return this.createPermissionForm.get('code'); }
   get name() { return this.createPermissionForm.get('name'); }
   get moduleId() { return this.createPermissionForm.get('moduleId'); }
+  get resourceId() { return this.createPermissionForm.get('resourceId'); }
+  get actionId() { return this.createPermissionForm.get('actionId'); }
   get description() { return this.createPermissionForm.get('description'); }
   get systemPermission() { return this.createPermissionForm.get('systemPermission'); }
   get active() { return this.createPermissionForm.get('active'); }

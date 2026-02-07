@@ -16,15 +16,44 @@
 		<div class="kt-portlet__body">
 			<h4>Permission Information</h4>
 
-			<!-- Row 1: Code, Name, Status -->
+			<!-- Row 2: Module, Resource, Action -->
+			<div class="form-group row form-group-marginless kt-margin-t-20">
+				<label class="col-lg-1 col-form-label required">Module:</label>
+				<div class="col-lg-3">
+					<select class="form-control" formControlName="moduleId">
+						<option value="">Select a Module</option>
+						<option *ngFor="let mod of modules" [value]="mod.id">{{ mod.name }}</option>
+					</select>
+					<span class="form-text text-muted">Select the module</span>
+				</div>
+
+				<label class="col-lg-1 col-form-label required">Resource:</label>
+				<div class="col-lg-3">
+					<select class="form-control" formControlName="resourceId" [disabled]="!moduleId?.value">
+						<option value="">Select a Resource</option>
+						<option *ngFor="let res of filteredResources" [value]="res.id">{{ res.resourceName }}</option>
+					</select>
+					<span class="form-text text-muted">Select a resource (within module)</span>
+				</div>
+
+				<label class="col-lg-1 col-form-label required">Action:</label>
+				<div class="col-lg-3">
+					<select class="form-control" formControlName="actionId">
+						<option value="">Select an Action</option>
+						<option *ngFor="let act of actions" [value]="act.id">{{ act.name }}</option>
+					</select>
+					<span class="form-text text-muted">Select an operation</span>
+				</div>
+			</div>
+
+			<!-- Row 3: Name, Code, Status -->
 			<div class="form-group row form-group-marginless kt-margin-t-20">
 				<label class="col-lg-1 col-form-label required">Permission Code:</label>
 				<div class="col-lg-3">
 					<input type="text" class="form-control" placeholder="e.g., STUDENT_VIEW" formControlName="code"
 						[class.is-invalid]="code?.invalid && (code?.touched || code?.dirty)"
-						[class.is-valid]="code?.valid && (code?.touched || code?.dirty)"
-						[disabled]="isEditMode">
-					<span class="form-text text-muted">Permission code</span>
+						[class.is-valid]="code?.valid && (code?.touched || code?.dirty)">
+					<span class="form-text text-muted">Unique code (auto-suggested)</span>
 					<span class="invalid-feedback" *ngIf="code?.invalid && (code?.touched || code?.dirty)">
 						{{ getErrorMessage('code') }}
 					</span>
@@ -35,39 +64,24 @@
 					<input type="text" class="form-control" placeholder="e.g., View Students" formControlName="name"
 						[class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
 						[class.is-valid]="name?.valid && (name?.touched || name?.dirty)">
-					<span class="form-text text-muted">Human-readable name</span>
+					<span class="form-text text-muted">Display name (auto-suggested)</span>
 					<span class="invalid-feedback" *ngIf="name?.invalid && (name?.touched || name?.dirty)">
 						{{ getErrorMessage('name') }}
 					</span>
 				</div>
 
-				<label class="col-lg-1 col-form-label">Status:</label>
+				<label class="col-lg-1 col-form-label">Status & Type:</label>
 				<div class="col-lg-3">
-					<label class="kt-checkbox kt-margin-t-10">
-						<input type="checkbox" formControlName="active"> Active
-						<span></span>
-					</label>
-				</div>
-			</div>
-
-			<!-- Row 2: Module, System Permission -->
-			<div class="form-group row form-group-marginless kt-margin-t-20">
-				<label class="col-lg-1 col-form-label">Module:</label>
-				<div class="col-lg-3">
-				<select class="form-control" formControlName="moduleId">
-					<option value="">Select a Module</option>
-					<option *ngFor="let mod of modules" [value]="mod.id">{{ mod.name }}</option>
-				</select>
-				<span class="form-text text-muted">Select the module this permission belongs to</span>
-				</div>
-
-				<label class="col-lg-1 col-form-label">Type:</label>
-				<div class="col-lg-3">
-					<label class="kt-checkbox kt-margin-t-10">
-						<input type="checkbox" formControlName="systemPermission"> System Permission
-						<span></span>
-					</label>
-					<span class="form-text text-muted">Cannot be deleted</span>
+					<div class="kt-checkbox-inline">
+						<label class="kt-checkbox kt-margin-r-15">
+							<input type="checkbox" formControlName="active"> Active
+							<span></span>
+						</label>
+						<label class="kt-checkbox">
+							<input type="checkbox" formControlName="systemPermission"> System
+							<span></span>
+						</label>
+					</div>
 				</div>
 			</div>
 
