@@ -37,7 +37,7 @@ export class RolesListingTableComponent {
     private router: Router,
     private rolesService: RolesService,
     private jwtService: JwtService
-  ) {}
+  ) { }
 
   columns = [
     { key: 'roleName', label: 'Role Name', sortable: true },
@@ -100,6 +100,11 @@ export class RolesListingTableComponent {
   editRoleDetails(role: RoleResponse, event: Event): void {
     event.preventDefault();
     this.router.navigate(ROUTES.ROLES.EDIT(role.id.toString()));
+  }
+
+  assignPermissions(role: RoleResponse, event: Event): void {
+    event.preventDefault();
+    this.router.navigate(ROUTES.ROLES.ASSIGN_PERMISSIONS(role.id.toString()));
   }
 
   deleteRole(roleId: number, event: Event): void {

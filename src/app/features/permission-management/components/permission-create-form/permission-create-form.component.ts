@@ -63,6 +63,8 @@ export class PermissionCreateFormComponent implements OnInit {
 
   private loadAllData() {
     this.isLoading = true;
+    console.log('🔄 Loading all data for permission management...');
+    
     forkJoin({
       modules: this.permissionService.getModules(),
       resources: this.permissionService.getResources(),
@@ -70,6 +72,17 @@ export class PermissionCreateFormComponent implements OnInit {
       permissions: this.permissionService.getAllPermissions()
     }).subscribe({
       next: (result) => {
+        console.log('✅ Data loaded:', {
+          modulesCount: result.modules?.length || 0,
+          resourcesCount: result.resources?.length || 0,
+          actionsCount: result.actions?.length || 0,
+          permissionsCount: result.permissions?.length || 0
+        });
+        console.log('Modules:', result.modules);
+        console.log('Resources:', result.resources);
+        console.log('Actions:', result.actions);
+        console.log('Permissions:', result.permissions);
+        
         this.modules = result.modules || [];
         this.resources = result.resources || [];
         this.actions = result.actions || [];
@@ -77,10 +90,14 @@ export class PermissionCreateFormComponent implements OnInit {
 
         this.processGroupedData();
         this.initializeSelection();
+        
+        console.log('📊 Grouped data:', this.groupedData);
+        console.log('✓ Selection map:', this.selectionMap);
+        
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Error loading data:', err);
+        console.error('❌ Error loading data:', err);
         this.toaster?.show('Failed to load initial data.', 'error');
         this.isLoading = false;
       }
@@ -88,11 +105,25 @@ export class PermissionCreateFormComponent implements OnInit {
   }
 
   private processGroupedData() {
-    this.groupedData = this.modules.map(mod => ({
-      module: mod,
-      resources: this.resources.filter(res => res.module?.id === mod.id),
-      isExpanded: true
-    })).filter(g => g.resources.length > 0);
+    console.log('🔄 Processing grouped data...');
+    console.log('Total modules:', this.modules.length);
+    console.log('Total resources:', this.resources.length);
+    
+    this.groupedData = this.modules.map(mod => {
+      const moduleResources = this.resources.filter(res => res.module?.id === mod.id);
+      console.log(`Module "${mod.name}": ${moduleResources.length} resources`);
+      return {
+        module: mod,
+        resources: moduleResources,
+        isExpanded: true
+      };
+    }).filter(g => {
+      const hasResources = g.resources.length > 0;
+      console.log(`Module "${g.module.name}" - hasResources: ${hasResources}`);
+      return hasResources;
+    });
+    
+    console.log('📊 Final grouped data count:', this.groupedData.length);
   }
 
   private initializeSelection() {

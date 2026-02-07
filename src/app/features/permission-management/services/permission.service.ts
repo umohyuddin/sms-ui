@@ -26,7 +26,9 @@ export class PermissionService {
       return new Observable(observer => observer.error({ message: 'Organization ID not found in token' }));
     }
     const url = `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.GET_ALL(organizationId)}`;
-    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(
+      map((res: any) => Array.isArray(res.body) ? res.body : res.body?.data || [])
+    );
   }
 
   getPermissionById(id: string | number): Observable<any> {
@@ -68,7 +70,9 @@ export class PermissionService {
       return new Observable(observer => observer.error({ message: 'Organization ID not found' }));
     }
     const url = `${this.baseUrl}${API_ENDPOINTS.USERS.PERMISSIONS.SEARCH(organizationId, keyword)}`;
-    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(
+      map((res: any) => Array.isArray(res.body) ? res.body : res.body?.data || [])
+    );
   }
 
   deletePermission(id: number): Observable<any> {

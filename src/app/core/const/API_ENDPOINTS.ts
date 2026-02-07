@@ -40,7 +40,14 @@ export const API_ENDPOINTS = {
             UPDATE: (id: string | number) => `/api/v1/actions/${id}`,
             GET_ALL: '/api/v1/actions',
             GET_BY_ID: (id: string | number) => `/api/v1/actions/${id}`,
-            DELETE: (id: string | number) => `/api/v1/actions/${id}`
+            DELETE: (id: string | number) => `/api/v1/actions/${id}`,
+            SEARCH: (keyword: string) => `/api/v1/actions/search?keyword=${keyword}`
+        },
+        ROLE_PERMISSIONS: {
+            ASSIGN: '/api/role-permissions/assign',
+            GET_BY_ROLE: (roleId: string | number) => `/api/role-permissions/role/${roleId}`,
+            REMOVE: (roleId: string | number, permissionId: string | number) => `/api/role-permissions/role/${roleId}/permission/${permissionId}`,
+            REMOVE_ALL: (roleId: string | number) => `/api/role-permissions/role/${roleId}`
         }
     },
     SALARY_STRUCTURE: {

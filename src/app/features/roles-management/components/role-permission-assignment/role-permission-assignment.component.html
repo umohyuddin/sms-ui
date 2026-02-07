@@ -1,0 +1,70 @@
+<div class="rp-page">
+    <div class="rp-header">
+        <div class="rp-header-left">
+            <h2 class="rp-title">Role Permissions</h2>
+            <p class="rp-subtitle">Configure granular access levels for user roles.</p>
+        </div>
+        <div class="rp-header-right">
+            <div class="rp-search">
+                <i class="la la-search"></i>
+                <input type="text" class="rp-search-input" placeholder="Search permissions...">
+            </div>
+        </div>
+    </div>
+
+    <app-loader *ngIf="loading"></app-loader>
+
+    <div class="rp-modules" *ngIf="!loading">
+        <div class="rp-module-card" *ngFor="let module of groupedPermissions">
+            <div class="rp-module-header">
+                <div class="rp-module-info">
+                    <div class="rp-module-icon">
+                        <i class="la la-layer-group"></i>
+                    </div>
+                    <div>
+                        <div class="rp-module-name">{{ module.moduleName }}</div>
+                        <div class="rp-module-meta">
+                            {{ getModuleSelectedCount(module) }} of {{ getModuleTotalPermissions(module) }} permissions active
+                        </div>
+                    </div>
+                </div>
+                <div class="rp-module-actions">
+                    <span class="rp-toggle-label">Master Toggle</span>
+                    <label class="rp-switch">
+                        <input type="checkbox" [checked]="isModuleFullySelected(module)"
+                            [indeterminate]="isModulePartiallySelected(module)"
+                            (change)="toggleModule(module, $event)">
+                        <span class="rp-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="rp-module-body">
+                <div class="rp-resource" *ngFor="let resource of module.resources">
+                    <div class="rp-resource-title">{{ resource.resourceName }}</div>
+                    <div class="rp-permissions-grid">
+                        <div class="rp-permission-card" *ngFor="let perm of resource.permissions">
+                            <div class="rp-permission-text">
+                                <div class="rp-permission-name">{{ perm.action?.name }}</div>
+                                <div class="rp-permission-desc">{{ perm.action?.description || 'Permission access' }}</div>
+                            </div>
+                            <label class="rp-switch rp-switch-sm">
+                                <input type="checkbox" [checked]="isPermissionSelected(perm.id)"
+                                    (change)="togglePermission(perm.id)">
+                                <span class="rp-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rp-footer" *ngIf="!loading">
+        <button type="button" class="rp-btn rp-btn-secondary" (click)="goBack()">Discard Changes</button>
+        <button type="button" class="rp-btn rp-btn-primary" (click)="saveAssignments()" [disabled]="saving">
+            <span *ngIf="saving" class="spinner-border spinner-border-sm mr-1"></span>
+            Save Permissions
+        </button>
+    </div>
+</div>
