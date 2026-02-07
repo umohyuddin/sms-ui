@@ -20,12 +20,25 @@ export class ResourceService {
 
     getAllResources(): Observable<any> {
         const url = `${this.baseUrl}${API_ENDPOINTS.USERS.RESOURCES.GET_ALL}`;
-        return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
+        return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(
+            map((res: any) => {
+                console.log('📦 Resources Response:', res);
+                console.log('📦 Resources Body:', res.body);
+                // API returns array directly in body, not wrapped in data property
+                return Array.isArray(res.body) ? res.body : (res.body?.data || []);
+            })
+        );
     }
 
     getResourceById(id: string | number): Observable<any> {
         const url = `${this.baseUrl}${API_ENDPOINTS.USERS.RESOURCES.GET_BY_ID(id)}`;
-        return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
+        return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(
+            map((res: any) => {
+                console.log('📦 Resource Detail Response:', res);
+                // Handle both wrapped and direct response
+                return res.body?.data || res.body;
+            })
+        );
     }
 
     saveResource(id: string | null, payload: any): Observable<any> {
@@ -38,7 +51,12 @@ export class ResourceService {
         return this.http.request(method, url, {
             observeResponse: true,
             body: payload
-        }).pipe(map((res: any) => res.body.data));
+        }).pipe(
+            map((res: any) => {
+                console.log('📦 Save Resource Response:', res);
+                return res.body?.data || res.body;
+            })
+        );
     }
 
     deleteResource(id: number): Observable<any> {
@@ -48,6 +66,13 @@ export class ResourceService {
 
     getModules(): Observable<any> {
         const url = `${this.baseUrl}${API_ENDPOINTS.USERS.MODULES.GET_ALL}`;
-        return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
+        return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(
+            map((res: any) => {
+                console.log('📦 Modules Response:', res);
+                console.log('📦 Modules Body:', res.body);
+                // API returns array directly in body, not wrapped in data property
+                return Array.isArray(res.body) ? res.body : (res.body?.data || []);
+            })
+        );
     }
 }

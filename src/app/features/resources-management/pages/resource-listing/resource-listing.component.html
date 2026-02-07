@@ -1,3 +1,8 @@
+<app-toaster #toaster></app-toaster>
+<app-loader *ngIf="loading" type="pulse" size="lg" color="primary" message="Loading..." [overlay]="true"
+    [fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
+</app-loader>
+
 <div class="kt-portlet kt-portlet--mobile">
     <div class="kt-portlet__head kt-portlet__head--lg">
         <div class="kt-portlet__head-label">

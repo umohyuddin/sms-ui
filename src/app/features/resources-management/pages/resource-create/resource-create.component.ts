@@ -22,6 +22,7 @@ export class ResourceCreateComponent implements OnInit {
     isEditMode = false;
     resourceId: string | null = null;
     isSaving = false;
+    loaderMessage = 'Processing...';
     modules: ModuleResponse[] = [];
 
     constructor(
@@ -44,9 +45,9 @@ export class ResourceCreateComponent implements OnInit {
 
     private initializeForm() {
         this.resourceForm = this.fb.group({
-            resourceName: ['', [Validators.required, Validators.maxLength(100)]],
+            resourceName: ['', [Validators.required, Validators.maxLength(100), this.noWhitespaceValidator]],
             moduleId: ['', [Validators.required]],
-            version: ['v1'],
+            version: ['v1', [Validators.maxLength(10)]],
             description: ['', [Validators.maxLength(255)]],
             isAuthRequired: [true],
             isActive: [true]
@@ -55,8 +56,14 @@ export class ResourceCreateComponent implements OnInit {
 
     private loadModules() {
         this.resourceService.getModules().subscribe({
-            next: (data) => this.modules = data || [],
-            error: (err) => console.error('Error loading modules:', err)
+            next: (data) => {
+                console.log('✅ Modules loaded:', data);
+                this.modules = data || [];
+            },
+            error: (err) => {
+                console.error('❌ Error loading modules:', err);
+                this.toaster?.show('Failed to load modules.', 'error');
+            }
         });
     }
 
@@ -75,20 +82,29 @@ export class ResourceCreateComponent implements OnInit {
     onSubmit() {
         if (this.resourceForm.invalid) {
             this.resourceForm.markAllAsTouched();
+            this.toaster?.show('Please fix validation errors before submitting.', 'error');
             return;
         }
 
         this.isSaving = true;
+        this.loaderMessage = this.isEditMode ? 'Updating Resource...' : 'Creating Resource...';
         const payload = this.resourceForm.getRawValue();
 
         this.resourceService.saveResource(this.resourceId, payload).subscribe({
             next: () => {
-                this.toaster?.show(this.isEditMode ? 'Resource updated' : 'Resource created', 'success');
+                this.toaster?.show(
+                    this.isEditMode ? 'Resource updated successfully.' : 'Resource created successfully.',
+                    'success'
+                );
                 setTimeout(() => this.router.navigate(ROUTES.RESOURCES.LIST), 1000);
             },
             error: (err) => {
                 this.isSaving = false;
-                this.toaster?.show('Error saving resource', 'error');
+                this.toaster?.show('Failed to save resource.', 'error');
+                console.error('Error saving resource:', err);
+            },
+            complete: () => {
+                this.isSaving = false;
             }
         });
     }
@@ -96,4 +112,44 @@ export class ResourceCreateComponent implements OnInit {
     onCancel() {
         this.router.navigate(ROUTES.RESOURCES.LIST);
     }
+
+    // Getters
+    get resourceName() { return this.resourceForm.get('resourceName'); }
+    get moduleId() { return this.resourceForm.get('moduleId'); }
+    get version() { return this.resourceForm.get('version'); }
+    get description() { return this.resourceForm.get('description'); }
+
+    noWhitespaceValidator(control: any) {
+        if (control.value && !control.value.trim()) return { whitespace: true };
+        return null;
+    }
+
+    getErrorMessage(controlName: keyof typeof this.validationMessages): string {
+        const control = this.resourceForm.get(controlName as string);
+        if (!control || !control.errors) return '';
+
+        for (const error in control.errors) {
+            const key = error as keyof typeof this.validationMessages[typeof controlName];
+            if (this.validationMessages[controlName][key]) return this.validationMessages[controlName][key];
+        }
+
+        return '';
+    }
+
+    validationMessages = {
+        resourceName: {
+            required: 'Resource Name is required.',
+            maxlength: 'Resource Name cannot exceed 100 characters.',
+            whitespace: 'Resource Name cannot be empty or whitespace only.'
+        },
+        moduleId: {
+            required: 'Module is required.'
+        },
+        version: {
+            maxlength: 'Version cannot exceed 10 characters.'
+        },
+        description: {
+            maxlength: 'Description cannot exceed 255 characters.'
+        }
+    };
 }
