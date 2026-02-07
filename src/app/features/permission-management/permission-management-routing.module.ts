@@ -7,8 +7,10 @@ import { PermissionCreateComponent } from './pages/permission-create/permission-
 const routes: Routes = [
   { path: '', component: PermissionListingComponent },
   { path: 'permission-details/:id', component: PermissionDetailsComponent },
-  { path: 'permission-edit/:id', component: PermissionCreateComponent },
-  { path: 'permission-create', component: PermissionCreateComponent }
+  { path: '', component: PermissionListingComponent },
+  { path: 'permission-details/:id', component: PermissionDetailsComponent },
+  { path: 'manage', component: PermissionCreateComponent },
+  { path: 'permission-create', redirectTo: 'manage', pathMatch: 'full' }
 ];
 
 @NgModule({

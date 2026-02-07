@@ -152,8 +152,8 @@ export const ROUTES = {
   },
   PERMISSIONS: {
     LIST: ['permissions'],
-    CREATE: ['permissions', 'permission-create'],
-    EDIT: (id: string) => ['permissions', 'permission-edit', id],
+    CREATE: ['permissions', 'manage'],
+    EDIT: (id: string) => ['permissions', 'manage'],
     DETAILS: (id: string) => ['permissions', 'permission-details', id]
   },
   ACTIONS: {

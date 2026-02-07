@@ -19,7 +19,7 @@ export class PermissionInfoComponent {
   constructor(
     private route: ActivatedRoute,
     private permissionService: PermissionService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.permissionId = this.route.snapshot.paramMap.get('id') ?? '';
@@ -30,8 +30,8 @@ export class PermissionInfoComponent {
 
   getPermissionDetails(permissionId: string): void {
     this.permissionService.getPermissionById(permissionId).subscribe({
-      next: (response) => {
-        this.permissionData = response.body;
+      next: (data) => {
+        this.permissionData = data;
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);

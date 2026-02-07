@@ -248,14 +248,38 @@ export class UserRoleAssignmentComponent implements OnInit {
         
         this.rolesService.getAllRoles().subscribe({
             next: (response) => {
-                console.log('✅ Roles loaded successfully:', response);
-                // Handle both wrapped and unwrapped responses
-                this.availableRoles = response.body?.data || response.body || [];
-                console.log('📋 Available roles:', this.availableRoles);
+                console.log('✅ Roles API Response:', response);
+                console.log('Response body:', response.body);
+                console.log('Response body type:', typeof response.body);
+                console.log('Is array:', Array.isArray(response.body));
+                
+                // Handle multiple possible response formats
+                if (response.body) {
+                    if (Array.isArray(response.body)) {
+                        this.availableRoles = response.body;
+                    } else if (response.body.data && Array.isArray(response.body.data)) {
+                        this.availableRoles = response.body.data;
+                    } else if (response.body.roles && Array.isArray(response.body.roles)) {
+                        this.availableRoles = response.body.roles;
+                    } else {
+                        console.warn('⚠️ Unexpected response format:', response.body);
+                        this.availableRoles = [];
+                    }
+                } else {
+                    this.availableRoles = [];
+                }
+                
+                console.log('📋 Parsed available roles:', this.availableRoles);
+                console.log('📊 Total roles count:', this.availableRoles.length);
                 this.loading = false;
             },
             error: (err) => {
                 console.error('❌ Error loading roles:', err);
+                console.error('Error details:', {
+                    status: err.status,
+                    message: err.message,
+                    error: err.error
+                });
                 this.loading = false;
                 this.availableRoles = [];
             }

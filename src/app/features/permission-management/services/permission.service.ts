@@ -83,16 +83,40 @@ export class PermissionService {
   // Helper methods to load triplets
   getModules(): Observable<any> {
     const url = `${this.baseUrl}${API_ENDPOINTS.USERS.MODULES.GET_ALL}`;
-    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(
+      map((res: any) => {
+        // Handle both wrapped and unwrapped responses
+        if (Array.isArray(res.body)) {
+          return res.body;
+        }
+        return res.body?.data || [];
+      })
+    );
   }
 
   getResources(): Observable<any> {
     const url = `${this.baseUrl}${API_ENDPOINTS.USERS.RESOURCES.GET_ALL}`;
-    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(
+      map((res: any) => {
+        // Handle both wrapped and unwrapped responses
+        if (Array.isArray(res.body)) {
+          return res.body;
+        }
+        return res.body?.data || [];
+      })
+    );
   }
 
   getActions(): Observable<any> {
     const url = `${this.baseUrl}${API_ENDPOINTS.USERS.ACTIONS.GET_ALL}`;
-    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(map((res: any) => res.body.data));
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true }).pipe(
+      map((res: any) => {
+        // Handle both wrapped and unwrapped responses
+        if (Array.isArray(res.body)) {
+          return res.body;
+        }
+        return res.body?.data || [];
+      })
+    );
   }
 }
