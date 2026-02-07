@@ -222,8 +222,8 @@
     <!-- ========================= -->
     <!-- ASSIGN ROLES -->
     <!-- ========================= -->
-    <!-- <div *ngIf="step.title === 'Assign Roles'">
-      <app-user-role-assignment [selectedRoleIds]="selectedRoleIds" (rolesChanged)="onRolesChanged()">
+    <div *ngIf="step.title === 'Assign Roles'">
+      <app-user-role-assignment [selectedRoleIds]="selectedRoleIds" (rolesChanged)="onRolesChanged($event)">
       </app-user-role-assignment>
       <div class="row kt-margin-t-20">
         <div class="col-lg-12 text-right">
@@ -232,7 +232,7 @@
           </button>
         </div>
       </div>
-    </div> -->
+    </div>
 
   </div>
 </div>

@@ -85,7 +85,7 @@
 						<div class="col-lg-4 kt-margin-b-10" *ngFor="let perm of permissions">
 							<label class="kt-checkbox kt-checkbox--brand">
 								<input type="checkbox" [checked]="isPermissionSelected(perm.id)"
-									(change)="togglePermission(perm.id)">
+									(click)="togglePermission(perm.id)">
 								{{ perm.name }} ({{ perm.code }})
 								<span></span>
 							</label>
