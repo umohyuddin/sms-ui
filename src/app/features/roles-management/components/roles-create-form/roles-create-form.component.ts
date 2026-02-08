@@ -27,6 +27,7 @@ export class RolesCreateFormComponent implements OnInit {
   roleData?: RoleResponse;
   isSaving = false;
   permissions: PermissionResponse[] = [];
+  groupedPermissions: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -62,8 +63,75 @@ export class RolesCreateFormComponent implements OnInit {
 
   private loadPermissions() {
     this.permissionService.getAllPermissions().subscribe({
-      next: (data) => this.permissions = data || [],
+      next: (data) => {
+        this.permissions = data || [];
+        this.groupPermissions();
+      },
       error: (err) => console.error('Error loading permissions:', err)
+    });
+  }
+
+  groupPermissions() {
+    const grouped = new Map();
+    
+    this.permissions.forEach(perm => {
+      const moduleName = perm.module?.name || 'Uncategorized';
+      if (!grouped.has(moduleName)) {
+        grouped.set(moduleName, {
+          moduleName,
+          resources: new Map()
+        });
+      }
+      
+      const module = grouped.get(moduleName);
+      const resourceName = perm.resource?.resourceName || 'General';
+      if (!module.resources.has(resourceName)) {
+        module.resources.set(resourceName, { resourceName, permissions: [] });
+      }
+      
+      module.resources.get(resourceName).permissions.push(perm);
+    });
+    
+    this.groupedPermissions = Array.from(grouped.values()).map(m => ({
+      ...m,
+      resources: Array.from(m.resources.values())
+    }));
+  }
+
+  getModuleSelectedCount(module: any): number {
+    return module.resources.reduce((count: number, res: any) => 
+      count + res.permissions.filter((p: any) => this.isPermissionSelected(p.id)).length, 0
+    );
+  }
+
+  getModuleTotalPermissions(module: any): number {
+    return module.resources.reduce((count: number, res: any) => count + res.permissions.length, 0);
+  }
+
+  isModuleFullySelected(module: any): boolean {
+    return this.getModuleSelectedCount(module) === this.getModuleTotalPermissions(module);
+  }
+
+  isModulePartiallySelected(module: any): boolean {
+    const selected = this.getModuleSelectedCount(module);
+    const total = this.getModuleTotalPermissions(module);
+    return selected > 0 && selected < total;
+  }
+
+  toggleModule(module: any, event: any) {
+    const isChecked = event.target.checked;
+    module.resources.forEach((res: any) => {
+      res.permissions.forEach((perm: any) => {
+        if (isChecked) {
+          if (!this.isPermissionSelected(perm.id)) {
+            this.togglePermission(perm.id);
+          }
+        } else {
+          if (this.isPermissionSelected(perm.id)) {
+            this.togglePermission(perm.id);
+          }
+        }
+      });
     });
   }
 

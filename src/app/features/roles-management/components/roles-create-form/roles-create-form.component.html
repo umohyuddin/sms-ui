@@ -1,114 +1,142 @@
 <app-toaster #toaster></app-toaster>
 <app-loader *ngIf="isLoading" type="pulse" size="lg" color="primary" [message]="loadingMessage" [overlay]="true"
-	[fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
+    [fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
 </app-loader>
 
 <div class="kt-portlet">
-	<div class="kt-portlet__head">
-		<div class="kt-portlet__head-label">
-			<h3 class="kt-portlet__head-title">
-				{{ isEditMode ? 'Update Role Details' : 'Add New Role' }}
-			</h3>
-		</div>
-	</div>
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+                {{ isEditMode ? 'Update Role Details' : 'Add New Role' }}
+            </h3>
+        </div>
+    </div>
 
-	<form class="kt-form kt-form--label-right" [formGroup]="createRoleForm" (ngSubmit)="onSubmit()">
-		<div class="kt-portlet__body">
-			<h4>Role Information</h4>
+    <form class="kt-form kt-form--label-right" [formGroup]="createRoleForm" (ngSubmit)="onSubmit()">
+        <div class="kt-portlet__body">
+            <h4>Role Information</h4>
 
-			<!-- Row 1: Code, Name, Status -->
-			<div class="form-group row form-group-marginless kt-margin-t-20">
-				<label class="col-lg-1 col-form-label required">Role Code:</label>
-				<div class="col-lg-3">
-					<input type="text" class="form-control" placeholder="e.g., SUPER_ADMIN" formControlName="code"
-						[class.is-invalid]="code?.invalid && (code?.touched || code?.dirty)"
-						[class.is-valid]="code?.valid && (code?.touched || code?.dirty)" [disabled]="isEditMode">
-					<span class="form-text text-muted">System role code</span>
-					<span class="invalid-feedback" *ngIf="code?.invalid && (code?.touched || code?.dirty)">
-						{{ getErrorMessage('code') }}
-					</span>
-				</div>
+            <!-- Row 1: Code, Name, Status -->
+            <div class="form-group row form-group-marginless kt-margin-t-20">
+                <label class="col-lg-1 col-form-label required">Role Code:</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" placeholder="e.g., SUPER_ADMIN" formControlName="code"
+                        [class.is-invalid]="code?.invalid && (code?.touched || code?.dirty)"
+                        [class.is-valid]="code?.valid && (code?.touched || code?.dirty)" [disabled]="isEditMode">
+                    <span class="form-text text-muted">System role code</span>
+                    <span class="invalid-feedback" *ngIf="code?.invalid && (code?.touched || code?.dirty)">
+                        {{ getErrorMessage('code') }}
+                    </span>
+                </div>
 
-				<label class="col-lg-1 col-form-label required">Role Name:</label>
-				<div class="col-lg-3">
-					<input type="text" class="form-control" placeholder="e.g., Super Administrator"
-						formControlName="name" [class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
-						[class.is-valid]="name?.valid && (name?.touched || name?.dirty)">
-					<span class="form-text text-muted">Human-readable name</span>
-					<span class="invalid-feedback" *ngIf="name?.invalid && (name?.touched || name?.dirty)">
-						{{ getErrorMessage('name') }}
-					</span>
-				</div>
+                <label class="col-lg-1 col-form-label required">Role Name:</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" placeholder="e.g., Super Administrator"
+                        formControlName="name" [class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
+                        [class.is-valid]="name?.valid && (name?.touched || name?.dirty)">
+                    <span class="form-text text-muted">Human-readable name</span>
+                    <span class="invalid-feedback" *ngIf="name?.invalid && (name?.touched || name?.dirty)">
+                        {{ getErrorMessage('name') }}
+                    </span>
+                </div>
 
-				<label class="col-lg-1 col-form-label">Status:</label>
-				<div class="col-lg-3">
-					<label class="kt-checkbox kt-margin-t-10">
-						<input type="checkbox" formControlName="active"> Active
-						<span></span>
-					</label>
-				</div>
-			</div>
+                <label class="col-lg-1 col-form-label">Status:</label>
+                <div class="col-lg-3">
+                    <label class="kt-checkbox kt-margin-t-10">
+                        <input type="checkbox" formControlName="active"> Active
+                        <span></span>
+                    </label>
+                </div>
+            </div>
 
-			<!-- Row 2: System Role Checkbox -->
-			<div class="form-group row form-group-marginless kt-margin-t-20">
-				<label class="col-lg-1 col-form-label">Type:</label>
-				<div class="col-lg-3">
-					<label class="kt-checkbox kt-margin-t-10">
-						<input type="checkbox" formControlName="systemRole"> System Role
-						<span></span>
-					</label>
-					<span class="form-text text-muted">Cannot be deleted</span>
-				</div>
-			</div>
+            <!-- Row 2: System Role Checkbox -->
+            <div class="form-group row form-group-marginless kt-margin-t-20">
+                <label class="col-lg-1 col-form-label">Type:</label>
+                <div class="col-lg-3">
+                    <label class="kt-checkbox kt-margin-t-10">
+                        <input type="checkbox" formControlName="systemRole"> System Role
+                        <span></span>
+                    </label>
+                    <span class="form-text text-muted">Cannot be deleted</span>
+                </div>
+            </div>
 
-			<!-- Row 3: Description -->
-			<div class="form-group row form-group-marginless kt-margin-t-20">
-				<label class="col-lg-1 col-form-label">Description:</label>
-				<div class="col-lg-8">
-					<textarea class="form-control" rows="3" placeholder="Role description" formControlName="description"
-						[class.is-invalid]="description?.invalid && (description?.touched || description?.dirty)"
-						[class.is-valid]="description?.valid && (description?.touched || description?.dirty)"></textarea>
-					<span class="invalid-feedback"
-						*ngIf="description?.invalid && (description?.touched || description?.dirty)">
-						{{ getErrorMessage('description') }}
-					</span>
-				</div>
-			</div>
+            <!-- Row 3: Description -->
+            <div class="form-group row form-group-marginless kt-margin-t-20">
+                <label class="col-lg-1 col-form-label">Description:</label>
+                <div class="col-lg-11">
+                    <textarea class="form-control" rows="3" placeholder="Role description" formControlName="description"
+                        [class.is-invalid]="description?.invalid && (description?.touched || description?.dirty)"
+                        [class.is-valid]="description?.valid && (description?.touched || description?.dirty)"></textarea>
+                    <span class="invalid-feedback"
+                        *ngIf="description?.invalid && (description?.touched || description?.dirty)">
+                        {{ getErrorMessage('description') }}
+                    </span>
+                </div>
+            </div>
 
-			<div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-separator--space-lg">
-			</div>
+            <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-separator--space-lg">
+            </div>
 
-			<h4>Permission Assignment</h4>
-			<div class="form-group row kt-margin-t-20">
-				<div class="col-lg-12">
-					<div class="row">
-						<div class="col-lg-4 kt-margin-b-10" *ngFor="let perm of permissions">
-							<label class="kt-checkbox kt-checkbox--brand">
-								<input type="checkbox" [checked]="isPermissionSelected(perm.id)"
-									(click)="togglePermission(perm.id)">
-								{{ perm.name }} ({{ perm.code }})
-								<span></span>
-							</label>
-							<div class="text-muted small">
-								{{ perm.module?.name }} > {{ perm.resource?.resourceName }} > {{ perm.action?.name }}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+            <h4>Permission Assignment</h4>
+            <div class="rp-modules kt-margin-t-20">
+                <div class="rp-module-card" *ngFor="let module of groupedPermissions">
+                    <div class="rp-module-header">
+                        <div class="rp-module-info">
+                            <div class="rp-module-icon">
+                                <i class="la la-layer-group"></i>
+                            </div>
+                            <div>
+                                <div class="rp-module-name">{{ module.moduleName }}</div>
+                                <div class="rp-module-meta">
+                                    {{ getModuleSelectedCount(module) }} of {{ getModuleTotalPermissions(module) }} permissions active
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rp-module-actions">
+                            <span class="rp-toggle-label">Master Toggle</span>
+                            <label class="rp-switch">
+                                <input type="checkbox" [checked]="isModuleFullySelected(module)"
+                                    [indeterminate]="isModulePartiallySelected(module)"
+                                    (change)="toggleModule(module, $event)">
+                                <span class="rp-slider"></span>
+                            </label>
+                        </div>
+                    </div>
 
-		<div class="kt-portlet__foot">
-			<div class="kt-form__actions">
-				<div class="row">
-					<div class="col-lg-12 text-right">
-						<button type="submit" class="btn btn-dark mr-2">
-							{{ isEditMode ? 'Update Role' : 'Add Role' }}
-						</button>
-						<button type="button" class="btn btn-danger" (click)="goToRolesListing()">Cancel</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</form>
+                    <div class="rp-module-body">
+                        <div class="rp-resource" *ngFor="let resource of module.resources">
+                            <div class="rp-resource-title">{{ resource.resourceName }}</div>
+                            <div class="rp-permissions-grid">
+                                <div class="rp-permission-card" *ngFor="let perm of resource.permissions">
+                                    <div class="rp-permission-text">
+                                        <div class="rp-permission-name">{{ perm.action?.name }}</div>
+                                        <div class="rp-permission-desc">{{ perm.action?.description || 'Permission access' }}</div>
+                                    </div>
+                                    <label class="rp-switch rp-switch-sm">
+                                        <input type="checkbox" [checked]="isPermissionSelected(perm.id)"
+                                            (change)="togglePermission(perm.id)">
+                                        <span class="rp-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+                <div class="row">
+                    <div class="col-lg-12 text-right">
+                        <button type="submit" class="btn btn-dark mr-2">
+                            {{ isEditMode ? 'Update Role' : 'Add Role' }}
+                        </button>
+                        <button type="button" class="btn btn-danger" (click)="goToRolesListing()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
