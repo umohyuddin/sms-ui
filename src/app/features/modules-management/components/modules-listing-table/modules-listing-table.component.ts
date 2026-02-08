@@ -36,7 +36,7 @@ export class ModulesListingTableComponent {
     { key: 'code', label: 'Code', sortable: true },
     { key: 'name', label: 'Name', sortable: true },
     { key: 'description', label: 'Description', sortable: false },
-    { key: 'route', label: 'Route', sortable: false },
+    // { key: 'route', label: 'Route', sortable: false },
     { key: 'actions', label: 'Actions', sortable: true }
   ];
 
