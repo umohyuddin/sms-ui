@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -19,6 +19,8 @@ import { LoaderComponent } from '../../../../shared/components/loader/loader.com
 })
 export class ResourceListingTableComponent {
     @ViewChild('toaster') toaster!: ToasterComponent;
+    @Output() deleteResource = new EventEmitter<number>();
+
     loading: boolean = false;
     pagination: Pagination<ResourceResponse> = new Pagination([], 10);
     searchControl = new FormControl('');
@@ -41,7 +43,7 @@ export class ResourceListingTableComponent {
     ];
 
     ngOnInit() {
-        this.getResources();
+        this.loadResources();
         this.subscribeToSearch();
     }
 
@@ -70,7 +72,7 @@ export class ResourceListingTableComponent {
             });
     }
 
-    private getResources() {
+    loadResources() {
         this.loading = true;
         this.resourceService.getAllResources().subscribe({
             next: (response) => {
@@ -90,7 +92,7 @@ export class ResourceListingTableComponent {
     viewResourceDetails(resource: ResourceResponse, event: Event): void {
         event.preventDefault();
         console.log('Viewing Resource ID:', resource.id);
-        // this.router.navigate(ROUTES.RESOURCES.DETAILS(resource.id.toString()));
+        this.router.navigate(ROUTES.RESOURCES.DETAILS(resource.id.toString()));
     }
 
     editResourceDetails(resource: ResourceResponse, event: Event): void {
@@ -99,7 +101,7 @@ export class ResourceListingTableComponent {
         this.router.navigate(ROUTES.RESOURCES.EDIT(resource.id.toString()));
     }
 
-    deleteResource(resourceId: number, event: Event): void {
+    onDeleteResource(resourceId: number, event: Event): void {
         event.stopPropagation();
 
         if (!resourceId) {
@@ -107,21 +109,7 @@ export class ResourceListingTableComponent {
             return;
         }
 
-        if (confirm('Are you sure you want to delete this resource?')) {
-            this.loading = true;
-            this.resourceService.deleteResource(resourceId).subscribe({
-                next: () => {
-                    this.toaster?.show('Resource deleted successfully', 'success');
-                    this.getResources();
-                    this.loading = false;
-                },
-                error: (error) => {
-                    const message = error?.error?.message || 'Failed to delete resource. Please try again.';
-                    this.toaster?.show(message, 'error');
-                    this.loading = false;
-                }
-            });
-        }
+        this.deleteResource.emit(resourceId);
     }
 
     onPageSizeChange(event: any) {

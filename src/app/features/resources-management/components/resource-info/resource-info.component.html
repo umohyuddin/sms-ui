@@ -1,0 +1,64 @@
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-dark flaticon-layers"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                Resource Details
+            </h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+
+            </div>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <div class="kt-widget kt-widget--user-profile-3" *ngIf="resourceData">
+            <div class="kt-widget__top">
+                <div class="kt-widget__pic kt-widget__pic--primary kt-font-primary kt-font-bolder kt-font-light">
+                    {{ getInitials(resourceData?.resourceName) }}
+                </div>
+                <div class="kt-widget__content">
+                    <div class="kt-widget__head">
+                        <div class="kt-widget__user">
+                            <a href="#" class="kt-widget__username">
+                                {{ resourceData?.resourceName }}
+                            </a>
+                            <span class="ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
+                                [ngClass]="resourceData?.isActive ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">
+                                {{ resourceData?.isActive ? 'Active' : 'Inactive' }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="kt-widget__subhead row">
+                        <div class="col-4">
+                            <a><b>Module:</b> {{ resourceData?.module?.name || 'N/A' }}</a>
+                        </div>
+
+                        <div class="col-4">
+                            <a><b>Version:</b> {{ resourceData?.version }}</a>
+                        </div>
+
+                        <div class="col-4">
+                            <a><b>Auth Required:</b> 
+                                <span class="kt-badge kt-badge--inline"
+                                    [ngClass]="resourceData?.isAuthRequired ? 'kt-badge--primary' : 'kt-badge--warning'">
+                                    {{ resourceData?.isAuthRequired ? 'Yes' : 'No' }}
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="kt-widget__info" *ngIf="resourceData?.description">
+                        <div class="kt-widget__desc">
+                            <i style="font-size: 1.5rem !important;" class="flaticon-document mr-2"></i>
+                            <b>{{ resourceData?.description }}</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

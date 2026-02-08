@@ -1,0 +1,107 @@
+<app-toaster #toaster></app-toaster>
+<app-loader *ngIf="isSaving" type="pulse" size="lg" color="primary" [message]="loaderMessage" [overlay]="true"
+    [fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
+</app-loader>
+
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+                {{ isEditMode ? 'Update Resource' : 'Add New Resource' }}
+            </h3>
+        </div>
+    </div>
+
+    <form class="kt-form kt-form--label-right" [formGroup]="resourceForm" (ngSubmit)="onSubmit()">
+        <div class="kt-portlet__body">
+            <h4>Resource Information</h4>
+
+            <div class="form-group row form-group-marginless kt-margin-t-20">
+                <label class="col-lg-1 col-form-label required">Module:</label>
+                <div class="col-lg-3">
+                    <select class="form-control" formControlName="moduleId"
+                        [class.is-invalid]="moduleId?.invalid && (moduleId?.touched || moduleId?.dirty)"
+                        [class.is-valid]="moduleId?.valid && (moduleId?.touched || moduleId?.dirty)">
+                        <option value="">Select a Module</option>
+                        <option *ngFor="let mod of modules" [value]="mod.id">{{ mod.name }}</option>
+                    </select>
+                    <span class="form-text text-muted">Select the module this resource belongs to</span>
+                    <span class="invalid-feedback" *ngIf="moduleId?.invalid && (moduleId?.touched || moduleId?.dirty)">
+                        {{ getErrorMessage('moduleId') }}
+                    </span>
+                </div>
+
+                <label class="col-lg-1 col-form-label required">Resource Name:</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" formControlName="resourceName"
+                        placeholder="e.g., Student Management"
+                        [class.is-invalid]="resourceName?.invalid && (resourceName?.touched || resourceName?.dirty)"
+                        [class.is-valid]="resourceName?.valid && (resourceName?.touched || resourceName?.dirty)">
+                    <span class="form-text text-muted">Enter the resource name</span>
+                    <span class="invalid-feedback"
+                        *ngIf="resourceName?.invalid && (resourceName?.touched || resourceName?.dirty)">
+                        {{ getErrorMessage('resourceName') }}
+                    </span>
+                </div>
+
+                <label class="col-lg-1 col-form-label">Version:</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" formControlName="version" placeholder="e.g., v1"
+                        [class.is-invalid]="version?.invalid && (version?.touched || version?.dirty)"
+                        [class.is-valid]="version?.valid && (version?.touched || version?.dirty)">
+                    <span class="form-text text-muted">API version (optional)</span>
+                    <span class="invalid-feedback" *ngIf="version?.invalid && (version?.touched || version?.dirty)">
+                        {{ getErrorMessage('version') }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row form-group-marginless kt-margin-t-20">
+                <label class="col-lg-1 col-form-label">Auth Required:</label>
+                <div class="col-lg-3">
+                    <label class="kt-checkbox kt-margin-t-10">
+                        <input type="checkbox" formControlName="isAuthRequired">
+                        <span></span>
+                    </label>
+                </div>
+
+                <label class="col-lg-1 col-form-label">Active:</label>
+                <div class="col-lg-3">
+                    <label class="kt-checkbox kt-margin-t-10">
+                        <input type="checkbox" formControlName="isActive">
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+            <h4 class="kt-margin-b-20">Description</h4> -->
+
+            <div class="form-group row">
+                <label class="col-lg-1 col-form-label">Description:</label>
+                <div class="col-lg-11">
+                    <textarea class="form-control" formControlName="description" rows="3"
+                        placeholder="Enter resource description"
+                        [class.is-invalid]="description?.invalid && (description?.touched || description?.dirty)"
+                        [class.is-valid]="description?.valid && (description?.touched || description?.dirty)"></textarea>
+                    <span class="form-text text-muted">Provide a brief description of the resource</span>
+                    <span class="invalid-feedback"
+                        *ngIf="description?.invalid && (description?.touched || description?.dirty)">
+                        {{ getErrorMessage('description') }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="kt-portlet__foot">
+            <div class="kt-form__actions d-flex justify-content-end">
+                <button type="submit" class="btn btn-dark mr-2">
+                    {{ isEditMode ? 'Update' : 'Save' }}
+                </button>
+                <button type="button" (click)="onCancel()" class="btn btn-secondary">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

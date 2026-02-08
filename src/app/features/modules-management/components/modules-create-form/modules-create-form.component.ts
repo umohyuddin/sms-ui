@@ -49,9 +49,9 @@ export class ModulesCreateFormComponent {
       code: ['', [Validators.required, Validators.maxLength(50), this.noWhitespaceValidator]],
       name: ['', [Validators.required, Validators.maxLength(100), this.noWhitespaceValidator]],
       description: ['', [Validators.maxLength(255)]],
-      icon: ['', [Validators.maxLength(50)]],
-      route: ['', [Validators.maxLength(100)]],
-      displayOrder: [null],
+      // icon: ['', [Validators.maxLength(50)]],
+      // route: ['', [Validators.maxLength(100)]],
+      // displayOrder: [null],
       systemModule: [false],
       active: [true]
     });

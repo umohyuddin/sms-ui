@@ -50,7 +50,7 @@
 			</div>
 
 			<!-- Row 2: Icon, Route -->
-			<div class="form-group row form-group-marginless kt-margin-t-20">
+			<!-- <div class="form-group row form-group-marginless kt-margin-t-20">
 				<label class="col-lg-1 col-form-label">Icon:</label>
 				<div class="col-lg-3">
 					<input type="text" class="form-control" placeholder="e.g., la la-users" formControlName="icon"
@@ -76,7 +76,7 @@
 					<input type="number" class="form-control" placeholder="e.g., 1" formControlName="displayOrder">
 					<span class="form-text text-muted">Menu order</span>
 				</div>
-			</div>
+			</div> -->
 
 			<!-- Row 3: System Module Checkbox -->
 			<div class="form-group row form-group-marginless kt-margin-t-20">
@@ -93,7 +93,7 @@
 			<!-- Row 4: Description -->
 			<div class="form-group row form-group-marginless kt-margin-t-20">
 				<label class="col-lg-1 col-form-label">Description:</label>
-				<div class="col-lg-8">
+				<div class="col-lg-11">
 					<textarea class="form-control" rows="3" placeholder="Module description" formControlName="description"
 						[ngClass]="{'is-invalid': description?.invalid && (description?.touched || description?.dirty), 'is-valid': description?.valid && (description?.touched || description?.dirty)}"></textarea>
 					<div class="invalid-feedback d-block" *ngIf="description?.invalid && (description?.touched || description?.dirty)">

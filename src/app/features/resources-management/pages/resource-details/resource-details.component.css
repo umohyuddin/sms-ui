@@ -1,0 +1,15 @@
+.kt-info {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.kt-info__label {
+    font-weight: 600;
+    min-width: 150px;
+    color: #3f4254;
+}
+
+.kt-info__data {
+    color: #5a6268;
+}
