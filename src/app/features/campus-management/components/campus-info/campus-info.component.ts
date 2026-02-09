@@ -5,9 +5,11 @@ import { CampusResponse } from '../../models/campusResponse';
 import { HttpClientService } from '../../../../core/services/http-client.service';
 import { ActivatedRoute } from '@angular/router';
 import { AppConfigService } from '../../../../core/services/app-config.service';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
+import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 
 
 @Component({
@@ -18,21 +20,28 @@ import { SmsUtil } from '../../../../core/utils/smsUtil';
   styleUrls: ['./Campus-info.component.css']
 })
 export class CampusInfoComponent {
+  private readonly MODULE = 'Campus';
+  private readonly COMPONENT = 'InfoDisplay';
+
   campusData?: CampusResponse;
   CampusId!: string;
   URL = '';
   constructor(private httpClientService: HttpClientService
     , private route: ActivatedRoute,
-    private appConfig: AppConfigService
+    private appConfig: AppConfigService,
+    private logger: LoggerService
   ) { }
 
   ngOnInit(): void {
-    console.log('API Base URL:', this.appConfig.apiBaseUrl);
+    LoggerUtil.group(`📌 [${this.MODULE}] Init`);
     this.URL = this.appConfig.apiBaseUrl;
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '🔗 API Base URL set');
 
     this.CampusId = this.route.snapshot.paramMap.get('id') ?? '';
-    console.log('Campus ID from route:', this.CampusId);
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '📍 Campus ID from route', this.CampusId);
+    
     this.getCampusDetails(this.CampusId);
+    LoggerUtil.groupEnd();
   }
 
   getCampusDetails(campusId: string): void {

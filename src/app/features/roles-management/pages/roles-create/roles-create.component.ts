@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { RolesCreateFormComponent } from '../../components/roles-create-form/roles-create-form.component';
 
 @Component({

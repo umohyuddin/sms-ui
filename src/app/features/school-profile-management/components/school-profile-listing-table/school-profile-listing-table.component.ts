@@ -5,6 +5,7 @@ import { SchoolProfileManagementService } from '../../services/school-profile-ma
 import { Router, RouterLink } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { InstituteContactCreateFormComponent } from '../institute-contact-create-form/institute-contact-create-form.component';
 import { InstituteContactListingTableComponent } from '../institute-contact-listing-table/institute-contact-listing-table.component';
 import { InstituteSocialLinkCreateFormComponent } from '../institute-social-link-create-form/institute-social-link-create-form.component';
@@ -68,7 +69,7 @@ export class SchoolProfileListingTableComponent {
   constructor(
     private router: Router,
     private schoolProfileManagementService: SchoolProfileManagementService
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.getProfileDetails();

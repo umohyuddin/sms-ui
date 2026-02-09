@@ -4,6 +4,7 @@ import { OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { SalaryStructureComponentListingTableComponent } from '../../components/salary-structure-component-listing-table/salary-structure-component-listing-table.component';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
@@ -19,7 +20,7 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
   standalone: true,
 })
 export class SalaryStructureComponentListingComponent implements OnInit {
-  constructor(private router: Router) { }
+  constructor(private router: Router, private logger: LoggerService) { }
 
   ngOnInit(): void {}
 

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { SalaryComponentCreateFormComponent } from '../../../salary-component-management/components/salary-component-create-form/salary-component-create-form.component';
 import { SalaryStructureComponentCreateFormComponent } from '../../components/salary-structure-component-create-form/salary-structure-component-create-form.component';
 

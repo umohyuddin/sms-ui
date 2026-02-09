@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
 
@@ -27,7 +28,7 @@ export class EmployeeSalaryListingTableComponent implements OnInit {
 
   constructor(private router: Router,
     private employeeSalaryService: EmployeeSalaryService,
-  ) { }
+   private logger: LoggerService) { }
 
   columns = [
     { key: 'employeeCode', label: 'Employee Code', sortable: true },
@@ -44,6 +45,7 @@ export class EmployeeSalaryListingTableComponent implements OnInit {
   ];
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.getEmployeeSalaries();
     //this.subscribeToSearch();
   }

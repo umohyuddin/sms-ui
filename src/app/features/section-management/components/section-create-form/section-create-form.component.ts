@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
 import { CampusResponse } from '../../../campus-management/models/campusResponse';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
@@ -37,9 +38,10 @@ export class SectionCreateFormComponent {
     private campusManagementService: CampusManagementService,
     private standardManagemenetService: StandardManagementService,
     private sectionManagementService: SectionManagementService
-  ) {}
+  , private logger: LoggerService) {}
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);
     this.sectionId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.sectionId;

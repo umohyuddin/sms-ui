@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { FeeCatalogComponentManagementService } from '../../services/fee-catalog-component-management.service';
 import { FeeCatalogComponentResponse } from '../../models/FeeCatalogComponentResponse';
@@ -32,7 +33,7 @@ export class FeeCatalogComponentListingTableComponent {
     private router: Router,
     private feeCatalogManagementService: FeeCatalogManagementService,
     private feeCatalogComponentManagementService: FeeCatalogComponentManagementService
-  ) { }
+  , private logger: LoggerService) { }
 
   columns = [
     { key: 'componentName', label: 'Fee Component Name', sortable: true },
@@ -46,6 +47,7 @@ export class FeeCatalogComponentListingTableComponent {
   ];
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.getFeeCatalog()
     this.initializeForm();
     this.getFeeCatalogComponents();

@@ -4,6 +4,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { AcademicYearResponse } from '../../models/AcademicYearResponse';
 import { HttpClientService } from '../../../../core/services/http-client.service';
 import { ActivatedRoute } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { AcademicYearManagementService } from '../../services/academic-year-management.service';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
@@ -27,7 +28,7 @@ export class TenantInfoComponent {
   constructor(
     private academicYearService: AcademicYearManagementService,
     private route: ActivatedRoute
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.routedId = this.route.snapshot.paramMap.get('id') ?? '';

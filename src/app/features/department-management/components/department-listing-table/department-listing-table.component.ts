@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { NoDataComponent } from '../../../../shared/components/no-data/no-data.component';
 import { PortletHeaderComponent } from '../../../../shared/components/portlet-header/portlet-header.component';
 import { PageTexts } from '../../../../core/const/PAGE_TEXT';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-department-listing-table',
@@ -30,7 +31,8 @@ export class DepartmentListingTableComponent {
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router,
-    private departmentService: DepartmentManagementService) { }
+    private departmentService: DepartmentManagementService,
+    private logger: LoggerService) { }
 
   columns = [
     { key: 'departmentName', label: 'Department Name', sortable: true },

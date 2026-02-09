@@ -6,6 +6,7 @@ import { DesignationResponse } from '../models/DesignationResponse';
 import { DesignationManagementService } from '../../services/designationManagement.service';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-designation-info',
@@ -20,7 +21,7 @@ export class DesignationInfoComponent {
   URL = '';
   constructor(private httpClientService: DesignationManagementService
     , private route: ActivatedRoute
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.routedId = this.route.snapshot.paramMap.get('id') ?? '';

@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
 import { StandardManagementService } from '../../services/standard-management.service';
 import { CampusResponse } from '../../../campus-management/models/campusResponse';
@@ -63,9 +64,10 @@ export class StandardCreateFormComponent {
     private route: ActivatedRoute,
     private campusManagementService: CampusManagementService,
     private standardManagementService: StandardManagementService
-  ) {}
+  , private logger: LoggerService) {}
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);
     LoggerUtil.log(this.MODULE, this.COMPONENT, '⚙️ Initializing component');
 

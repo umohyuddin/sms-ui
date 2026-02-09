@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { EmployeeDeductionService } from '../../services/employee-deduction.service';
 import { EmployeeDeduction } from '../../models/employee-deduction.model';
 
@@ -14,7 +15,7 @@ export class EmployeeDeductionListingComponent implements OnInit {
   employeeDeduction: EmployeeDeduction | null = null;
   loading = false;
 
-  constructor(private employeeDeductionService: EmployeeDeductionService) { }
+  constructor(private employeeDeductionService: EmployeeDeductionService, private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.loadEmployeeDeductions();

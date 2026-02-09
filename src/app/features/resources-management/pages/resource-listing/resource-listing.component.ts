@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ResourceListingTableComponent } from '../../components/resource-listing-table/resource-listing-table.component';
 import { ResourceService } from '../../services/resource.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
@@ -31,7 +32,7 @@ export class ResourceListingComponent implements OnInit {
     pendingDeleteId?: number;
     loading = false;
 
-    constructor(private router: Router, private resourceService: ResourceService) { }
+    constructor(private router: Router, private resourceService: ResourceService, private logger: LoggerService) { }
 
     ngOnInit(): void { }
 

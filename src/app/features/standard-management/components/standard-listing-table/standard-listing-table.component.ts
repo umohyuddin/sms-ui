@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { StandardResponse } from '../../models/standardResponse';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { Subject } from 'rxjs';
 import { StandardManagementService } from '../../services/standard-management.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
@@ -33,7 +34,7 @@ export class StandardListingTableComponent {
     private router: Router,
     private standardManagementService: StandardManagementService,
     private campusManagementService: CampusManagementService
-  ) { }
+  , private logger: LoggerService) { }
 
   columns = [
     { key: 'standardName', label: 'Standard Name', sortable: true },
@@ -44,6 +45,7 @@ export class StandardListingTableComponent {
   ];
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.initializeForm();
     this.getCampuses();
     this.getStandards();

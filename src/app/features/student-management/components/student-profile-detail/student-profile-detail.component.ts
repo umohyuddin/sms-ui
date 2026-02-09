@@ -7,6 +7,7 @@ import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-student-profile-detail',
@@ -33,7 +34,7 @@ export class StudentProfileDetailComponent {
     private fb: FormBuilder,
     private studentManagementService: StudentManagementService,
     private router: Router
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.initializeForm();

@@ -9,6 +9,7 @@ import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 import { EmployeeTypeService } from '../../../employee-type-management/services/employee-type.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-salary-structure-create-form',
@@ -35,10 +36,11 @@ export class SalaryStructureCreateFormComponent {
     private route: ActivatedRoute,
     private router: Router,
     private appConfig: AppConfigService
-  ) { }
+  , private logger: LoggerService) { }
 
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);
     this.routedId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.routedId;

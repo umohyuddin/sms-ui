@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-employee-advance-details',
@@ -8,5 +9,5 @@ import { Component } from '@angular/core';
   styleUrl: './employee-advance-details.component.css'
 })
 export class EmployeeAdvanceDetailsComponent {
-
+  constructor(private logger: LoggerService) {}
 }

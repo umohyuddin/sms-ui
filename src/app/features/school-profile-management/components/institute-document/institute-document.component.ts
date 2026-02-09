@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { InstituteDocumentResponseDto } from '../../models/InstituteDocumentResponseDto';
 import { SchoolProfileManagementService } from '../../services/school-profile-management.service';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-institute-document',
@@ -24,7 +25,8 @@ export class InstituteDocumentComponent {
 
   constructor(
     private fb: FormBuilder,
-    private schoolProfileManagementService: SchoolProfileManagementService
+    private schoolProfileManagementService: SchoolProfileManagementService,
+    private logger: LoggerService
   ) { }
 
   ngOnInit(): void {

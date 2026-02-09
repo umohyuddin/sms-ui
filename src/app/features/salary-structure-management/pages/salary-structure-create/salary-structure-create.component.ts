@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { SalaryComponentCreateFormComponent } from '../../../salary-component-management/components/salary-component-create-form/salary-component-create-form.component';
 import { SalaryStructureCreateFormComponent } from '../../components/salary-structure-create-form/salary-structure-create-form.component';
 

@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { RolesService } from '../../services/roles.service';
@@ -37,7 +38,7 @@ export class RolesListingTableComponent {
     private router: Router,
     private rolesService: RolesService,
     private jwtService: JwtService
-  ) { }
+  , private logger: LoggerService) { }
 
   columns = [
     { key: 'roleName', label: 'Role Name', sortable: true },
@@ -46,6 +47,7 @@ export class RolesListingTableComponent {
   ];
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.getRoles();
     this.subscribeToSearch();
   }

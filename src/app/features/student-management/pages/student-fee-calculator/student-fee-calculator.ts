@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { StudentManagementService } from '../../services/student-management.service';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { FeeRateResponse } from '../../../fee-rate-management/models/FeeRateResponse';
 import { ActiveFeeRateResponse, FeeComponent } from '../../models/ActiveFeeRateFormatedResponse';
 import { DiscountRate } from '../../models/DiscountRate';
@@ -43,7 +44,8 @@ export class StudentFeeCaculator implements OnInit {
   constructor(private studentManagementSerivce: StudentManagementService,
     private configService: AppConfigService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private logger: LoggerService
   ) { }
 
 
@@ -75,9 +77,9 @@ export class StudentFeeCaculator implements OnInit {
         campusId: params['campusId'],
         standardId: params['standardId']
       };
-      console.log("Query Params Object:", apiParams);
+      this.logger.info('Query Params Object', apiParams);
       this.academicYear = this.configService.getAcademicYear();
-      console.log("academic Year", this.academicYear)
+      this.logger.info('academic Year', this.academicYear);
       this.getActiveDiscounts(apiParams);
       this.getActiveFeeRates(apiParams);
       if (this.isEditMode) {
@@ -91,26 +93,26 @@ export class StudentFeeCaculator implements OnInit {
   private mapAssignedFeesToUI(assignments: StudentFeeAssignmentFlatDTO[]): void {
 
     if (!assignments.length || !this.activeFeeRate_.length) {
-      console.warn('⚠️ Fee catalogs not loaded or no assignments');
+      this.logger.warn('Fee catalogs not loaded or no assignments');
       return;
     }
 
-    console.log('🧩 Mapping assigned FEES to UI...');
-    console.table(assignments);
+    this.logger.info('Mapping assigned FEES to UI');
+    this.logger.debug('Assignments', assignments);
 
     // Reset first
     this.selectedComponents = {};
 
     assignments.forEach(assign => {
 
-      console.log('➡️ Processing assigned fee:', assign);
+      this.logger.info('Processing assigned fee', assign);
 
       const feeCatalog = this.activeFeeRate_.find(
         f => f.id === assign.feeCatalogId
       );
 
       if (!feeCatalog) {
-        console.warn('❌ Fee Catalog not found:', assign.feeCatalogId);
+        this.logger.warn('Fee Catalog not found', assign.feeCatalogId);
         return;
       }
 
@@ -119,7 +121,7 @@ export class StudentFeeCaculator implements OnInit {
       );
 
       if (!component) {
-        console.warn('❌ Fee Component not found:', assign.feeComponentId);
+        this.logger.warn('Fee Component not found', assign.feeComponentId);
         return;
       }
 
@@ -133,8 +135,8 @@ export class StudentFeeCaculator implements OnInit {
       if (!exists) {
         this.selectedComponents[feeCatalog.id].push(component);
 
-        console.log('✅ FEE COMPONENT MARKED');
-        console.log({
+        this.logger.success('FEE COMPONENT MARKED');
+        this.logger.debug('Fee component details', {
           feeCatalogId: feeCatalog.id,
           feeCatalogName: feeCatalog.name,
           feeComponentId: component.id,
@@ -143,7 +145,7 @@ export class StudentFeeCaculator implements OnInit {
       }
     });
 
-    console.log('🎯 FINAL SELECTED FEES STATE:', this.selectedComponents);
+    this.logger.info('FINAL SELECTED FEES STATE', this.selectedComponents);
 
     this.calculateDiscount();
     this.updateTotals();

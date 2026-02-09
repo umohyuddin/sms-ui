@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RolePermissionService } from '../../services/role-permission.service';
 import { PermissionService } from '../../../permission-management/services/permission.service';
 import { RolesService } from '../../services/roles.service';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { forkJoin } from 'rxjs';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
@@ -41,7 +42,8 @@ export class RolePermissionAssignmentComponent implements OnInit {
         private router: Router,
         private rolePermissionService: RolePermissionService,
         private permissionService: PermissionService,
-        private rolesService: RolesService
+        private rolesService: RolesService,
+        private logger: LoggerService
     ) { }
 
     ngOnInit(): void {
@@ -66,7 +68,7 @@ export class RolePermissionAssignmentComponent implements OnInit {
                 this.loading = false;
             },
             error: (err) => {
-                console.error('Error loading data', err);
+                this.logger.error('Error loading data', err);
                 this.loading = false;
             }
         });
@@ -201,7 +203,7 @@ export class RolePermissionAssignmentComponent implements OnInit {
                             this.goBack();
                         },
                         error: (err) => {
-                            console.error('Error assigning permissions', err);
+                            this.logger.error('Error assigning permissions', err);
                             this.saving = false;
                         }
                     });
@@ -211,7 +213,7 @@ export class RolePermissionAssignmentComponent implements OnInit {
                 }
             },
             error: (err) => {
-                console.error('Error clearing permissions', err);
+                this.logger.error('Error clearing permissions', err);
                 this.saving = false;
             }
         });

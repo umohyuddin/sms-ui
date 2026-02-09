@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { EmployeeDocumentResponseDto } from '../../models/EmployeeDocumentResponseDto';
@@ -31,7 +32,7 @@ export class EmployeeDocumentComponent {
     private employeeManagementService: EmployeeManagementService,
     private route: ActivatedRoute,
     private appConfig: AppConfigService
-  ) { }
+  , private logger: LoggerService) { }
 
 
 

@@ -8,6 +8,7 @@ import { AcademicYearResponse } from '../../../tenant-management/models/Academic
 import { StudentFeeSummaryResponse } from '../../models/StudentFeeSummaryResponse';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { EmployeeDocumentResponseDto } from '../../models/EmployeeDocumentResponseDto';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { EmployeePersonalInformationComponent } from '../employee-personal-information/employee-personal-information.component';
@@ -62,7 +63,7 @@ export class EmployeeInfoComponent {
     private desingationService: DesignationManagementService,
     private route: ActivatedRoute,
     private appConfig: AppConfigService
-  ) { }
+  , private logger: LoggerService) { }
 
 
 

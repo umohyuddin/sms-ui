@@ -7,6 +7,7 @@ import { DesignationResponse } from '../models/DesignationResponse';
 import { DesignationManagementService } from '../../services/designationManagement.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-designation-listing-table',
@@ -25,7 +26,7 @@ export class DesignationListingTableComponent {
   constructor(
     private router: Router,
     private designationService: DesignationManagementService
-  ) { }
+  , private logger: LoggerService) { }
 
   columns = [
     { key: 'designationName', label: 'Designation Name' },

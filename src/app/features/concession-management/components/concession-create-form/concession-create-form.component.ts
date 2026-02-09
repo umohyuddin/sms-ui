@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { ConcessionManagementService } from '../../services/concession-management.service';
 import { ConcessionResponse } from '../../models/ConcessionResponse';
@@ -32,9 +33,10 @@ export class ConcessionCreateFormComponent {
     private feeCatalogManagementService: FeeCatalogManagementService,
     private route: ActivatedRoute,
     private router: Router,
-  ) { }
+   private logger: LoggerService) { }
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.getFeeCatalogMeta();
 
     this.initializeForm();

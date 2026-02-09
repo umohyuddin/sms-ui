@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { LoggerService } from './logger.service';
 import { HttpClientService } from './http-client.service';
 import { HTTP_METHOD } from '../const/HTTP_METHOD';
 import { HttpClient, HttpResponse } from '@angular/common/http';
@@ -33,28 +34,27 @@ export class AppConfigService {
 
   constructor(
     private httpClientService: HttpClientService,
-    private http: HttpClient
+    private http: HttpClient,
+    private logger: LoggerService
   ) { }
 
   /**
    * Load config from local JSON file
    */
   loadConfig(): void {
-    console.group('📥 Loading Local Config');
+    this.logger.group('📥 Loading Local Config');
     this.httpClientService.request<any>(HTTP_METHOD.GET, '/assets/config/config.json', { observeResponse: true })
       .subscribe({
         next: (response: HttpResponse<any>) => {
-          console.log('%c✅ Local config loaded', 'color: green; font-weight: bold;');
-          console.log('Status:', response.status);
-          console.log('Body:', response.body);
+          this.logger.success('Local config loaded');
+          this.logger.info('Status', response.status);
+          this.logger.info('Body', response.body);
           this.config = response.body;
         },
         error: (error) => {
-          console.error('%c❌ Failed to load local config', 'color: red; font-weight: bold;');
-          console.error('Status:', error.status);
-          console.error('Message:', error.message);
+          this.logger.error('Failed to load local config', { status: error.status, message: error.message });
         },
-        complete: () => console.log('🔚 Local config load complete')
+        complete: () => this.logger.complete('Local config load complete')
       });
     console.groupEnd();
   }
@@ -63,7 +63,7 @@ export class AppConfigService {
    * Load config + backend static data
    */
   async loadConfig_(): Promise<void> {
-    console.group('🚀 App Startup Initialization');
+    this.logger.group('🚀 App Startup Initialization');
 
     try {
       // Load local config first
@@ -71,20 +71,20 @@ export class AppConfigService {
         this.httpClientService.request<any>(HTTP_METHOD.GET, '/assets/config/config.json', { observeResponse: true })
       );
       this.config = response.body;
-      console.group('📦 Config Loaded');
-      console.log('Status:', response.status);
-      console.log('Config:', response.body);
-      console.groupEnd();
+      this.logger.group('📦 Config Loaded');
+      this.logger.info('Status', response.status);
+      this.logger.info('Config', response.body);
+      this.logger.groupEnd();
 
       // Fetch backend static data
-      console.group('🌐 Loading Backend Static Data');
+      this.logger.group('🌐 Loading Backend Static Data');
 
       const data = await firstValueFrom(
         forkJoin({
           academicYear: this.http.get<AcademicYearResponse>(`${this.apiBaseUrl}/api/school/academic/current`)
             .pipe(
               catchError(err => {
-                console.error('%c❌ Failed to fetch academic year', 'color: red; font-weight: bold;', err);
+                this.logger.error('Failed to fetch academic year', err);
                 // fallback default academic year
                 return of({
                   id: 0,
@@ -98,7 +98,7 @@ export class AppConfigService {
           employeeLookUp: this.http.request<any>(HTTP_METHOD.GET, `${this.apiBaseUrl}${API_ENDPOINTS.LOOKUP.EMPLOYEE_DOCS_META}`)
             .pipe(
               catchError(err => {
-                console.error('%c❌ Failed to fetch employee lookup data', 'color: red; font-weight: bold;', err);
+                this.logger.error('Failed to fetch employee lookup data', err);
                 return of({});
               })
             )
@@ -109,13 +109,13 @@ export class AppConfigService {
       this.academicYearData = data.academicYear;
       this.employeeLookUpData = data.employeeLookUp;
 
-      console.group('✅ Backend Data Loaded');
-      console.log('Academic Year:', this.academicYearData);
-      console.log('Lookup Data:', this.employeeLookUpData);
-      console.groupEnd();
+      this.logger.group('✅ Backend Data Loaded');
+      this.logger.info('Academic Year', this.academicYearData);
+      this.logger.info('Lookup Data', this.employeeLookUpData);
+      this.logger.groupEnd();
 
       // Map dropdowns
-      console.group('📌 Mapping Dropdowns');
+      this.logger.group('📌 Mapping Dropdowns');
 
       this.docsTypeDD = SmsUtil.mapToKeyValue(this.employeeLookUpData?.docs ?? []);
       console.log('docsTypeDD:', this.docsTypeDD);
@@ -154,13 +154,13 @@ export class AppConfigService {
       console.log('systemEmployeeType:', this.systemEmployeeType);
 
       console.groupEnd(); // dropdowns
-      console.groupEnd(); // backend data
+      this.logger.groupEnd(); // backend data
 
     } catch (err) {
-      console.error('%c❌ App config initialization failed', 'color: red; font-weight: bold;', err);
+      this.logger.error('App config initialization failed', err);
     }
 
-    console.groupEnd(); // app startup
+    this.logger.groupEnd(); // app startup
   }
 
   /** Base API URL */

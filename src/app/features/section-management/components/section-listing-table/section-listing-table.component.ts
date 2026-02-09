@@ -7,6 +7,7 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
 import { SectionManagementService } from '../../services/section-management.service';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { StandardResponse } from '../../../standard-management/models/standardResponse';
 import { Campus, SectionResponse } from '../../models/SectionResponse';
 
@@ -34,7 +35,8 @@ export class SectionListingTableComponent {
     private router: Router,
     private campusManagementService: CampusManagementService,
     private standardManagementService: StandardManagementService,
-    private sectionManagementService: SectionManagementService
+    private sectionManagementService: SectionManagementService,
+    private logger: LoggerService
   ) { }
 
   columns = [
@@ -65,23 +67,23 @@ export class SectionListingTableComponent {
 
   onCampusChange() {
     this.sectionsSearchForm.get('campusId')?.valueChanges.subscribe(campusId => {
-      console.log("Campus changed:", campusId);
+      this.logger.info('Campus changed', campusId);
       this.loadStandardsByCampus(campusId);
     });
   }
   loadStandardsByCampus(campusId: any) {
     this.standardManagementService.getCampusById(campusId).subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
+        this.logger.success('Success Status', response.status);
+        this.logger.info('Response Body', response.body);
         this.standardsResponseDD = response.body;
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.logger.error('Request Error Status', error.status);
+        this.logger.error('Message', error.message);
       },
       complete: () => {
-        console.log('🔚 Request Complete');
+        this.logger.complete('Request Complete');
       }
     });
   }
@@ -90,16 +92,16 @@ export class SectionListingTableComponent {
   private getCampuses() {
     this.campusManagementService.getAllCampuses().subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
+        this.logger.success('Success Status', response.status);
+        this.logger.info('Response Body', response.body);
         this.campusesResponseDD = response.body;
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.logger.error('Request Error Status', error.status);
+        this.logger.error('Message', error.message);
       },
       complete: () => {
-        console.log('🔚 Request Complete');
+        this.logger.complete('Request Complete');
       }
     });
 
@@ -108,16 +110,16 @@ export class SectionListingTableComponent {
   private getStandards() {
     this.standardManagementService.getAllStandards().subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
+        this.logger.success('Success Status', response.status);
+        this.logger.info('Response Body', response.body);
         this.sectionsResponse = response.body;
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.logger.error('Request Error Status', error.status);
+        this.logger.error('Message', error.message);
       },
       complete: () => {
-        console.log('🔚 Request Complete');
+        this.logger.complete('Request Complete');
       }
     })
   }
@@ -125,23 +127,23 @@ export class SectionListingTableComponent {
   getAllSections() {
     this.sectionManagementService.getAllSection().subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
+        this.logger.success('Success Status', response.status);
+        this.logger.info('Response Body', response.body);
         this.sectionsResponse = response.body;
         this.pagination = new Pagination(this.sectionsResponse, 10);
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.logger.error('Request Error Status', error.status);
+        this.logger.error('Message', error.message);
       },
       complete: () => {
-        console.log('🔚 Request Complete');
+        this.logger.complete('Request Complete');
       }
     })
   }
 
   viewSectionDetails(item: SectionResponse, event: Event): void {
-    console.log('Viewing details for Section ID:', item.id);
+    this.logger.info('Viewing details for Section ID', item.id);
     event.preventDefault();  // prevents anchor default behavior
     this.router.navigate(ROUTES.CAMPUS.SECTION.DETAILS(item.id.toString()));
   }

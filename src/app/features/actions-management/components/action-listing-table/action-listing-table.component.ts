@@ -5,6 +5,7 @@ import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
 import { ActionResponse } from '../../models/ActionResponse';
 import { ActionService } from '../../services/action.service';
 import { Pagination } from '../../../../core/pagar/pagination';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
     selector: 'app-action-listing-table',
@@ -32,7 +33,7 @@ export class ActionListingTableComponent implements OnInit, OnDestroy {
         { key: 'actions', label: 'Actions' }
     ];
 
-    constructor(private actionService: ActionService) { }
+    constructor(private actionService: ActionService, private logger: LoggerService) { }
 
     ngOnInit() {
         this.loadActions();

@@ -9,6 +9,8 @@ import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { EmployeeManagementService } from '../../../employee-management/services/employee-management.service';
 import { Pagination } from '../../../../core/pagar/pagination';
+import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
+import { LoggerService } from '../../../../core/services/logger.service';
 @Component({
   selector: 'app-department-create-form',
   standalone: true,
@@ -17,6 +19,8 @@ import { Pagination } from '../../../../core/pagar/pagination';
   styleUrl: './department-create-form.component.css'
 })
 export class DepartmentCreateFormComponent {
+  private readonly MODULE = 'Department';
+  private readonly COMPONENT = 'CreateForm';
 
   departmentDD: KeyValueOption[] = [];
   responseData?: DepartmentResponse
@@ -37,24 +41,27 @@ export class DepartmentCreateFormComponent {
     private route: ActivatedRoute,
     private router: Router,
     private departmentManagementService: DepartmentManagementService,
-    private employeeManagementSerivce: EmployeeManagementService
+    private employeeManagementSerivce: EmployeeManagementService,
+    private logger: LoggerService
 
   ) { }
 
   ngOnInit() {
+    LoggerUtil.group(`📌 [${this.MODULE}] Init`);
     this.getAllDepartments()
     this.initializeForm();
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Form initialized');
 
     this.initSearch();
     this.routedId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.routedId;
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '📝 Mode detected', this.isEditMode ? 'EDIT' : 'CREATE');
 
     if (this.isEditMode) {
-      console.log('Edit Mode Activated - Load data for:', this.routedId);
+      LoggerUtil.log(this.MODULE, this.COMPONENT, '🔹 Loading department details for', this.routedId);
       this.getDepartmentDetails(this.routedId!);
-    } else {
-      console.log('Create Mode Activated');
     }
+    LoggerUtil.groupEnd();
   }
   private initSearch(): void {
     this.search$

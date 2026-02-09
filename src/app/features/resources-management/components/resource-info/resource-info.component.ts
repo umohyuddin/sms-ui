@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientService } from '../../../../core/services/http-client.service';
 import { ActivatedRoute } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
@@ -24,7 +25,7 @@ export class ResourceInfoComponent {
         private httpClientService: HttpClientService,
         private route: ActivatedRoute,
         private appConfig: AppConfigService
-    ) { }
+    , private logger: LoggerService) { }
 
     ngOnInit(): void {
         console.log('API Base URL:', this.appConfig.apiBaseUrl);

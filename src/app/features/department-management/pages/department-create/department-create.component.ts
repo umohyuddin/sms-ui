@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { PageSubHeaderComponent } from '../../../../shared/components/page-sub-header/page-sub-header.component';
 import { DepartmentCreateFormComponent } from '../../components/department-create-form/department-create-form.component';
 

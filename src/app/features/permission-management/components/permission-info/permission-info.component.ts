@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { PermissionService } from '../../services/permission.service';
 import { PermissionResponse } from '../../models/PermissionResponse';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
@@ -19,7 +20,7 @@ export class PermissionInfoComponent {
   constructor(
     private route: ActivatedRoute,
     private permissionService: PermissionService
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.permissionId = this.route.snapshot.paramMap.get('id') ?? '';

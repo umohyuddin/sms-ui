@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-dashboard-header-stats',

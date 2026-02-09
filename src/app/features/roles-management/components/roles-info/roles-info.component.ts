@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { RolesService } from '../../services/roles.service';
 import { RoleResponse } from '../../models/RoleResponse';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
@@ -19,7 +20,7 @@ export class RolesInfoComponent {
   constructor(
     private route: ActivatedRoute,
     private rolesService: RolesService
-  ) {}
+  , private logger: LoggerService) {}
 
   ngOnInit(): void {
     this.roleId = this.route.snapshot.paramMap.get('id') ?? '';

@@ -4,6 +4,7 @@ import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { StudentDocumentResponse } from '../../models/StudentDocumentResponse';
 import { StudentManagementService } from '../../services/student-management.service';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-student-documents',
@@ -24,7 +25,7 @@ export class StudentDocumentsComponent {
   constructor(
     private fb: FormBuilder,
     private studentManagementService: StudentManagementService
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.initializeForm();

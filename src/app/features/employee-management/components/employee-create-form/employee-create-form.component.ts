@@ -14,6 +14,7 @@ import { DesignationManagementService } from '../../../designation-management/se
 import { DesignationResponse } from '../../../designation-management/components/models/DesignationResponse';
 import { UserRoleAssignmentComponent } from '../../../roles-management/components/user-role-assignment/user-role-assignment.component';
 import { RolesService } from '../../../roles-management/services/roles.service';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 
 interface EmployeeStep {
@@ -63,7 +64,8 @@ export class EmployeeCreateFormComponent implements OnInit {
     private employeeManagementSerivce: EmployeeManagementService,
     private departmentService: DepartmentManagementService,
     private designationService: DesignationManagementService,
-    private rolesService: RolesService
+    private rolesService: RolesService,
+    private logger: LoggerService
   ) { }
 
   ngOnInit() {
@@ -146,18 +148,18 @@ export class EmployeeCreateFormComponent implements OnInit {
     for (const name in controls) {
       if (controls[name].invalid) {
         invalid.push(name);
-        console.log(`${name} is invalid`, controls[name].errors);
+        this.logger.debug(`${name} is invalid`, controls[name].errors);
       }
     }
     return invalid;
   }
 
   private employeeLookUpData() {
-    console.group('📦 Fetching Employee Lookup Data');
+    this.logger.group('📦 Fetching Employee Lookup Data');
     this.employeeManagementSerivce.getDocsMeta()
       .subscribe({
         next: (response) => {
-          console.info('✅ Lookup data loaded', {
+          this.logger.success('Lookup data loaded', {
             status: response.status,
             body: response.body
           });
@@ -169,15 +171,14 @@ export class EmployeeCreateFormComponent implements OnInit {
           this.religionDD = SmsUtil.mapToKeyValue(response.body.religions);
         },
         error: (error) => {
-          console.error('❌ Failed to load lookup data', {
+          this.logger.error('Failed to load lookup data', {
             status: error.status,
             message: error.message
           });
         },
         complete: () => {
-
-          console.log('🔚 Request Complete');
-          console.groupEnd();
+          this.logger.complete('Request Complete');
+          this.logger.groupEnd();
         }
       })
   }
@@ -190,8 +191,9 @@ export class EmployeeCreateFormComponent implements OnInit {
           key: d.id.toString(),
           label: d.departmentName // or whatever property contains the department name
         }));
+        this.logger.success(`Loaded ${this.departments.length} departments`);
       },
-      error: error => console.error('Request Error:', error)
+      error: error => this.logger.error('Failed to load departments', error)
     });
   }
 
@@ -201,12 +203,12 @@ export class EmployeeCreateFormComponent implements OnInit {
       `${this.createForm.get('firstName')?.value} ${this.createForm.get('middleName')?.value || ''} ${this.createForm.get('lastName')?.value}`.trim()
     );
 
-    console.group('➡️ Submitting Employee Form');
-    console.info('Form Data:', this.createForm.getRawValue());
+    this.logger.group('➡️ Submitting Employee Form');
+    this.logger.info('Form Data:', this.createForm.getRawValue());
 
     if (this.createForm.invalid) {
       this.createForm.markAllAsTouched();
-      console.warn('❌ Employee form is invalid', {
+      this.logger.warn('Employee form is invalid', {
         invalidControls: this.getInvalidControls(),
         formValue: this.createForm.getRawValue()
       });
@@ -216,7 +218,7 @@ export class EmployeeCreateFormComponent implements OnInit {
     this.employeeManagementSerivce.save(this.createForm.getRawValue())
       .subscribe({
         next: (response) => {
-          console.info('✅ Employee saved successfully', {
+          this.logger.success('Employee saved successfully', {
             status: response.status,
             employee: response.body
           });
@@ -227,21 +229,21 @@ export class EmployeeCreateFormComponent implements OnInit {
           if (this.currentStep.formGroup) this.currentStep.formGroup.enable();
         },
         error: (error) => {
-          console.error('❌ Failed to save employee', {
+          this.logger.error('Failed to save employee', {
             status: error.status,
             message: error.message,
             formData: this.createForm.getRawValue()
           });
         },
         complete: () => {
-          console.log('🔚 Employee form submission complete');
-          console.groupEnd();
+          this.logger.complete('Employee form submission complete');
+          this.logger.groupEnd();
         }
       })
   }
 
   saveDepartment() {
-    if (!this.response?.id) return console.error('❌ Employee ID missing');
+    if (!this.response?.id) return this.logger.error('Employee ID missing');
 
     if (this.departmentForm.invalid) {
       this.departmentForm.markAllAsTouched();
@@ -256,12 +258,12 @@ export class EmployeeCreateFormComponent implements OnInit {
 
     this.departmentService.assignDepartment(payload).subscribe({
       next: (res) => {
-        console.info('✅ Department assigned', res.body);
+        this.logger.success('Department assigned', res.body);
         this.currentStep.completed = true;  // mark step completed
         this.loadDesignationsByDepartment(payload.departmentId); // preload designations
         this.nextStep();                     // enable next step form
       },
-      error: (err) => console.error('❌ Failed to assign department', err)
+      error: (err) => this.logger.error('Failed to assign department', err)
     });
   }
 
@@ -274,14 +276,14 @@ export class EmployeeCreateFormComponent implements OnInit {
           key: d.id.toString(),
           label: d.designationName
         }));
-        console.info(`✅ Loaded ${this.designations.length} designations for department ID ${departmentId}`);
+        this.logger.success(`Loaded ${this.designations.length} designations for department ID ${departmentId}`);
       },
-      error: error => console.error('❌ Failed to load designations', error)
+      error: error => this.logger.error('Failed to load designations', error)
     });
   }
 
   saveDesignation() {
-    if (!this.response?.id) return console.error('❌ Employee ID missing');
+    if (!this.response?.id) return this.logger.error('Employee ID missing');
 
     if (this.designationForm.invalid) {
       this.designationForm.markAllAsTouched();
@@ -297,12 +299,12 @@ export class EmployeeCreateFormComponent implements OnInit {
 
     this.designationService.assignDesignation(payload).subscribe({
       next: (res) => {
-        console.info('✅ Designation assigned', res.body);
+        this.logger.success('Designation assigned', res.body);
         this.currentStep.completed = true;
         this.nextStep();
         this.router.navigate(ROUTES.EMPLOYEE.LIST) // move to next step if exists
       },
-      error: (err) => console.error('❌ Failed to assign designation', err)
+      error: (err) => this.logger.error('Failed to assign designation', err)
     });
   }
 
@@ -312,15 +314,15 @@ export class EmployeeCreateFormComponent implements OnInit {
   }
 
   saveRoles() {
-    if (!this.response?.id) return console.error('❌ Employee ID missing');
+    if (!this.response?.id) return this.logger.error('Employee ID missing');
 
     this.rolesService.assignRolesToUser(this.response.id, this.selectedRoleIds).subscribe({
       next: (res) => {
-        console.info('✅ Roles assigned', res.body);
+        this.logger.success('Roles assigned', res.body);
         this.currentStep.completed = true;
         this.router.navigate(ROUTES.EMPLOYEE.LIST);
       },
-      error: (err) => console.error('❌ Failed to assign roles', err)
+      error: (err) => this.logger.error('Failed to assign roles', err)
     });
   }
 

@@ -8,6 +8,7 @@ import { EmployeeResponse } from '../../models/EmployeeResponse';
 import { EmployeeManagementService } from '../../services/employee-management.service';
 import { EmployeeAddress } from '../../models/EmployeeAddress';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { HttpClientService } from '../../../../core/services/http-client.service';
@@ -42,7 +43,7 @@ export class EmployeeAddressComponent {
     private route: ActivatedRoute,
     private appConfig: AppConfigService,
     private httpClientService: HttpClientService,
-  ) { }
+   private logger: LoggerService) { }
 
 
 

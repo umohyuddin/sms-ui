@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { InstituteFacilityResponse } from '../../models/InstituteFacilityResponse';
@@ -28,7 +29,7 @@ export class InstituteFacilityListingTableComponent implements OnChanges {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private schoolProfileManagementService: SchoolProfileManagementService) {}
+  constructor(private schoolProfileManagementService: SchoolProfileManagementService, private logger: LoggerService) {}
 
   columns = [
     { key: 'name', label: 'Facility Name', sortable: true },
@@ -40,6 +41,7 @@ export class InstituteFacilityListingTableComponent implements OnChanges {
   ];
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.refreshFacilities();
     this.subscribeToSearch();
   }

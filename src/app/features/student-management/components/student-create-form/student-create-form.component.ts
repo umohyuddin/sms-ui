@@ -8,6 +8,7 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
@@ -59,7 +60,7 @@ export class StudentCreateFormComponent {
     private studentService: StudentManagementService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  , private logger: LoggerService) {}
 
   ngOnInit(): void {
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);

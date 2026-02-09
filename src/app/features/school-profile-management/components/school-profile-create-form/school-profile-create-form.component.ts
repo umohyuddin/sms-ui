@@ -11,6 +11,7 @@ import { InstituteResponse } from '../../models/InstituteResponse';
 import { SchoolProfileManagementService } from '../../services/school-profile-management.service';
 import { CommonModule } from '@angular/common';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-school-profile-create-form',

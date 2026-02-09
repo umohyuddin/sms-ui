@@ -5,6 +5,7 @@ import { Pagination } from '../../../../core/pagar/pagination';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
 import { StandardResponse } from '../../../standard-management/models/standardResponse';
@@ -41,7 +42,8 @@ export class StudentListingTableComponent {
     private studentManagementService: StudentManagementService,
     private campusManagementService: CampusManagementService,
     private standardManagementService: StandardManagementService,
-    private sectionManagementService: SectionManagementService
+    private sectionManagementService: SectionManagementService,
+    private logger: LoggerService
   ) { }
 
   columns = [
@@ -82,23 +84,23 @@ export class StudentListingTableComponent {
   private getCampuses() {
     this.campusManagementService.getAllCampuses().subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
+        this.logger.success('Success Status', response.status);
+        this.logger.info('Response Body', response.body);
         this.campusesResponse = response.body;
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.logger.error('Request Error Status', error.status);
+        this.logger.error('Message', error.message);
       },
       complete: () => {
-        console.log('🔚 Request Complete');
+        this.logger.complete('Request Complete');
       }
     });
   }
 
   onCampusChange() {
     this.studentSearchForm.get('campusId')?.valueChanges.subscribe(campusId => {
-      console.log("Campus changed:", campusId);
+      this.logger.info('Campus changed', campusId);
       this.loadStandardByCampusId(campusId);
     });
   }
@@ -106,16 +108,16 @@ export class StudentListingTableComponent {
     this.studentSearchForm.get('standardId')?.setValue('')
     this.standardManagementService.getCampusById(campusId).subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
+        this.logger.success('Success Status', response.status);
+        this.logger.info('Response Body', response.body);
         this.standardsResponse = response.body;
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.logger.error('Request Error Status', error.status);
+        this.logger.error('Message', error.message);
       },
       complete: () => {
-        console.log('🔚 Request Complete');
+        this.logger.complete('Request Complete');
       }
     });
   }
@@ -123,17 +125,17 @@ export class StudentListingTableComponent {
   getAllStudents() {
     this.studentManagementService.getAllStudents().subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
+        this.logger.success('Success Status', response.status);
+        this.logger.info('Response Body', response.body);
         this.studentsResponse = response.body;
         this.pagination = new Pagination(this.studentsResponse, 10);
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.logger.error('Request Error Status', error.status);
+        this.logger.error('Message', error.message);
       },
       complete: () => {
-        console.log('🔚 Request Complete');
+        this.logger.complete('Request Complete');
       }
     });
 

@@ -5,6 +5,7 @@ import { ConcessionComponentManagementService } from '../../services/concession-
 import { ConcessionComponentResponse } from '../../models/ConcessionComponentResponse';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
 import { CHARGE_TYPE_CLASSES, RECURRENCE_RULE_CLASSES } from '../../../../core/const/COLOR_CONST';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class ConcessionComponentInfoComponent {
   constructor(
     private concessionComponentManagementService: ConcessionComponentManagementService,
     private route: ActivatedRoute,
+    private logger: LoggerService
   ) { }
 
   ngOnInit(): void {

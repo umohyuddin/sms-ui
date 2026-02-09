@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { PermissionCreateFormComponent } from '../../components/permission-create-form/permission-create-form.component';
 
 @Component({

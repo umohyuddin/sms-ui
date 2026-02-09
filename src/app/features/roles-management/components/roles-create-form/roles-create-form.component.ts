@@ -10,6 +10,7 @@ import { LoaderComponent } from '../../../../shared/components/loader/loader.com
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 import { PermissionService } from '../../../permission-management/services/permission.service';
 import { PermissionResponse } from '../../../permission-management/models/PermissionResponse';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-roles-create-form',
@@ -35,7 +36,8 @@ export class RolesCreateFormComponent implements OnInit {
     private router: Router,
     private rolesService: RolesService,
     private permissionService: PermissionService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private logger: LoggerService
   ) { }
 
   ngOnInit() {
@@ -67,7 +69,7 @@ export class RolesCreateFormComponent implements OnInit {
         this.permissions = data || [];
         this.groupPermissions();
       },
-      error: (err) => console.error('Error loading permissions:', err)
+      error: (err) => this.logger.error('Error loading permissions', err)
     });
   }
 
@@ -164,7 +166,7 @@ export class RolesCreateFormComponent implements OnInit {
       organizationId: this.jwtService.getOrganizationId()
     };
 
-    console.log('📋 Role Payload:', payload);
+    this.logger.info('Role Payload', payload);
 
     this.rolesService.saveRole(this.roleId, payload).subscribe({
       next: () => {
@@ -178,8 +180,7 @@ export class RolesCreateFormComponent implements OnInit {
       },
       error: (error) => {
         this.isSaving = false;
-        console.error('❌ Save Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.logger.error('Save Error Status', { status: error.status, message: error.message });
         this.toaster?.show('Failed to save role.', 'error');
       },
       complete: () => {
@@ -205,8 +206,7 @@ export class RolesCreateFormComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.logger.error('Request Error Status', { status: error.status, message: error.message });
       }
     });
   }

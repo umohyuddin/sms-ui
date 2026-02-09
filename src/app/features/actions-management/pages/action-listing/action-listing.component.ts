@@ -8,12 +8,13 @@ import { Pagination } from '../../../../core/pagar/pagination';
 import { DeletePopupComponent } from '../../../../shared/components/delete-popup/delete-popup.component';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
     selector: 'app-action-listing',
     standalone: true,
     imports: [CommonModule, RouterModule, DeletePopupComponent, ToasterComponent, LoaderComponent],
-    templateUrl: './action-listing.component.html'
+    templateUrl: './action-listing.html'
 })
 export class ActionListingComponent implements OnInit {
     @ViewChild('toaster') toaster!: ToasterComponent;
@@ -23,7 +24,7 @@ export class ActionListingComponent implements OnInit {
     isDeletePopupOpen = false;
     pendingDeleteId?: number;
 
-    constructor(private actionService: ActionService, private router: Router) { }
+    constructor(private actionService: ActionService, private router: Router, private logger: LoggerService) { }
 
     ngOnInit() {
         this.loadActions();

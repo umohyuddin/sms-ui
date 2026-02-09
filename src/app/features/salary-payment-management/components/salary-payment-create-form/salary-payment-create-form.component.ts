@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-salary-payment-create-form',

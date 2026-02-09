@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { SchoolProfileManagementService } from '../../services/school-profile-management.service';
 import { InstituteFinancialSettings } from '../../models/InstituteFinancialSettings';
 import { TaxTypeResponse } from '../../models/TaxTypeResponse';
@@ -34,7 +35,7 @@ export class InstituteFinancialSettingsFormComponent implements OnInit, OnChange
     constructor(
         private fb: FormBuilder,
         private schoolService: SchoolProfileManagementService
-    ) {
+    , private logger: LoggerService) {
         this.initForm();
     }
 

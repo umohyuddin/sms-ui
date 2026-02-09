@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ActivatedRoute } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { FeeCatalogResponse } from '../../models/FeeCatalogResponse';
 import { FeeCatalogManagementService } from '../../services/fee-catalog-management.service';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
@@ -21,7 +22,7 @@ export class FeeCatalogInfoComponent {
     private feeCatalogManagementService: FeeCatalogManagementService,
     private route: ActivatedRoute,
 
-  ) { }
+   private logger: LoggerService) { }
 
   ngOnInit(): void {
 

@@ -5,6 +5,7 @@ import { SalaryStructureResponse } from '../../../salary-structure-management/mo
 import { ActivatedRoute, Router } from '@angular/router';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { SalaryStructureDetails } from '../../../salary-structure-component-management/models/SalaryStructureDetails';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { EmployeeManagementService } from '../../services/employee-management.service';
@@ -26,7 +27,7 @@ export class EmployeeAssignSalaryComponent {
     private employeeManagementService: EmployeeManagementService,
     private route: ActivatedRoute,
 
-  ) { }
+   private logger: LoggerService) { }
 
   ngOnInit(): void {
 

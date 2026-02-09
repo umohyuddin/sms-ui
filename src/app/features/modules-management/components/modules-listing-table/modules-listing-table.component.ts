@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { ModulesService } from '../../services/modules.service';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ModuleResponse } from '../../models/ModuleResponse';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { JwtService } from '../../../../core/services/jwt.service';
@@ -29,7 +30,8 @@ export class ModulesListingTableComponent {
   constructor(
     private router: Router,
     private modulesService: ModulesService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private logger: LoggerService
   ) {}
 
   columns = [
@@ -59,7 +61,7 @@ export class ModulesListingTableComponent {
           this.pagination = new Pagination(this.modules, 10);
         },
         error: (error) => {
-          console.error('Search error:', error);
+          this.logger.error('Search error', error);
         }
       });
   }
@@ -71,8 +73,7 @@ export class ModulesListingTableComponent {
         this.pagination = new Pagination(this.modules, 10);
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.logger.error('Request Error Status', { status: error.status, message: error.message });
       }
     });
   }
@@ -103,8 +104,7 @@ export class ModulesListingTableComponent {
           this.pendingDeleteId = undefined;
         },
         error: (error) => {
-          console.error('❌ Delete Error Status:', error.status);
-          console.error('Message:', error.message);
+          this.logger.error('Delete Error Status', { status: error.status, message: error.message });
           this.isDeletePopupOpen = false;
           this.pendingDeleteId = undefined;
         }

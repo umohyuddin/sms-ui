@@ -6,6 +6,7 @@ import { EmployeeTypeService } from '../../services/employee-type.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-employee-type-create-form',
@@ -24,9 +25,10 @@ export class EmployeeTypeCreateFormComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-  ) { }
+   private logger: LoggerService) { }
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.initializeForm();
 
     this.routedId = this.route.snapshot.paramMap.get('id');

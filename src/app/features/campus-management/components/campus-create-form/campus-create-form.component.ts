@@ -12,6 +12,7 @@ import { CampusManagementService } from '../../services/campus-management.servic
 import { CampusMetaData } from '../../models/CampusMetaData';
 import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { PageTexts } from '../../../../core/const/PAGE_TEXT';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 
 @Component({
@@ -39,7 +40,8 @@ export class CampusCreateFormComponent {
     private httpClientService: HttpClientService,
     private route: ActivatedRoute,
     private router: Router,
-    private campusManagementService: CampusManagementService
+    private campusManagementService: CampusManagementService,
+    private logger: LoggerService
   ) {}
 
   ngOnInit() {

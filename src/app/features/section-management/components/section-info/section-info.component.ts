@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { SectionResponse } from '../../models/SectionResponse';
 import { SectionManagementService } from '../../services/section-management.service';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
 
 @Component({
@@ -19,29 +20,30 @@ export class SectionInfoComponent {
   URL = '';
   constructor(
     private sectionManagementService: SectionManagementService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private logger: LoggerService
   ) { }
 
   ngOnInit(): void {
     this.sectionId = this.route.snapshot.paramMap.get('id') ?? '';
-    console.log('Section ID from route:', this.sectionId);
+    this.logger.info('Section ID from route', this.sectionId);
     this.getSectionDetails(this.sectionId);
   }
 
   getSectionDetails(sectionId: string): void {
     this.sectionManagementService.getSectionById(sectionId).subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
+        this.logger.success('Success Status', response.status);
+        this.logger.info('Response Body', response.body);
         this.sectionData = response.body;
-        console.log('📦 Standard data :', this.sectionData);
+        this.logger.info('Standard data', this.sectionData);
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.logger.error('Request Error Status', error.status);
+        this.logger.error('Message', error.message);
       },
       complete: () => {
-        console.log('🔚 Request Complete');
+        this.logger.complete('Request Complete');
       }
     })
   }

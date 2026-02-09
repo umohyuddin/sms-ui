@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClientService } from '../../../core/services/http-client.service';
 import { AppConfigService } from '../../../core/services/app-config.service';
+import { LoggerService } from '../../../core/services/logger.service';
 import { Observable } from 'rxjs';
 import { HTTP_METHOD } from '../../../core/const/HTTP_METHOD';
 import { API_ENDPOINTS } from '../../../core/const/API_ENDPOINTS';
@@ -12,9 +13,9 @@ export class StudentManagementService {
 
   private baseUrl = '';
 
-  constructor(private http: HttpClientService, private appConfig: AppConfigService) {
+  constructor(private http: HttpClientService, private appConfig: AppConfigService, private logger: LoggerService) {
     this.baseUrl = appConfig.apiBaseUrl;
-    console.log('API Base URL:', this.appConfig.apiBaseUrl);
+    this.logger.info('API Base URL', this.appConfig.apiBaseUrl);
   }
 getDocsMeta(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.EMPLOYEE_DOCS_META}`, { observeResponse: true });
@@ -42,7 +43,7 @@ getDocsMeta(): Observable<any> {
         link.click();
         window.URL.revokeObjectURL(objectUrl);
       },
-      error: (err) => console.error('Error downloading document', err)
+      error: (err) => this.logger.error('Error downloading document', err)
     });
 }
 

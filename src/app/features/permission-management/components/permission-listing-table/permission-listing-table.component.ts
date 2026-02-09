@@ -2,6 +2,7 @@ import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { PermissionService } from '../../services/permission.service';
@@ -35,7 +36,7 @@ export class PermissionListingTableComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private permissionService: PermissionService
-  ) { }
+  , private logger: LoggerService) { }
 
   columns = [
     { key: 'module', label: 'Module', sortable: true },
@@ -47,6 +48,7 @@ export class PermissionListingTableComponent implements OnInit, OnDestroy {
   ];
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.getPermissions();
     this.subscribeToSearch();
   }

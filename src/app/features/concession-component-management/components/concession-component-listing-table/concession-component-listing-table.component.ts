@@ -8,6 +8,7 @@ import { CHARGE_TYPE_CLASSES, RECURRENCE_RULE_CLASSES } from '../../../../core/c
 import { ConcessionComponentResponse, DiscountType } from '../../models/ConcessionComponentResponse';
 import { ConcessionComponentManagementService } from '../../services/concession-component-management.service';
 import { ConcessionManagementService } from '../../../concession-management/services/concession-management.service';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-concession-component-listing-table',
@@ -31,7 +32,8 @@ export class ConcessionListingTableComponent {
   constructor(private router: Router,
     private fb: FormBuilder,
     private concessionComponentManagementService: ConcessionComponentManagementService,
-    private concessionManagementService: ConcessionManagementService
+    private concessionManagementService: ConcessionManagementService,
+    private logger: LoggerService
   ) { }
 
   columns = [

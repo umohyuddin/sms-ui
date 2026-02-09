@@ -5,6 +5,7 @@ import { SalaryStructureResponse } from '../../models/SalaryStructureResponse';
 import { ActivatedRoute } from '@angular/router';
 import { SalaryStructureService } from '../../services/salary-structure.service';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class SalaryStructureInfoComponent {
   constructor(
     private salaryStructureManagementService: SalaryStructureService,
     private route: ActivatedRoute,
-  ) { }
+   private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.routedId = this.route.snapshot.paramMap.get('id') ?? '';

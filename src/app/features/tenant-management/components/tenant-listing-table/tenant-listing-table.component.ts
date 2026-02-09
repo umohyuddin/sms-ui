@@ -9,6 +9,7 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoggerService } from '../../../../core/services/logger.service';
 @Component({
   selector: 'app-tenant-listing-table',
   standalone: true,
@@ -23,7 +24,8 @@ export class TenantListingTableComponent {
   academicYears: AcademicYearResponse[] = [];
   constructor(
     private router: Router,
-    private academicYearService: AcademicYearManagementService
+    private academicYearService: AcademicYearManagementService,
+    private logger: LoggerService
   ) { }
 
   searchControl = new FormControl('');
@@ -50,10 +52,10 @@ export class TenantListingTableComponent {
   editDetails(academic_year: AcademicYearResponse, event: Event): void {
     event.preventDefault();  // prevents anchor default behavior
     if (academic_year.id === undefined) {
-      console.error('Campus ID is undefined');
+      this.logger.error('Campus ID is undefined');
       return;
     }
-    console.log('Editing Campus ID:', academic_year.id);
+    this.logger.info('Editing Campus ID', academic_year.id);
     this.router.navigate(ROUTES.ACADEMIC_YEAR.EDIT(academic_year.id.toString()));
   }
 
@@ -61,13 +63,13 @@ export class TenantListingTableComponent {
     this.loading = true;
     this.academicYearService.getAcademicYears().subscribe({
       next: (response) => {
-        console.log('📦 Academic Years:', response.body);
+        this.logger.info('Academic Years', response.body);
         this.academicYears = response.body;
         this.pagination = new Pagination(this.academicYears, 10);
         this.loading = false;
       },
       error: (error) => {
-        console.error('❌ Error loading academic years:', error.message);
+        this.logger.error('Error loading academic years', error.message);
         this.loading = false;
       }
     });
@@ -77,17 +79,17 @@ export class TenantListingTableComponent {
     event.preventDefault();
 
     if (!academicYear?.id) { // check if academicYear or id is undefined/null
-        console.warn('Cannot view Academic Year: academicYear is undefined or missing id');
+        this.logger.warn('Cannot view Academic Year: academicYear is undefined or missing id');
         return;
     }
 
-    console.log('Viewing Academic Year ID:', academicYear.id);
+    this.logger.info('Viewing Academic Year ID', academicYear.id);
     this.router.navigate(ROUTES.ACADEMIC_YEAR.DETAILS(academicYear.id.toString()));
 }
 
   editAcademicYear(academicYear: AcademicYearResponse, event: Event) {
     event.preventDefault();
-    console.log('Editing Academic Year ID:', academicYear.id);
+    this.logger.info('Editing Academic Year ID', academicYear.id);
     //this.router.navigate(ROUTES.CAMPUS.ACADEMIC_YEAR.EDIT(academicYear.id.toString()));
   }
 
@@ -104,7 +106,7 @@ export class TenantListingTableComponent {
           this.academicYears = response.body;
           this.pagination = new Pagination(this.academicYears, 10);
         },
-        error: (error) => console.error('❌ Search Error:', error)
+        error: (error) => this.logger.error('Search Error', error)
       });
   }
 

@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 @Component({
   selector: 'app-dashboard-tenant-listing-table',
   standalone: true,

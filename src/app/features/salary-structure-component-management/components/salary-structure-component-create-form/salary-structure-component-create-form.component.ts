@@ -5,6 +5,7 @@ import { SalaryStructureService } from '../../../salary-structure-management/ser
 import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 import { SalaryStructureComponentService } from '../../services/salary-structure-component.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
@@ -38,9 +39,10 @@ export class SalaryStructureComponentCreateFormComponent {
     private salaryStructureService: SalaryStructureService,
     private salaryStructureMapping: SalaryStructureComponentService,
     private salaryComponentService: SalaryComponentService,
-  ) { }
+   private logger: LoggerService) { }
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);
     LoggerUtil.log(this.MODULE, this.COMPONENT, '⚙️ Initializing component');
 

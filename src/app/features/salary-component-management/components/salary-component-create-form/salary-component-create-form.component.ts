@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SalaryComponentService } from '../../services/salary-component.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-salary-component-create-form',
@@ -32,7 +33,7 @@ export class SalaryComponentCreateFormComponent {
     private route: ActivatedRoute,
     private router: Router,
     private salaryComponentService: SalaryComponentService
-  ) {}
+  , private logger: LoggerService) {}
 
   ngOnInit(): void {
     this.initForm();

@@ -15,6 +15,7 @@ import { ConcessionManagementService } from '../../../concession-management/serv
 import { ConcessionComponentResponse, DiscountType } from '../../../concession-component-management/models/ConcessionComponentResponse';
 import { ConcessionComponentManagementService } from '../../../concession-component-management/services/concession-component-management.service';
 import { HttpParams } from '@angular/common/http';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-concession-rate-listing-table',
@@ -43,7 +44,7 @@ export class ConcessionRateListingTableComponent {
     private concessionComponentManagementService: ConcessionComponentManagementService,
     private concessionManagementService: ConcessionManagementService,
     private feeCatalogManagementService: FeeCatalogManagementService,
-  ) { }
+   private logger: LoggerService) { }
 
   columns = [
     // { key: 'id', label: 'Id', sortable: true },
@@ -59,6 +60,7 @@ export class ConcessionRateListingTableComponent {
   ];
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.getAllDiscountTypes()
     this.getConcessionCatalogMeta();
     this.getAllConcessionRates();

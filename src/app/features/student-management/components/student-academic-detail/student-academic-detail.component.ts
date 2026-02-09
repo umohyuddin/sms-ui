@@ -4,6 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { StudentManagementService } from '../../services/student-management.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-student-academic-detail',
@@ -22,7 +23,7 @@ export class StudentAcademicDetailComponent {
       private fb: FormBuilder,
       private studentManagementService: StudentManagementService,
       private router: Router
-    ) { }
+    , private logger: LoggerService) { }
   
     ngOnInit(): void {
       this.getStudentDetails(this.studentId);

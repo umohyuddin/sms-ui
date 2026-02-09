@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { PermissionService } from '../../services/permission.service';
 import { PermissionResponse } from '../../models/PermissionResponse';
 import { ModuleResponse } from '../../models/ModuleResponse';
@@ -55,9 +56,10 @@ export class PermissionCreateFormComponent implements OnInit {
     private router: Router,
     private permissionService: PermissionService,
     private jwtService: JwtService
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.loadAllData();
   }
 

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { FeeCatalogResponse } from '../../models/FeeCatalogResponse';
@@ -29,7 +30,7 @@ export class FeeCatalogListingTableComponent {
 
   constructor(private router: Router,
     private feeCatalogManagementService: FeeCatalogManagementService,
-  ) { }
+   private logger: LoggerService) { }
 
   columns = [
     { key: 'feeCatalogName', label: 'Fee Catalog Name', sortable: true },
@@ -41,6 +42,7 @@ export class FeeCatalogListingTableComponent {
   ];
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.getFeeCatalogs();
     this.SubscribeToSearch();
   }

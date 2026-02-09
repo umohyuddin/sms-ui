@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { SchoolProfileManagementService } from '../../services/school-profile-management.service';
 import { FacilityTypeResponse } from '../../models/FacilityTypeResponse';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 interface FacilitySelection {
   facilityTypeId: number;

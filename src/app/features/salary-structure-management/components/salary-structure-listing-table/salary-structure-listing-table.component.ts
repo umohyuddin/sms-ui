@@ -6,6 +6,7 @@ import { SalaryStructureResponse } from '../../models/SalaryStructureResponse';
 import { SalaryStructureService } from '../../services/salary-structure.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
@@ -22,7 +23,7 @@ export class SalaryStructureListingTableComponent {
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router,
-    private salaryStructureService: SalaryStructureService) { }
+    private salaryStructureService: SalaryStructureService, private logger: LoggerService) { }
 
   columns = [
     { key: 'employeeType', label: 'Employee Type', sortable: true },
@@ -34,6 +35,7 @@ export class SalaryStructureListingTableComponent {
   ];
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.getSalaryStructures();
     this.subscribeToSearch();
   }

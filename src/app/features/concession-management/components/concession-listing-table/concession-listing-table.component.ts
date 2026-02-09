@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
@@ -29,7 +30,7 @@ export class ConcessionListingTableComponent {
 
   constructor(private router: Router,
     private concessionManagementService: ConcessionManagementService,
-  ) { }
+   private logger: LoggerService) { }
 
   columns = [
     // { key: 'id', label: 'Id', sortable: true },
@@ -42,6 +43,7 @@ export class ConcessionListingTableComponent {
   ];
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.getAllConcessions();
     this.SubscribeToSearch();
   }

@@ -9,6 +9,7 @@ import { StudentManagementService } from '../../services/student-management.serv
 import { AcademicYearManagementService } from '../../../tenant-management/services/academic-year-management.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 
 @Component({
@@ -34,7 +35,7 @@ export class StudentFeeSummaryComponent {
     private academicYearService: AcademicYearManagementService,
     private appCofig : AppConfigService,
     private route: ActivatedRoute
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.studentId = this.route.snapshot.paramMap.get('id') ?? '';

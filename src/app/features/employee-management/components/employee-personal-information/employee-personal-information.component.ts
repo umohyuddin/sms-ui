@@ -9,6 +9,7 @@ import { EmployeeResponse } from '../../models/EmployeeResponse';
 import { StudentFeeSummaryResponse } from '../../models/StudentFeeSummaryResponse';
 import { EmployeeManagementService } from '../../services/employee-management.service';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
 
@@ -41,7 +42,7 @@ export class EmployeePersonalInformationComponent {
     private employeeManagementService: EmployeeManagementService,
     private route: ActivatedRoute,
     private appConfig: AppConfigService
-  ) { }
+  , private logger: LoggerService) { }
 
 
 

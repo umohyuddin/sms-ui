@@ -7,6 +7,7 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { FeeComponent, FeeRateResponse } from '../../models/FeeRateResponse';
 import { FeeRateManagementService } from '../../services/fee-rate-management.service';
 import { AppConfigService } from '../../../../core/services/app-config.service';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { FeeCatalogManagementService } from '../../../fee-catalog-management/services/fee-catalog-management.service';
 import { FeeCatalogResponse } from '../../../fee-catalog-management/models/FeeCatalogResponse';
@@ -35,7 +36,8 @@ export class FeeRateListingTableComponent {
     private router: Router,
     private feeRateService: FeeRateManagementService,
     private feeCatalogManagementService: FeeCatalogManagementService,
-    private feeCatalogComponentManagementService: FeeCatalogComponentManagementService
+    private feeCatalogComponentManagementService: FeeCatalogComponentManagementService,
+    private logger: LoggerService
   ) { }
 
   columns = [
@@ -63,7 +65,7 @@ export class FeeRateListingTableComponent {
   private subscribeToFeeCatalogChange() {
     this.searchForm.get('feeCatalogId')?.valueChanges.subscribe(feeCatalogId => {
       if (feeCatalogId) {
-        console.log('Fee Catalog changed', feeCatalogId);
+        this.logger.info('Fee Catalog changed', feeCatalogId);
         this.loadFeeComponents(feeCatalogId);
       } else {
         this.feeComponentDD = []; // clear dependent dropdown
@@ -75,16 +77,16 @@ export class FeeRateListingTableComponent {
   loadFeeComponents(feeCatalogId: any) {
     this.feeCatalogComponentManagementService.getByFeeCatalogId(feeCatalogId).subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
+        this.logger.success('Success Status', response.status);
+        this.logger.info('Response Body', response.body);
         this.feeComponentDD = response.body;
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.logger.error('Request Error Status', error.status);
+        this.logger.error('Message', error.message);
       },
       complete: () => {
-        console.log('🔚 Request Complete');
+        this.logger.complete('Request Complete');
       }
     });
   }
@@ -92,8 +94,8 @@ export class FeeRateListingTableComponent {
   getFeeCatalogs() {
     this.feeCatalogManagementService.getAllFeeCatalogs().subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
+        this.logger.success('Success Status', response.status);
+        this.logger.info('Response Body', response.body);
         this.feeCatalogDD = response.body;
       },
       error: (error) => {

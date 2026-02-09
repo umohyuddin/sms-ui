@@ -6,12 +6,13 @@ import { ActionService } from '../../services/action.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
     selector: 'app-action-create',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, ToasterComponent, LoaderComponent],
-    templateUrl: './action-create.component.html'
+    templateUrl: './action-create.html'
 })
 export class ActionCreateComponent implements OnInit {
     @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
@@ -26,7 +27,8 @@ export class ActionCreateComponent implements OnInit {
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
-        private actionService: ActionService
+        private actionService: ActionService,
+        private logger: LoggerService
     ) { }
 
     ngOnInit() {

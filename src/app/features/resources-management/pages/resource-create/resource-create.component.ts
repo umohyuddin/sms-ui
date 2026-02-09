@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { ResourceCreateFormComponent } from '../../components/resource-create-form/resource-create-form.component';
 
@@ -21,9 +22,10 @@ export class ResourceCreateComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private router: Router
-    ) { }
+    , private logger: LoggerService) { }
 
     ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
         this.resourceId = this.route.snapshot.paramMap.get('id');
         this.isEditMode = !!this.resourceId;
     }

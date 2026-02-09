@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { ResourceService } from '../../services/resource.service';
@@ -31,7 +32,7 @@ export class ResourceListingTableComponent {
     constructor(
         private router: Router,
         private resourceService: ResourceService
-    ) { }
+    , private logger: LoggerService) { }
 
     columns = [
         { key: 'moduleName', label: 'Module', sortable: true },
@@ -43,6 +44,7 @@ export class ResourceListingTableComponent {
     ];
 
     ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
         this.loadResources();
         this.subscribeToSearch();
     }
@@ -67,7 +69,7 @@ export class ResourceListingTableComponent {
                 error: (error) => {
                     this.loading = false;
                     this.toaster?.show('Failed to search resources.', 'error');
-                    console.error('Search error:', error);
+                    this.logger.error('Search error', error);
                 }
             });
     }
@@ -76,7 +78,7 @@ export class ResourceListingTableComponent {
         this.loading = true;
         this.resourceService.getAllResources().subscribe({
             next: (response) => {
-                console.log('📦 Resources:', response);
+                this.logger.info('Resources loaded', response);
                 this.resources = response || [];
                 this.pagination = new Pagination(this.resources, 10);
                 this.loading = false;
@@ -84,20 +86,20 @@ export class ResourceListingTableComponent {
             error: (error) => {
                 this.loading = false;
                 this.toaster?.show('Failed to load resources.', 'error');
-                console.error('❌ Request Error:', error);
+                this.logger.error('Failed to load resources', error);
             }
         });
     }
 
     viewResourceDetails(resource: ResourceResponse, event: Event): void {
         event.preventDefault();
-        console.log('Viewing Resource ID:', resource.id);
+        this.logger.info('Viewing Resource ID', resource.id);
         this.router.navigate(ROUTES.RESOURCES.DETAILS(resource.id.toString()));
     }
 
     editResourceDetails(resource: ResourceResponse, event: Event): void {
         event.preventDefault();
-        console.log('Editing Resource ID:', resource.id);
+        this.logger.info('Editing Resource ID', resource.id);
         this.router.navigate(ROUTES.RESOURCES.EDIT(resource.id.toString()));
     }
 

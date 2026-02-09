@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { StandardResponse } from '../../models/standardResponse';
 import { ActivatedRoute } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { StandardManagementService } from '../../services/standard-management.service';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
 
@@ -21,7 +22,7 @@ export class StandardInfoComponent {
   constructor(
     private standardManagementService: StandardManagementService,
     private route: ActivatedRoute
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.standardId = this.route.snapshot.paramMap.get('id') ?? '';

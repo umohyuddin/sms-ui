@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
     selector: 'app-action-create-form',
@@ -14,6 +15,8 @@ export class ActionCreateFormComponent {
     @Input() isEditMode = false;
     @Output() submitForm = new EventEmitter<void>();
     @Output() cancel = new EventEmitter<void>();
+
+    constructor(private logger: LoggerService) {}
 
     onSubmit() {
         this.submitForm.emit();

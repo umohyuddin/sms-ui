@@ -8,6 +8,7 @@ import { SchoolProfileManagementService } from '../../services/school-profile-ma
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 import { DeletePopupComponent } from '../../../../shared/components/delete-popup/delete-popup.component';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-institute-board-member-listing-table',
@@ -32,7 +33,7 @@ export class InstituteBoardMemberListingTableComponent implements OnChanges {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private schoolProfileManagementService: SchoolProfileManagementService) {}
+  constructor(private schoolProfileManagementService: SchoolProfileManagementService, private logger: LoggerService) {}
 
   columns = [
     { key: 'fullName', label: 'Full Name', sortable: true },

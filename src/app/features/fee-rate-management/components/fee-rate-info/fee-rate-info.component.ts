@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
 import { FeeRateManagementService } from '../../services/fee-rate-management.service';
 import { FeeRateResponse } from '../../models/FeeRateResponse';
@@ -22,7 +23,7 @@ export class FeeRateInfoComponent {
   constructor(
     private feeRateManagementService: FeeRateManagementService,
     private route: ActivatedRoute
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.routedId = this.route.snapshot.paramMap.get('id') ?? '';

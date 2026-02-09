@@ -5,6 +5,7 @@ import { SalaryComponentService } from '../../services/salary-component.service'
 import { ActivatedRoute } from '@angular/router';
 import { CHARGE_TYPE_CLASSES } from '../../../../core/const/COLOR_CONST';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-salary-component-info',
@@ -20,7 +21,7 @@ export class SalaryComponentInfoComponent {
     constructor(
       private salaryComponentManagementService: SalaryComponentService,
       private route: ActivatedRoute,
-    ) { }
+     private logger: LoggerService) { }
   
     ngOnInit(): void {
   

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DesignationCreateFormComponent } from '../../components/designation-create-form/designation-create-form.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { DesignationInfoComponent } from '../../components/designation-info/designation-info.component';
 
@@ -17,9 +18,10 @@ routedId: number | null = null;
   constructor(private route: ActivatedRoute,
     private router: Router
 
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.routedId = id ? +id : null; // convert string to number

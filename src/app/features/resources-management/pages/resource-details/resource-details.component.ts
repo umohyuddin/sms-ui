@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { ResourceInfoComponent } from '../../components/resource-info/resource-info.component';
 
@@ -17,9 +18,10 @@ export class ResourceDetailsComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
-    ) { }
+     private logger: LoggerService) { }
 
     ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
         this.route.paramMap.subscribe(params => {
             const id = params.get('id');
             this.resourceId = id ? +id : null;

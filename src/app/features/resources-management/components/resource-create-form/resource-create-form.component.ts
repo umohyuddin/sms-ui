@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ResourceService } from '../../services/resource.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
@@ -29,9 +30,10 @@ export class ResourceCreateFormComponent implements OnInit {
         private fb: FormBuilder,
         private router: Router,
         private resourceService: ResourceService
-    ) { }
+    , private logger: LoggerService) { }
 
     ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
         this.initializeForm();
         this.loadModules();
 

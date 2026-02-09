@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { EmployeeTypeCreateFormComponent } from '../../components/employee-type-create-form/employee-type-create-form.component';
 import { EmployeeTypeListingTableComponent } from '../../components/employee-type-listing-table/employee-type-listing-table.component';
@@ -12,7 +13,7 @@ import { EmployeeTypeListingTableComponent } from '../../components/employee-typ
   styleUrl: './employee-type-listing.component.css'
 })
 export class EmployeeTypeListingComponent {
-constructor(private router: Router) { }
+constructor(private router: Router, private logger: LoggerService) { }
 
   ngOnInit(): void {}
 

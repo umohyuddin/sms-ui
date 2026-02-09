@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Pagination } from '../../../../core/pagar/pagination';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 import { StandardResponse } from '../../../standard-management/models/standardResponse';
 import { CampusResponse } from '../../../campus-management/models/campusResponse';
@@ -76,7 +77,8 @@ export class StudentCollectFee {
     private standardManagemenetService: StandardManagementService,
     private studentManagementSerivce: StudentManagementService,
     private configService: AppConfigService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private logger: LoggerService) { }
 
   ngOnInit() {
     this.academicYear = this.configService.getAcademicYear();
@@ -125,7 +127,7 @@ export class StudentCollectFee {
   private getCampuses() {
     this.campusManagementService.getAllCampuses().subscribe({
       next: response => this.campuses = response.body,
-      error: err => console.error(err)
+      error: err => this.logger.error('Error loading campuses', err)
     });
   }
 
@@ -139,7 +141,7 @@ export class StudentCollectFee {
   loadStandardByCampusId(campusId: any) {
     this.standardManagemenetService.getCampusById(campusId).subscribe({
       next: response => this.standardDD = response.body,
-      error: err => console.error(err)
+      error: err => this.logger.error('Error loading standards', err)
     });
   }
 

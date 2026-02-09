@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-salary-slip-details',
@@ -8,5 +9,5 @@ import { Component } from '@angular/core';
   styleUrl: './salary-slip-details.component.css'
 })
 export class SalarySlipDetailsComponent {
-
+  constructor(private logger: LoggerService) {}
 }

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { PageTexts } from '../../../../core/const/PAGE_TEXT';
 import { SchoolProfileListingTableComponent } from '../../components/school-profile-listing-table/school-profile-listing-table.component';
@@ -15,7 +16,7 @@ import { SchoolProfileListingTableComponent } from '../../components/school-prof
 export class SchoolProfileListingComponent {
 school: any = null; // initially null
  texts = PageTexts.SCHOOL_PROFILE;
-constructor(private router: Router) {}
+constructor(private router: Router, private logger: LoggerService) {}
 
 createSchool() {
   this.router.navigate(ROUTES.SCHOOL_PROFILE.CREATE); // adjust route

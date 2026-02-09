@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { StandardResponse } from '../../../standard-management/models/standardResponse';
@@ -36,7 +37,7 @@ export class EmployeeListingTableComponent {
     private fb: FormBuilder,
     private router: Router,
     private employeeManagementService: EmployeeManagementService,
-  ) { }
+   private logger: LoggerService) { }
 
 
   columns = [
@@ -72,6 +73,7 @@ export class EmployeeListingTableComponent {
 
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.getAllEmployee();
     this.SubscribeToSearch();
   }

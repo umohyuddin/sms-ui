@@ -6,6 +6,7 @@ import { HTTP_METHOD } from '../../../../core/const/HTTP_METHOD';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { HttpClientService } from '../../../../core/services/http-client.service';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -23,7 +24,8 @@ export class DepartmentInfoComponent {
   constructor(
     private httpClientService: HttpClientService,
     private route: ActivatedRoute,
-    private appConfig: AppConfigService
+    private appConfig: AppConfigService,
+    private logger: LoggerService
   ) {}
 
   ngOnInit(): void {

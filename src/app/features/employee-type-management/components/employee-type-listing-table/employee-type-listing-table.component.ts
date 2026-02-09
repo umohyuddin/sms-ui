@@ -8,6 +8,7 @@ import { FeeCatalogResponse as EmployeeTypeResponse } from '../../../fee-catalog
 import { EmployeeTypeService } from '../../services/employee-type.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-employee-type-listing-table',
@@ -26,7 +27,7 @@ export class EmployeeTypeListingTableComponent {
 
   constructor(private router: Router,
     private empTypeManagementService: EmployeeTypeService,
-  ) { }
+   private logger: LoggerService) { }
 
   columns = [
     { key: 'empTypeName', label: 'Employee Type', sortable: true },
@@ -36,6 +37,7 @@ export class EmployeeTypeListingTableComponent {
   ];
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.getEmployeeTypes();
     this.SubscribeToSearch();
   }

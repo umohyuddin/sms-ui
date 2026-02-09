@@ -9,6 +9,7 @@ import { StudentFeeSummaryResponse } from '../../models/StudentFeeSummaryRespons
 import { StudentFeeAssignmentFlatDTO } from '../../models/StudentFeeAssignmentFlatDTO';
 import { StudentDiscountAssignmentResponse } from '../../models/StudentDiscountAssignmentResponse ';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { StudentDocumentResponse } from '../../models/StudentDocumentResponse';
 import { ProfileSideWidgetTabComponent } from '../../../../shared/components/profile-side-widget-tab/profile-side-widget-tab.component';
@@ -48,7 +49,7 @@ export class StudentInfoComponent {
     private studentManagementService: StudentManagementService,
     private academicYearService: AcademicYearManagementService,
     private route: ActivatedRoute
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.studentId = this.route.snapshot.paramMap.get('id') ?? '';

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { DepartmentListingTableComponent } from '../../components/department-listing-table/department-listing-table.component';
 
 @Component({
@@ -11,7 +12,7 @@ import { DepartmentListingTableComponent } from '../../components/department-lis
   styleUrl: './department-listing.component.css'
 })
 export class DepartmentListingComponent {
-constructor(private router: Router) { }
+constructor(private router: Router, private logger: LoggerService) { }
 
   ngOnInit(): void {}
 

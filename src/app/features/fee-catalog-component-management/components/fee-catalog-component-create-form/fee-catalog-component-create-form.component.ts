@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { FeeCatalogComponentResponse } from '../../models/FeeCatalogComponentResponse';
 import { FeeCatalogResponse } from '../../../fee-catalog-management/models/FeeCatalogResponse';
@@ -46,9 +47,10 @@ export class FeeCatalogComponentCreateFormComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  , private logger: LoggerService) {}
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);
     LoggerUtil.log(this.MODULE, this.COMPONENT, '⚙️ Initializing component');
 

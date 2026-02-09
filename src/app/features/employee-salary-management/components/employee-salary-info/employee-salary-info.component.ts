@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 import { SalaryPaymentService } from '../../../salary-payment-management/services/salary-payment.service';
@@ -34,7 +35,7 @@ export class EmployeeSalaryInfoComponent {
     private employeeSalaryManagementService: EmployeeSalaryService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+  , private logger: LoggerService) { }
 
   private loadPaymentModes(): void {
     this.paymentModeDD = [

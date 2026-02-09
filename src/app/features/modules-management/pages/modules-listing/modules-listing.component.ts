@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ModulesListingTableComponent } from '../../components';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
@@ -12,7 +13,7 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
   styleUrl: './modules-listing.component.css'
 })
 export class ModulesListingComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private logger: LoggerService) {}
 
   goToCreateModule(): void {
     this.router.navigate(ROUTES.MODULES.CREATE);

@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CampusResponse } from '../../../campus-management/models/campusResponse';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
@@ -49,9 +50,10 @@ export class ConcessionRateCreateFormComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-  ) { }
+   private logger: LoggerService) { }
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);
     LoggerUtil.log(this.MODULE, this.COMPONENT, '⚙️ Initializing component');
 

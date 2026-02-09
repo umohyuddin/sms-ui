@@ -8,6 +8,7 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { EmployeeResponse } from '../../models/EmployeeResponse';
 import { EmployeeManagementService } from '../../services/employee-management.service';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { EmployeeDepartmentHistoryResponse } from '../../models/EmployeeDepartmentHistoryResponse';
 import { DesignationManagementService } from '../../../designation-management/services/designationManagement.service';
 import { EmployeeDesignationHistoryResponseDTO } from '../../../designation-management/components/models/EmployeeDesignationHistoryResponseDTO';
@@ -40,9 +41,10 @@ export class EmployeeDepartmentComponent {
     private departmentService: DepartmentManagementService,
     private designationService:DesignationManagementService
     //    private designationService: DesignationManagementService
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
 
     this.routedId = this.route.snapshot.paramMap.get('id') ?? '';
     console.log('ID from route:', this.routedId);

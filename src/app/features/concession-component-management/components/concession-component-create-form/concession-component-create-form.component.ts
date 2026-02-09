@@ -9,6 +9,7 @@ import { ConcessionManagementService } from '../../../concession-management/serv
 import { ConcessionResponse } from '../../../concession-management/models/ConcessionResponse';
 import { ConcessionComponentResponse } from '../../models/ConcessionComponentResponse';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-concession-component-create-form',
@@ -31,7 +32,8 @@ export class ConcessionComponentCreateFormComponent {
     private concessionComponentManagementService: ConcessionComponentManagementService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private logger: LoggerService
   ) {}
 
   ngOnInit() {

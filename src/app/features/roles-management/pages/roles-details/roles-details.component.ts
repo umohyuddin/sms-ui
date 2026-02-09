@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { RolesInfoComponent } from '../../components/roles-info/roles-info.component';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
@@ -16,9 +17,10 @@ export class RolesDetailsComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  , private logger: LoggerService) {}
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.routedId = id ? +id : null;

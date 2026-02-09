@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { RolesService } from '../../services/roles.service';
 import { RoleResponse } from '../../models/RoleResponse';
 
@@ -236,9 +237,10 @@ export class UserRoleAssignmentComponent implements OnInit {
     availableRoles: RoleResponse[] = [];
     loading: boolean = false;
 
-    constructor(private rolesService: RolesService) { }
+    constructor(private rolesService: RolesService, private logger: LoggerService) { }
 
     ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
         this.loadRoles();
     }
 

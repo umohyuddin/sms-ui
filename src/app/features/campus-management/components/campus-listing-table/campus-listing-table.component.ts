@@ -5,6 +5,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { CampusManagementService } from '../../services/campus-management.service';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { CampusResponse } from '../../models/campusResponse';
 import { PageTexts } from '../../../../core/const/PAGE_TEXT';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
@@ -29,6 +30,7 @@ export class CampusListingTableComponent {
 
   constructor(private router: Router,
     private campusManagementService: CampusManagementService,
+    private logger: LoggerService
   ) { }
 
   columns = [

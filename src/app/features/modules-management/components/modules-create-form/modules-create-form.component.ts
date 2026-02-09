@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ModulesService } from '../../services/modules.service';
 import { ModuleResponse } from '../../models/ModuleResponse';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
@@ -31,9 +32,10 @@ export class ModulesCreateFormComponent {
     private router: Router,
     private modulesService: ModulesService,
     private jwtService: JwtService
-  ) {}
+  , private logger: LoggerService) {}
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.initializeForm();
 
     this.moduleId = this.activatedRoute.snapshot.paramMap.get('id');

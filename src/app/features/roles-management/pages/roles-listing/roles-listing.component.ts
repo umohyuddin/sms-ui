@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { RolesListingTableComponent } from '../../components/roles-listing-table/roles-listing-table.component';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
@@ -12,7 +13,7 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
   styleUrl: './roles-listing.component.css'
 })
 export class RolesListingComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private logger: LoggerService) {}
 
   goToCreateRole(): void {
     this.router.navigate(ROUTES.ROLES.CREATE);

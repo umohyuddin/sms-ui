@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { ConcessionManagementService } from '../../services/concession-management.service';
 import { CampusResponse } from '../../../campus-management/models/campusResponse';
@@ -25,7 +26,7 @@ export class ConcessionInfoComponent {
     private concessionManagementService: ConcessionManagementService,
     private route: ActivatedRoute,
 
-  ) { }
+   private logger: LoggerService) { }
 
   ngOnInit(): void {
 

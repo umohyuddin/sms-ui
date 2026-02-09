@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ModulesService } from '../../services/modules.service';
 import { ModuleResponse } from '../../models/ModuleResponse';
 
@@ -18,7 +19,7 @@ export class ModulesInfoComponent {
   constructor(
     private activatedRoute: ActivatedRoute,
     private modulesService: ModulesService
-  ) {}
+  , private logger: LoggerService) {}
 
   ngOnInit(): void {
     let id = this.moduleId;

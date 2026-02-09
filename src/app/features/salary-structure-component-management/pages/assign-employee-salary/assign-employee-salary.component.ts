@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { EmployeeManagementService } from '../../../employee-management/services/employee-management.service';
 import { EmployeeResponse } from '../../../employee-management/models/EmployeeResponse';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-assign-employee-salary',
@@ -20,12 +21,13 @@ export class AssignEmployeeSalaryComponent {
   constructor(
     private employeeManagementService: EmployeeManagementService,
     private fb: FormBuilder
-  ) {
+  , private logger: LoggerService) {
     this.employeeForm = this.fb.group({
       employees: this.fb.array([])
     });
   }
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.getAllEmployee();
   }
 

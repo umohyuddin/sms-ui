@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { SchoolProfileManagementService } from '../../services/school-profile-management.service';
 import { InstituteResponse } from '../../models/InstituteResponse';
 import { RolesService } from '../../../roles-management/services/roles.service';
@@ -33,7 +34,7 @@ export class InstituteContactCreateFormComponent implements OnChanges {
     private fb: FormBuilder,
     private schoolProfileManagementService: SchoolProfileManagementService,
     private rolesService: RolesService
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit(): void {
     console.log('Create Form Institute ID:', this.instituteId);

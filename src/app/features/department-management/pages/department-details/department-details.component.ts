@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { DepartmentInfoComponent } from '../../components/department-info/department-info.component';
 import { PageSubHeaderComponent } from '../../../../shared/components/page-sub-header/page-sub-header.component';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-department-details',
@@ -16,7 +17,8 @@ export class DepartmentDetailsComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private logger: LoggerService
   ) { }
 
   ngOnInit() {

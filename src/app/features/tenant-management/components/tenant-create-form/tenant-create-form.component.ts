@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { AcademicYearManagementService } from '../../services/academic-year-management.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
@@ -34,9 +35,10 @@ export class TenantCreateFormComponent {
     private router: Router,
     private academicYearService: AcademicYearManagementService,
     private appConfig: AppConfigService
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);
     this.URL = this.appConfig.apiBaseUrl;
     this.academicYearId = this.route.snapshot.paramMap.get('id');

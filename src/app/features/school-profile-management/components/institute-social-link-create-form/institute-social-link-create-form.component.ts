@@ -5,6 +5,7 @@ import { SchoolProfileManagementService } from '../../services/school-profile-ma
 import { InstituteResponse } from '../../models/InstituteResponse';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-institute-social-link-create-form',

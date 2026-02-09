@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { EmployeeAdvanceCreateFormComponent } from '../../../employee-advance-management/components/employee-advance-create-form/employee-advance-create-form.component';
 import { EmployeeTypeCreateFormComponent } from '../../components/employee-type-create-form/employee-type-create-form.component';
 

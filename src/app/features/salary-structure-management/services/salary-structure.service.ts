@@ -4,6 +4,7 @@ import { API_ENDPOINTS } from '../../../core/const/API_ENDPOINTS';
 import { HTTP_METHOD } from '../../../core/const/HTTP_METHOD';
 import { AppConfigService } from '../../../core/services/app-config.service';
 import { HttpClientService } from '../../../core/services/http-client.service';
+import { LoggerService } from '../../../core/services/logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,9 @@ export class SalaryStructureService {
 
   private baseUrl = '';
 
-  constructor(private http: HttpClientService, private appConfig: AppConfigService) {
+  constructor(private http: HttpClientService, private appConfig: AppConfigService, private logger: LoggerService) {
     this.baseUrl = appConfig.apiBaseUrl;
-    console.log('API Base URL:', this.baseUrl);
+    this.logger.info('API Base URL', this.baseUrl);
   }
 
   /** Create or Update Salary Structure */

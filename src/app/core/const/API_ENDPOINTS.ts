@@ -123,7 +123,7 @@ export const API_ENDPOINTS = {
 
     },
     EMPLOYEE: {
-        CREATE: '/api/institute/employees',
+        CREATE: '/api/institute/employees/list',
         UPDATE: (id: string) => `/api/institute/employees/${id}`,
         UPDATE_PROFILE: `/api/institute/employees/update-profile-photo`,
         UPLOAD_DOCS: `/api/institute/employees/upload-document`,

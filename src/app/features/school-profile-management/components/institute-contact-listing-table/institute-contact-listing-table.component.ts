@@ -8,6 +8,7 @@ import { SchoolProfileManagementService } from '../../services/school-profile-ma
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 import { DeletePopupComponent } from '../../../../shared/components/delete-popup/delete-popup.component';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-institute-contact-listing-table',

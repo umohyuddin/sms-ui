@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CommonModule } from '@angular/common';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { EmployeeTypeService } from '../../../employee-type-management/services/employee-type.service';
 import { DepartmentManagementService } from '../../../department-management/services/DepartmentManagementService';
 import { EmployeeTypeResponse } from '../../../employee-type-management/models/EmployeeTypeResponse';
@@ -42,7 +43,7 @@ export class DesignationCreateFormComponent {
     private employeeTypeService: EmployeeTypeService,
     private departmentService: DepartmentManagementService,
     private designationService: DesignationManagementService
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit(): void {
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);

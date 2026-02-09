@@ -6,6 +6,7 @@ import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } fro
 import { Pagination } from '../../../../core/pagar/pagination';
 import { SalaryStructureComponentService } from '../../services/salary-structure-component.service';
 import { A11yModule } from "@angular/cdk/a11y";
+import { LoggerService } from '../../../../core/services/logger.service';
 import { SalaryStructureDetails } from '../../models/SalaryStructureDetails';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
@@ -28,7 +29,7 @@ export class SalaryStructureComponentListingTableComponent implements OnInit {
 
   constructor(private router: Router,
     private salaryStructureComponentService: SalaryStructureComponentService,
-  ) { }
+   private logger: LoggerService) { }
 
   columns = [
     { key: 'id', label: 'ID', sortable: true },
@@ -41,6 +42,7 @@ export class SalaryStructureComponentListingTableComponent implements OnInit {
   ];
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.getSalaryStructureComponents();
     //this.subscribeToSearch();
   }

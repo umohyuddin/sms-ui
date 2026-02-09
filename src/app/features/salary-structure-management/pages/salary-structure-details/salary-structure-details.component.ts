@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SalaryStructureInfoComponent } from '../../components/salary-structure-info/salary-structure-info.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
 @Component({
@@ -15,9 +16,10 @@ export class SalaryStructureDetailsComponent {
 
   constructor(private route: ActivatedRoute,
     private router: Router
-  ) { }
+  , private logger: LoggerService) { }
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.routedId = id ? +id : null; // convert string to number

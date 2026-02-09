@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn,
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoggerService } from '../../../../core/services/logger.service';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
 import { AcademicYearManagementService } from '../../../tenant-management/services/academic-year-management.service';
@@ -48,9 +49,10 @@ export class FeeRateCreateFormComponent {
     private feeCatalogManagementService: FeeCatalogManagementService,
     private feeComponentManageService: FeeCatalogComponentManagementService,
     private feeRateManagementService: FeeRateManagementService
-  ) {}
+  , private logger: LoggerService) {}
 
   ngOnInit() {
+    this.logger.log("ngOnInit called", this.constructor.name);
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);
     this.initializeForm();
     this.loadDropdownData();
