@@ -171,9 +171,10 @@ export const ROUTES = {
   },
   ACADEMIC: {
     SUBJECTS: {
-      LIST: ['academic/subjects'],
-      CREATE: ['academic/subjects/create'],
-      EDIT: (id: string) => ['academic/subjects/edit', id],
+      LIST: ['subjects'],
+      CREATE: ['subjects', 'subject-create'],
+      EDIT: (id: string) => ['subjects', 'subject-edit', id],
+      DETAILS: (id: string) => ['subjects', 'subject-details', id],
     },
     SUBJECT_GROUPS: {
       LIST: ['subject-groups'],
