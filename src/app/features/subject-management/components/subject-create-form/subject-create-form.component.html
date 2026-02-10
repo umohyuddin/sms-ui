@@ -77,7 +77,7 @@
       <div class="kt-form__actions">
         <div class="row">
           <div class="col-lg-12 text-right">
-            <button type="submit" class="btn btn-brand" [disabled]="subjectForm.invalid || loading">
+            <button type="submit" class="btn btn-dark mr-2" [disabled]="subjectForm.invalid || loading">
               {{ loading ? 'Saving...' : 'Submit' }}
             </button>
             <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
