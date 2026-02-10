@@ -176,9 +176,10 @@ export const ROUTES = {
       EDIT: (id: string) => ['academic/subjects/edit', id],
     },
     SUBJECT_GROUPS: {
-      LIST: ['academic/subject-groups'],
-      CREATE: ['academic/subject-groups/create'],
-      EDIT: (id: string) => ['academic/subject-groups/edit', id],
+      LIST: ['subject-groups'],
+      CREATE: ['subject-groups/subject-group-create'],
+      EDIT: (id: string) => ['subject-groups/subject-group-edit', id],
+      DETAILS: (id: string) => ['subject-groups/subject-group-details', id]
     },
     MAPPING: {
       STANDARD_SUBJECT: ['academic/mappings/standard-subject'],

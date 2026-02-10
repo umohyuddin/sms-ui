@@ -412,6 +412,13 @@ export const API_ENDPOINTS = {
                 GET_BY_ID: (id: string | number) => `/api/academic/core/subjects/${id}`,
                 DELETE: (id: string | number) => `/api/academic/core/subjects/${id}`
             },
+            SUBJECT_GROUPS: {
+                CREATE: '/api/academic/core/subject-groups',
+                UPDATE: (id: string | number) => `/api/academic/core/subject-groups/${id}`,
+                GET_ALL: '/api/academic/core/subject-groups',
+                GET_BY_ID: (id: string | number) => `/api/academic/core/subject-groups/${id}`,
+                DELETE: (id: string | number) => `/api/academic/core/subject-groups/${id}`
+            },
             STANDARD_SUBJECTS: {
                 ASSIGN: '/api/academic/core/standard-subjects',
                 GET_BY_STANDARD: '/api/academic/core/standard-subjects',

@@ -2,11 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PageTexts } from '../../../../core/const/PAGE_TEXT';
-import { AcademicManagementService } from '../../services/academic-management.service';
+import { SubjectGroupManagementService } from '../../services/subject-group-management.service';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-
 
 @Component({
     selector: 'app-subject-group-create-form',
@@ -19,11 +17,10 @@ export class SubjectGroupCreateFormComponent implements OnInit {
     isEdit = false;
     groupId: string | null = null;
     loading = false;
-    texts = PageTexts.academic.subjectGroups;
 
     constructor(
         private fb: FormBuilder,
-        private academicService: AcademicManagementService,
+        private subjectGroupService: SubjectGroupManagementService,
         private route: ActivatedRoute,
         private router: Router,
         private logger: LoggerService
@@ -51,12 +48,19 @@ export class SubjectGroupCreateFormComponent implements OnInit {
 
     loadGroup() {
         this.logger.info('Loading subject group data', this.groupId);
-        this.academicService.getSubjectGroupById(this.groupId!).subscribe({
+        this.loading = true;
+        this.subjectGroupService.getSubjectGroupById(this.groupId!).subscribe({
             next: (resp) => {
-                this.groupForm.patchValue(resp.body);
-                this.logger.success('Subject group loaded successfully');
+                if (resp.body) {
+                    this.groupForm.patchValue(resp.body);
+                    this.logger.success('Subject group loaded successfully');
+                } else {
+                    this.logger.error('Subject group data is empty');
+                }
+                this.loading = false;
             },
             error: (err) => {
+                this.loading = false;
                 this.logger.error('Failed to load subject group', err);
             }
         });
@@ -68,7 +72,7 @@ export class SubjectGroupCreateFormComponent implements OnInit {
         this.loading = true;
         this.logger.info('Submitting subject group form', this.groupForm.value);
         
-        this.academicService.saveSubjectGroup(this.groupId, this.groupForm.value).subscribe({
+        this.subjectGroupService.saveSubjectGroup(this.groupId, this.groupForm.value).subscribe({
             next: () => {
                 this.logger.success('Subject group saved successfully');
                 this.router.navigate(ROUTES.ACADEMIC.SUBJECT_GROUPS.LIST);

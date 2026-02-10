@@ -329,6 +329,19 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'subject-groups',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/subject-group-management/subject-group-management-module')
+            .then(m => m.SubjectGroupManagementModule)
+      }
+    ]
+  },
+  {
     path: 'resources',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
