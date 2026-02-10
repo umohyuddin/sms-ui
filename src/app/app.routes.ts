@@ -316,6 +316,19 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'academic',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/academic-management/academic-management.module')
+            .then(m => m.AcademicManagementModule)
+      }
+    ]
+  },
+  {
     path: 'resources',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),

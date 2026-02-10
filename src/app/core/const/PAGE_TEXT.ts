@@ -11,8 +11,8 @@ export const PageTexts = {
       welcomeNote: 'Add your Profile to unlock all the features and manage everything with ease.',
       welcomeHeading: 'Welcome to Your Profile Setup!',
       profileAddedHeading: 'School Profile Added!',
-      profileAddedMessagge:'Your school profile has been successfully created. However, no campus has been set up yet.',
-      profileAddedNote:'Please set up at least one campus to ensure your system runs smoothly. If your school is a standalone entity, creating at least one campus is required for proper functionality.'
+      profileAddedMessagge: 'Your school profile has been successfully created. However, no campus has been set up yet.',
+      profileAddedNote: 'Please set up at least one campus to ensure your system runs smoothly. If your school is a standalone entity, creating at least one campus is required for proper functionality.'
     }
   },
 
@@ -101,4 +101,43 @@ export const PageTexts = {
   },
 
   // add more pages here...
+  academic: {
+    subjects: {
+      icon: 'kt-font-dark flaticon-squares',
+      header: 'Subjects Listing',
+      buttons: {
+        add: 'Add Subject',
+        edit: 'Edit Subject',
+        delete: 'Delete Subject'
+      },
+      messages: {
+        noData: 'No subjects available. Please add a new subject.',
+        deleteConfirmation: 'Are you sure you want to delete this subject?'
+      }
+    },
+    subjectGroups: {
+      icon: 'kt-font-dark flaticon-squares',
+      header: 'Subject Groups Listing',
+      buttons: {
+        add: 'Add Group',
+        edit: 'Edit Group',
+        delete: 'Delete Group'
+      },
+      messages: {
+        noData: 'No subject groups available. Please add a new group.',
+        deleteConfirmation: 'Are you sure you want to delete this group?'
+      }
+    },
+    exams: {
+      header: 'Exams Listing',
+      buttons: {
+        add: 'Add Exam',
+        schedule: 'Schedule Exam'
+      }
+    },
+    attendance: {
+      studentHeader: 'Student Attendance',
+      employeeHeader: 'Employee Attendance'
+    }
+  }
 };

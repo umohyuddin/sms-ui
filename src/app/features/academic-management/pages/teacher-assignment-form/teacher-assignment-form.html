@@ -1,0 +1,110 @@
+<div class="kt-portlet">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-label">
+      <h3 class="kt-portlet__head-title">
+        {{ isEdit ? 'Update Teacher Assignment' : 'New Teacher Assignment' }}
+      </h3>
+    </div>
+  </div>
+
+  <!--begin::Form-->
+  <form class="kt-form kt-form--label-right" [formGroup]="assignmentForm" (ngSubmit)="onSubmit()">
+    <div class="kt-portlet__body">
+      <h4>Teacher & Subject Information</h4>
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label required">Teacher:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="employeeId"
+            [class.is-invalid]="assignmentForm.get('employeeId')?.invalid && (assignmentForm.get('employeeId')?.touched || assignmentForm.get('employeeId')?.dirty)"
+            [class.is-valid]="assignmentForm.get('employeeId')?.valid && (assignmentForm.get('employeeId')?.touched || assignmentForm.get('employeeId')?.dirty)">
+            <option value="">Select Teacher</option>
+            <option *ngFor="let t of teachers" [value]="t.id">{{ t.fullName }}</option>
+          </select>
+          <span class="form-text text-muted">Please select teacher</span>
+          <span class="invalid-feedback" *ngIf="assignmentForm.get('employeeId')?.invalid && (assignmentForm.get('employeeId')?.touched || assignmentForm.get('employeeId')?.dirty)">
+            Teacher is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label required">Subject:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="subjectId"
+            [class.is-invalid]="assignmentForm.get('subjectId')?.invalid && (assignmentForm.get('subjectId')?.touched || assignmentForm.get('subjectId')?.dirty)"
+            [class.is-valid]="assignmentForm.get('subjectId')?.valid && (assignmentForm.get('subjectId')?.touched || assignmentForm.get('subjectId')?.dirty)">
+            <option value="">Select Subject</option>
+            <option *ngFor="let s of subjects" [value]="s.id">{{ s.name }}</option>
+          </select>
+          <span class="form-text text-muted">Please select subject</span>
+          <span class="invalid-feedback" *ngIf="assignmentForm.get('subjectId')?.invalid && (assignmentForm.get('subjectId')?.touched || assignmentForm.get('subjectId')?.dirty)">
+            Subject is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label">Options:</label>
+        <div class="col-lg-3">
+          <label class="kt-checkbox kt-margin-t-10">
+            <input type="checkbox" formControlName="isPrimary"> Is Primary Teacher
+            <span></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+      <h4 class="kt-margin-b-20">Class & Schedule Information</h4>
+
+      <div class="form-group row form-group-marginless">
+        <label class="col-lg-1 col-form-label required">Standard:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="standardId" (change)="onStandardChange()"
+            [class.is-invalid]="assignmentForm.get('standardId')?.invalid && (assignmentForm.get('standardId')?.touched || assignmentForm.get('standardId')?.dirty)"
+            [class.is-valid]="assignmentForm.get('standardId')?.valid && (assignmentForm.get('standardId')?.touched || assignmentForm.get('standardId')?.dirty)">
+            <option value="">Select Standard</option>
+            <option *ngFor="let s of standards" [value]="s.id">{{ s.standardName }}</option>
+          </select>
+          <span class="form-text text-muted">Please select standard</span>
+          <span class="invalid-feedback" *ngIf="assignmentForm.get('standardId')?.invalid && (assignmentForm.get('standardId')?.touched || assignmentForm.get('standardId')?.dirty)">
+            Standard is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label required">Section:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="sectionId"
+            [class.is-invalid]="assignmentForm.get('sectionId')?.invalid && (assignmentForm.get('sectionId')?.touched || assignmentForm.get('sectionId')?.dirty)"
+            [class.is-valid]="assignmentForm.get('sectionId')?.valid && (assignmentForm.get('sectionId')?.touched || assignmentForm.get('sectionId')?.dirty)">
+            <option value="">Select Section</option>
+            <option *ngFor="let s of sections" [value]="s.id">{{ s.sectionName }}</option>
+          </select>
+          <span class="form-text text-muted">Please select section</span>
+          <span class="invalid-feedback" *ngIf="assignmentForm.get('sectionId')?.invalid && (assignmentForm.get('sectionId')?.touched || assignmentForm.get('sectionId')?.dirty)">
+            Section is required
+          </span>
+        </div>
+
+        <label class="col-lg-1 col-form-label required">Effective From:</label>
+        <div class="col-lg-3">
+          <input type="date" class="form-control" formControlName="effectiveFrom"
+            [class.is-invalid]="assignmentForm.get('effectiveFrom')?.invalid && (assignmentForm.get('effectiveFrom')?.touched || assignmentForm.get('effectiveFrom')?.dirty)"
+            [class.is-valid]="assignmentForm.get('effectiveFrom')?.valid && (assignmentForm.get('effectiveFrom')?.touched || assignmentForm.get('effectiveFrom')?.dirty)">
+          <span class="form-text text-muted">Please select effective date</span>
+          <span class="invalid-feedback" *ngIf="assignmentForm.get('effectiveFrom')?.invalid && (assignmentForm.get('effectiveFrom')?.touched || assignmentForm.get('effectiveFrom')?.dirty)">
+            Effective date is required
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions">
+        <div class="row">
+          <div class="col-lg-12 text-right">
+            <button type="submit" class="btn btn-brand" [disabled]="assignmentForm.invalid || loading">
+              {{ loading ? 'Assigning...' : 'Assign Teacher' }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

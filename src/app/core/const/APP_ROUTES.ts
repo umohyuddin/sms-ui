@@ -168,7 +168,52 @@ export const ROUTES = {
     CREATE: ['resources', 'resource-create'],
     EDIT: (id: string) => ['resources', 'resource-edit', id],
     DETAILS: (id: string) => ['resources', 'resource-details', id]
+  },
+  ACADEMIC: {
+    SUBJECTS: {
+      LIST: ['academic/subjects'],
+      CREATE: ['academic/subjects/create'],
+      EDIT: (id: string) => ['academic/subjects/edit', id],
+    },
+    SUBJECT_GROUPS: {
+      LIST: ['academic/subject-groups'],
+      CREATE: ['academic/subject-groups/create'],
+      EDIT: (id: string) => ['academic/subject-groups/edit', id],
+    },
+    MAPPING: {
+      STANDARD_SUBJECT: ['academic/mappings/standard-subject'],
+      TEACHER_ASSIGNMENT: ['academic/mappings/teacher-assignment'],
+    },
+    TIMETABLE: {
+      VIEW: ['academic/timetable'],
+      MANAGE: ['academic/timetable/manage'],
+    },
+    ATTENDANCE: {
+      STUDENT: ['academic/attendance/student'],
+      EMPLOYEE: ['academic/attendance/employee'],
+      HISTORY: ['academic/attendance/history'],
+    },
+    EXAMS: {
+      LIST: ['academic/exams'],
+      SCHEDULE: ['academic/exams/schedule'],
+      TYPES: ['academic/exams/types'],
+      TERMS: ['academic/exams/terms'],
+    },
+    ASSESSMENTS: {
+      LIST: ['academic/assessments'],
+      TYPES: ['academic/assessments/types'],
+      SUBMISSIONS: ['academic/assessments/submissions'],
+    },
+    RESULTS: {
+      MARKS_ENTRY: ['academic/results/marks-entry'],
+      WEIGHTAGES: ['academic/results/weightages'],
+      PROCESSING: ['academic/results/process'],
+      REPORT_CARDS: ['academic/results/report-cards'],
+      GRADE_SCALES: ['academic/results/grade-scales'],
+    },
+    HISTORY: {
+      STUDENT_ACTIVITY: (id: string) => ['academic/history/activity', id],
+      ACADEMIC_HISTORY: (id: string) => ['academic/history/academic', id],
+    }
   }
-
 };
-

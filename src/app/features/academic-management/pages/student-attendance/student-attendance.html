@@ -1,0 +1,101 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container kt-container--fluid">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Daily Student Attendance</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        </div>
+    </div>
+</div>
+
+<div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <div class="kt-portlet kt-portlet--mobile">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+            <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon">
+                    <i class="kt-font-dark flaticon-squares"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                    Mark Attendance
+                </h3>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+            <div class="row mb-5 align-items-end">
+                <div class="col-md-3">
+                    <label>Section</label>
+                    <select class="form-control" [(ngModel)]="filters.sectionId">
+                        <option value="">Select Section</option>
+                        <option *ngFor="let s of sections" [value]="s.id">{{ s.sectionName }}</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Date</label>
+                    <input type="date" class="form-control" [(ngModel)]="filters.date">
+                </div>
+                <div class="col-md-2">
+                    <button (click)="loadStudents()" class="btn btn-dark btn-block">
+                        <i class="la la-search"></i>
+                        Search
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive" *ngIf="students.length > 0">
+                <table class="table table-bordered table-hover attendance-table table-checkable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Roll No</th>
+                            <th>Student Name</th>
+                            <th class="text-center">Status</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let student of students">
+                            <td>{{ student.rollNo }}</td>
+                            <td><strong>{{ student.fullName }}</strong></td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-toggle">
+                                    <label class="btn btn-outline-success btn-sm"
+                                        [class.active]="student.status === 'PRESENT'">
+                                        <input type="radio" [(ngModel)]="student.status" value="PRESENT"> P
+                                    </label>
+                                    <label class="btn btn-outline-danger btn-sm"
+                                        [class.active]="student.status === 'ABSENT'">
+                                        <input type="radio" [(ngModel)]="student.status" value="ABSENT"> A
+                                    </label>
+                                    <label class="btn btn-outline-warning btn-sm"
+                                        [class.active]="student.status === 'LATE'">
+                                        <input type="radio" [(ngModel)]="student.status" value="LATE"> L
+                                    </label>
+                                    <label class="btn btn-outline-info btn-sm"
+                                        [class.active]="student.status === 'LEAVE'">
+                                        <input type="radio" [(ngModel)]="student.status" value="LEAVE"> LE
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]="student.remarks"
+                                    placeholder="Optional remarks">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="kt-portlet__foot mt-4" *ngIf="students.length > 0">
+                <div class="kt-form__actions text-right">
+                    <button (click)="saveAttendance()" class="btn btn-success btn-bold" [disabled]="loading">
+                        <i class="la la-check"></i>
+                        {{ loading ? 'Saving...' : 'Save Attendance' }}
+                    </button>
+                </div>
+            </div>
+
+            <div class="alert alert-dark mt-5" role="alert" *ngIf="students.length === 0 && !loading">
+                <div class="alert-icon"><i class="flaticon-info"></i></div>
+                <div class="alert-text">Search for a section to display students.</div>
+            </div>
+        </div>
+    </div>
+</div>

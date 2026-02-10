@@ -171,6 +171,85 @@
 
 
             <li class="kt-menu__section ">
+              <h4 class="kt-menu__section-text">Academic Management</h4>
+              <i class="kt-menu__section-icon flaticon-more-v2"></i>
+            </li>
+            <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true"
+              (click)="handleSubmenuAccordion($event)">
+              <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
+                <span class="kt-menu__link-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1"
+                    class="kt-svg-icon">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                      <rect x="0" y="0" width="24" height="24" />
+                      <path
+                        d="M12,11 C9.790861,11 8,9.209139 8,7 C8,4.790861 9.790861,3 12,3 C14.209139,3 16,4.790861 16,7 C16,9.209139 14.209139,11 12,11 Z"
+                        fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                      <path
+                        d="M3.00065168,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
+                        fill="#000000" fill-rule="nonzero" />
+                    </g>
+                  </svg>
+                </span>
+                <span class="kt-menu__link-text">Academics</span>
+                <i class="kt-menu__ver-arrow la la-angle-right"></i>
+              </a>
+              <div class="kt-menu__submenu">
+                <span class="kt-menu__arrow"></span>
+                <ul class="kt-menu__subnav">
+                  <li routerLink="/academic/subjects" class="kt-menu__item" aria-haspopup="true">
+                    <a class="kt-menu__link">
+                      <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                      <span class="kt-menu__link-text">Subjects</span>
+                    </a>
+                  </li>
+                  <li routerLink="/academic/subject-groups" class="kt-menu__item" aria-haspopup="true">
+                    <a class="kt-menu__link">
+                      <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                      <span class="kt-menu__link-text">Subject Groups</span>
+                    </a>
+                  </li>
+                  <li routerLink="/academic/mapping" class="kt-menu__item" aria-haspopup="true">
+                    <a class="kt-menu__link">
+                      <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                      <span class="kt-menu__link-text">Standard Mapping</span>
+                    </a>
+                  </li>
+                  <li routerLink="/academic/teacher-assignment" class="kt-menu__item" aria-haspopup="true">
+                    <a class="kt-menu__link">
+                      <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                      <span class="kt-menu__link-text">Teacher Assignments</span>
+                    </a>
+                  </li>
+                  <li routerLink="/academic/timetable" class="kt-menu__item" aria-haspopup="true">
+                    <a class="kt-menu__link">
+                      <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                      <span class="kt-menu__link-text">Timetables</span>
+                    </a>
+                  </li>
+                  <li routerLink="/academic/student-attendance" class="kt-menu__item" aria-haspopup="true">
+                    <a class="kt-menu__link">
+                      <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                      <span class="kt-menu__link-text">Attendance</span>
+                    </a>
+                  </li>
+                  <li routerLink="/academic/exams" class="kt-menu__item" aria-haspopup="true">
+                    <a class="kt-menu__link">
+                      <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                      <span class="kt-menu__link-text">Exams</span>
+                    </a>
+                  </li>
+                  <li routerLink="/academic/results" class="kt-menu__item" aria-haspopup="true">
+                    <a class="kt-menu__link">
+                      <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                      <span class="kt-menu__link-text">Results</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+
+            <li class="kt-menu__section ">
               <h4 class="kt-menu__section-text">Components</h4>
               <i class="kt-menu__section-icon flaticon-more-v2"></i>
             </li>

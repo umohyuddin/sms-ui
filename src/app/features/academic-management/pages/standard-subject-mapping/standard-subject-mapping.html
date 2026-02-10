@@ -1,0 +1,101 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container kt-container--fluid">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Standard-Subject Mapping</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a class="kt-subheader__breadcrumbs-link">Academic Management</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <div class="kt-portlet kt-portlet--mobile">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+            <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon">
+                    <i class="kt-font-dark flaticon-squares"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                    Map Subjects to Standards
+                </h3>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+            <div class="row mb-5">
+                <div class="col-md-4">
+                    <label>Academic Year</label>
+                    <select class="form-control" [(ngModel)]="selectedYearId" (change)="onFilterChange()">
+                        <option *ngFor="let year of academicYears" [value]="year.id">{{ year.yearName }}</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label>Standard</label>
+                    <select class="form-control" [(ngModel)]="selectedStandardId" (change)="onFilterChange()">
+                        <option *ngFor="let std of standards" [value]="std.id">{{ std.standardName }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mt-4" *ngIf="selectedYearId && selectedStandardId">
+                <div class="col-md-5">
+                    <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title text-brand">Available Subjects</h3>
+                            </div>
+                        </div>
+                        <div class="kt-portlet__body">
+                            <div class="list-group list-container">
+                                <div *ngFor="let subject of availableSubjects"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    {{ subject.name }}
+                                    <button class="btn btn-sm btn-label-brand btn-bold"
+                                        (click)="assign(subject)">Assign</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-center justify-content-center">
+                    <i class="la la-exchange la-3x text-muted"></i>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-danger">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title text-danger">Assigned Subjects</h3>
+                            </div>
+                        </div>
+                        <div class="kt-portlet__body">
+                            <div class="list-group list-container">
+                                <div *ngFor="let assignment of assignedSubjects"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <strong>{{ assignment.subjectName }}</strong>
+                                        <span
+                                            [class]="assignment.isMandatory ? 'kt-badge kt-badge--primary kt-badge--inline ml-2' : 'kt-badge kt-badge--warning kt-badge--inline ml-2'">
+                                            {{ assignment.isMandatory ? 'Mandatory' : 'Elective' }}
+                                        </span>
+                                    </span>
+                                    <button class="btn btn-sm btn-label-danger btn-bold"
+                                        (click)="unassign(assignment)">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-dark mt-5" role="alert" *ngIf="!selectedYearId || !selectedStandardId">
+                <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
+                <div class="alert-text">Please select Academic Year and Standard to start mapping.</div>
+            </div>
+        </div>
+    </div>
+</div>

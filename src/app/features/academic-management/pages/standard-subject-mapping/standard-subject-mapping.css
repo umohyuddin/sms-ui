@@ -1,0 +1,11 @@
+.list-container {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ebedf2;
+}
+
+.mapping-column {
+    border: 1px solid #ebedf2;
+    padding: 10px;
+    background: #fdfdfd;
+}

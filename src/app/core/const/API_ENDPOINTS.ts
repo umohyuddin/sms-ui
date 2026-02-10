@@ -395,5 +395,126 @@ export const API_ENDPOINTS = {
             UPDATE: (id: string | number) => `/api/lookups/facility-types/${id}`,
             DELETE: (id: string | number) => `/api/lookups/facility-types/${id}`
         }
+    },
+    ACADEMIC: {
+        CORE: {
+            GROUPS: {
+                CREATE: '/api/academic/core/groups',
+                UPDATE: (id: string | number) => `/api/academic/core/groups/${id}`,
+                GET_ALL: '/api/academic/core/groups',
+                GET_BY_ID: (id: string | number) => `/api/academic/core/groups/${id}`,
+                DELETE: (id: string | number) => `/api/academic/core/groups/${id}`
+            },
+            SUBJECTS: {
+                CREATE: '/api/academic/core/subjects',
+                UPDATE: (id: string | number) => `/api/academic/core/subjects/${id}`,
+                GET_ALL: '/api/academic/core/subjects',
+                GET_BY_ID: (id: string | number) => `/api/academic/core/subjects/${id}`,
+                DELETE: (id: string | number) => `/api/academic/core/subjects/${id}`
+            },
+            STANDARD_SUBJECTS: {
+                ASSIGN: '/api/academic/core/standard-subjects',
+                GET_BY_STANDARD: '/api/academic/core/standard-subjects',
+                UNASSIGN: '/api/academic/core/standard-subjects'
+            }
+        },
+        SCHEDULING: {
+            ASSIGNMENTS: {
+                CREATE: '/api/academic/scheduling/assignments',
+                GET_BY_TEACHER: (id: string | number) => `/api/academic/scheduling/assignments/teacher/${id}`,
+                GET_BY_SECTION: '/api/academic/scheduling/assignments/section',
+                DELETE: '/api/academic/scheduling/assignments'
+            },
+            TIMETABLE: {
+                CREATE: '/api/academic/scheduling/timetable',
+                UPDATE: (id: string | number) => `/api/academic/scheduling/timetable/${id}`,
+                GET_SECTION: '/api/academic/scheduling/timetable/section',
+                GET_TEACHER: (id: string | number) => `/api/academic/scheduling/timetable/teacher/${id}`,
+                DELETE: (id: string | number) => `/api/academic/scheduling/timetable/${id}`
+            }
+        },
+        ATTENDANCE: {
+            STUDENTS: {
+                MARK: '/api/academic/attendance/students',
+                GET_SECTION: '/api/academic/attendance/students/section',
+                GET_MONTHLY: (id: string | number) => `/api/academic/attendance/students/${id}/monthly`,
+                DELETE: (id: string | number) => `/api/academic/attendance/students/${id}`
+            },
+            EMPLOYEES: {
+                MARK: '/api/academic/attendance/employees',
+                GET_MONTHLY: (id: string | number) => `/api/academic/attendance/employees/${id}/monthly`,
+                DELETE: (id: string | number) => `/api/academic/attendance/employees/${id}`
+            }
+        },
+        EVALUATION: {
+            EXAM_TYPES: {
+                CREATE: '/api/academic/evaluation/exam-types',
+                UPDATE: (id: string | number) => `/api/academic/evaluation/exam-types/${id}`,
+                GET_ALL: '/api/academic/evaluation/exam-types',
+                DELETE: (id: string | number) => `/api/academic/evaluation/exam-types/${id}`
+            },
+            EXAM_TERMS: {
+                CREATE: '/api/academic/evaluation/exam-terms',
+                UPDATE: (id: string | number) => `/api/academic/evaluation/exam-terms/${id}`,
+                GET_BY_YEAR: '/api/academic/evaluation/exam-terms',
+                DELETE: (id: string | number) => `/api/academic/evaluation/exam-terms/${id}`
+            },
+            ASSESSMENT_TYPES: {
+                CREATE: '/api/academic/evaluation/assessment-types',
+                UPDATE: (id: string | number) => `/api/academic/evaluation/assessment-types/${id}`,
+                GET_ALL: '/api/academic/evaluation/assessment-types',
+                DELETE: (id: string | number) => `/api/academic/evaluation/assessment-types/${id}`
+            },
+            EXAMS: {
+                CREATE: '/api/academic/evaluation/exams',
+                UPDATE: (id: string | number) => `/api/academic/evaluation/exams/${id}`,
+                GET_BY_ID: (id: string | number) => `/api/academic/evaluation/exams/${id}`,
+                GET_BY_SECTION: '/api/academic/evaluation/exams/section',
+                DELETE: (id: string | number) => `/api/academic/evaluation/exams/${id}`
+            },
+            EXAM_SUBJECTS: {
+                SCHEDULE: '/api/academic/evaluation/exam-subjects',
+                GET_BY_EXAM: '/api/academic/evaluation/exam-subjects',
+                UNSCHEDULE: '/api/academic/evaluation/exam-subjects'
+            },
+            ASSESSMENTS: {
+                CREATE: '/api/academic/evaluation/assessments',
+                UPDATE: (id: string | number) => `/api/academic/evaluation/assessments/${id}`,
+                GET_BY_ID: (id: string | number) => `/api/academic/evaluation/assessments/${id}`,
+                GET_BY_ASSIGNMENT: (id: string | number) => `/api/academic/evaluation/assessments/assignment/${id}`,
+                DELETE: (id: string | number) => `/api/academic/evaluation/assessments/${id}`
+            },
+            STUDENT_ASSESSMENTS: {
+                SUBMIT: '/api/academic/evaluation/student-assessments/submit',
+                EVALUATE: '/api/academic/evaluation/student-assessments/evaluate',
+                GET_BY_ASSESSMENT: (id: string | number) => `/api/academic/evaluation/student-assessments/assessment/${id}`,
+                GET_BY_STUDENT: (id: string | number) => `/api/academic/evaluation/student-assessments/student/${id}`
+            }
+        },
+        RESULTS: {
+            MARKS: {
+                RECORD: '/api/academic/results/marks',
+                GET_BY_SUBJECT: (id: string | number) => `/api/academic/results/marks/subject/${id}`,
+                GET_BY_STUDENT: (id: string | number) => `/api/academic/results/marks/student/${id}`
+            },
+            WEIGHTAGES: {
+                SAVE: '/api/academic/results/weightages',
+                GET_BY_STANDARD: (id: string | number) => `/api/academic/results/weightages/standard/${id}`
+            },
+            PROCESS: '/api/academic/results/process',
+            SECTION_RESULTS: '/api/academic/results/section',
+            STUDENT_RESULT: (id: string | number) => `/api/academic/results/student/${id}`,
+            REPORT_CARDS: {
+                GENERATE: '/api/academic/results/report-cards',
+                GET_BY_STUDENT: (id: string | number) => `/api/academic/results/report-cards/student/${id}`,
+                DELETE: (id: string | number) => `/api/academic/results/report-cards/${id}`
+            },
+            GRADE_SCALES: {
+                CREATE: '/api/academic/results/grade-scales',
+                UPDATE: (id: string | number) => `/api/academic/results/grade-scales/${id}`,
+                GET_ALL: '/api/academic/results/grade-scales',
+                DELETE: (id: string | number) => `/api/academic/results/grade-scales/${id}`
+            }
+        }
     }
 };

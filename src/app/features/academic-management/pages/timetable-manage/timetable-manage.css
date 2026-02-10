@@ -1,0 +1,43 @@
+.timetable-grid {
+    table-layout: fixed;
+}
+
+.timetable-cell {
+    height: 100px;
+    vertical-align: middle;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.3s;
+}
+
+.timetable-cell:hover {
+    background: #f7f8fa;
+}
+
+.time-label {
+    width: 100px;
+    font-weight: 600;
+    background: #f7f8fa;
+    text-align: center;
+}
+
+.entry-box {
+    border-radius: 4px;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.entry-box:hover .delete-btn {
+    opacity: 1;
+}

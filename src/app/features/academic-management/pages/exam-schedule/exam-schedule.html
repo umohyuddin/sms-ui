@@ -1,0 +1,51 @@
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Schedule Exam Subjects</h3>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <h5>Exam: <strong>{{ examName }}</strong></h5>
+            </div>
+            <div class="col-md-6 text-right">
+                <button (click)="openScheduleModal()" class="btn btn-brand btn-sm">Add Subject to Schedule</button>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Exam Date</th>
+                        <th>Time</th>
+                        <th>Max Marks</th>
+                        <th>Pass Marks</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let s of subjects">
+                        <td>{{ s.subjectName }}</td>
+                        <td>{{ s.examDate }}</td>
+                        <td>{{ s.startTime }} - {{ s.endTime }}</td>
+                        <td>{{ s.maxMarks }}</td>
+                        <td>{{ s.minPassMarks }}</td>
+                        <td>
+                            <button (click)="deleteSchedule(s.id!)" class="btn btn-sm btn-icon btn-clean"><i
+                                    class="la la-trash text-danger"></i></button>
+                            <button (click)="goToMarksEntry(s.id!)"
+                                class="btn btn-sm btn-label-success btn-bold ml-2">Marks Entry</button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="subjects.length === 0">
+                        <td colspan="6" class="text-center italic text-muted">No subjects scheduled for this exam yet.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
