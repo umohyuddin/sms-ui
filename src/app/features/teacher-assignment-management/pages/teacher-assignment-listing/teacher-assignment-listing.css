@@ -18,19 +18,12 @@
     letter-spacing: 0.05rem;
 }
 
-code {
-    background-color: #f1f1f1;
-    padding: 2px 4px;
-    border-radius: 3px;
-    color: #5d78ff;
-}
-
 .selected-filters .kt-badge {
     margin-right: 8px;
     font-weight: 500;
 }
 
-.subject-cell strong {
+.teacher-cell strong {
     font-size: 0.95rem;
 }
 
@@ -60,7 +53,12 @@ code {
 }
 
 .helper-text {
-    color: #6c7293;
-    font-size: 0.9rem;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
+.helper-text i {
+    font-size: 1rem;
+}

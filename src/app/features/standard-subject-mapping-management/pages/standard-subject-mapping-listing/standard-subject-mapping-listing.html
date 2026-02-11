@@ -3,6 +3,7 @@
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">Standard-Subject Mapping</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <span class="kt-subheader__desc">Define curriculum mapping for each standard</span>
             <div class="kt-subheader__breadcrumbs">
                 <a class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
@@ -11,9 +12,57 @@
                 <a class="kt-subheader__breadcrumbs-link">Standard Subject Mapping</a>
             </div>
         </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <button class="btn btn-outline-secondary mr-2">
+                    <i class="la la-download"></i> Export
+                </button>
+                <button class="btn btn-brand">
+                    <i class="la la-plus"></i> New Mapping
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <div class="kt-portlet kt-portlet--bordered">
+        <div class="kt-portlet__body">
+            <div class="kt-infobox">
+                <div class="kt-infobox__header">
+                    <h2 class="kt-infobox__title">How it works</h2>
+                </div>
+                <div class="kt-infobox__body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="kt-callout kt-callout--brand">
+                                <div class="kt-callout__body">
+                                    <h5 class="kt-callout__title">1. Select Context</h5>
+                                    <p class="kt-callout__text">Pick Academic Year, Campus, and Standard</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="kt-callout kt-callout--success">
+                                <div class="kt-callout__body">
+                                    <h5 class="kt-callout__title">2. Search Subjects</h5>
+                                    <p class="kt-callout__text">Use the mega search to filter quickly</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="kt-callout kt-callout--warning">
+                                <div class="kt-callout__body">
+                                    <h5 class="kt-callout__title">3. Assign or Remove</h5>
+                                    <p class="kt-callout__text">Move subjects between Available and Assigned</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <app-standard-subject-mapping-table></app-standard-subject-mapping-table>
 </div>

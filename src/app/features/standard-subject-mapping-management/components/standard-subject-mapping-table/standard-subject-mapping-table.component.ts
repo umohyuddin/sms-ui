@@ -30,6 +30,14 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
 
     megaSearchTerm: string = '';
 
+    get mandatoryCount(): number {
+        return this.assignedSubjects.filter(a => a.isMandatory).length;
+    }
+
+    get electiveCount(): number {
+        return this.assignedSubjects.filter(a => !a.isMandatory).length;
+    }
+
     private destroy$ = new RxSubject<void>();
 
     constructor(private mappingService: StandardSubjectMappingService) { }

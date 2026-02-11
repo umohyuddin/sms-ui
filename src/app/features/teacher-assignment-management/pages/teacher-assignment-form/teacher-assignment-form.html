@@ -1,0 +1,274 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+  <div class="kt-container kt-container--fluid">
+    <div class="kt-subheader__main">
+      <h3 class="kt-subheader__title">Teacher Assignment</h3>
+      <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+      <span class="kt-subheader__desc">Assign teachers to subjects and sections</span>
+    </div>
+    <div class="kt-subheader__toolbar">
+      <div class="kt-subheader__wrapper">
+        <button type="button" class="btn btn-outline-secondary" (click)="onCancel()">
+          <i class="la la-arrow-left"></i> Back to Listing
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-8">
+    <div class="kt-portlet">
+      <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+          <h3 class="kt-portlet__head-title">
+            {{ isEdit ? 'Update Teacher Assignment' : 'New Teacher Assignment' }}
+          </h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+          <span class="kt-badge kt-badge--inline kt-badge--brand">Draft</span>
+        </div>
+      </div>
+
+      <form class="kt-form kt-form--label-right" [formGroup]="assignmentForm" (ngSubmit)="onSubmit()">
+        <div class="kt-portlet__body">
+          <div class="kt-section">
+            <div class="kt-section__title">Assignment Context</div>
+            <div class="kt-section__content">
+              <div class="form-group row">
+                <label class="col-lg-2 col-form-label required">Campus</label>
+                <div class="col-lg-4">
+                  <select class="form-control">
+                    <option value="">Select Campus</option>
+                    <option>Central Campus</option>
+                    <option>North Campus</option>
+                    <option>East Campus</option>
+                  </select>
+                  <span class="form-text text-muted">Choose campus to filter standards</span>
+                </div>
+
+                <label class="col-lg-2 col-form-label required">Academic Year</label>
+                <div class="col-lg-4">
+                  <select class="form-control">
+                    <option>2025-26</option>
+                    <option>2024-25</option>
+                    <option>2023-24</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+
+          <div class="kt-section">
+            <div class="kt-section__title">Teacher & Subject</div>
+            <div class="kt-section__content">
+              <div class="form-group row">
+                <label class="col-lg-2 col-form-label required">Teacher</label>
+                <div class="col-lg-4">
+                  <select class="form-control" formControlName="employeeId"
+                    [class.is-invalid]="assignmentForm.get('employeeId')?.invalid && (assignmentForm.get('employeeId')?.touched || assignmentForm.get('employeeId')?.dirty)"
+                    [class.is-valid]="assignmentForm.get('employeeId')?.valid && (assignmentForm.get('employeeId')?.touched || assignmentForm.get('employeeId')?.dirty)">
+                    <option value="">Select Teacher</option>
+                    <option *ngFor="let t of teachers" [value]="t.id">{{ t.fullName }}</option>
+                  </select>
+                  <span class="invalid-feedback" *ngIf="assignmentForm.get('employeeId')?.invalid && (assignmentForm.get('employeeId')?.touched || assignmentForm.get('employeeId')?.dirty)">
+                    Teacher is required
+                  </span>
+                </div>
+
+                <label class="col-lg-2 col-form-label required">Subject</label>
+                <div class="col-lg-4">
+                  <select class="form-control" formControlName="subjectId"
+                    [class.is-invalid]="assignmentForm.get('subjectId')?.invalid && (assignmentForm.get('subjectId')?.touched || assignmentForm.get('subjectId')?.dirty)"
+                    [class.is-valid]="assignmentForm.get('subjectId')?.valid && (assignmentForm.get('subjectId')?.touched || assignmentForm.get('subjectId')?.dirty)">
+                    <option value="">Select Subject</option>
+                    <option *ngFor="let s of subjects" [value]="s.id">{{ s.name }}</option>
+                  </select>
+                  <span class="invalid-feedback" *ngIf="assignmentForm.get('subjectId')?.invalid && (assignmentForm.get('subjectId')?.touched || assignmentForm.get('subjectId')?.dirty)">
+                    Subject is required
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-lg-2 col-form-label">Teaching Role</label>
+                <div class="col-lg-4">
+                  <select class="form-control">
+                    <option>PRIMARY</option>
+                    <option>ASSISTANT</option>
+                    <option>SUBSTITUTE</option>
+                  </select>
+                  <span class="form-text text-muted">Primary or support role</span>
+                </div>
+                <label class="col-lg-2 col-form-label">Primary Teacher</label>
+                <div class="col-lg-4">
+                  <span class="kt-switch kt-switch--sm kt-switch--success">
+                    <label>
+                      <input type="checkbox" formControlName="isPrimary">
+                      <span></span>
+                    </label>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+
+          <div class="kt-section">
+            <div class="kt-section__title">Class & Schedule</div>
+            <div class="kt-section__content">
+              <div class="form-group row">
+                <label class="col-lg-2 col-form-label required">Standard</label>
+                <div class="col-lg-4">
+                  <select class="form-control" formControlName="standardId" (change)="onStandardChange()"
+                    [class.is-invalid]="assignmentForm.get('standardId')?.invalid && (assignmentForm.get('standardId')?.touched || assignmentForm.get('standardId')?.dirty)"
+                    [class.is-valid]="assignmentForm.get('standardId')?.valid && (assignmentForm.get('standardId')?.touched || assignmentForm.get('standardId')?.dirty)">
+                    <option value="">Select Standard</option>
+                    <option *ngFor="let s of standards" [value]="s.id">{{ s.standardName }}</option>
+                  </select>
+                  <span class="invalid-feedback" *ngIf="assignmentForm.get('standardId')?.invalid && (assignmentForm.get('standardId')?.touched || assignmentForm.get('standardId')?.dirty)">
+                    Standard is required
+                  </span>
+                </div>
+
+                <label class="col-lg-2 col-form-label required">Section</label>
+                <div class="col-lg-4">
+                  <select class="form-control" formControlName="sectionId"
+                    [class.is-invalid]="assignmentForm.get('sectionId')?.invalid && (assignmentForm.get('sectionId')?.touched || assignmentForm.get('sectionId')?.dirty)"
+                    [class.is-valid]="assignmentForm.get('sectionId')?.valid && (assignmentForm.get('sectionId')?.touched || assignmentForm.get('sectionId')?.dirty)">
+                    <option value="">Select Section</option>
+                    <option *ngFor="let s of sections" [value]="s.id">{{ s.sectionName }}</option>
+                  </select>
+                  <span class="invalid-feedback" *ngIf="assignmentForm.get('sectionId')?.invalid && (assignmentForm.get('sectionId')?.touched || assignmentForm.get('sectionId')?.dirty)">
+                    Section is required
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-lg-2 col-form-label required">Effective From</label>
+                <div class="col-lg-4">
+                  <input type="date" class="form-control" formControlName="effectiveFrom"
+                    [class.is-invalid]="assignmentForm.get('effectiveFrom')?.invalid && (assignmentForm.get('effectiveFrom')?.touched || assignmentForm.get('effectiveFrom')?.dirty)"
+                    [class.is-valid]="assignmentForm.get('effectiveFrom')?.valid && (assignmentForm.get('effectiveFrom')?.touched || assignmentForm.get('effectiveFrom')?.dirty)">
+                  <span class="invalid-feedback" *ngIf="assignmentForm.get('effectiveFrom')?.invalid && (assignmentForm.get('effectiveFrom')?.touched || assignmentForm.get('effectiveFrom')?.dirty)">
+                    Effective date is required
+                  </span>
+                </div>
+
+                <label class="col-lg-2 col-form-label">Effective To</label>
+                <div class="col-lg-4">
+                  <input type="date" class="form-control" placeholder="Optional end date">
+                  <span class="form-text text-muted">Leave empty for ongoing</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+
+          <div class="kt-section">
+            <div class="kt-section__title">Notes & Status</div>
+            <div class="kt-section__content">
+              <div class="form-group row">
+                <label class="col-lg-2 col-form-label">Notes</label>
+                <div class="col-lg-10">
+                  <textarea class="form-control" rows="3" placeholder="Optional notes for this assignment"></textarea>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-lg-2 col-form-label">Active</label>
+                <div class="col-lg-4">
+                  <span class="kt-switch kt-switch--sm kt-switch--success">
+                    <label>
+                      <input type="checkbox" checked>
+                      <span></span>
+                    </label>
+                  </span>
+                </div>
+                <label class="col-lg-2 col-form-label">Soft Delete</label>
+                <div class="col-lg-4">
+                  <span class="kt-switch kt-switch--sm kt-switch--danger">
+                    <label>
+                      <input type="checkbox">
+                      <span></span>
+                    </label>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kt-portlet__foot">
+          <div class="kt-form__actions">
+            <div class="row">
+              <div class="col-lg-12 text-right">
+                <button type="button" class="btn btn-outline-secondary mr-2">Save as Draft</button>
+                <button type="submit" class="btn btn-brand" [disabled]="assignmentForm.invalid || loading">
+                  {{ loading ? 'Assigning...' : 'Assign Teacher' }}
+                </button>
+                <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-xl-4">
+    <div class="kt-portlet kt-portlet--height-fluid">
+      <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+          <h3 class="kt-portlet__head-title">Assignment Preview</h3>
+        </div>
+      </div>
+      <div class="kt-portlet__body">
+        <div class="kt-widget13">
+          <div class="kt-widget13__item">
+            <span class="kt-widget13__desc">Teacher</span>
+            <span class="kt-widget13__text">{{ assignmentForm.get('employeeId')?.value || 'Select a teacher' }}</span>
+          </div>
+          <div class="kt-widget13__item">
+            <span class="kt-widget13__desc">Subject</span>
+            <span class="kt-widget13__text">{{ assignmentForm.get('subjectId')?.value || 'Select a subject' }}</span>
+          </div>
+          <div class="kt-widget13__item">
+            <span class="kt-widget13__desc">Standard / Section</span>
+            <span class="kt-widget13__text">{{ assignmentForm.get('standardId')?.value || 'Standard' }} / {{ assignmentForm.get('sectionId')?.value || 'Section' }}</span>
+          </div>
+          <div class="kt-widget13__item">
+            <span class="kt-widget13__desc">Role</span>
+            <span class="kt-widget13__text">Primary</span>
+          </div>
+          <div class="kt-widget13__item">
+            <span class="kt-widget13__desc">Effective</span>
+            <span class="kt-widget13__text">{{ assignmentForm.get('effectiveFrom')?.value || 'Select date' }}</span>
+          </div>
+          <div class="kt-widget13__item">
+            <span class="kt-widget13__desc">Status</span>
+            <span class="kt-badge kt-badge--inline kt-badge--success">Active</span>
+          </div>
+        </div>
+
+        <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+
+        <div class="kt-infobox">
+          <div class="kt-infobox__header">
+            <h2 class="kt-infobox__title">Best Practices</h2>
+          </div>
+          <div class="kt-infobox__body">
+            <ul class="kt-list">
+              <li>Assign a primary teacher for each section and subject.</li>
+              <li>Set an end date for temporary or substitute roles.</li>
+              <li>Keep only one active assignment per subject per section.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

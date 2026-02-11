@@ -4,14 +4,91 @@
             <span class="kt-portlet__head-icon">
                 <i class="kt-font-dark flaticon-squares"></i>
             </span>
-            <h3 class="kt-portlet__head-title">
-                Standard Subject Mapping
-            </h3>
+            <h3 class="kt-portlet__head-title">Standard Subject Mapping</h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-actions">
+                <button class="btn btn-outline-brand btn-sm mr-2">
+                    <i class="la la-refresh"></i> Refresh
+                </button>
+                <button class="btn btn-brand btn-sm">
+                    <i class="la la-save"></i> Save Changes
+                </button>
+            </div>
         </div>
     </div>
     <div class="kt-portlet__body">
+        <div class="kt-callout kt-callout--brand mb-4">
+            <div class="kt-callout__body">
+                <div class="kt-callout__title">Easy 3-step mapping</div>
+                <div class="kt-callout__text">
+                    1) Choose Academic Year, Campus, and Standard. 2) Search subjects. 3) Assign or remove.
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Insights -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="kt-widget24 kt-widget24--brand">
+                    <div class="kt-widget24__details">
+                        <div class="kt-widget24__info">
+                            <h4 class="kt-widget24__title">Available</h4>
+                            <span class="kt-widget24__desc">Subjects pool</span>
+                        </div>
+                        <span class="kt-widget24__stats kt-font-brand">{{ availableSubjects.length }}</span>
+                    </div>
+                    <div class="progress progress--sm">
+                        <div class="progress-bar kt-bg-brand" role="progressbar" style="width: 60%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="kt-widget24 kt-widget24--success">
+                    <div class="kt-widget24__details">
+                        <div class="kt-widget24__info">
+                            <h4 class="kt-widget24__title">Assigned</h4>
+                            <span class="kt-widget24__desc">Mapped to standard</span>
+                        </div>
+                        <span class="kt-widget24__stats kt-font-success">{{ assignedSubjects.length }}</span>
+                    </div>
+                    <div class="progress progress--sm">
+                        <div class="progress-bar kt-bg-success" role="progressbar" style="width: 45%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="kt-widget24 kt-widget24--warning">
+                    <div class="kt-widget24__details">
+                        <div class="kt-widget24__info">
+                            <h4 class="kt-widget24__title">Mandatory</h4>
+                            <span class="kt-widget24__desc">Core subjects</span>
+                        </div>
+                        <span class="kt-widget24__stats kt-font-warning">{{ mandatoryCount }}</span>
+                    </div>
+                    <div class="progress progress--sm">
+                        <div class="progress-bar kt-bg-warning" role="progressbar" style="width: 35%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="kt-widget24 kt-widget24--danger">
+                    <div class="kt-widget24__details">
+                        <div class="kt-widget24__info">
+                            <h4 class="kt-widget24__title">Elective</h4>
+                            <span class="kt-widget24__desc">Optional subjects</span>
+                        </div>
+                        <span class="kt-widget24__stats kt-font-danger">{{ electiveCount }}</span>
+                    </div>
+                    <div class="progress progress--sm">
+                        <div class="progress-bar kt-bg-danger" role="progressbar" style="width: 25%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Filters Row -->
-        <div class="row mb-5">
+        <div class="row mb-4">
             <div class="col-md-4">
                 <label>Academic Year</label>
                 <select class="form-control" [(ngModel)]="selectedYearId" (change)="onFilterChange()">
@@ -36,17 +113,31 @@
             </div>
         </div>
 
+        <div class="row mb-3" *ngIf="selectedYearId || selectedCampusId || selectedStandardId">
+            <div class="col-md-12">
+                <div class="selected-filters">
+                    <span class="kt-badge kt-badge--inline kt-badge--brand" *ngIf="selectedYearId">Academic Year</span>
+                    <span class="kt-badge kt-badge--inline kt-badge--info" *ngIf="selectedCampusId">Campus</span>
+                    <span class="kt-badge kt-badge--inline kt-badge--success" *ngIf="selectedStandardId">Standard</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Mega Search Row -->
         <div class="row mb-4" *ngIf="selectedYearId && selectedStandardId">
             <div class="col-md-12">
-                <div class="input-group">
+                <div class="input-group input-group-lg">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="flaticon-search"></i></span>
                     </div>
-                    <input type="text" class="form-control form-control-lg"
-                        placeholder="Mega Search Subjects (Code or Name)..." [(ngModel)]="megaSearchTerm"
+                    <input type="text" class="form-control"
+                        placeholder="Search subjects by code or name..." [(ngModel)]="megaSearchTerm"
                         (input)="onMegaSearch()">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary">Clear</button>
+                    </div>
                 </div>
+                <div class="helper-text mt-2">Tip: Try subject code like MTH-101 or name like Mathematics.</div>
             </div>
         </div>
 
@@ -60,9 +151,12 @@
                             <h3 class="kt-portlet__head-title text-brand">Available Subjects ({{
                                 filteredAvailable.length }})</h3>
                         </div>
+                        <div class="kt-portlet__head-toolbar">
+                            <button class="btn btn-sm btn-outline-brand">Assign All</button>
+                        </div>
                     </div>
                     <div class="kt-portlet__body p-0">
-                        <div class="list-container" style="max-height: 400px; overflow-y: auto;">
+                        <div class="list-container" style="max-height: 440px; overflow-y: auto;">
                             <table class="table table-hover mb-0">
                                 <thead class="thead-light">
                                     <tr>
@@ -101,13 +195,16 @@
                             <h3 class="kt-portlet__head-title text-danger">Assigned Subjects ({{ filteredAssigned.length
                                 }})</h3>
                         </div>
+                        <div class="kt-portlet__head-toolbar">
+                            <button class="btn btn-sm btn-outline-danger">Remove All</button>
+                        </div>
                     </div>
                     <div class="kt-portlet__body p-0">
-                        <div class="list-container" style="max-height: 400px; overflow-y: auto;">
+                        <div class="list-container" style="max-height: 440px; overflow-y: auto;">
                             <table class="table table-hover mb-0">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th>Subject Name</th>
+                                        <th>Subject</th>
                                         <th>Type</th>
                                         <th class="text-right">Action</th>
                                     </tr>
@@ -115,7 +212,10 @@
                                 <tbody>
                                     <tr *ngFor="let assignment of filteredAssigned">
                                         <td>
-                                            <strong>{{ assignment.subjectName }}</strong>
+                                            <div class="subject-cell">
+                                                <strong>{{ assignment.subjectName }}</strong>
+                                                <span class="text-muted d-block">Standard subject mapping</span>
+                                            </div>
                                         </td>
                                         <td>
                                             <span
@@ -143,9 +243,11 @@
         </div>
 
         <!-- Empty State -->
-        <div class="alert alert-dark mt-5" role="alert" *ngIf="!selectedYearId || !selectedStandardId">
-            <div class="alert-icon"><i class="flaticon-info"></i></div>
-            <div class="alert-text">Please select Academic Year, Campus, and Standard to manage subject mappings.</div>
+        <div class="empty-state" *ngIf="!selectedYearId || !selectedStandardId">
+            <div class="empty-state__icon"><i class="flaticon-info"></i></div>
+            <div class="empty-state__title">Start by choosing context</div>
+            <div class="empty-state__subtitle">Select Academic Year, Campus, and Standard to manage mappings.</div>
+            <button class="btn btn-brand mt-3">Select Context</button>
         </div>
     </div>
 </div>
