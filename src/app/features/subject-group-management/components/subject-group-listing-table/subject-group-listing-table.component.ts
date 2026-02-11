@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -8,18 +8,25 @@ import { SubjectGroupManagementService } from '../../services/subject-group-mana
 import { LoggerService } from '../../../../core/services/logger.service';
 import { SubjectGroup } from '../../models/subject-group.model';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { DeletePopupComponent } from '../../../../shared/components/delete-popup/delete-popup.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
     selector: 'app-subject-group-listing-table',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterModule],
+    imports: [CommonModule, ReactiveFormsModule, RouterModule, DeletePopupComponent, ToasterComponent, LoaderComponent],
     templateUrl: './subject-group-listing-table.component.html',
     styleUrls: ['./subject-group-listing-table.component.css']
 })
 export class SubjectGroupListingTableComponent implements OnInit, OnDestroy {
+    @ViewChild('toaster') toaster!: ToasterComponent;
     pagination: Pagination<SubjectGroup> = new Pagination([], 10);
     searchControl = new FormControl('');
     subjectGroups: SubjectGroup[] = [];
+    loading = false;
+    isDeletePopupOpen = false;
+    pendingDeleteId?: number;
 
     columns = [
         { key: 'name', label: 'Group Name' },
@@ -62,13 +69,19 @@ export class SubjectGroupListingTableComponent implements OnInit, OnDestroy {
     }
 
     private getGroups() {
+        this.loading = true;
         this.subjectGroupService.getSubjectGroups().subscribe({
             next: (resp) => {
                 this.subjectGroups = resp.body || [];
                 this.pagination = new Pagination(this.subjectGroups, 10);
+                this.loading = false;
                 this.logger.success('Subject groups loaded successfully');
             },
-            error: (err) => this.logger.error('Error fetching subject groups', err)
+            error: (err) => {
+                this.loading = false;
+                this.toaster?.show('Failed to load subject groups.', 'error');
+                this.logger.error('Error fetching subject groups', err);
+            }
         });
     }
 
@@ -80,15 +93,34 @@ export class SubjectGroupListingTableComponent implements OnInit, OnDestroy {
     deleteGroup(id: number | undefined, event: Event) {
         if (!id) return;
         event.stopPropagation();
-        if (confirm('Are you sure you want to delete this subject group?')) {
-            this.subjectGroupService.deleteSubjectGroup(id).subscribe({
-                next: () => {
-                    this.logger.success('Subject group deleted successfully');
-                    this.getGroups();
-                },
-                error: (err) => this.logger.error('Error deleting subject group', err)
-            });
-        }
+        this.pendingDeleteId = id;
+        this.isDeletePopupOpen = true;
+    }
+
+    onConfirmDelete(): void {
+        if (this.pendingDeleteId === undefined) return;
+        this.loading = true;
+        this.subjectGroupService.deleteSubjectGroup(this.pendingDeleteId).subscribe({
+            next: () => {
+                this.logger.success('Subject group deleted successfully');
+                this.toaster?.show('Subject group deleted successfully.', 'success');
+                this.isDeletePopupOpen = false;
+                this.pendingDeleteId = undefined;
+                this.getGroups();
+            },
+            error: (err) => {
+                this.loading = false;
+                this.toaster?.show('Failed to delete subject group.', 'error');
+                this.logger.error('Error deleting subject group', err);
+                this.isDeletePopupOpen = false;
+                this.pendingDeleteId = undefined;
+            }
+        });
+    }
+
+    onCancelDelete(): void {
+        this.isDeletePopupOpen = false;
+        this.pendingDeleteId = undefined;
     }
 
     onPageSizeChange(event: any) {

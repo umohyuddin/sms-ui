@@ -1,3 +1,8 @@
+<app-toaster #toaster></app-toaster>
+<app-loader *ngIf="loading" type="pulse" size="lg" color="primary" [message]="loaderMessage" [overlay]="true"
+    [fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
+</app-loader>
+
 <div class="kt-portlet kt-portlet--mobile">
     <div class="kt-portlet__head kt-portlet__head--lg">
         <div class="kt-portlet__head-label">
@@ -26,8 +31,8 @@
                                 {{ groupData.name }}
                             </a>
                             <span class="ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
-                                [ngClass]="groupData.isActive ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">
-                                {{ groupData.isActive ? 'Active' : 'Inactive' }}
+                                [ngClass]="groupData.active ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">
+                                {{ groupData.active ? 'Active' : 'Inactive' }}
                             </span>
                         </div>
                     </div>

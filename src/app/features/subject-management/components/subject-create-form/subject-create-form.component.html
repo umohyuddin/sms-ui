@@ -17,7 +17,8 @@
             [class.is-invalid]="subjectForm.get('name')?.invalid && (subjectForm.get('name')?.touched || subjectForm.get('name')?.dirty)"
             [class.is-valid]="subjectForm.get('name')?.valid && (subjectForm.get('name')?.touched || subjectForm.get('name')?.dirty)">
           <span class="form-text text-muted">Please enter subject name</span>
-          <span class="invalid-feedback" *ngIf="subjectForm.get('name')?.invalid && (subjectForm.get('name')?.touched || subjectForm.get('name')?.dirty)">
+          <span class="invalid-feedback"
+            *ngIf="subjectForm.get('name')?.invalid && (subjectForm.get('name')?.touched || subjectForm.get('name')?.dirty)">
             Subject name is required
           </span>
         </div>
@@ -28,7 +29,8 @@
             [class.is-invalid]="subjectForm.get('code')?.invalid && (subjectForm.get('code')?.touched || subjectForm.get('code')?.dirty)"
             [class.is-valid]="subjectForm.get('code')?.valid && (subjectForm.get('code')?.touched || subjectForm.get('code')?.dirty)">
           <span class="form-text text-muted">Please enter subject code</span>
-          <span class="invalid-feedback" *ngIf="subjectForm.get('code')?.invalid && (subjectForm.get('code')?.touched || subjectForm.get('code')?.dirty)">
+          <span class="invalid-feedback"
+            *ngIf="subjectForm.get('code')?.invalid && (subjectForm.get('code')?.touched || subjectForm.get('code')?.dirty)">
             Subject code is required
           </span>
         </div>
@@ -42,7 +44,8 @@
             <option *ngFor="let group of groups" [value]="group.id">{{ group.name }}</option>
           </select>
           <span class="form-text text-muted">Please select subject group</span>
-          <span class="invalid-feedback" *ngIf="subjectForm.get('subjectGroupId')?.invalid && (subjectForm.get('subjectGroupId')?.touched || subjectForm.get('subjectGroupId')?.dirty)">
+          <span class="invalid-feedback"
+            *ngIf="subjectForm.get('subjectGroupId')?.invalid && (subjectForm.get('subjectGroupId')?.touched || subjectForm.get('subjectGroupId')?.dirty)">
             Subject group is required
           </span>
         </div>
@@ -51,7 +54,8 @@
       <div class="form-group row form-group-marginless kt-margin-t-20">
         <label class="col-lg-1 col-form-label">Description:</label>
         <div class="col-lg-11">
-          <textarea class="form-control" formControlName="description" rows="3" placeholder="Enter description"></textarea>
+          <textarea class="form-control" formControlName="description" rows="3"
+            placeholder="Enter description"></textarea>
           <span class="form-text text-muted">Please enter description (optional)</span>
         </div>
       </div>
@@ -66,7 +70,7 @@
         </div>
         <div class="col-lg-3">
           <label class="kt-checkbox kt-margin-t-10">
-            <input type="checkbox" formControlName="isActive"> Is Active
+            <input type="checkbox" formControlName="active"> Is Active
             <span></span>
           </label>
         </div>

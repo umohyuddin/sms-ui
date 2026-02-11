@@ -3,33 +3,72 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_ENDPOINTS } from '../../../core/const/API_ENDPOINTS';
 import { Subject, SubjectGroup } from '../models/subject.model';
+import { HTTP_METHOD } from '../../../core/const/HTTP_METHOD';
+import { HttpClientService } from '../../../core/services/http-client.service';
+import { AppConfigService } from '../../../core/services/app-config.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SubjectManagementService {
-    constructor(private http: HttpClient) { }
+    private baseUrl = '';
 
-    getSubjects(): Observable<HttpResponse<Subject[]>> {
-        return this.http.get<Subject[]>(API_ENDPOINTS.ACADEMIC.CORE.SUBJECTS.GET_ALL, { observe: 'response' });
-    }
+  constructor(
+    private http: HttpClientService,
+    private appConfig: AppConfigService
+  ) {
+    this.baseUrl = this.appConfig.apiBaseUrl;
+    console.log('Subject API Base URL:', this.baseUrl);
+  }
 
-    getSubjectById(id: string): Observable<HttpResponse<Subject>> {
-        return this.http.get<Subject>(API_ENDPOINTS.ACADEMIC.CORE.SUBJECTS.GET_BY_ID(id), { observe: 'response' });
-    }
+  /** Get all subjects */
+  getSubjects(): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.CORE.SUBJECTS.GET_ALL}`,
+      { observeResponse: true }
+    );
+  }
 
-    saveSubject(id: string | null, data: any): Observable<HttpResponse<Subject>> {
-        if (id) {
-            return this.http.put<Subject>(API_ENDPOINTS.ACADEMIC.CORE.SUBJECTS.UPDATE(id), data, { observe: 'response' });
-        }
-        return this.http.post<Subject>(API_ENDPOINTS.ACADEMIC.CORE.SUBJECTS.CREATE, data, { observe: 'response' });
-    }
+  /** Get subject by ID */
+  getSubjectById(id: string | number): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.CORE.SUBJECTS.GET_BY_ID(id)}`,
+      { observeResponse: true }
+    );
+  }
 
-    deleteSubject(id: number): Observable<HttpResponse<void>> {
-        return this.http.delete<void>(API_ENDPOINTS.ACADEMIC.CORE.SUBJECTS.DELETE(id), { observe: 'response' });
-    }
+  /** Create or update subject */
+  saveSubject(id: string | null, payload: any): Observable<any> {
+    const isUpdate = !!id;
+    const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
 
-    getSubjectGroups(): Observable<HttpResponse<SubjectGroup[]>> {
-        return this.http.get<SubjectGroup[]>(API_ENDPOINTS.ACADEMIC.CORE.SUBJECT_GROUPS.GET_ALL, { observe: 'response' });
-    }
+    const url = isUpdate
+      ? `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.CORE.SUBJECTS.UPDATE(id)}`
+      : `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.CORE.SUBJECTS.CREATE}`;
+
+    return this.http.request(method, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
+  /** Delete subject */
+  deleteSubject(id: number): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.DELETE,
+      `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.CORE.SUBJECTS.DELETE(id)}`,
+      { observeResponse: true }
+    );
+  }
+
+  /** Get all subject groups */
+  getSubjectGroups(): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.CORE.SUBJECT_GROUPS.GET_ALL}`,
+      { observeResponse: true }
+    );
+  }
 }

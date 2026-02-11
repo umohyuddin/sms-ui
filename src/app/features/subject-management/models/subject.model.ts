@@ -3,7 +3,7 @@ export interface SubjectGroup {
     name: string;
     code?: string;
     description?: string;
-    isActive: boolean;
+    active: boolean;
 }
 
 export interface Subject {
@@ -14,5 +14,5 @@ export interface Subject {
     subjectGroupId: number;
     subjectGroupName?: string;
     isElective: boolean;
-    isActive: boolean;
+    active: boolean;
 }

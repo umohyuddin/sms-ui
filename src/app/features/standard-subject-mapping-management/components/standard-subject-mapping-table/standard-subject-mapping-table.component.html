@@ -1,0 +1,151 @@
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-dark flaticon-squares"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                Standard Subject Mapping
+            </h3>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <!-- Filters Row -->
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <label>Academic Year</label>
+                <select class="form-control" [(ngModel)]="selectedYearId" (change)="onFilterChange()">
+                    <option [value]="null">Select Year</option>
+                    <option *ngFor="let year of academicYears" [value]="year.id">{{ year.name }}</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label>Campus</label>
+                <select class="form-control" [(ngModel)]="selectedCampusId" (change)="onCampusChange()">
+                    <option [value]="null">Select Campus</option>
+                    <option *ngFor="let campus of campuses" [value]="campus.id">{{ campus.campusName }}</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label>Standard</label>
+                <select class="form-control" [(ngModel)]="selectedStandardId" (change)="onFilterChange()"
+                    [disabled]="!selectedCampusId">
+                    <option [value]="null">Select Standard</option>
+                    <option *ngFor="let std of standards" [value]="std.id">{{ std.standardName }}</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Mega Search Row -->
+        <div class="row mb-4" *ngIf="selectedYearId && selectedStandardId">
+            <div class="col-md-12">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="flaticon-search"></i></span>
+                    </div>
+                    <input type="text" class="form-control form-control-lg"
+                        placeholder="Mega Search Subjects (Code or Name)..." [(ngModel)]="megaSearchTerm"
+                        (input)="onMegaSearch()">
+                </div>
+            </div>
+        </div>
+
+        <!-- Mapping Content -->
+        <div class="row mt-4" *ngIf="selectedYearId && selectedStandardId">
+            <!-- Available Subjects -->
+            <div class="col-md-6">
+                <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-brand shadow-sm">
+                    <div class="kt-portlet__head bg-light">
+                        <div class="kt-portlet__head-label">
+                            <h3 class="kt-portlet__head-title text-brand">Available Subjects ({{
+                                filteredAvailable.length }})</h3>
+                        </div>
+                    </div>
+                    <div class="kt-portlet__body p-0">
+                        <div class="list-container" style="max-height: 400px; overflow-y: auto;">
+                            <table class="table table-hover mb-0">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Name</th>
+                                        <th class="text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let subject of filteredAvailable">
+                                        <td><code>{{ subject.code }}</code></td>
+                                        <td>{{ subject.name }}</td>
+                                        <td class="text-right">
+                                            <button class="btn btn-sm btn-label-brand btn-bold"
+                                                (click)="assign(subject)">
+                                                <i class="la la-plus"></i> Assign
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="filteredAvailable.length === 0">
+                                        <td colspan="3" class="text-center text-muted py-4">No matching available
+                                            subjects</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assigned Subjects -->
+            <div class="col-md-6">
+                <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-danger shadow-sm">
+                    <div class="kt-portlet__head bg-light">
+                        <div class="kt-portlet__head-label">
+                            <h3 class="kt-portlet__head-title text-danger">Assigned Subjects ({{ filteredAssigned.length
+                                }})</h3>
+                        </div>
+                    </div>
+                    <div class="kt-portlet__body p-0">
+                        <div class="list-container" style="max-height: 400px; overflow-y: auto;">
+                            <table class="table table-hover mb-0">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Subject Name</th>
+                                        <th>Type</th>
+                                        <th class="text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let assignment of filteredAssigned">
+                                        <td>
+                                            <strong>{{ assignment.subjectName }}</strong>
+                                        </td>
+                                        <td>
+                                            <span
+                                                [class]="assignment.isMandatory ? 'kt-badge kt-badge--primary kt-badge--inline' : 'kt-badge kt-badge--warning kt-badge--inline'">
+                                                {{ assignment.isMandatory ? 'Mandatory' : 'Elective' }}
+                                            </span>
+                                        </td>
+                                        <td class="text-right">
+                                            <button class="btn btn-sm btn-label-danger btn-icon btn-circle"
+                                                (click)="unassign(assignment)" title="Remove">
+                                                <i class="la la-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="filteredAssigned.length === 0">
+                                        <td colspan="3" class="text-center text-muted py-4">No matching assigned
+                                            subjects</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="alert alert-dark mt-5" role="alert" *ngIf="!selectedYearId || !selectedStandardId">
+            <div class="alert-icon"><i class="flaticon-info"></i></div>
+            <div class="alert-text">Please select Academic Year, Campus, and Standard to manage subject mappings.</div>
+        </div>
+    </div>
+</div>

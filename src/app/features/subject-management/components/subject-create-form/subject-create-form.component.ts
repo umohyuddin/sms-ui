@@ -33,7 +33,7 @@ export class SubjectCreateFormComponent implements OnInit {
             subjectGroupId: ['', Validators.required],
             description: [''],
             isElective: [false],
-            isActive: [true]
+            active: [true]
         });
     }
 

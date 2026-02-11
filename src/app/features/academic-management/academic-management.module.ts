@@ -5,7 +5,6 @@ import { SubjectListing } from './pages/subject-listing/subject-listing';
 import { SubjectCreate } from './pages/subject-create/subject-create';
 import { SubjectGroupListing } from './pages/subject-group-listing/subject-group-listing';
 import { SubjectGroupCreate } from './pages/subject-group-create/subject-group-create';
-import { StandardSubjectMapping } from './pages/standard-subject-mapping/standard-subject-mapping';
 import { TeacherAssignmentListing } from './pages/teacher-assignment-listing/teacher-assignment-listing';
 import { TeacherAssignmentForm } from './pages/teacher-assignment-form/teacher-assignment-form';
 import { TimetableManage } from './pages/timetable-manage/timetable-manage';
@@ -25,7 +24,6 @@ const routes: Routes = [
     { path: 'subject-groups', component: SubjectGroupListing },
     { path: 'subject-groups/create', component: SubjectGroupCreate },
     { path: 'subject-groups/edit/:id', component: SubjectGroupCreate },
-    { path: 'mapping', component: StandardSubjectMapping },
     { path: 'teacher-assignment', component: TeacherAssignmentListing },
     { path: 'teacher-assignment/create', component: TeacherAssignmentForm },
     { path: 'timetable', component: TimetableManage },

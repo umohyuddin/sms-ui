@@ -3,7 +3,7 @@ export interface SubjectGroup {
     name: string;
     code: string;
     description?: string;
-    isActive: boolean;
+    active: boolean;
     createdAt?: string;
     updatedAt?: string;
 }

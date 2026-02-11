@@ -368,7 +368,17 @@ export const routes: Routes = [
     ]
   },
 
-  // Default redirect
+  {
+    path: 'standard-subject-mapping',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/standard-subject-mapping-management/standard-subject-mapping-management.module').then(m => m.StandardSubjectMappingManagementModule)
+      }
+    ]
+  },
   {
     path: '',
     redirectTo: 'auth/login',

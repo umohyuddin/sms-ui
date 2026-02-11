@@ -300,13 +300,16 @@ export const API_ENDPOINTS = {
             SEARCH: (keyword: string) => `/api/institute/employee-types/${keyword}`,
         },
         STANDARDS: {
-            CREATE: '/api/institute/campuses/standards',
-            UPDATE: (id: string) => `/api/institute/campuses/standards/${id}`,
-            GET_ALL: '/api/institute/campuses/standards',
-            SEARCH: '/api/institute/campuses/standards/search',
-            GET_BY_ID: (id: string) => `/api/institute/campuses/standards/${id}`,
-            GET_BY_CAMPUS_ID: (id: string) => `/api/institute/campuses/standards/campus/${id}`
+            CREATE: '/api/institute/campuses-standards',
+            UPDATE: (id: string) => `/api/institute/campuses-standards/${id}`,
+            GET_ALL: '/api/institute/campuses-standards',
+            SEARCH: '/api/institute/campuses-standards/search',
+            GET_BY_ID: (id: string) => `/api/institute/campuses-standards/${id}`,
+            GET_BY_CAMPUS_ID: (campusId: string) => `/api/institute/campuses-standards/campus/${campusId}`,
+            DELETE_BY_ID: (id: string) => `/api/institute/campuses-standards/${id}`,
+            DELETE_BY_CAMPUS_ID: (campusId: string) => `/api/institute/campuses-standards/campus/${campusId}`
         },
+
         SECTIONS: {
             CREATE: '/api/institute/campuses/standards/sections',
             UPDATE: (id: string) => `/api/institute/campuses/standards/sections/${id}`,
@@ -413,11 +416,11 @@ export const API_ENDPOINTS = {
                 DELETE: (id: string | number) => `/api/academic/core/subjects/${id}`
             },
             SUBJECT_GROUPS: {
-                CREATE: '/api/academic/core/subject-groups',
-                UPDATE: (id: string | number) => `/api/academic/core/subject-groups/${id}`,
-                GET_ALL: '/api/academic/core/subject-groups',
-                GET_BY_ID: (id: string | number) => `/api/academic/core/subject-groups/${id}`,
-                DELETE: (id: string | number) => `/api/academic/core/subject-groups/${id}`
+                CREATE: '/api/academic/core/groups',
+                UPDATE: (id: string | number) => `/api/academic/core/groups/${id}`,
+                GET_ALL: '/api/academic/core/groups',
+                GET_BY_ID: (id: string | number) => `/api/academic/core/groups/${id}`,
+                DELETE: (id: string | number) => `/api/academic/core/groups/${id}`
             },
             STANDARD_SUBJECTS: {
                 ASSIGN: '/api/academic/core/standard-subjects',
