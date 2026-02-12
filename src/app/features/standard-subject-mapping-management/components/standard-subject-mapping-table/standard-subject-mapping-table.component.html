@@ -11,7 +11,7 @@
                 <button class="btn btn-outline-brand btn-sm mr-2">
                     <i class="la la-refresh"></i> Refresh
                 </button>
-                <button class="btn btn-brand btn-sm">
+                <button class="btn btn-brand btn-sm" (click)="saveAll()">
                     <i class="la la-save"></i> Save Changes
                 </button>
             </div>
@@ -123,24 +123,30 @@
         <!-- Mega Search Row -->
         <div class="row mb-4" *ngIf="selectedYearId && selectedStandardId">
             <div class="col-md-12">
-                <div class="input-group input-group-lg">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="flaticon-search"></i></span>
-                    </div>
+                <div class="kt-input-icon kt-input-icon--left kt-input-icon--right">
                     <input type="text" class="form-control" placeholder="Search subjects by code or name..."
                         [(ngModel)]="megaSearchTerm" (input)="onMegaSearch()">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary">Clear</button>
-                    </div>
+                    <span class="kt-input-icon__icon kt-input-icon__icon--left">
+                        <span><i class="la la-search"></i></span>
+                    </span>
+                    <span class="kt-input-icon__icon kt-input-icon__icon--right" *ngIf="megaSearchTerm"
+                        (click)="megaSearchTerm = ''; onMegaSearch()" style="cursor: pointer; pointer-events: all;">
+                        <span><i class="la la-close kt-font-danger"></i></span>
+                    </span>
                 </div>
-                <div class="helper-text mt-2">Tip: Try subject code like MTH-101 or name like Mathematics.</div>
+                <div class="mt-2 pl-1">
+                    <span class="text-muted small">
+                        <i class="la la-info-circle mr-1"></i>
+                        Try searching by code (e.g., <code>MTH-101</code>) or name (e.g., <code>Mathematics</code>)
+                    </span>
+                </div>
             </div>
         </div>
 
         <!-- Mapping Content -->
         <div class="row mt-4" *ngIf="selectedYearId && selectedStandardId">
             <!-- Available Subjects -->
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-brand shadow-sm">
                     <div class="kt-portlet__head bg-light">
                         <div class="kt-portlet__head-label">
@@ -166,9 +172,9 @@
                                         <td><code>{{ subject.code }}</code></td>
                                         <td>{{ subject.name }}</td>
                                         <td class="text-right">
-                                            <button class="btn btn-sm btn-label-brand btn-bold"
+                                            <button class="btn btn-sm btn-icon btn-label-brand btn-circle"
                                                 (click)="assign(subject)">
-                                                <i class="la la-plus"></i> Assign
+                                                <i class="la la-plus"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -184,7 +190,7 @@
             </div>
 
             <!-- Assigned Subjects -->
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-danger shadow-sm">
                     <div class="kt-portlet__head bg-light">
                         <div class="kt-portlet__head-label">
@@ -201,25 +207,45 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th>Subject</th>
-                                        <th>Type</th>
+                                        <th style="width: 80px;">Hrs/Wk</th>
+                                        <th style="width: 80px;">Theory</th>
+                                        <th style="width: 80px;">Prac.</th>
+                                        <th style="width: 120px;">Type</th>
                                         <th class="text-right">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let assignment of filteredAssigned">
-                                        <td>
+                                        <td class="align-middle">
                                             <div class="subject-cell">
                                                 <strong>{{ assignment.subjectName }}</strong>
-                                                <span class="text-muted d-block">Standard subject mapping</span>
+                                                <!-- <span class="text-muted d-block small">Academic mapping</span> -->
                                             </div>
                                         </td>
-                                        <td>
-                                            <span
-                                                [class]="assignment.isMandatory ? 'kt-badge kt-badge--primary kt-badge--inline' : 'kt-badge kt-badge--warning kt-badge--inline'">
-                                                {{ assignment.isMandatory ? 'Mandatory' : 'Elective' }}
-                                            </span>
+                                        <td class="align-middle">
+                                            <input type="number" class="form-control form-control-sm"
+                                                [(ngModel)]="assignment.weeklyHours" min="0">
                                         </td>
-                                        <td class="text-right">
+                                        <td class="align-middle">
+                                            <input type="number" class="form-control form-control-sm"
+                                                [(ngModel)]="assignment.theoryMarks" min="0">
+                                        </td>
+                                        <td class="align-middle">
+                                            <input type="number" class="form-control form-control-sm"
+                                                [(ngModel)]="assignment.practicalMarks" min="0">
+                                        </td>
+                                        <td class="align-middle">
+                                            <select class="form-control form-control-sm"
+                                                [(ngModel)]="assignment.optional">
+                                                <option [ngValue]="false">Mandatory</option>
+                                                <option [ngValue]="true">Elective</option>
+                                            </select>
+                                        </td>
+                                        <td class="text-right align-middle">
+                                            <button class="btn btn-sm btn-icon btn-label-brand btn-circle mr-2"
+                                                (click)="saveAssignment(assignment)" title="Save Changes">
+                                                <i class="la la-save"></i>
+                                            </button>
                                             <button class="btn btn-sm btn-label-danger btn-icon btn-circle"
                                                 (click)="unassign(assignment)" title="Remove">
                                                 <i class="la la-trash"></i>
@@ -236,14 +262,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Empty State -->
-        <div class="empty-state" *ngIf="!selectedYearId || !selectedStandardId">
-            <div class="empty-state__icon"><i class="flaticon-info"></i></div>
-            <div class="empty-state__title">Start by choosing context</div>
-            <div class="empty-state__subtitle">Select Academic Year, Campus, and Standard to manage mappings.</div>
-            <button class="btn btn-brand mt-3">Select Context</button>
         </div>
     </div>
 </div>

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject as RxSubject, takeUntil } from 'rxjs';
 import { StandardSubjectMappingService } from '../../services/standard-subject-mapping.service';
-import { Subject, StandardSubject, Campus, Standard, AcademicYear } from '../../models/standard-subject-mapping.model';
+import { Subject, StandardSubject, Campus, Standard, AcademicYear, StandardSubjectRequest } from '../../models/standard-subject-mapping.model';
 
 @Component({
     selector: 'app-standard-subject-mapping-table',
@@ -146,11 +146,15 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
     }
 
     assign(subject: Subject): void {
-        const payload = {
-            standardId: this.selectedStandardId,
-            subjectId: subject.id,
-            academicYearId: this.selectedYearId,
-            isMandatory: true
+        const payload: StandardSubjectRequest = {
+            standardId: this.selectedStandardId!,
+            subjectId: subject.id!,
+            academicYearId: this.selectedYearId!,
+            optional: subject.isElective || false,
+            weeklyHours: 0,
+            theoryMarks: 100,
+            practicalMarks: 0,
+            active: true
         };
         this.mappingService.assignSubject(payload).pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.loadAssignments();
@@ -165,6 +169,30 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
                     this.loadAssignments();
                 });
         }
+    }
+
+    saveAssignment(assignment: StandardSubject): void {
+        const payload: StandardSubjectRequest = {
+            standardId: assignment.standardId,
+            subjectId: assignment.subjectId,
+            academicYearId: assignment.academicYearId,
+            optional: assignment.optional,
+            weeklyHours: assignment.weeklyHours,
+            theoryMarks: assignment.theoryMarks,
+            practicalMarks: assignment.practicalMarks,
+            active: assignment.active ?? true
+        };
+        this.mappingService.assignSubject(payload).pipe(takeUntil(this.destroy$)).subscribe(() => {
+            this.loadAssignments();
+        });
+    }
+
+    saveAll(): void {
+        if (!this.assignedSubjects.length) return;
+
+        // In a real app, we'd use forkJoin or a bulk endpoint
+        // For now, let's just save the current state
+        this.assignedSubjects.forEach(assignment => this.saveAssignment(assignment));
     }
 
     ngOnDestroy(): void {

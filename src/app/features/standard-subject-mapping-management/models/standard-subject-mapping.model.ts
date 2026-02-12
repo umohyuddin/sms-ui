@@ -15,6 +15,22 @@ export interface StandardSubject {
     academicYearId: number;
     subjectName?: string;
     isMandatory: boolean;
+    optional: boolean;
+    weeklyHours: number;
+    theoryMarks: number;
+    practicalMarks: number;
+    active: boolean;
+}
+
+export interface StandardSubjectRequest {
+    standardId: number;
+    subjectId: number;
+    academicYearId: number;
+    optional: boolean;
+    weeklyHours?: number;
+    theoryMarks?: number;
+    practicalMarks?: number;
+    active: boolean;
 }
 
 export interface Standard {
