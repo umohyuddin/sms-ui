@@ -13,6 +13,6 @@ export interface Subject {
     description?: string;
     subjectGroupId: number;
     subjectGroupName?: string;
-    isElective: boolean;
+    core: boolean;
     active: boolean;
 }

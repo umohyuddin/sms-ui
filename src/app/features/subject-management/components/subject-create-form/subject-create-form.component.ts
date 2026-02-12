@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,14 +6,17 @@ import { SubjectManagementService } from '../../services/subject-management.serv
 import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { SubjectGroup } from '../../models/subject.model';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
     selector: 'app-subject-create-form',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule],
+    imports: [CommonModule, ReactiveFormsModule, ToasterComponent, LoaderComponent],
     templateUrl: './subject-create-form.component.html'
 })
 export class SubjectCreateFormComponent implements OnInit {
+    @ViewChild('toaster') toaster!: ToasterComponent;
     subjectForm: FormGroup;
     isEdit = false;
     subjectId: string | null = null;
@@ -32,7 +35,7 @@ export class SubjectCreateFormComponent implements OnInit {
             code: ['', Validators.required],
             subjectGroupId: ['', Validators.required],
             description: [''],
-            isElective: [false],
+            core: [false],
             active: [true]
         });
     }
@@ -53,12 +56,18 @@ export class SubjectCreateFormComponent implements OnInit {
 
     loadGroups() {
         this.logger.info('Loading subject groups');
+        this.loading = true;
         this.subjectService.getSubjectGroups().subscribe({
             next: (resp) => {
                 this.groups = resp.body || [];
                 this.logger.success('Subject groups loaded successfully');
+                this.loading = false;
             },
-            error: (err) => this.logger.error('Failed to load subject groups', err)
+            error: (err) => {
+                this.loading = false;
+                this.logger.error('Failed to load subject groups', err);
+                this.toaster?.show('Failed to load subject groups.', 'error');
+            }
         });
     }
 
@@ -78,6 +87,7 @@ export class SubjectCreateFormComponent implements OnInit {
             error: (err) => {
                 this.loading = false;
                 this.logger.error('Failed to load subject', err);
+                this.toaster?.show('Failed to load subject.', 'error');
             }
         });
     }
@@ -91,11 +101,17 @@ export class SubjectCreateFormComponent implements OnInit {
         this.subjectService.saveSubject(this.subjectId, this.subjectForm.value).subscribe({
             next: () => {
                 this.logger.success('Subject saved successfully');
-                this.router.navigate(ROUTES.ACADEMIC.SUBJECTS.LIST);
+                this.toaster?.show(this.isEdit ? 'Subject updated successfully.' : 'Subject created successfully.', 'success');
+
+                // Add delay to ensure toaster is visible before navigation
+                setTimeout(() => {
+                    this.router.navigate(ROUTES.ACADEMIC.SUBJECTS.LIST);
+                }, 1000);
             },
             error: (err) => {
                 this.loading = false;
                 this.logger.error('Failed to save subject', err);
+                this.toaster?.show('Failed to save subject.', 'error');
             }
         });
     }

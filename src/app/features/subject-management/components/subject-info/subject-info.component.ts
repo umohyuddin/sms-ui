@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { SubjectManagementService } from '../../services/subject-management.service';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { Subject } from '../../models/subject.model';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 
 @Component({
     selector: 'app-subject-info',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, ToasterComponent],
     templateUrl: './subject-info.component.html'
 })
 export class SubjectInfoComponent implements OnInit {
+    @ViewChild('toaster') toaster!: ToasterComponent;
     subjectData: Subject | null = null;
     subjectId: string | null = null;
 
@@ -42,6 +44,7 @@ export class SubjectInfoComponent implements OnInit {
             },
             error: (err) => {
                 this.logger.error('Failed to load subject details', err);
+                this.toaster?.show('Failed to load subject details.', 'error');
             }
         });
     }

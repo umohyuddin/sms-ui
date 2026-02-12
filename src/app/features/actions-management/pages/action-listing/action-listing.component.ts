@@ -9,11 +9,12 @@ import { DeletePopupComponent } from '../../../../shared/components/delete-popup
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { LoggerService } from '../../../../core/services/logger.service';
+import { ActionListingTableComponent } from '../../components/action-listing-table/action-listing-table.component';
 
 @Component({
     selector: 'app-action-listing',
     standalone: true,
-    imports: [CommonModule, RouterModule, DeletePopupComponent, ToasterComponent, LoaderComponent],
+    imports: [CommonModule, RouterModule, DeletePopupComponent, ToasterComponent, LoaderComponent, ActionListingTableComponent],
     templateUrl: './action-listing.html'
 })
 export class ActionListingComponent implements OnInit {

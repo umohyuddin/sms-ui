@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -8,18 +8,25 @@ import { SubjectManagementService } from '../../services/subject-management.serv
 import { LoggerService } from '../../../../core/services/logger.service';
 import { Subject } from '../../models/subject.model';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { DeletePopupComponent } from '../../../../shared/components/delete-popup/delete-popup.component';
 
 @Component({
     selector: 'app-subject-listing-table',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterModule],
+    imports: [CommonModule, ReactiveFormsModule, RouterModule, ToasterComponent, LoaderComponent, DeletePopupComponent],
     templateUrl: './subject-listing-table.component.html',
     styleUrls: ['./subject-listing-table.component.css']
 })
 export class SubjectListingTableComponent implements OnInit, OnDestroy {
+    @ViewChild('toaster') toaster!: ToasterComponent;
     pagination: Pagination<Subject> = new Pagination([], 10);
     searchControl = new FormControl('');
     subjects: Subject[] = [];
+    loading = false;
+    isDeletePopupOpen = false;
+    pendingDeleteId?: number;
 
     columns = [
         { key: 'name', label: 'Subject Name' },
@@ -63,6 +70,7 @@ export class SubjectListingTableComponent implements OnInit, OnDestroy {
     }
 
     private getSubjects() {
+        this.loading = true;
         this.subjectService.getSubjects().subscribe({
             next: (resp) => {
                 const rawSubjects = resp.body || [];
@@ -72,8 +80,13 @@ export class SubjectListingTableComponent implements OnInit, OnDestroy {
                 }));
                 this.pagination = new Pagination(this.subjects, 10);
                 this.logger.success('Subjects loaded successfully');
+                this.loading = false;
             },
-            error: (err) => this.logger.error('Error fetching subjects', err)
+            error: (err) => {
+                this.loading = false;
+                this.logger.error('Error fetching subjects', err);
+                this.toaster?.show('Failed to load subjects.', 'error');
+            }
         });
     }
 
@@ -117,15 +130,33 @@ export class SubjectListingTableComponent implements OnInit, OnDestroy {
     deleteSubject(id: number | undefined, event: Event) {
         if (!id) return;
         event.stopPropagation();
-        if (confirm('Are you sure you want to delete this subject?')) {
-            this.subjectService.deleteSubject(id).subscribe({
-                next: () => {
-                    this.logger.success('Subject deleted successfully');
-                    this.getSubjects();
-                },
-                error: (err) => this.logger.error('Error deleting subject', err)
-            });
-        }
+        this.pendingDeleteId = id;
+        this.isDeletePopupOpen = true;
+    }
+
+    onConfirmDelete() {
+        if (!this.pendingDeleteId) return;
+        this.loading = true;
+        this.subjectService.deleteSubject(this.pendingDeleteId).subscribe({
+            next: () => {
+                this.logger.success('Subject deleted successfully');
+                this.toaster?.show('Subject deleted successfully.', 'success');
+                this.isDeletePopupOpen = false;
+                this.pendingDeleteId = undefined;
+                this.getSubjects();
+            },
+            error: (err) => {
+                this.loading = false;
+                this.logger.error('Error deleting subject', err);
+                this.toaster?.show('Failed to delete subject.', 'error');
+                this.isDeletePopupOpen = false;
+            }
+        });
+    }
+
+    onCancelDelete() {
+        this.isDeletePopupOpen = false;
+        this.pendingDeleteId = undefined;
     }
 
     ngOnDestroy() {
