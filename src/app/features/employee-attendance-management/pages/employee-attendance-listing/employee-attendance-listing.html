@@ -1,0 +1,307 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container kt-container--fluid">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Employee Attendance</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <span class="kt-subheader__desc">Track and manage employee attendance records</span>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <button type="button" class="btn btn-outline-secondary mr-2" (click)="exportAttendance()">
+                    <i class="la la-download"></i> Export Report
+                </button>
+                <button type="button" class="btn btn-brand active" (click)="goToMarkAttendance()">
+                    <i class="la la-check-square"></i> Mark Attendance
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row">
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__body">
+                <div class="kt-widget24">
+                    <div class="kt-widget24__details">
+                        <div class="kt-widget24__info">
+                            <h4 class="kt-widget24__title">Total Staff</h4>
+                            <span class="kt-widget24__desc">Active employees</span>
+                        </div>
+                        <span class="kt-widget24__stats kt-font-brand">{{ statistics.totalEmployees }}</span>
+                    </div>
+                    <div class="progress progress--sm">
+                        <div class="progress-bar kt-bg-brand" role="progressbar" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__body">
+                <div class="kt-widget24">
+                    <div class="kt-widget24__details">
+                        <div class="kt-widget24__info">
+                            <h4 class="kt-widget24__title">Present</h4>
+                            <span class="kt-widget24__desc">On duty</span>
+                        </div>
+                        <span class="kt-widget24__stats kt-font-success">{{ statistics.present }}</span>
+                    </div>
+                    <div class="progress progress--sm">
+                        <div class="progress-bar kt-bg-success" role="progressbar" 
+                             [style.width.%]="(statistics.present / statistics.totalEmployees) * 100"></div>
+                    </div>
+                    <div class="kt-widget24__action">
+                        <span class="kt-widget24__number">{{ statistics.attendancePercentage }}%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__body">
+                <div class="kt-widget24">
+                    <div class="kt-widget24__details">
+                        <div class="kt-widget24__info">
+                            <h4 class="kt-widget24__title">Absent</h4>
+                            <span class="kt-widget24__desc">Not present</span>
+                        </div>
+                        <span class="kt-widget24__stats kt-font-danger">{{ statistics.absent }}</span>
+                    </div>
+                    <div class="progress progress--sm">
+                        <div class="progress-bar kt-bg-danger" role="progressbar" 
+                             [style.width.%]="(statistics.absent / statistics.totalEmployees) * 100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__body">
+                <div class="kt-widget24">
+                    <div class="kt-widget24__details">
+                        <div class="kt-widget24__info">
+                            <h4 class="kt-widget24__title">On Leave</h4>
+                            <span class="kt-widget24__desc">Approved</span>
+                        </div>
+                        <span class="kt-widget24__stats kt-font-warning">{{ statistics.leave }}</span>
+                    </div>
+                    <div class="progress progress--sm">
+                        <div class="progress-bar kt-bg-warning" role="progressbar" 
+                             [style.width.%]="(statistics.leave / statistics.totalEmployees) * 100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__body">
+                <div class="kt-widget24">
+                    <div class="kt-widget24__details">
+                        <div class="kt-widget24__info">
+                            <h4 class="kt-widget24__title">Half Day</h4>
+                            <span class="kt-widget24__desc">Partial</span>
+                        </div>
+                        <span class="kt-widget24__stats kt-font-info">{{ statistics.halfDay }}</span>
+                    </div>
+                    <div class="progress progress--sm">
+                        <div class="progress-bar kt-bg-info" role="progressbar" 
+                             [style.width.%]="(statistics.halfDay / statistics.totalEmployees) * 100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-dark flaticon-user-settings"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">Attendance Records</h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-actions">
+                <button type="button" class="btn btn-outline-brand btn-sm mr-2">
+                    <i class="la la-refresh"></i> Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <!-- Guidance Callout -->
+        <div class="kt-callout kt-callout--info mb-4">
+            <div class="kt-callout__body">
+                <div class="kt-callout__title">Quick Attendance Management</div>
+                <div class="kt-callout__text">
+                    1) Select date range and department. 2) Search employees. 3) View or export reports.
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="kt-form kt-form--label-right kt-margin-b-15">
+            <div class="kt-form__body">
+                <div class="form-group row">
+                    <div class="col-lg-3">
+                        <label>Date Range</label>
+                        <div class="input-group">
+                            <input type="date" class="form-control" [(ngModel)]="filters.dateFrom" 
+                                   (change)="applyFilters()" placeholder="From">
+                            <div class="input-group-append input-group-prepend">
+                                <span class="input-group-text"><i class="la la-minus"></i></span>
+                            </div>
+                            <input type="date" class="form-control" [(ngModel)]="filters.dateTo" 
+                                   (change)="applyFilters()" placeholder="To">
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <label>Quick Select</label>
+                        <select class="form-control" #dateRangeSelect (change)="selectDateRange(dateRangeSelect.value)">
+                            <option value="">Choose...</option>
+                            <option *ngFor="let range of dateRanges" [value]="range.value">{{ range.label }}</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <label>Department</label>
+                        <select class="form-control" [(ngModel)]="filters.departmentId" (change)="applyFilters()">
+                            <option [value]="null">All Departments</option>
+                            <option value="1">Teaching</option>
+                            <option value="2">Administration</option>
+                            <option value="3">Support Staff</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <label>Designation</label>
+                        <select class="form-control" [(ngModel)]="filters.designationId" (change)="applyFilters()">
+                            <option [value]="null">All Designations</option>
+                            <option value="1">Teacher</option>
+                            <option value="2">Admin</option>
+                            <option value="3">Staff</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <label>Status</label>
+                        <select class="form-control" [(ngModel)]="filters.status" (change)="applyFilters()">
+                            <option value="">All Status</option>
+                            <option value="PRESENT">Present</option>
+                            <option value="ABSENT">Absent</option>
+                            <option value="LEAVE">Leave</option>
+                            <option value="HALF_DAY">Half Day</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-1">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-outline-secondary btn-block" (click)="resetFilters()">
+                            <i class="la la-undo"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Filters -->
+        <div class="row mb-3" *ngIf="filters.dateFrom || filters.departmentId || filters.designationId || filters.status">
+            <div class="col-12">
+                <div class="selected-filters">
+                    <span class="kt-badge kt-badge--inline kt-badge--brand" *ngIf="filters.dateFrom">
+                        Date: {{ filters.dateFrom }} - {{ filters.dateTo || 'Now' }}
+                    </span>
+                    <span class="kt-badge kt-badge--inline kt-badge--info" *ngIf="filters.departmentId">
+                        Department Selected
+                    </span>
+                    <span class="kt-badge kt-badge--inline kt-badge--success" *ngIf="filters.designationId">
+                        Designation Selected
+                    </span>
+                    <span class="kt-badge kt-badge--inline kt-badge--warning" *ngIf="filters.status">
+                        Status: {{ filters.status }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="flaticon-search"></i></span>
+                    </div>
+                    <input type="text" class="form-control" [formControl]="searchControl"
+                           placeholder="Search by employee name, code, or department">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" (click)="searchControl.setValue('')">Clear</button>
+                    </div>
+                </div>
+                <small class="form-text text-muted helper-text">
+                    <i class="flaticon2-information"></i> Use filters to narrow down results and find attendance records quickly
+                </small>
+            </div>
+        </div>
+
+        <!-- Attendance Table -->
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered" *ngIf="filteredRecords.length > 0; else noRecords">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Date</th>
+                        <th>Employee</th>
+                        <th>Code</th>
+                        <th>Department</th>
+                        <th>Designation</th>
+                        <th>Status</th>
+                        <th>Remarks</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let record of filteredRecords">
+                        <td>{{ record.attendanceDate | date:'MMM d, y' }}</td>
+                        <td><strong>{{ record.employeeName }}</strong></td>
+                        <td>{{ record.employeeCode }}</td>
+                        <td>{{ record.departmentName }}</td>
+                        <td>{{ record.designationName }}</td>
+                        <td>
+                            <span class="kt-badge kt-badge--inline kt-badge--pill"
+                                  [ngClass]="{
+                                    'kt-badge--success': record.status === 'PRESENT',
+                                    'kt-badge--danger': record.status === 'ABSENT',
+                                    'kt-badge--warning': record.status === 'LEAVE',
+                                    'kt-badge--info': record.status === 'HALF_DAY'
+                                  }">
+                                {{ record.status }}
+                            </span>
+                        </td>
+                        <td>{{ record.remarks || '-' }}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-clean btn-icon" (click)="viewDetails(record)" title="View Details">
+                                <i class="la la-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <ng-template #noRecords>
+                <div class="empty-state">
+                    <div class="empty-state__icon"><i class="flaticon-user-settings"></i></div>
+                    <div class="empty-state__title">No attendance records found</div>
+                    <div class="empty-state__subtitle">
+                        Select a date range and filters to view attendance records, or mark new attendance.
+                    </div>
+                    <button class="btn btn-brand btn-sm mt-3" (click)="goToMarkAttendance()">
+                        <i class="la la-check-square"></i> Mark Attendance
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

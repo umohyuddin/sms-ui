@@ -1,0 +1,58 @@
+.selected-filters .kt-badge {
+    margin-right: 8px;
+    font-weight: 500;
+}
+
+.helper-text {
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.helper-text i {
+    font-size: 1rem;
+}
+
+.empty-state {
+    border: 1px dashed #e2e5ec;
+    background: #f9fafc;
+    border-radius: 8px;
+    padding: 60px 24px;
+    text-align: center;
+    margin: 24px 0;
+}
+
+.empty-state__icon {
+    font-size: 3rem;
+    color: #5d78ff;
+    margin-bottom: 16px;
+}
+
+.empty-state__icon i {
+    font-size: 3rem;
+}
+
+.empty-state__title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #48465b;
+}
+
+.empty-state__subtitle {
+    color: #6c7293;
+    font-size: 0.95rem;
+}
+
+.table thead th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05rem;
+    background-color: #f8f9fb;
+}
+
+.table tbody tr:hover {
+    background-color: #f9fbfd;
+}

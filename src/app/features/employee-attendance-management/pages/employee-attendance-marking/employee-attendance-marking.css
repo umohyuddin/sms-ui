@@ -1,0 +1,191 @@
+.attendance-stat {
+    text-align: center;
+}
+
+.attendance-stat__value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.attendance-stat__label {
+    font-size: 0.85rem;
+    color: #6c7293;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.employees-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.employee-card {
+    border: 2px solid #ebedf2;
+    border-radius: 8px;
+    padding: 16px;
+    background: #fff;
+    transition: all 0.3s ease;
+}
+
+.employee-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.employee-card.marked {
+    border-color: #5d78ff;
+    background: #f9fbff;
+}
+
+.employee-card__header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.employee-card__avatar {
+    margin-right: 12px;
+}
+
+.employee-card__avatar-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.employee-card__info {
+    flex: 1;
+}
+
+.employee-card__name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #48465b;
+    margin-bottom: 3px;
+}
+
+.employee-card__meta {
+    font-size: 0.8rem;
+    color: #6c7293;
+    margin-bottom: 2px;
+}
+
+.employee-card__designation {
+    font-size: 0.75rem;
+    color: #a1a5b7;
+}
+
+.employee-card__actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.status-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 8px;
+    border: 2px solid #ebedf2;
+    border-radius: 6px;
+    background: #fff;
+    color: #6c7293;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.status-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status-btn i {
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+}
+
+.status-btn--present:hover {
+    border-color: #1bc5bd;
+    color: #1bc5bd;
+}
+
+.status-btn--present.active {
+    background: #1bc5bd;
+    border-color: #1bc5bd;
+    color: #fff;
+}
+
+.status-btn--absent:hover {
+    border-color: #fd397a;
+    color: #fd397a;
+}
+
+.status-btn--absent.active {
+    background: #fd397a;
+    border-color: #fd397a;
+    color: #fff;
+}
+
+.status-btn--leave:hover {
+    border-color: #ffb822;
+    color: #ffb822;
+}
+
+.status-btn--leave.active {
+    background: #ffb822;
+    border-color: #ffb822;
+    color: #fff;
+}
+
+.status-btn--halfday:hover {
+    border-color: #5578eb;
+    color: #5578eb;
+}
+
+.status-btn--halfday.active {
+    background: #5578eb;
+    border-color: #5578eb;
+    color: #fff;
+}
+
+.employee-card__remarks {
+    margin-top: 8px;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .employees-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .attendance-stat__value {
+        font-size: 1.5rem;
+    }
+}

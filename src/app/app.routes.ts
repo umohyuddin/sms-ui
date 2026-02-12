@@ -329,6 +329,32 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'student-attendance',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/student-attendance-management/student-attendance-management-module')
+            .then(m => m.StudentAttendanceManagementModule)
+      }
+    ]
+  },
+  {
+    path: 'employee-attendance',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/employee-attendance-management/employee-attendance-management-module')
+            .then(m => m.EmployeeAttendanceManagementModule)
+      }
+    ]
+  },
+  {
     path: 'academic',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),

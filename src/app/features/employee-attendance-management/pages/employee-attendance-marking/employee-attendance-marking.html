@@ -1,0 +1,224 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container kt-container--fluid">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Mark Employee Attendance</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <span class="kt-subheader__desc">{{ attendanceDate | date:'EEEE, MMMM d, y' }}</span>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <button type="button" class="btn btn-outline-secondary mr-2" (click)="cancel()">
+                    <i class="la la-close"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-brand" (click)="saveAttendance()" [disabled]="isSaving">
+                    <i class="la la-save"></i> {{ isSaving ? 'Saving...' : 'Save Attendance' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="row">
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__body p-3">
+                <div class="attendance-stat">
+                    <div class="attendance-stat__value kt-font-brand">{{ stats.total }}</div>
+                    <div class="attendance-stat__label">Total</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-success">
+            <div class="kt-portlet__body p-3">
+                <div class="attendance-stat">
+                    <div class="attendance-stat__value kt-font-success">{{ stats.present }}</div>
+                    <div class="attendance-stat__label">Present</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-danger">
+            <div class="kt-portlet__body p-3">
+                <div class="attendance-stat">
+                    <div class="attendance-stat__value kt-font-danger">{{ stats.absent }}</div>
+                    <div class="attendance-stat__label">Absent</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-warning">
+            <div class="kt-portlet__body p-3">
+                <div class="attendance-stat">
+                    <div class="attendance-stat__value kt-font-warning">{{ stats.leave }}</div>
+                    <div class="attendance-stat__label">On Leave</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-info">
+            <div class="kt-portlet__body p-3">
+                <div class="attendance-stat">
+                    <div class="attendance-stat__value kt-font-info">{{ stats.halfDay }}</div>
+                    <div class="attendance-stat__label">Half Day</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+            <div class="kt-portlet__body p-3">
+                <div class="attendance-stat">
+                    <div class="attendance-stat__value kt-font-brand">{{ getAttendancePercentage() }}%</div>
+                    <div class="attendance-stat__label">Attendance</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Mark Employee Attendance</h3>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <!-- Guidance -->
+        <div class="kt-callout kt-callout--info mb-4">
+            <div class="kt-callout__body">
+                <div class="kt-callout__title">Quick Marking Guide</div>
+                <div class="kt-callout__text">
+                    1) Select date and filter by department. 2) Click status buttons for each employee. 3) Use bulk actions for efficiency.
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <label class="font-weight-bold">Attendance Date <span class="text-danger">*</span></label>
+                <input type="date" class="form-control form-control-lg" [(ngModel)]="attendanceDate">
+            </div>
+            <div class="col-md-3">
+                <label class="font-weight-bold">Department</label>
+                <select class="form-control form-control-lg" [(ngModel)]="departmentId">
+                    <option [value]="null">All Departments</option>
+                    <option [value]="1">Teaching</option>
+                    <option [value]="2">Administration</option>
+                    <option [value]="3">Support Staff</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="font-weight-bold">Quick Filter</label>
+                <select class="form-control form-control-lg" [(ngModel)]="filterStatus" (change)="applyFilters()">
+                    <option value="all">All Employees</option>
+                    <option value="marked">Marked Only</option>
+                    <option value="unmarked">Unmarked Only</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Bulk Actions -->
+        <div class="row mb-3">
+            <div class="col-md-8">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="flaticon-search"></i></span>
+                    </div>
+                    <input type="text" class="form-control" [formControl]="searchControl" 
+                           placeholder="Search employee by name, code, or department">
+                </div>
+            </div>
+            <div class="col-md-4 text-right">
+                <div class="btn-group">
+                    <button class="btn btn-outline-success" (click)="markAllAs('PRESENT')">
+                        <i class="la la-check"></i> All Present
+                    </button>
+                    <button class="btn btn-outline-danger" (click)="markAllAs('ABSENT')">
+                        <i class="la la-times"></i> All Absent
+                    </button>
+                    <button class="btn btn-outline-secondary" (click)="clearAll()">
+                        <i class="la la-undo"></i> Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employees Grid -->
+        <div class="employees-grid">
+            <div class="employee-card" *ngFor="let emp of filteredEmployees" 
+                 [class.marked]="emp.status !== null">
+                <div class="employee-card__header">
+                    <div class="employee-card__avatar">
+                        <div class="employee-card__avatar-icon">
+                            {{ emp.name.charAt(0) }}
+                        </div>
+                    </div>
+                    <div class="employee-card__info">
+                        <div class="employee-card__name">{{ emp.name }}</div>
+                        <div class="employee-card__meta">{{ emp.code }} • {{ emp.department }}</div>
+                        <div class="employee-card__designation">{{ emp.designation }}</div>
+                    </div>
+                </div>
+                <div class="employee-card__actions">
+                    <button class="status-btn status-btn--present" 
+                            [class.active]="emp.status === 'PRESENT'"
+                            (click)="markStatus(emp, 'PRESENT')">
+                        <i class="la la-check"></i>
+                        <span>Present</span>
+                    </button>
+                    <button class="status-btn status-btn--absent" 
+                            [class.active]="emp.status === 'ABSENT'"
+                            (click)="markStatus(emp, 'ABSENT')">
+                        <i class="la la-times"></i>
+                        <span>Absent</span>
+                    </button>
+                    <button class="status-btn status-btn--leave" 
+                            [class.active]="emp.status === 'LEAVE'"
+                            (click)="markStatus(emp, 'LEAVE')">
+                        <i class="la la-calendar-check-o"></i>
+                        <span>Leave</span>
+                    </button>
+                    <button class="status-btn status-btn--halfday" 
+                            [class.active]="emp.status === 'HALF_DAY'"
+                            (click)="markStatus(emp, 'HALF_DAY')">
+                        <i class="la la-clock-o"></i>
+                        <span>Half Day</span>
+                    </button>
+                </div>
+                <div class="employee-card__remarks" *ngIf="emp.status !== null">
+                    <input type="text" class="form-control form-control-sm" 
+                           [(ngModel)]="emp.remarks"
+                           placeholder="Add remarks (optional)">
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="filteredEmployees.length === 0" class="alert alert-light text-center py-5">
+            <i class="flaticon-search icon-3x text-muted mb-3"></i>
+            <p class="mb-0">No employees found matching your search criteria</p>
+        </div>
+    </div>
+    <div class="kt-portlet__foot">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="text-muted">
+                    <i class="flaticon-info"></i>
+                    {{ stats.present + stats.absent + stats.leave + stats.halfDay }} of {{ stats.total }} employees marked
+                </div>
+            </div>
+            <div class="col-md-6 text-right">
+                <button type="button" class="btn btn-secondary mr-2" (click)="cancel()">Cancel</button>
+                <button type="button" class="btn btn-brand" (click)="saveAttendance()" [disabled]="isSaving">
+                    <i class="la la-save"></i> {{ isSaving ? 'Saving...' : 'Save Attendance' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

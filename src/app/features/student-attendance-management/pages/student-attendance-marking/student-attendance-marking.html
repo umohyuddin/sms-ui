@@ -1,0 +1,314 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container kt-container--fluid">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Mark Attendance</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <span class="kt-subheader__desc">{{ attendanceDate | date:'EEEE, MMMM d, y' }}</span>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <button type="button" class="btn btn-outline-secondary mr-2" (click)="cancel()">
+                    <i class="la la-close"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-brand" (click)="saveAttendance()" [disabled]="isSaving">
+                    <i class="la la-save"></i> {{ isSaving ? 'Saving...' : 'Save Attendance' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats -->
+<div class="row">
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__body p-3">
+                <div class="attendance-stat">
+                    <div class="attendance-stat__value kt-font-brand">{{ stats.total }}</div>
+                    <div class="attendance-stat__label">Total</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-success">
+            <div class="kt-portlet__body p-3">
+                <div class="attendance-stat">
+                    <div class="attendance-stat__value kt-font-success">{{ stats.present }}</div>
+                    <div class="attendance-stat__label">Present</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-danger">
+            <div class="kt-portlet__body p-3">
+                <div class="attendance-stat">
+                    <div class="attendance-stat__value kt-font-danger">{{ stats.absent }}</div>
+                    <div class="attendance-stat__label">Absent</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-warning">
+            <div class="kt-portlet__body p-3">
+                <div class="attendance-stat">
+                    <div class="attendance-stat__value kt-font-warning">{{ stats.leave }}</div>
+                    <div class="attendance-stat__label">On Leave</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-info">
+            <div class="kt-portlet__body p-3">
+                <div class="attendance-stat">
+                    <div class="attendance-stat__value kt-font-info">{{ stats.unmarked }}</div>
+                    <div class="attendance-stat__label">Unmarked</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2">
+        <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+            <div class="kt-portlet__body p-3">
+                <div class="attendance-stat">
+                    <div class="attendance-stat__value kt-font-brand">{{ getAttendancePercentage() }}%</div>
+                    <div class="attendance-stat__label">Attendance</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Select Class & Mark Attendance</h3>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <!-- Context Selection -->
+        <div class="kt-callout kt-callout--brand mb-4">
+            <div class="kt-callout__body">
+                <div class="kt-callout__title">⚡ Quick Marking Guide</div>
+                <div class="kt-callout__text">
+                    <strong>Fast Way:</strong> 1) Select filters 2) Use keyboard shortcuts (P=Present, A=Absent, L=Leave) 3) Save. <strong>Or:</strong> Click status buttons on cards.
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions Bar -->
+        <div class="quick-actions-bar">
+            <div class="quick-action-item">
+                <span class="action-badge present-badge">P</span>
+                <span class="action-label">All Present</span>
+            </div>
+            <div class="quick-action-item">
+                <span class="action-badge absent-badge">A</span>
+                <span class="action-label">All Absent</span>
+            </div>
+            <div class="quick-action-item">
+                <span class="action-badge leave-badge">L</span>
+                <span class="action-label">All Leave</span>
+            </div>
+            <div class="quick-action-item">
+                <span class="action-badge clear-badge">C</span>
+                <span class="action-label">Clear All</span>
+            </div>
+            <div class="quick-action-item">
+                <span class="action-badge undo-badge">U</span>
+                <span class="action-label">Undo</span>
+            </div>
+            <div class="quick-action-item ml-auto">
+                <button class="btn-keyboard-help" (click)="showKeyboardHelp = !showKeyboardHelp" title="Press ? for help">
+                    <i class="flaticon-info"></i> <span>Help</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Keyboard Help Panel -->
+        <div class="keyboard-help" *ngIf="showKeyboardHelp">
+            <div class="keyboard-help-header">
+                <h4>⌨️ Keyboard Shortcuts</h4>
+                <button class="close-help" (click)="showKeyboardHelp = false">×</button>
+            </div>
+            <div class="keyboard-shortcuts-grid">
+                <div class="shortcut-item">
+                    <span class="key">P</span>
+                    <span class="desc">Mark all visible as Present</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="key">A</span>
+                    <span class="desc">Mark all visible as Absent</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="key">L</span>
+                    <span class="desc">Mark all visible as Leave</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="key">C</span>
+                    <span class="desc">Clear all markings</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="key">U</span>
+                    <span class="desc">Undo last action</span>
+                </div>
+                <div class="shortcut-item">
+                    <span class="key">?</span>
+                    <span class="desc">Toggle help</span>
+                </div>
+            </div>
+            <div class="keyboard-help-footer">
+                <small>💡 Tip: Use "Unmarked Only" filter to see remaining students</small>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <label class="font-weight-bold">Attendance Date <span class="text-danger">*</span></label>
+                <input type="date" class="form-control form-control-lg" [(ngModel)]="attendanceDate">
+            </div>
+            <div class="col-md-3">
+                <label class="font-weight-bold">Standard <span class="text-danger">*</span></label>
+                <select class="form-control form-control-lg" [(ngModel)]="standardId" (change)="onContextChange()">
+                    <option [value]="null">Select Standard</option>
+                    <option [value]="1">Grade 1</option>
+                    <option [value]="2">Grade 2</option>
+                    <option [value]="3">Grade 3</option>
+                    <option [value]="4">Grade 4</option>
+                    <option [value]="5">Grade 5</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="font-weight-bold">Section <span class="text-danger">*</span></label>
+                <select class="form-control form-control-lg" [(ngModel)]="sectionId" (change)="onContextChange()" 
+                        [disabled]="!standardId">
+                    <option [value]="null">Select Section</option>
+                    <option [value]="1">A</option>
+                    <option [value]="2">B</option>
+                    <option [value]="3">C</option>
+                    <option [value]="4">D</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="font-weight-bold">Quick Filter</label>
+                <select class="form-control form-control-lg" [(ngModel)]="filterStatus" (change)="applyFilters()">
+                    <option value="all">All Students</option>
+                    <option value="marked">Marked Only</option>
+                    <option value="unmarked">Unmarked Only</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Students List -->
+        <div *ngIf="students.length > 0">
+            <!-- Bulk Actions -->
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="flaticon-search"></i></span>
+                        </div>
+                        <input type="text" class="form-control" [formControl]="searchControl" 
+                               placeholder="Search student by name or roll number">
+                    </div>
+                </div>
+                <div class="col-md-4 text-right">
+                    <div class="btn-group">
+                        <button class="btn btn-outline-success" (click)="markAllAs('PRESENT')" title="Mark All Present">
+                            <i class="la la-check"></i> All Present
+                        </button>
+                        <button class="btn btn-outline-danger" (click)="markAllAs('ABSENT')" title="Mark All Absent">
+                            <i class="la la-times"></i> All Absent
+                        </button>
+                        <button class="btn btn-outline-secondary" (click)="clearAll()" title="Clear All">
+                            <i class="la la-undo"></i> Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Students Grid -->
+            <div class="students-grid">
+                <div class="student-card" *ngFor="let student of filteredStudents" 
+                     [class.marked]="student.status !== null">
+                    <div class="student-card__header">
+                        <div class="student-card__avatar">
+                            <div class="student-card__avatar-icon">
+                                {{ student.name.charAt(0) }}
+                            </div>
+                        </div>
+                        <div class="student-card__info">
+                            <div class="student-card__name">{{ student.name }}</div>
+                            <div class="student-card__roll">Roll No: {{ student.rollNo }}</div>
+                        </div>
+                    </div>
+                    <div class="student-card__actions">
+                        <button class="status-btn status-btn--present" 
+                                [class.active]="student.status === 'PRESENT'"
+                                (click)="markStatus(student, 'PRESENT')"
+                                title="Mark Present">
+                            <i class="la la-check"></i>
+                            <span>Present</span>
+                        </button>
+                        <button class="status-btn status-btn--absent" 
+                                [class.active]="student.status === 'ABSENT'"
+                                (click)="markStatus(student, 'ABSENT')"
+                                title="Mark Absent">
+                            <i class="la la-times"></i>
+                            <span>Absent</span>
+                        </button>
+                        <button class="status-btn status-btn--leave" 
+                                [class.active]="student.status === 'LEAVE'"
+                                (click)="markStatus(student, 'LEAVE')"
+                                title="Mark Leave">
+                            <i class="la la-calendar-check-o"></i>
+                            <span>Leave</span>
+                        </button>
+                    </div>
+                    <div class="student-card__remarks" *ngIf="student.status !== null">
+                        <input type="text" class="form-control form-control-sm" 
+                               [(ngModel)]="student.remarks"
+                               placeholder="Add remarks (optional)">
+                    </div>
+                </div>
+            </div>
+
+            <!-- No Results -->
+            <div *ngIf="filteredStudents.length === 0" class="alert alert-light text-center py-5">
+                <i class="flaticon-search icon-3x text-muted mb-3"></i>
+                <p class="mb-0">No students found matching your search criteria</p>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="students.length === 0" class="empty-state">
+            <div class="empty-state__icon">
+                <i class="flaticon-users"></i>
+            </div>
+            <div class="empty-state__title">Select Class to Mark Attendance</div>
+            <div class="empty-state__subtitle">
+                Choose a standard and section to load students and start marking attendance.
+            </div>
+        </div>
+    </div>
+    <div class="kt-portlet__foot" *ngIf="students.length > 0">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="text-muted">
+                    <i class="flaticon-info"></i>
+                    {{ stats.present + stats.absent + stats.leave }} of {{ stats.total }} students marked
+                </div>
+            </div>
+            <div class="col-md-6 text-right">
+                <button type="button" class="btn btn-secondary mr-2" (click)="cancel()">Cancel</button>
+                <button type="button" class="btn btn-brand" (click)="saveAttendance()" [disabled]="isSaving">
+                    <i class="la la-save"></i> {{ isSaving ? 'Saving...' : 'Save Attendance' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

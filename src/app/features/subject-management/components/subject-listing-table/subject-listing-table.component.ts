@@ -65,12 +65,44 @@ export class SubjectListingTableComponent implements OnInit, OnDestroy {
     private getSubjects() {
         this.subjectService.getSubjects().subscribe({
             next: (resp) => {
-                this.subjects = resp.body || [];
+                const rawSubjects = resp.body || [];
+                this.subjects = rawSubjects.map((subject: any) => ({
+                    ...subject,
+                    active: this.normalizeActive(subject)
+                }));
                 this.pagination = new Pagination(this.subjects, 10);
                 this.logger.success('Subjects loaded successfully');
             },
             error: (err) => this.logger.error('Error fetching subjects', err)
         });
+    }
+
+    private normalizeActive(subject: any): boolean {
+        if (subject?.active !== undefined && subject?.active !== null) {
+            return this.normalizeBoolean(subject.active);
+        }
+
+        if (subject?.isActive !== undefined && subject?.isActive !== null) {
+            return this.normalizeBoolean(subject.isActive);
+        }
+
+        if (subject?.deleted !== undefined && subject?.deleted !== null) {
+            return !this.normalizeBoolean(subject.deleted);
+        }
+
+        return false;
+    }
+
+    private normalizeBoolean(value: any): boolean {
+        if (value === true || value === 'true' || value === 1 || value === '1' || value === 'Y' || value === 'y') {
+            return true;
+        }
+
+        if (value === false || value === 'false' || value === 0 || value === '0' || value === 'N' || value === 'n') {
+            return false;
+        }
+
+        return !!value;
     }
 
     onPageSizeChange(event: any) {

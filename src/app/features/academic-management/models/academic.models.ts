@@ -17,6 +17,7 @@ export interface Subject {
     subjectGroupName?: string;
     isElective: boolean;
     isActive: boolean;
+    active?: boolean;
 }
 
 export interface StandardSubject {
