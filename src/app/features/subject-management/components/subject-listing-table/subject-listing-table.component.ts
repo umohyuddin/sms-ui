@@ -127,6 +127,11 @@ export class SubjectListingTableComponent implements OnInit, OnDestroy {
         this.router.navigate(ROUTES.ACADEMIC.SUBJECTS.EDIT(subject.id!.toString()));
     }
 
+    viewSubject(subject: Subject, event: Event) {
+        event.preventDefault();
+        this.router.navigate(ROUTES.ACADEMIC.SUBJECTS.DETAILS(subject.id!.toString()));
+    }
+
     deleteSubject(id: number | undefined, event: Event) {
         if (!id) return;
         event.stopPropagation();
