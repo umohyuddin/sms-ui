@@ -18,14 +18,7 @@
         </div>
     </div>
     <div class="kt-portlet__body">
-        <div class="kt-callout kt-callout--brand mb-4">
-            <div class="kt-callout__body">
-                <div class="kt-callout__title">Easy 3-step mapping</div>
-                <div class="kt-callout__text">
-                    1) Choose Academic Year, Campus, and Standard. 2) Search subjects. 3) Assign or remove.
-                </div>
-            </div>
-        </div>
+
 
         <!-- Quick Insights -->
         <div class="row mb-4">
@@ -130,9 +123,8 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="flaticon-search"></i></span>
                     </div>
-                    <input type="text" class="form-control"
-                        placeholder="Search subjects by code or name..." [(ngModel)]="megaSearchTerm"
-                        (input)="onMegaSearch()">
+                    <input type="text" class="form-control" placeholder="Search subjects by code or name..."
+                        [(ngModel)]="megaSearchTerm" (input)="onMegaSearch()">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary">Clear</button>
                     </div>
