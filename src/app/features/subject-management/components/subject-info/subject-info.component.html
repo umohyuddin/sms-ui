@@ -40,16 +40,16 @@
                             <a><b>Group:</b> {{ subjectData.subjectGroupName }}</a>
                         </div>
                         <div class="col-4">
-                            <a><b>Type:</b> {{ subjectData.core ? 'Elective' : 'Mandatory' }}</a>
+                            <a><b>Type:</b> {{ subjectData.core ? 'Mandatory' : 'Elective' }}</a>
                         </div>
+                    </div>
+                    <div class="kt-widget__subhead row">
+                        <div class="col-4">
+                            <a><b>Description:</b> {{ subjectData.description || 'No description provided' }}</a>
+                        </div>
+
                     </div>
 
-                    <div class="kt-widget__info" *ngIf="subjectData.description">
-                        <div class="kt-widget__desc">
-                            <i style="font-size: 1.5rem !important;" class="flaticon-document mr-2"></i>
-                            <b>{{ subjectData.description }}</b>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

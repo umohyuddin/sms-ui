@@ -39,7 +39,7 @@ export class SubjectInfoComponent implements OnInit {
         this.logger.info('Loading subject details', this.subjectId);
         this.subjectService.getSubjectById(this.subjectId!).subscribe({
             next: (resp) => {
-                this.subjectData = resp.body;
+                this.subjectData =resp.body;
                 this.logger.success('Subject details loaded successfully');
             },
             error: (err) => {
@@ -47,6 +47,34 @@ export class SubjectInfoComponent implements OnInit {
                 this.toaster?.show('Failed to load subject details.', 'error');
             }
         });
+    }
+
+    private normalizeActive(subject: any): boolean {
+        if (subject?.active !== undefined && subject?.active !== null) {
+            return this.normalizeBoolean(subject.active);
+        }
+
+        if (subject?.isActive !== undefined && subject?.isActive !== null) {
+            return this.normalizeBoolean(subject.isActive);
+        }
+
+        if (subject?.deleted !== undefined && subject?.deleted !== null) {
+            return !this.normalizeBoolean(subject.deleted);
+        }
+
+        return false;
+    }
+
+    private normalizeBoolean(value: any): boolean {
+        if (value === true || value === 'true' || value === 1 || value === '1' || value === 'Y' || value === 'y') {
+            return true;
+        }
+
+        if (value === false || value === 'false' || value === 0 || value === '0' || value === 'N' || value === 'n') {
+            return false;
+        }
+
+        return !!value;
     }
 
     getInitials(name: string): string {
