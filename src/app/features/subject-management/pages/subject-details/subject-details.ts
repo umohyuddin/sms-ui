@@ -27,4 +27,8 @@ export class SubjectDetails implements OnInit {
             this.router.navigate(ROUTES.ACADEMIC.SUBJECTS.EDIT(this.subjectId));
         }
     }
+
+    goBack() {
+        this.router.navigate(ROUTES.ACADEMIC.SUBJECTS.LIST);
+    }
 }
