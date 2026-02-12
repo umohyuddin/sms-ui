@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { SubjectListing } from './pages/subject-listing/subject-listing';
 import { SubjectCreate } from './pages/subject-create/subject-create';
-import { SubjectGroupListing } from './pages/subject-group-listing/subject-group-listing';
+
 import { SubjectGroupCreate } from './pages/subject-group-create/subject-group-create';
 import { TimetableManage } from './pages/timetable-manage/timetable-manage';
 import { StudentAttendancePage } from './pages/student-attendance/student-attendance';
@@ -19,7 +19,7 @@ const routes: Routes = [
     { path: 'subjects', component: SubjectListing },
     { path: 'subjects/create', component: SubjectCreate },
     { path: 'subjects/edit/:id', component: SubjectCreate },
-    { path: 'subject-groups', component: SubjectGroupListing },
+
     { path: 'subject-groups/create', component: SubjectGroupCreate },
     { path: 'subject-groups/edit/:id', component: SubjectGroupCreate },
     { path: 'timetable', component: TimetableManage },
