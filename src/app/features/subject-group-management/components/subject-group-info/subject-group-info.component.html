@@ -21,13 +21,88 @@
     <div class="kt-portlet__body">
         <div class="kt-widget kt-widget--user-profile-3" *ngIf="groupData">
             <div class="kt-widget__top">
-                <div class="kt-widget__pic kt-widget__pic--primary kt-font-primary kt-font-bolder kt-font-light">
-                    {{ getInitials(groupData.name) }}
+                <div
+                    class="kt-widget__pic kt-widget__pic--primary kt-font-primary kt-font-bolder kt-font-light d-flex align-items-center justify-content-center">
+                    <style>
+                        @keyframes float {
+                            0% {
+                                transform: translateY(0px);
+                            }
+
+                            50% {
+                                transform: translateY(-5px);
+                            }
+
+                            100% {
+                                transform: translateY(0px);
+                            }
+                        }
+
+                        @keyframes bubbleRise {
+                            0% {
+                                transform: translateY(0) scale(1);
+                                opacity: 0;
+                            }
+
+                            50% {
+                                opacity: 0.8;
+                            }
+
+                            100% {
+                                transform: translateY(-15px) scale(1.2);
+                                opacity: 0;
+                            }
+                        }
+
+                        .animate-float {
+                            animation: float 3s ease-in-out infinite;
+                        }
+
+                        .animate-bubble {
+                            animation: bubbleRise 4s infinite ease-in;
+                        }
+
+                        .bubble-delay-1 {
+                            animation-delay: 1s;
+                        }
+
+                        .bubble-delay-2 {
+                            animation-delay: 2.5s;
+                        }
+                    </style>
+                    <svg width="60" height="60" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        class="animate-float">
+                        <defs>
+                            <linearGradient id="flaskGradient" x1="32" y1="4" x2="32" y2="60"
+                                gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#5d78ff" />
+                                <stop offset="100%" stop-color="#34bfa3" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Modern Flask -->
+                        <path d="M22 4H42V18L52 42C54 48 50 54 44 54H20C14 54 10 48 12 42L22 18V4Z"
+                            stroke="url(#flaskGradient)" stroke-width="3" stroke-linecap="round"
+                            stroke-linejoin="round" />
+
+                        <!-- Liquid Filling -->
+                        <path
+                            d="M16 34C16 34 22 38 32 38C42 38 48 34 48 34V48C48 51 46 54 42 54H22C18 54 16 51 16 48V34Z"
+                            fill="url(#flaskGradient)" fill-opacity="0.8" />
+
+                        <!-- Shine Effect -->
+                        <path d="M25 8H39" stroke="url(#flaskGradient)" stroke-width="2" stroke-linecap="round" />
+
+                        <!-- Bubbles -->
+                        <circle cx="32" cy="24" r="2" fill="url(#flaskGradient)" fill-opacity="0.4"
+                            class="animate-bubble bubble-delay-1" />
+                        <circle cx="38" cy="30" r="1.5" fill="url(#flaskGradient)" fill-opacity="0.6"
+                            class="animate-bubble bubble-delay-2" />
+                    </svg>
                 </div>
                 <div class="kt-widget__content">
                     <div class="kt-widget__head">
                         <div class="kt-widget__user">
-                            <a href="#" class="kt-widget__username">
+                            <a class="kt-widget__username">
                                 {{ groupData.name }}
                             </a>
                             <span class="ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
@@ -41,11 +116,9 @@
                             <a><b>Code:</b> {{ groupData.code }}</a>
                         </div>
                     </div>
-
-                    <div class="kt-widget__info" *ngIf="groupData.description">
-                        <div class="kt-widget__desc">
-                            <i style="font-size: 1.5rem !important;" class="flaticon-document mr-2"></i>
-                            <b>{{ groupData.description }}</b>
+                    <div class="kt-widget__subhead row">
+                        <div class="col-12">
+                            <a><b>Description:</b> {{ groupData.description || 'No description provided' }}</a>
                         </div>
                     </div>
                 </div>

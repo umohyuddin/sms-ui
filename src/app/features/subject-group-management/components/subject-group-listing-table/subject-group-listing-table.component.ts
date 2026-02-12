@@ -85,6 +85,11 @@ export class SubjectGroupListingTableComponent implements OnInit, OnDestroy {
         });
     }
 
+    viewGroup(group: SubjectGroup, event: Event) {
+        event.preventDefault();
+        this.router.navigate(ROUTES.ACADEMIC.SUBJECT_GROUPS.DETAILS(group.id!.toString()));
+    }
+
     editGroup(group: SubjectGroup, event: Event) {
         event.preventDefault();
         this.router.navigate(ROUTES.ACADEMIC.SUBJECT_GROUPS.EDIT(group.id!.toString()));

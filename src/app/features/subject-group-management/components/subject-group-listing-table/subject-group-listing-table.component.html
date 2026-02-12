@@ -60,6 +60,10 @@
                                     </span>
                                 </td>
                                 <td nowrap>
+                                    <a (click)="viewGroup(group, $event)"
+                                        class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View Info">
+                                        <i class="la la-eye"></i>
+                                    </a>
                                     <a (click)="editGroup(group, $event)"
                                         class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit">
                                         <i class="la la-edit"></i>
