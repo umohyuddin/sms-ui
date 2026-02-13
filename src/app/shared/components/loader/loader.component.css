@@ -1,3 +1,7 @@
+:host {
+  display: block;
+}
+
 /* Base Loader Container */
 .loader-container {
   display: flex;

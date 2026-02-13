@@ -36,6 +36,7 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
     selectedAvailableIds: Set<number> = new Set();
 
     loading = false;
+    loaderMessage = '';
     showDeletePopup = false;
     deletePopupTitle = '';
     deletePopupMessage = '';
@@ -125,6 +126,7 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
 
     loadAssignments(): void {
         this.loading = true;
+        this.loaderMessage = 'Loading assignments...';
         this.mappingService.getStandardSubjects(this.selectedStandardId!, this.selectedYearId!)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
@@ -181,6 +183,7 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
             active: true
         };
         this.loading = true;
+        this.loaderMessage = 'Assigning subject...';
         this.mappingService.assignSubject(payload).pipe(takeUntil(this.destroy$)).subscribe({
             next: () => {
                 this.toaster.show('Subject assigned successfully', 'success');
@@ -273,6 +276,7 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
     confirmUnassign(): void {
         if (this.pendingUnassign) {
             this.loading = true;
+            this.loaderMessage = 'Unassigning subject...';
             this.mappingService.unassignSubject(this.pendingUnassign.standardId, this.pendingUnassign.subjectId, this.pendingUnassign.academicYearId)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
@@ -287,6 +291,7 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
                 });
         } else if (this.pendingBulkUnassign) {
             this.loading = true;
+            this.loaderMessage = 'Performing bulk unassignment...';
             this.mappingService.bulkUnassignSubjects(this.selectedStandardId!, this.pendingBulkUnassign, this.selectedYearId!)
                 .pipe(takeUntil(this.destroy$))
                 .subscribe({
@@ -361,6 +366,7 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
             active: assignment.active ?? true
         };
         this.loading = true;
+        this.loaderMessage = assignment.id ? 'Updating assignment...' : 'Assigning subject...';
 
         const request = assignment.id
             ? this.mappingService.updateStandardSubjectMapping(assignment.id, payload)
@@ -408,6 +414,7 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
         });
 
         this.loading = true;
+        this.loaderMessage = 'Saving all assignments...';
 
         // If your backend bulkAssign actually handles updates (upsert), you can just use bulkAssign.
         // Otherwise, this approach handles both.
