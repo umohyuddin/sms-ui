@@ -154,7 +154,10 @@
                                 filteredAvailable.length }})</h3>
                         </div>
                         <div class="kt-portlet__head-toolbar">
-                            <button class="btn btn-sm btn-outline-brand">Assign All</button>
+                            <button class="btn btn-sm btn-outline-brand" [disabled]="selectedAvailableIds.size === 0"
+                                (click)="bulkAssign()">
+                                <i class="la la-plus-circle"></i> Assign Selected ({{selectedAvailableIds.size}})
+                            </button>
                         </div>
                     </div>
                     <div class="kt-portlet__body p-0">
@@ -162,6 +165,14 @@
                             <table class="table table-hover mb-0">
                                 <thead class="thead-light">
                                     <tr>
+                                        <th style="width: 30px;">
+                                            <label
+                                                class="kt-checkbox kt-checkbox--single kt-checkbox--solid kt-checkbox--brand m-0">
+                                                <input type="checkbox" [checked]="isAllAvailableSelected()"
+                                                    (change)="toggleAllAvailable($any($event.target).checked)">
+                                                <span></span>
+                                            </label>
+                                        </th>
                                         <th>Code</th>
                                         <th>Name</th>
                                         <th class="text-right">Action</th>
@@ -169,6 +180,14 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let subject of filteredAvailable">
+                                        <td class="align-middle">
+                                            <label
+                                                class="kt-checkbox kt-checkbox--single kt-checkbox--solid kt-checkbox--brand m-0">
+                                                <input type="checkbox" [checked]="selectedAvailableIds.has(subject.id!)"
+                                                    (change)="toggleAvailableSelection(subject.id!)">
+                                                <span></span>
+                                            </label>
+                                        </td>
                                         <td><code>{{ subject.code }}</code></td>
                                         <td>{{ subject.name }}</td>
                                         <td class="text-right">
@@ -179,7 +198,7 @@
                                         </td>
                                     </tr>
                                     <tr *ngIf="filteredAvailable.length === 0">
-                                        <td colspan="3" class="text-center text-muted py-4">No matching available
+                                        <td colspan="4" class="text-center text-muted py-4">No matching available
                                             subjects</td>
                                     </tr>
                                 </tbody>
@@ -198,7 +217,10 @@
                                 }})</h3>
                         </div>
                         <div class="kt-portlet__head-toolbar">
-                            <button class="btn btn-sm btn-outline-danger">Remove All</button>
+                            <button class="btn btn-sm btn-outline-danger" [disabled]="selectedAssignedIds.size === 0"
+                                (click)="bulkUnassign()">
+                                <i class="la la-trash-o"></i> Remove Selected ({{selectedAssignedIds.size}})
+                            </button>
                         </div>
                     </div>
                     <div class="kt-portlet__body p-0">
@@ -206,6 +228,14 @@
                             <table class="table table-hover mb-0">
                                 <thead class="thead-light">
                                     <tr>
+                                        <th style="width: 30px;">
+                                            <label
+                                                class="kt-checkbox kt-checkbox--single kt-checkbox--solid kt-checkbox--danger m-0">
+                                                <input type="checkbox" [checked]="isAllAssignedSelected()"
+                                                    (change)="toggleAllAssigned($any($event.target).checked)">
+                                                <span></span>
+                                            </label>
+                                        </th>
                                         <th>Subject</th>
                                         <th style="width: 80px;">Hrs/Wk</th>
                                         <th style="width: 80px;">Theory</th>
@@ -216,6 +246,15 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let assignment of filteredAssigned">
+                                        <td class="align-middle">
+                                            <label
+                                                class="kt-checkbox kt-checkbox--single kt-checkbox--solid kt-checkbox--danger m-0">
+                                                <input type="checkbox"
+                                                    [checked]="selectedAssignedIds.has(assignment.subjectId)"
+                                                    (change)="toggleSubjectSelection(assignment.subjectId)">
+                                                <span></span>
+                                            </label>
+                                        </td>
                                         <td class="align-middle">
                                             <div class="subject-cell">
                                                 <strong>{{ assignment.subjectName }}</strong>
@@ -265,3 +304,9 @@
         </div>
     </div>
 </div>
+
+<app-loader [show]="loading"></app-loader>
+<app-delete-popup [show]="showDeletePopup" [title]="deletePopupTitle" [message]="deletePopupMessage"
+    (confirm)="confirmUnassign()" (cancel)="cancelUnassign()">
+</app-delete-popup>
+<app-toaster></app-toaster>

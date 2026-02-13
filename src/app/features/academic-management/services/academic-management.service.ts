@@ -57,6 +57,9 @@ export class AcademicManagementService {
     assignSubjectToStandard(payload: any): Observable<any> {
         return this.crud(HTTP_METHOD.POST, `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.CORE.STANDARD_SUBJECTS.ASSIGN}`, payload);
     }
+    bulkAssignSubjectsToStandard(payload: any): Observable<any> {
+        return this.crud(HTTP_METHOD.POST, `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.CORE.STANDARD_SUBJECTS.BULK_ASSIGN}`, payload);
+    }
     getStandardSubjects(standardId: string | number, academicYearId: string | number): Observable<any> {
         const url = `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.CORE.STANDARD_SUBJECTS.GET_BY_STANDARD}?standardId=${standardId}&academicYearId=${academicYearId}`;
         return this.crud(HTTP_METHOD.GET, url);
@@ -64,6 +67,15 @@ export class AcademicManagementService {
     unassignSubjectFromStandard(standardId: string | number, subjectId: string | number, academicYearId: string | number): Observable<any> {
         const url = `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.CORE.STANDARD_SUBJECTS.UNASSIGN}?standardId=${standardId}&subjectId=${subjectId}&academicYearId=${academicYearId}`;
         return this.crud(HTTP_METHOD.DELETE, url);
+    }
+
+    bulkUnassignSubjectsFromStandard(standardId: string | number, subjectIds: number[], academicYearId: string | number): Observable<any> {
+        const url = `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.CORE.STANDARD_SUBJECTS.BULK_UNASSIGN}?standardId=${standardId}&subjectIds=${subjectIds.join(',')}&academicYearId=${academicYearId}`;
+        return this.crud(HTTP_METHOD.DELETE, url);
+    }
+
+    updateStandardSubjectMapping(id: number | string, payload: any): Observable<any> {
+        return this.crud(HTTP_METHOD.PUT, `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.CORE.STANDARD_SUBJECTS.UPDATE(id)}`, payload);
     }
 
     // --- 2. Scheduling ---

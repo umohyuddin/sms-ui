@@ -23,6 +23,11 @@ export class TeacherAssignmentListing implements OnInit, OnDestroy {
 
     pagination: Pagination<TeacherAssignment> = new Pagination([], 10);
     searchControl = new FormControl('');
+    megaSearchTerm: string = '';
+
+    onMegaSearch(): void {
+        this.searchControl.setValue(this.megaSearchTerm);
+    }
     columns = [
         { key: 'teacher', label: 'Teacher' },
         { key: 'subject', label: 'Subject' },

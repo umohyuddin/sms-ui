@@ -44,7 +44,19 @@ export class StandardSubjectMappingService {
         return this.academicService.assignSubjectToStandard(payload);
     }
 
+    bulkAssignSubjects(payload: any): Observable<any> {
+        return this.academicService.bulkAssignSubjectsToStandard(payload);
+    }
+
     unassignSubject(standardId: string | number, subjectId: string | number, academicYearId: string | number): Observable<any> {
         return this.academicService.unassignSubjectFromStandard(standardId, subjectId, academicYearId);
+    }
+
+    bulkUnassignSubjects(standardId: string | number, subjectIds: number[], academicYearId: string | number): Observable<any> {
+        return this.academicService.bulkUnassignSubjectsFromStandard(standardId, subjectIds, academicYearId);
+    }
+
+    updateStandardSubjectMapping(id: number | string, payload: any): Observable<any> {
+        return this.academicService.updateStandardSubjectMapping(id, payload);
     }
 }

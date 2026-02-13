@@ -1,14 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subject as RxSubject, takeUntil } from 'rxjs';
+import { Subject as RxSubject, takeUntil, Observable, forkJoin } from 'rxjs';
 import { StandardSubjectMappingService } from '../../services/standard-subject-mapping.service';
 import { Subject, StandardSubject, Campus, Standard, AcademicYear, StandardSubjectRequest } from '../../models/standard-subject-mapping.model';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { DeletePopupComponent } from '../../../../shared/components/delete-popup/delete-popup.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 
 @Component({
     selector: 'app-standard-subject-mapping-table',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, LoaderComponent, DeletePopupComponent, ToasterComponent],
     templateUrl: './standard-subject-mapping-table.component.html',
     styleUrls: ['./standard-subject-mapping-table.component.css']
 })
@@ -29,6 +32,17 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
     filteredAvailable: Subject[] = [];
 
     megaSearchTerm: string = '';
+    selectedAssignedIds: Set<number> = new Set();
+    selectedAvailableIds: Set<number> = new Set();
+
+    loading = false;
+    showDeletePopup = false;
+    deletePopupTitle = '';
+    deletePopupMessage = '';
+    pendingUnassign: StandardSubject | null = null;
+    pendingBulkUnassign: number[] | null = null;
+
+    @ViewChild(ToasterComponent) toaster!: ToasterComponent;
 
     get mandatoryCount(): number {
         return this.assignedSubjects.filter(a => a.isMandatory).length;
@@ -110,11 +124,21 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
     }
 
     loadAssignments(): void {
+        this.loading = true;
         this.mappingService.getStandardSubjects(this.selectedStandardId!, this.selectedYearId!)
             .pipe(takeUntil(this.destroy$))
-            .subscribe(resp => {
-                this.assignedSubjects = resp.body || [];
-                this.filterAvailable();
+            .subscribe({
+                next: resp => {
+                    this.assignedSubjects = resp.body || [];
+                    this.selectedAssignedIds.clear(); // Clear selection when data is reloaded
+                    this.selectedAvailableIds.clear(); // Clear selection when data is reloaded
+                    this.filterAvailable();
+                    this.loading = false;
+                },
+                error: () => {
+                    this.loading = false;
+                    this.toaster.show('Failed to load assignments', 'error');
+                }
             });
     }
 
@@ -156,19 +180,173 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
             practicalMarks: 0,
             active: true
         };
-        this.mappingService.assignSubject(payload).pipe(takeUntil(this.destroy$)).subscribe(() => {
-            this.loadAssignments();
+        this.loading = true;
+        this.mappingService.assignSubject(payload).pipe(takeUntil(this.destroy$)).subscribe({
+            next: () => {
+                this.toaster.show('Subject assigned successfully', 'success');
+                this.loadAssignments();
+            },
+            error: () => {
+                this.loading = false;
+                this.toaster.show('Failed to assign subject', 'error');
+            }
+        });
+    }
+
+    bulkAssign(): void {
+        if (this.selectedAvailableIds.size === 0) return;
+
+        const assignments = Array.from(this.selectedAvailableIds).map(subjectId => {
+            const subject = this.allSubjects.find(s => s.id === subjectId);
+            return {
+                standardId: this.selectedStandardId!,
+                subjectId: subjectId,
+                academicYearId: this.selectedYearId!,
+                optional: subject?.isElective || false,
+                weeklyHours: 0,
+                theoryMarks: 100,
+                practicalMarks: 0,
+                active: true
+            };
+        });
+
+        this.loading = true;
+        this.mappingService.bulkAssignSubjects({ assignments }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: () => {
+                this.toaster.show(`${assignments.length} subjects assigned successfully`, 'success');
+                this.loadAssignments();
+            },
+            error: () => {
+                this.loading = false;
+                this.toaster.show('Failed to assign subjects', 'error');
+            }
+        });
+    }
+
+    assignAll(): void {
+        if (this.filteredAvailable.length === 0) return;
+
+        const assignments = this.filteredAvailable.map(subject => {
+            return {
+                standardId: this.selectedStandardId!,
+                subjectId: subject.id!,
+                academicYearId: this.selectedYearId!,
+                optional: subject.isElective || false,
+                weeklyHours: 0,
+                theoryMarks: 100,
+                practicalMarks: 0,
+                active: true
+            };
+        });
+
+        this.loading = true;
+        this.mappingService.bulkAssignSubjects({ assignments }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: () => {
+                this.toaster.show(`All ${assignments.length} subjects assigned successfully`, 'success');
+                this.loadAssignments();
+            },
+            error: () => {
+                this.loading = false;
+                this.toaster.show('Failed to assign all subjects', 'error');
+            }
         });
     }
 
     unassign(assignment: StandardSubject): void {
-        if (confirm(`Are you sure you want to remove ${assignment.subjectName} from this standard?`)) {
-            this.mappingService.unassignSubject(assignment.standardId, assignment.subjectId, assignment.academicYearId)
+        this.pendingUnassign = assignment;
+        this.pendingBulkUnassign = null;
+        this.deletePopupTitle = 'Unassign Subject';
+        this.deletePopupMessage = `Are you sure you want to remove ${assignment.subjectName} from this standard?`;
+        this.showDeletePopup = true;
+    }
+
+    bulkUnassign(): void {
+        if (this.selectedAssignedIds.size === 0) return;
+
+        this.pendingUnassign = null;
+        this.pendingBulkUnassign = Array.from(this.selectedAssignedIds);
+        this.deletePopupTitle = 'Bulk Unassign Subjects';
+        this.deletePopupMessage = `Are you sure you want to remove ${this.selectedAssignedIds.size} selected subjects?`;
+        this.showDeletePopup = true;
+    }
+
+    confirmUnassign(): void {
+        if (this.pendingUnassign) {
+            this.loading = true;
+            this.mappingService.unassignSubject(this.pendingUnassign.standardId, this.pendingUnassign.subjectId, this.pendingUnassign.academicYearId)
                 .pipe(takeUntil(this.destroy$))
-                .subscribe(() => {
-                    this.loadAssignments();
+                .subscribe({
+                    next: () => {
+                        this.toaster.show('Subject unassigned successfully', 'success');
+                        this.loadAssignments();
+                    },
+                    error: () => {
+                        this.loading = false;
+                        this.toaster.show('Failed to unassign subject', 'error');
+                    }
+                });
+        } else if (this.pendingBulkUnassign) {
+            this.loading = true;
+            this.mappingService.bulkUnassignSubjects(this.selectedStandardId!, this.pendingBulkUnassign, this.selectedYearId!)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe({
+                    next: () => {
+                        this.toaster.show(`${this.pendingBulkUnassign!.length} subjects unassigned successfully`, 'success');
+                        this.loadAssignments();
+                    },
+                    error: () => {
+                        this.loading = false;
+                        this.toaster.show('Failed to unassign subjects', 'error');
+                    }
                 });
         }
+        this.showDeletePopup = false;
+    }
+
+    cancelUnassign(): void {
+        this.showDeletePopup = false;
+        this.pendingUnassign = null;
+        this.pendingBulkUnassign = null;
+    }
+
+    toggleSubjectSelection(subjectId: number): void {
+        if (this.selectedAssignedIds.has(subjectId)) {
+            this.selectedAssignedIds.delete(subjectId);
+        } else {
+            this.selectedAssignedIds.add(subjectId);
+        }
+    }
+
+    toggleAllAssigned(isSelected: boolean): void {
+        if (isSelected) {
+            this.filteredAssigned.forEach(a => this.selectedAssignedIds.add(a.subjectId));
+        } else {
+            this.selectedAssignedIds.clear();
+        }
+    }
+
+    toggleAvailableSelection(subjectId: number): void {
+        if (this.selectedAvailableIds.has(subjectId)) {
+            this.selectedAvailableIds.delete(subjectId);
+        } else {
+            this.selectedAvailableIds.add(subjectId);
+        }
+    }
+
+    toggleAllAvailable(isSelected: boolean): void {
+        if (isSelected) {
+            this.filteredAvailable.forEach(s => this.selectedAvailableIds.add(s.id!));
+        } else {
+            this.selectedAvailableIds.clear();
+        }
+    }
+
+    isAllAvailableSelected(): boolean {
+        return this.filteredAvailable.length > 0 && this.filteredAvailable.every(s => this.selectedAvailableIds.has(s.id!));
+    }
+
+    isAllAssignedSelected(): boolean {
+        return this.filteredAssigned.length > 0 && this.filteredAssigned.every(a => this.selectedAssignedIds.has(a.subjectId));
     }
 
     saveAssignment(assignment: StandardSubject): void {
@@ -182,17 +360,76 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
             practicalMarks: assignment.practicalMarks,
             active: assignment.active ?? true
         };
-        this.mappingService.assignSubject(payload).pipe(takeUntil(this.destroy$)).subscribe(() => {
-            this.loadAssignments();
+        this.loading = true;
+
+        const request = assignment.id
+            ? this.mappingService.updateStandardSubjectMapping(assignment.id, payload)
+            : this.mappingService.assignSubject(payload);
+
+        request.pipe(takeUntil(this.destroy$)).subscribe({
+            next: () => {
+                const message = assignment.id ? 'Assignment updated successfully' : 'Subject assigned successfully';
+                this.toaster.show(message, 'success');
+                this.loadAssignments();
+            },
+            error: () => {
+                this.loading = false;
+                const message = assignment.id ? 'Failed to update assignment' : 'Failed to assign subject';
+                this.toaster.show(message, 'error');
+            }
         });
     }
 
     saveAll(): void {
         if (!this.assignedSubjects.length) return;
 
-        // In a real app, we'd use forkJoin or a bulk endpoint
-        // For now, let's just save the current state
-        this.assignedSubjects.forEach(assignment => this.saveAssignment(assignment));
+        // Note: For now, we perform separate calls for updates if they have IDs, 
+        // or a bulk call for assign. A bulk update endpoint would be better.
+        const updateTasks: Observable<any>[] = [];
+        const newAssignments: any[] = [];
+
+        this.assignedSubjects.forEach(assignment => {
+            const payload = {
+                standardId: assignment.standardId,
+                subjectId: assignment.subjectId,
+                academicYearId: assignment.academicYearId,
+                optional: assignment.optional,
+                weeklyHours: assignment.weeklyHours,
+                theoryMarks: assignment.theoryMarks,
+                practicalMarks: assignment.practicalMarks,
+                active: assignment.active ?? true
+            };
+
+            if (assignment.id) {
+                updateTasks.push(this.mappingService.updateStandardSubjectMapping(assignment.id, payload));
+            } else {
+                newAssignments.push(payload);
+            }
+        });
+
+        this.loading = true;
+
+        // If your backend bulkAssign actually handles updates (upsert), you can just use bulkAssign.
+        // Otherwise, this approach handles both.
+        if (newAssignments.length > 0) {
+            updateTasks.push(this.mappingService.bulkAssignSubjects({ assignments: newAssignments }));
+        }
+
+        if (updateTasks.length === 0) {
+            this.loading = false;
+            return;
+        }
+
+        forkJoin(updateTasks).pipe(takeUntil(this.destroy$)).subscribe({
+            next: () => {
+                this.toaster.show('All assignments saved successfully', 'success');
+                this.loadAssignments();
+            },
+            error: () => {
+                this.loading = false;
+                this.toaster.show('Failed to save some assignments', 'error');
+            }
+        });
     }
 
     ngOnDestroy(): void {

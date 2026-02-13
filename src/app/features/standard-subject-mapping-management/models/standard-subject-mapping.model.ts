@@ -10,6 +10,7 @@ export interface Subject {
 }
 
 export interface StandardSubject {
+    id?: number;
     standardId: number;
     subjectId: number;
     academicYearId: number;

@@ -217,5 +217,11 @@ export const ROUTES = {
       STUDENT_ACTIVITY: (id: string) => ['academic/history/activity', id],
       ACADEMIC_HISTORY: (id: string) => ['academic/history/academic', id],
     }
+  },
+  TEACHER_ASSIGNMENT: {
+    LIST: ['teacher-assignment'],
+    CREATE: ['teacher-assignment', 'create'],
+    EDIT: (id: string) => ['teacher-assignment', 'edit', id],
+    DETAILS: (id: string) => ['teacher-assignment', 'details', id]
   }
 };

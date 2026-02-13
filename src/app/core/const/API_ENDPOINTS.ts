@@ -424,8 +424,11 @@ export const API_ENDPOINTS = {
             },
             STANDARD_SUBJECTS: {
                 ASSIGN: '/api/academic/core/standard-subjects',
+                BULK_ASSIGN: '/api/academic/core/standard-subjects/bulk',
                 GET_BY_STANDARD: '/api/academic/core/standard-subjects',
-                UNASSIGN: '/api/academic/core/standard-subjects'
+                UNASSIGN: '/api/academic/core/standard-subjects',
+                BULK_UNASSIGN: '/api/academic/core/standard-subjects/bulk',
+                UPDATE: (id: string | number) => `/api/academic/core/standard-subjects/${id}`
             }
         },
         SCHEDULING: {
