@@ -22,7 +22,7 @@
 
         <!-- Quick Insights -->
         <div class="row mb-4">
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="kt-widget24 kt-widget24--brand">
                     <div class="kt-widget24__details">
                         <div class="kt-widget24__info">
@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="kt-widget24 kt-widget24--success">
                     <div class="kt-widget24__details">
                         <div class="kt-widget24__info">
@@ -48,36 +48,6 @@
                     </div>
                     <div class="progress progress--sm">
                         <div class="progress-bar kt-bg-success" role="progressbar" [style.width.%]="assignedPercent">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="kt-widget24 kt-widget24--warning">
-                    <div class="kt-widget24__details">
-                        <div class="kt-widget24__info">
-                            <h4 class="kt-widget24__title">Mandatory</h4>
-                            <span class="kt-widget24__desc">Core subjects</span>
-                        </div>
-                        <span class="kt-widget24__stats kt-font-warning">{{ mandatoryCount }}</span>
-                    </div>
-                    <div class="progress progress--sm">
-                        <div class="progress-bar kt-bg-warning" role="progressbar" [style.width.%]="mandatoryPercent">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="kt-widget24 kt-widget24--danger">
-                    <div class="kt-widget24__details">
-                        <div class="kt-widget24__info">
-                            <h4 class="kt-widget24__title">Elective</h4>
-                            <span class="kt-widget24__desc">Optional subjects</span>
-                        </div>
-                        <span class="kt-widget24__stats kt-font-danger">{{ electiveCount }}</span>
-                    </div>
-                    <div class="progress progress--sm">
-                        <div class="progress-bar kt-bg-danger" role="progressbar" [style.width.%]="electivePercent">
                         </div>
                     </div>
                 </div>
@@ -146,7 +116,7 @@
         <!-- Mapping Content -->
         <div class="row mt-4" *ngIf="selectedYearId && selectedStandardId">
             <!-- Available Subjects -->
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-brand shadow-sm">
                     <div class="kt-portlet__head bg-light">
                         <div class="kt-portlet__head-label">
@@ -209,7 +179,7 @@
             </div>
 
             <!-- Assigned Subjects -->
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-danger shadow-sm">
                     <div class="kt-portlet__head bg-light">
                         <div class="kt-portlet__head-label">
@@ -240,7 +210,6 @@
                                         <th style="width: 80px;">Hrs/Wk</th>
                                         <th style="width: 80px;">Theory</th>
                                         <th style="width: 80px;">Prac.</th>
-                                        <th style="width: 120px;">Type</th>
                                         <th class="text-right">Action</th>
                                     </tr>
                                 </thead>
@@ -273,13 +242,7 @@
                                             <input type="number" class="form-control form-control-sm"
                                                 [(ngModel)]="assignment.practicalMarks" min="0">
                                         </td>
-                                        <td class="align-middle">
-                                            <select class="form-control form-control-sm"
-                                                [(ngModel)]="assignment.optional">
-                                                <option [ngValue]="false">Mandatory</option>
-                                                <option [ngValue]="true">Elective</option>
-                                            </select>
-                                        </td>
+
                                         <td class="text-right align-middle">
                                             <button class="btn btn-sm btn-icon btn-label-brand btn-circle mr-2"
                                                 (click)="saveAssignment(assignment)" title="Save Changes">

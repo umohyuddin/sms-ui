@@ -45,14 +45,6 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
 
     @ViewChild(ToasterComponent) toaster!: ToasterComponent;
 
-    get mandatoryCount(): number {
-        return this.assignedSubjects.filter(a => a.isMandatory).length;
-    }
-
-    get electiveCount(): number {
-        return this.assignedSubjects.filter(a => !a.isMandatory).length;
-    }
-
     get availablePercent(): number {
         if (!this.allSubjects.length) return 0;
         return (this.availableSubjects.length / this.allSubjects.length) * 100;
@@ -61,16 +53,6 @@ export class StandardSubjectMappingTableComponent implements OnInit, OnDestroy {
     get assignedPercent(): number {
         if (!this.allSubjects.length) return 0;
         return (this.assignedSubjects.length / this.allSubjects.length) * 100;
-    }
-
-    get mandatoryPercent(): number {
-        if (!this.assignedSubjects.length) return 0;
-        return (this.mandatoryCount / this.assignedSubjects.length) * 100;
-    }
-
-    get electivePercent(): number {
-        if (!this.assignedSubjects.length) return 0;
-        return (this.electiveCount / this.assignedSubjects.length) * 100;
     }
 
     private destroy$ = new RxSubject<void>();
