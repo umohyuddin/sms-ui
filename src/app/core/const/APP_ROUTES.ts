@@ -204,6 +204,9 @@ export const ROUTES = {
       TERMS: ['academic/exams/terms'],
       CREATE_TERM: ['academic/exams/terms', 'create'],
       EDIT_TERM: (id: string) => ['academic/exams/terms', 'edit', id],
+      ASSESSMENT_TYPES: ['academic/exams/assessment-types'],
+      CREATE_ASSESSMENT_TYPE: ['academic/exams/assessment-types', 'create'],
+      EDIT_ASSESSMENT_TYPE: (id: string) => ['academic/exams/assessment-types', 'edit', id],
     },
     ASSESSMENTS: {
       LIST: ['academic/assessments'],

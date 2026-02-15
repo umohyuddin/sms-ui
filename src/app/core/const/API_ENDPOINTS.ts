@@ -481,6 +481,8 @@ export const API_ENDPOINTS = {
                 CREATE: '/api/academic/evaluation/assessment-types',
                 UPDATE: (id: string | number) => `/api/academic/evaluation/assessment-types/${id}`,
                 GET_ALL: '/api/academic/evaluation/assessment-types',
+                GET_BY_ID: (id: string | number) => `/api/academic/evaluation/assessment-types/${id}`,
+                SEARCH: (keyword: string) => `/api/academic/evaluation/assessment-types/search/${keyword}`,
                 DELETE: (id: string | number) => `/api/academic/evaluation/assessment-types/${id}`
             },
             EXAMS: {
