@@ -1,0 +1,13 @@
+/* CSS for Exam Term Listing Table */
+.kt-datatable__table {
+    width: 100%;
+}
+
+.kt-datatable__cell {
+    padding: 10px;
+    vertical-align: middle;
+}
+
+.kt-datatable__head .kt-datatable__cell span {
+    font-weight: bold;
+}

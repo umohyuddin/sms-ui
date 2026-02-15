@@ -12,6 +12,8 @@ import { ResultProcessingPage } from './pages/result-processing/result-processin
 import { GradeScaleListingPage } from './pages/grade-scale-listing/grade-scale-listing';
 import { ExamTypeListing } from '../exam-type-management/pages/exam-type-listing/exam-type-listing';
 import { ExamTypeCreate } from '../exam-type-management/pages/exam-type-create/exam-type-create';
+import { ExamTermListing } from '../exam-term-management/pages/exam-term-listing/exam-term-listing';
+import { ExamTermCreate } from '../exam-term-management/pages/exam-term-create/exam-term-create';
 
 const routes: Routes = [
     { path: '', redirectTo: 'subjects', pathMatch: 'full' },
@@ -23,6 +25,9 @@ const routes: Routes = [
     { path: 'exams/types', component: ExamTypeListing },
     { path: 'exams/types/create', component: ExamTypeCreate },
     { path: 'exams/types/edit/:id', component: ExamTypeCreate },
+    { path: 'exams/terms', component: ExamTermListing },
+    { path: 'exams/terms/create', component: ExamTermCreate },
+    { path: 'exams/terms/edit/:id', component: ExamTermCreate },
     { path: 'marks-entry', component: MarksEntryPage },
     { path: 'results', component: ResultProcessingPage },
     { path: 'grade-scales', component: GradeScaleListingPage }

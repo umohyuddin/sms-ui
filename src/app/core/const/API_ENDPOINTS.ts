@@ -473,6 +473,8 @@ export const API_ENDPOINTS = {
                 CREATE: '/api/academic/evaluation/exam-terms',
                 UPDATE: (id: string | number) => `/api/academic/evaluation/exam-terms/${id}`,
                 GET_BY_YEAR: '/api/academic/evaluation/exam-terms',
+                GET_BY_ID: (id: string | number) => `/api/academic/evaluation/exam-terms/${id}`,
+                SEARCH: (keyword: string) => `/api/academic/evaluation/exam-terms/search/${keyword}`,
                 DELETE: (id: string | number) => `/api/academic/evaluation/exam-terms/${id}`
             },
             ASSESSMENT_TYPES: {
