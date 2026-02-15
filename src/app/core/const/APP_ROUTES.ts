@@ -199,6 +199,8 @@ export const ROUTES = {
       LIST: ['academic/exams'],
       SCHEDULE: ['academic/exams/schedule'],
       TYPES: ['academic/exams/types'],
+      CREATE_TYPE: ['academic/exams/types', 'create'],
+      EDIT_TYPE: (id: string) => ['academic/exams/types', 'edit', id],
       TERMS: ['academic/exams/terms'],
     },
     ASSESSMENTS: {

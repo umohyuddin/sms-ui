@@ -465,6 +465,8 @@ export const API_ENDPOINTS = {
                 CREATE: '/api/academic/evaluation/exam-types',
                 UPDATE: (id: string | number) => `/api/academic/evaluation/exam-types/${id}`,
                 GET_ALL: '/api/academic/evaluation/exam-types',
+                GET_BY_ID: (id: string | number) => `/api/academic/evaluation/exam-types/${id}`,
+                SEARCH: (keyword: string) => `/api/academic/evaluation/exam-types/search/${keyword}`,
                 DELETE: (id: string | number) => `/api/academic/evaluation/exam-types/${id}`
             },
             EXAM_TERMS: {

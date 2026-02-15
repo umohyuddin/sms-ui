@@ -1,0 +1,71 @@
+<app-toaster #toaster></app-toaster>
+<app-loader *ngIf="loading" type="pulse" size="lg" color="primary" message="Loading..." [overlay]="true"
+    [fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
+</app-loader>
+
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+                {{ isEdit ? 'Update Exam Type' : 'Add New Exam Type' }}
+            </h3>
+        </div>
+    </div>
+
+    <form class="kt-form kt-form--label-right" [formGroup]="examTypeForm" (ngSubmit)="onSubmit()">
+        <div class="kt-portlet__body">
+            <h4 class="kt-margin-b-20">Exam Type Information</h4>
+            <div class="form-group row form-group-marginless">
+                <label class="col-lg-1 col-form-label required">Name:</label>
+                <div class="col-lg-5">
+                    <input type="text" class="form-control" placeholder="Enter exam type name" formControlName="name"
+                        [class.is-invalid]="examTypeForm.get('name')?.invalid && (examTypeForm.get('name')?.touched || examTypeForm.get('name')?.dirty)"
+                        [class.is-valid]="examTypeForm.get('name')?.valid && (examTypeForm.get('name')?.touched || examTypeForm.get('name')?.dirty)">
+                    <span class="form-text text-muted">Please enter exam type name</span>
+                    <span class="invalid-feedback">Name is required</span>
+                </div>
+
+                <label class="col-lg-1 col-form-label required">Code:</label>
+                <div class="col-lg-5">
+                    <input type="text" class="form-control" placeholder="Enter code" formControlName="code"
+                        [class.is-invalid]="examTypeForm.get('code')?.invalid && (examTypeForm.get('code')?.touched || examTypeForm.get('code')?.dirty)"
+                        [class.is-valid]="examTypeForm.get('code')?.valid && (examTypeForm.get('code')?.touched || examTypeForm.get('code')?.dirty)">
+                    <span class="form-text text-muted">Please enter code (e.g. MID, FINAL)</span>
+                    <span class="invalid-feedback">Code is required</span>
+                </div>
+            </div>
+
+            <div class="form-group row form-group-marginless kt-margin-t-20">
+                <label class="col-lg-1 col-form-label">Description:</label>
+                <div class="col-lg-11">
+                    <textarea class="form-control" formControlName="description" rows="3"
+                        placeholder="Enter description"></textarea>
+                    <span class="form-text text-muted">Optional description for the exam type</span>
+                </div>
+            </div>
+
+            <div class="form-group row form-group-marginless kt-margin-t-20">
+                <label class="col-lg-1 col-form-label">Status:</label>
+                <div class="col-lg-3">
+                    <label class="kt-checkbox kt-margin-t-10">
+                        <input type="checkbox" formControlName="active"> Is Active
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+                <div class="row">
+                    <div class="col-lg-12 text-right">
+                        <button type="submit" class="btn btn-dark mr-2" [disabled]="examTypeForm.invalid || loading">
+                            {{ loading ? 'Saving...' : 'Submit' }}
+                        </button>
+                        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

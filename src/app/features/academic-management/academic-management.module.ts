@@ -10,6 +10,8 @@ import { ExamSchedulePage } from './pages/exam-schedule/exam-schedule';
 import { MarksEntryPage } from './pages/marks-entry/marks-entry';
 import { ResultProcessingPage } from './pages/result-processing/result-processing';
 import { GradeScaleListingPage } from './pages/grade-scale-listing/grade-scale-listing';
+import { ExamTypeListing } from '../exam-type-management/pages/exam-type-listing/exam-type-listing';
+import { ExamTypeCreate } from '../exam-type-management/pages/exam-type-create/exam-type-create';
 
 const routes: Routes = [
     { path: '', redirectTo: 'subjects', pathMatch: 'full' },
@@ -18,6 +20,9 @@ const routes: Routes = [
     { path: 'exams', component: ExamListingPage },
     { path: 'exams/create', component: ExamCreatePage },
     { path: 'exams/schedule', component: ExamSchedulePage },
+    { path: 'exams/types', component: ExamTypeListing },
+    { path: 'exams/types/create', component: ExamTypeCreate },
+    { path: 'exams/types/edit/:id', component: ExamTypeCreate },
     { path: 'marks-entry', component: MarksEntryPage },
     { path: 'results', component: ResultProcessingPage },
     { path: 'grade-scales', component: GradeScaleListingPage }
