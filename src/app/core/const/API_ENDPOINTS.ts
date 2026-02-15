@@ -436,6 +436,7 @@ export const API_ENDPOINTS = {
                 CREATE: '/api/academic/scheduling/assignments',
                 GET_BY_TEACHER: (id: string | number) => `/api/academic/scheduling/assignments/teacher/${id}`,
                 GET_BY_SECTION: '/api/academic/scheduling/assignments/section',
+                GET_BY_STANDARD: '/api/academic/scheduling/assignments/standard',
                 DELETE: '/api/academic/scheduling/assignments'
             },
             TIMETABLE: {

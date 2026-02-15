@@ -90,6 +90,10 @@ export class AcademicManagementService {
         const url = `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.SCHEDULING.ASSIGNMENTS.GET_BY_SECTION}?standardId=${standardId}&sectionId=${sectionId}&academicYearId=${academicYearId}`;
         return this.crud(HTTP_METHOD.GET, url);
     }
+    getStandardAssignments(standardId: string | number, academicYearId: string | number): Observable<any> {
+        const url = `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.SCHEDULING.ASSIGNMENTS.GET_BY_STANDARD}?standardId=${standardId}&academicYearId=${academicYearId}`;
+        return this.crud(HTTP_METHOD.GET, url);
+    }
     unassignTeacher(params: any): Observable<any> {
         const query = new URLSearchParams(params).toString();
         return this.crud(HTTP_METHOD.DELETE, `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.SCHEDULING.ASSIGNMENTS.DELETE}?${query}`);

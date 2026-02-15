@@ -16,126 +16,38 @@
     </div>
 </div>
 
+<app-loader *ngIf="loading" type="pulse" size="lg" color="primary" [message]="loaderMessage" [overlay]="true"
+    [fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
+</app-loader>
+
 <div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
     <div class="kt-portlet kt-portlet--bordered mb-3">
         <div class="kt-portlet__body py-2 px-4">
             <div class="d-flex align-items-center justify-content-between flex-wrap">
                 <div class="d-flex align-items-center py-2 mr-3">
-                    <span class="kt-badge kt-badge--brand kt-badge--xl kt-badge--rounded mr-3">1</span>
+                    <span class="kt-badge kt-badge--brand kt-badge--xl kt-badge--rounded steps-badge mr-3">1</span>
                     <div>
-                        <span class="kt-font-bold">Select Context</span>
-                        <span class="text-muted d-block small">Pick Campus, Standard & Section</span>
+                        <span class="kt-font-bold kt-font-dark">Select Context</span>
+                        <span class="text-muted d-block small">Pick Year, Campus & Standard</span>
                     </div>
                 </div>
                 <div class="d-flex align-items-center py-2 mr-3 border-left pl-3">
-                    <span class="kt-badge kt-badge--success kt-badge--xl kt-badge--rounded mr-3">2</span>
+                    <span class="kt-badge kt-badge--success kt-badge--xl kt-badge--rounded steps-badge mr-3">2</span>
                     <div>
-                        <span class="kt-font-bold">Choose Subject</span>
-                        <span class="text-muted d-block small">Select target for assignment</span>
+                        <span class="kt-font-bold kt-font-dark">Pick Section</span>
+                        <span class="text-muted d-block small">Select section in row</span>
                     </div>
                 </div>
                 <div class="d-flex align-items-center py-2 border-left pl-3">
-                    <span class="kt-badge kt-badge--warning kt-badge--xl kt-badge--rounded mr-3">3</span>
+                    <span class="kt-badge kt-badge--warning kt-badge--xl kt-badge--rounded steps-badge mr-3">3</span>
                     <div>
-                        <span class="kt-font-bold">Assign Teacher</span>
-                        <span class="text-muted d-block small">Map lead or assistant teachers</span>
+                        <span class="kt-font-bold kt-font-dark">Assign Teacher</span>
+                        <span class="text-muted d-block small">Search and map teacher</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- <div class="row">
-        <div class="col-xl-3">
-            <div class="kt-portlet kt-portlet--height-fluid">
-                <div class="kt-portlet__body">
-                    <div class="kt-widget24">
-                        <div class="kt-widget24__details">
-                            <div class="kt-widget24__info">
-                                <h4 class="kt-widget24__title">Active Assignments</h4>
-                                <span class="kt-widget24__desc">Current academic year</span>
-                            </div>
-                            <span class="kt-widget24__stats kt-font-brand">128</span>
-                        </div>
-                        <div class="progress progress--sm">
-                            <div class="progress-bar kt-bg-brand" role="progressbar" style="width: 70%"></div>
-                        </div>
-                        <div class="kt-widget24__action">
-                            <span class="kt-widget24__change">+12%</span>
-                            <span class="kt-widget24__number">vs last term</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3">
-            <div class="kt-portlet kt-portlet--height-fluid">
-                <div class="kt-portlet__body">
-                    <div class="kt-widget24">
-                        <div class="kt-widget24__details">
-                            <div class="kt-widget24__info">
-                                <h4 class="kt-widget24__title">Primary Teachers</h4>
-                                <span class="kt-widget24__desc">Core assignments</span>
-                            </div>
-                            <span class="kt-widget24__stats kt-font-success">94</span>
-                        </div>
-                        <div class="progress progress--sm">
-                            <div class="progress-bar kt-bg-success" role="progressbar" style="width: 60%"></div>
-                        </div>
-                        <div class="kt-widget24__action">
-                            <span class="kt-widget24__change">+6%</span>
-                            <span class="kt-widget24__number">vs last term</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3">
-            <div class="kt-portlet kt-portlet--height-fluid">
-                <div class="kt-portlet__body">
-                    <div class="kt-widget24">
-                        <div class="kt-widget24__details">
-                            <div class="kt-widget24__info">
-                                <h4 class="kt-widget24__title">Assistant Teachers</h4>
-                                <span class="kt-widget24__desc">Support roles</span>
-                            </div>
-                            <span class="kt-widget24__stats kt-font-warning">22</span>
-                        </div>
-                        <div class="progress progress--sm">
-                            <div class="progress-bar kt-bg-warning" role="progressbar" style="width: 45%"></div>
-                        </div>
-                        <div class="kt-widget24__action">
-                            <span class="kt-widget24__change">+2%</span>
-                            <span class="kt-widget24__number">vs last term</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3">
-            <div class="kt-portlet kt-portlet--height-fluid">
-                <div class="kt-portlet__body">
-                    <div class="kt-widget24">
-                        <div class="kt-widget24__details">
-                            <div class="kt-widget24__info">
-                                <h4 class="kt-widget24__title">Expiring Soon</h4>
-                                <span class="kt-widget24__desc">Next 30 days</span>
-                            </div>
-                            <span class="kt-widget24__stats kt-font-danger">8</span>
-                        </div>
-                        <div class="progress progress--sm">
-                            <div class="progress-bar kt-bg-danger" role="progressbar" style="width: 30%"></div>
-                        </div>
-                        <div class="kt-widget24__action">
-                            <span class="kt-widget24__change">-3%</span>
-                            <span class="kt-widget24__number">vs last term</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
     <div class="kt-portlet kt-portlet--mobile">
         <div class="kt-portlet__head kt-portlet__head--lg">
             <div class="kt-portlet__head-label">
@@ -148,355 +60,142 @@
             </div>
             <div class="kt-portlet__head-toolbar">
                 <div class="kt-portlet__head-actions">
-                    <button type="button" class="btn btn-outline-brand btn-sm mr-2">
+                    <button type="button" class="btn btn-outline-brand btn-sm mr-2" (click)="loadAssignments()">
                         <i class="la la-refresh"></i> Refresh
-                    </button>
-                    <button type="button" class="btn btn-brand btn-sm">
-                        <i class="la la-save"></i> Save Changes
                     </button>
                 </div>
             </div>
         </div>
         <div class="kt-portlet__body">
-            <div class="row mb-4">
-                <div class="col-md-3">
-                    <div class="kt-widget24 kt-widget24--brand">
-                        <div class="kt-widget24__details">
-                            <div class="kt-widget24__info">
-                                <h4 class="kt-widget24__title">Available Teachers</h4>
-                                <span class="kt-widget24__desc">Ready to assign</span>
-                            </div>
-                            <span class="kt-widget24__stats kt-font-brand">46</span>
-                        </div>
-                        <div class="progress progress--sm">
-                            <div class="progress-bar kt-bg-brand" role="progressbar" style="width: 62%"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="kt-widget24 kt-widget24--success">
-                        <div class="kt-widget24__details">
-                            <div class="kt-widget24__info">
-                                <h4 class="kt-widget24__title">Assigned</h4>
-                                <span class="kt-widget24__desc">Current mappings</span>
-                            </div>
-                            <span class="kt-widget24__stats kt-font-success">128</span>
-                        </div>
-                        <div class="progress progress--sm">
-                            <div class="progress-bar kt-bg-success" role="progressbar" style="width: 48%"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="kt-widget24 kt-widget24--warning">
-                        <div class="kt-widget24__details">
-                            <div class="kt-widget24__info">
-                                <h4 class="kt-widget24__title">Primary</h4>
-                                <span class="kt-widget24__desc">Lead teachers</span>
-                            </div>
-                            <span class="kt-widget24__stats kt-font-warning">94</span>
-                        </div>
-                        <div class="progress progress--sm">
-                            <div class="progress-bar kt-bg-warning" role="progressbar" style="width: 55%"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="kt-widget24 kt-widget24--danger">
-                        <div class="kt-widget24__details">
-                            <div class="kt-widget24__info">
-                                <h4 class="kt-widget24__title">Substitute</h4>
-                                <span class="kt-widget24__desc">Temporary roles</span>
-                            </div>
-                            <span class="kt-widget24__stats kt-font-danger">8</span>
-                        </div>
-                        <div class="progress progress--sm">
-                            <div class="progress-bar kt-bg-danger" role="progressbar" style="width: 24%"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="kt-form kt-form--label-right kt-margin-b-15">
-                <div class="kt-form__body">
+            <div class="kt-form kt-form--label-right kt-margin-b-15 mt-3">
+                <div class="kt-form__body px-3">
                     <div class="form-group row">
-                        <div class="col-lg-3">
-                            <label>Campus</label>
-                            <select class="form-control">
-                                <option value="">All Campuses</option>
-                                <option>Central Campus</option>
-                                <option>North Campus</option>
-                                <option>East Campus</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3">
-                            <label>Standard</label>
-                            <select class="form-control">
-                                <option value="">All Standards</option>
-                                <option>Grade 5</option>
-                                <option>Grade 6</option>
-                                <option>Grade 7</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3">
-                            <label>Section</label>
-                            <select class="form-control">
-                                <option value="">All Sections</option>
-                                <option>A</option>
-                                <option>B</option>
-                                <option>C</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3">
-                            <label>Subject</label>
-                            <select class="form-control">
-                                <option value="">All Subjects</option>
-                                <option>Mathematics</option>
-                                <option>English</option>
-                                <option>Physics</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-lg-3">
-                            <label>Teacher</label>
-                            <select class="form-control">
-                                <option value="">All Teachers</option>
-                                <option>Emma Johnson</option>
-                                <option>David Patel</option>
-                                <option>Sophia Kim</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3">
-                            <label>Teaching Role</label>
-                            <select class="form-control">
-                                <option value="">All Roles</option>
-                                <option>PRIMARY</option>
-                                <option>ASSISTANT</option>
-                                <option>SUBSTITUTE</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3">
-                            <label>Status</label>
-                            <select class="form-control">
-                                <option value="">All</option>
-                                <option>Active</option>
-                                <option>Inactive</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3">
-                            <label>Effective Date</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="From">
-                                <div class="input-group-append input-group-prepend">
-                                    <span class="input-group-text"><i class="la la-minus"></i></span>
-                                </div>
-                                <input type="text" class="form-control" placeholder="To">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
                             <label>Academic Year</label>
-                            <select class="form-control">
-                                <option>2025-26</option>
-                                <option>2024-25</option>
-                                <option>2023-24</option>
+                            <select class="form-control" [(ngModel)]="selectedYearId" (change)="loadAssignments()">
+                                <option *ngFor="let year of academicYears" [value]="year.id">{{ year.name }}</option>
                             </select>
                         </div>
-                        <div class="col-lg-9 text-right">
-                            <button class="btn btn-outline-secondary mr-2"><i class="la la-undo"></i> Reset</button>
-                            <button class="btn btn-brand"><i class="la la-search"></i> Apply Filters</button>
+                        <div class="col-lg-4">
+                            <label>Campus</label>
+                            <select class="form-control" [(ngModel)]="selectedCampusId" (change)="onCampusChange()">
+                                <option value="">Select Campus</option>
+                                <option *ngFor="let campus of campuses" [value]="campus.id">{{ campus.campusName }}
+                                </option>
+                            </select>
                         </div>
-                    </div>
-                </div>
-            </div>
+                        <div class="col-lg-4">
+                            <label>Standard</label>
+                            <select class="form-control" [(ngModel)]="selectedStandardId" (change)="onStandardChange()">
+                                <option value="">Select Standard</option>
+                                <option *ngFor="let std of standards" [value]="std.id">{{ std.standardName }}</option>
+                            </select>
+                        </div>
 
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="selected-filters">
-                        <span class="kt-badge kt-badge--inline kt-badge--brand">Academic Year: 2025-26</span>
-                        <span class="kt-badge kt-badge--inline kt-badge--info">Campus: Central</span>
-                        <span class="kt-badge kt-badge--inline kt-badge--success">Standard: Grade 6</span>
-                        <span class="kt-badge kt-badge--inline kt-badge--warning">Section: A</span>
-                        <span class="kt-badge kt-badge--inline kt-badge--primary">Subject: Mathematics</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mb-4" *ngIf="filters.academicYearId && filters.standardId">
-                <div class="col-md-12">
-                    <div class="kt-input-icon kt-input-icon--left kt-input-icon--right">
-                        <input type="text" class="form-control" placeholder="Search teachers by name, ID, or subject..."
-                            [(ngModel)]="megaSearchTerm" (input)="onMegaSearch()">
-                        <span class="kt-input-icon__icon kt-input-icon__icon--left">
-                            <span><i class="la la-search"></i></span>
-                        </span>
-                        <span class="kt-input-icon__icon kt-input-icon__icon--right" *ngIf="megaSearchTerm"
-                            (click)="megaSearchTerm = ''; onMegaSearch()" style="cursor: pointer; pointer-events: all;">
-                            <span><i class="la la-close kt-font-danger"></i></span>
-                        </span>
-                    </div>
-                    <div class="mt-2 pl-1">
-                        <span class="text-muted small">
-                            <i class="la la-info-circle mr-1"></i>
-                            Try searching by teacher name, ID, or subject name
-                        </span>
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-6">
-                    <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-brand shadow-sm">
-                        <div class="kt-portlet__head bg-light">
+                <div class="col-12">
+                    <div class="kt-portlet kt-portlet--height-fluid shadow-sm">
+                        <div class="kt-portlet__head kt-portlet__head--noborder">
                             <div class="kt-portlet__head-label">
-                                <h3 class="kt-portlet__head-title text-brand">Available Teachers (12)
-                                </h3>
-                            </div>
-                            <div class="kt-portlet__head-toolbar">
-                                <button class="btn btn-sm btn-outline-brand">Assign All</button>
+                                <h3 class="kt-portlet__head-title">Assignment Matrix ({{ matrixRecords.length }}
+                                    Subjects)</h3>
                             </div>
                         </div>
                         <div class="kt-portlet__body p-0">
-                            <div class="list-container" style="max-height: 360px; overflow-y: auto;">
+                            <div class="table-responsive">
                                 <table class="table table-hover mb-0">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th>Teacher</th>
-                                            <th>Department</th>
-                                            <th class="text-right">Action</th>
+                                            <th
+                                                style="min-width: 200px; position: sticky; left: 0; z-index: 10; background: #f8f9fb;">
+                                                Subject</th>
+                                            <th *ngFor="let sec of sections" class="text-center"
+                                                style="min-width: 280px;">
+                                                Section {{ sec.sectionName }}
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="teacher-cell">
-                                                    <strong>Emma Johnson</strong>
-                                                    <span class="text-muted d-block">TCH-101 •
-                                                        Science</span>
-                                                </div>
+                                        <tr *ngFor="let r of matrixRecords">
+                                            <td class="align-middle font-weight-bold"
+                                                style="position: sticky; left: 0; z-index: 5; background: white; border-right: 1px solid #ebedf2;">
+                                                {{ r.subjectName }}
                                             </td>
-                                            <td>Science</td>
-                                            <td class="text-right">
-                                                <button class="btn btn-sm btn-label-brand btn-bold">
-                                                    <i class="la la-plus"></i> Assign
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="teacher-cell">
-                                                    <strong>David Patel</strong>
-                                                    <span class="text-muted d-block">TCH-207 •
-                                                        Mathematics</span>
-                                                </div>
-                                            </td>
-                                            <td>Mathematics</td>
-                                            <td class="text-right">
-                                                <button class="btn btn-sm btn-label-brand btn-bold">
-                                                    <i class="la la-plus"></i> Assign
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="teacher-cell">
-                                                    <strong>Sophia Kim</strong>
-                                                    <span class="text-muted d-block">TCH-156 •
-                                                        English</span>
-                                                </div>
-                                            </td>
-                                            <td>English</td>
-                                            <td class="text-right">
-                                                <button class="btn btn-sm btn-label-brand btn-bold">
-                                                    <i class="la la-plus"></i> Assign
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3" class="text-center text-muted py-4">Showing
-                                                static preview list</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                            <td *ngFor="let sec of sections" class="align-middle">
+                                                <div class="assignment-cell-container"
+                                                    *ngIf="r.cells && r.cells[sec.id]">
+                                                    <!-- Status Pill -->
+                                                    <div class="teacher-status-pill mb-2"
+                                                        [class.assigned]="r.cells[sec.id].assignedTeacherId"
+                                                        [class.unassigned]="!r.cells[sec.id].assignedTeacherId">
+                                                        <div class="pill-icon">
+                                                            <i class="la"
+                                                                [class.la-user-check]="r.cells[sec.id].assignedTeacherId"
+                                                                [class.la-user-plus]="!r.cells[sec.id].assignedTeacherId"></i>
+                                                        </div>
+                                                        <div class="pill-info">
+                                                            <span class="teacher-name">{{
+                                                                r.cells[sec.id].assignedTeacherName }}</span>
+                                                            <span class="assignment-date"
+                                                                *ngIf="r.cells[sec.id].assignedTeacherId && r.cells[sec.id].effectiveFrom">
+                                                                {{ r.cells[sec.id].effectiveFrom | date:'mediumDate' }}
+                                                            </span>
+                                                        </div>
+                                                        <button *ngIf="r.cells[sec.id].assignedTeacherId"
+                                                            class="btn btn-icon btn-sm pill-delete-btn ml-2"
+                                                            (click)="deleteAssignment(r, sec.id, $event)">
+                                                            <i class="la la-close"></i>
+                                                        </button>
+                                                    </div>
 
-                <div class="col-md-6">
-                    <div class="kt-portlet kt-portlet--height-fluid kt-portlet--border-bottom-danger shadow-sm">
-                        <div class="kt-portlet__head bg-light">
-                            <div class="kt-portlet__head-label">
-                                <h3 class="kt-portlet__head-title text-danger">Assigned Teachers (3)
-                                </h3>
-                            </div>
-                            <div class="kt-portlet__head-toolbar">
-                                <button class="btn btn-sm btn-outline-danger">Remove All</button>
-                            </div>
-                        </div>
-                        <div class="kt-portlet__body p-0">
-                            <div class="list-container" style="max-height: 360px; overflow-y: auto;">
-                                <table class="table table-hover mb-0">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th>Teacher</th>
-                                            <th>Role</th>
-                                            <th class="text-right">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="teacher-cell">
-                                                    <strong>Emma Johnson</strong>
-                                                    <span class="text-muted d-block">Grade 6 • Section A
-                                                        • Mathematics</span>
+                                                    <!-- Assignment Dropdown -->
+                                                    <div class="custom-searchable-dropdown"
+                                                        [class.open]="r.cells[sec.id].isDropdownOpen">
+                                                        <div class="dropdown-input-wrapper"
+                                                            (click)="r.cells[sec.id].isDropdownOpen = !r.cells[sec.id].isDropdownOpen; $event.stopPropagation()">
+                                                            <input type="text" class="form-control form-control-sm"
+                                                                placeholder="Assign teacher..."
+                                                                [(ngModel)]="r.cells[sec.id].searchTerm"
+                                                                (input)="onMatrixTeacherSearch(r.cells[sec.id]); r.cells[sec.id].isDropdownOpen = true"
+                                                                (click)="$event.stopPropagation()">
+                                                            <i class="la la-search dropdown-icon"></i>
+                                                        </div>
+                                                        <div class="dropdown-menu shadow"
+                                                            *ngIf="r.cells[sec.id].isDropdownOpen">
+                                                            <div class="dropdown-content">
+                                                                <div class="dropdown-item"
+                                                                    *ngFor="let teacher of r.cells[sec.id].filteredTeachers"
+                                                                    (click)="assignTeacherToSubject(r, teacher, sec.id)">
+                                                                    <div class="d-flex flex-column">
+                                                                        <span class="font-weight-bold">{{
+                                                                            teacher.fullName }}</span>
+                                                                        <small class="text-muted">{{
+                                                                            teacher.employeeCode }}</small>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="dropdown-item text-center text-muted"
+                                                                    *ngIf="r.cells[sec.id].filteredTeachers?.length === 0">
+                                                                    No teachers found
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </td>
-                                            <td><span class="kt-badge kt-badge--primary kt-badge--inline">PRIMARY</span>
-                                            </td>
-                                            <td class="text-right">
-                                                <button class="btn btn-sm btn-label-danger btn-icon btn-circle"
-                                                    title="Remove">
-                                                    <i class="la la-trash"></i>
-                                                </button>
-                                            </td>
                                         </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="teacher-cell">
-                                                    <strong>David Patel</strong>
-                                                    <span class="text-muted d-block">Grade 6 • Section A
-                                                        • Mathematics</span>
+                                        <tr *ngIf="matrixRecords.length === 0">
+                                            <td colspan="5" class="text-center py-10">
+                                                <div class="empty-state-v2">
+                                                    <i class="flaticon-search-1 display-4 text-muted mb-3 d-block"></i>
+                                                    <h5 class="text-muted font-weight-bold">Ready to Begin?</h5>
+                                                    <p class="text-muted small">Please select a Campus and Standard to
+                                                        generate the assignment matrix.</p>
                                                 </div>
-                                            </td>
-                                            <td><span
-                                                    class="kt-badge kt-badge--warning kt-badge--inline">ASSISTANT</span>
-                                            </td>
-                                            <td class="text-right">
-                                                <button class="btn btn-sm btn-label-danger btn-icon btn-circle"
-                                                    title="Remove">
-                                                    <i class="la la-trash"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="teacher-cell">
-                                                    <strong>Sophia Kim</strong>
-                                                    <span class="text-muted d-block">Grade 6 • Section A
-                                                        • English</span>
-                                                </div>
-                                            </td>
-                                            <td><span class="kt-badge kt-badge--info kt-badge--inline">SUBSTITUTE</span>
-                                            </td>
-                                            <td class="text-right">
-                                                <button class="btn btn-sm btn-label-danger btn-icon btn-circle"
-                                                    title="Remove">
-                                                    <i class="la la-trash"></i>
-                                                </button>
                                             </td>
                                         </tr>
                                     </tbody>

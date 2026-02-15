@@ -62,3 +62,286 @@
 .helper-text i {
     font-size: 1rem;
 }
+
+/* Modernized UI refinements */
+.kt-portlet {
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+    border: none;
+    border-radius: 8px;
+}
+
+.kt-portlet--bordered {
+    border: 1px solid #ebedf2;
+}
+
+/* Steps Indicator modern look */
+.steps-badge {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.kt-badge--xl {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+/* Form refinement */
+.kt-form label {
+    font-weight: 500;
+    color: #646c9a;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border-radius: 6px;
+    border: 1px solid #e2e5ec;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #5d78ff;
+    box-shadow: 0 0 0 3px rgba(93, 120, 255, 0.1);
+}
+
+/* Assignment Matrix Table */
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table thead th {
+    background-color: #f8f9fb;
+    color: #595d6e;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.04rem;
+    padding: 1rem;
+    border-top: none;
+    border-bottom: 2px solid #ebedf2;
+}
+
+.table tbody td {
+    padding: 1.25rem 1rem;
+    vertical-align: middle;
+    border-top: 1px solid #f4f5f8;
+    transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover td {
+    background-color: #fcfdfe;
+}
+
+/* Refined Pill Badges */
+.kt-badge--inline {
+    border-radius: 20px;
+    padding: 0.2rem 1rem;
+    font-weight: 500;
+    font-size: 0.8rem;
+    text-transform: none;
+}
+
+/* Custom Searchable Dropdown Modernization */
+.custom-searchable-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-input-wrapper {
+    position: relative;
+    cursor: pointer;
+}
+
+.dropdown-input-wrapper .form-control {
+    cursor: pointer;
+    background-color: #fff;
+    padding-right: 35px;
+}
+
+.dropdown-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a7abc3;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 0.8rem;
+}
+
+.custom-searchable-dropdown.open .dropdown-icon {
+    transform: translateY(-50%) rotate(180deg);
+    color: #5d78ff;
+}
+
+.custom-searchable-dropdown .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: block;
+    padding: 0.5rem 0;
+    background-color: #fff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-height: 250px;
+    overflow-y: auto;
+    animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-item {
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: none;
+}
+
+.dropdown-item:hover {
+    background-color: #f7f8fa;
+    color: #5d78ff;
+}
+
+.dropdown-item .font-weight-bold {
+    color: #48465b;
+    font-size: 0.9rem;
+    display: block;
+}
+
+.dropdown-item small {
+    color: #a7abc3;
+    font-size: 0.75rem;
+}
+
+/* Buttons */
+.btn-label-danger {
+    background-color: rgba(253, 57, 122, 0.1);
+    color: #fd397a;
+    transition: all 0.3s ease;
+}
+
+.btn-label-danger:hover {
+    background-color: #fd397a;
+    color: #fff;
+}
+
+/* Utilities & Spacing */
+.py-10 {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+}
+
+.empty-state-v2 {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.empty-state-v2 i {
+    opacity: 0.3;
+}
+
+.kt-font-dark {
+    color: #48465b !important;
+}
+
+.kt-badge--unified-light {
+    background-color: rgba(244, 245, 248, 0.5);
+    color: #a7abc3;
+}
+
+/* Teacher Status Pill - Premium Design */
+.teacher-status-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: 50px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 250px;
+}
+
+.teacher-status-pill.assigned {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+    color: white;
+}
+
+.teacher-status-pill.unassigned {
+    background: #f3f6f9;
+    border: 1px dashed #ced4da;
+    color: #7e8299;
+}
+
+.teacher-status-pill:hover {
+    transform: translateY(-2px);
+}
+
+.teacher-status-pill.assigned:hover {
+    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.35);
+}
+
+.pill-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.assigned .pill-icon {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.unassigned .pill-icon {
+    background: rgba(126, 130, 153, 0.1);
+}
+
+.pill-icon i {
+    font-size: 1.1rem;
+}
+
+.pill-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.teacher-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.assignment-date {
+    font-size: 0.7rem;
+    opacity: 0.85;
+    font-weight: 400;
+    line-height: 1;
+    margin-top: 1px;
+}
+
+.unassigned .teacher-name {
+    font-style: italic;
+    opacity: 0.7;
+}
