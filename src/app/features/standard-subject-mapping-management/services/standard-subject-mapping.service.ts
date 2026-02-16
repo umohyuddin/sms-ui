@@ -25,7 +25,7 @@ export class StandardSubjectMappingService {
     }
 
     getStandardsByCampus(campusId: string): Observable<any> {
-        return this.standardService.getCampusById(campusId);
+        return this.standardService.getStandardsByCampusId(campusId);
     }
 
     getAcademicYears(): Observable<any> {

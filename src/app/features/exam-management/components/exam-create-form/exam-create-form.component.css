@@ -1,0 +1,212 @@
+/* Metronic-Aligned Matrix Styles (Decent & Modern) */
+
+/* Container & Header */
+.matrix-container {
+    background: #ffffff;
+    border: 1px solid #ebedf2;
+    border-radius: 4px;
+    margin-top: 2rem;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.03);
+}
+
+.matrix-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #ebedf2;
+    background: #fcfcfd;
+}
+
+.matrix-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #48465b;
+    margin: 0;
+}
+
+/* Table Wrapper */
+.matrix-table-wrapper {
+    padding: 1rem 1.5rem;
+}
+
+.matrix-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* Header Styles */
+.matrix-table thead th {
+    background: #f7f8fa;
+    color: #595d6e;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 12px 15px;
+    border-bottom: 2px solid #ebedf2;
+    letter-spacing: 0.03rem;
+}
+
+/* Row Styles */
+.matrix-table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.matrix-table tbody tr:hover {
+    background-color: #f9faff;
+}
+
+.matrix-table tbody tr.matrix-row-selected {
+    background-color: #f4f6fa !important;
+    color: #48465b !important;
+}
+
+.matrix-table tbody tr.matrix-row-selected td {
+    border-bottom-color: #ebedf2;
+}
+
+.matrix-table tbody tr.matrix-row-selected .section-name-cell {
+    color: #5867dd !important;
+}
+
+.matrix-table td {
+    padding: 15px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f4f5f8;
+}
+
+/* Text & Labels */
+.section-name-cell {
+    font-weight: 600;
+    color: #595d6e;
+    /* Muted Metronic Dark Grey */
+    font-size: 0.95rem;
+}
+
+.scope-label {
+    font-size: 0.8rem;
+    color: #a2a5b9;
+}
+
+/* Interactive Controls */
+.matrix-table .form-control {
+    height: 38px;
+    border: 1px solid #e2e5ec;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.matrix-table .form-control:focus {
+    border-color: #5867dd;
+    background: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(88, 103, 221, 0.1);
+}
+
+/* Input Group Enhancements */
+.input-group-text {
+    background: #f7f8fa;
+    border-color: #e2e5ec;
+    color: #74788d;
+}
+
+/* Search Bar (Metronic style) */
+.search-wrapper {
+    position: relative;
+    width: 280px;
+}
+
+.search-wrapper i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c7293;
+    /* Decent Slate */
+}
+
+.search-wrapper .form-control {
+    padding-left: 40px;
+    background: #f4f5f8;
+    border-color: transparent;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.search-wrapper .form-control:focus {
+    background: #ffffff;
+    border-color: #5867dd;
+}
+
+/* Status Select Customization */
+.status-select {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* Micro-interactions */
+.matrix-table .kt-checkbox {
+    display: inline-block;
+    padding-left: 20px;
+    /* Slight adjustment for alignment */
+    margin-bottom: 0;
+}
+
+.matrix-table .kt-checkbox>span {
+    border-radius: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Specific override for Metronic brand checkbox */
+.matrix-table .kt-checkbox.kt-checkbox--brand>span {
+    border: 1px solid #e2e5ec;
+}
+
+.matrix-table .kt-checkbox.kt-checkbox--single.kt-checkbox--brand input:checked~span {
+    background-color: #5867dd !important;
+    /* Professional Indigo */
+    border-color: #5867dd !important;
+}
+
+.matrix-table .kt-checkbox.kt-checkbox--single.kt-checkbox--brand>span:after {
+    border: solid #ffffff;
+}
+
+.kt-checkbox>span {
+    border-radius: 3px;
+}
+
+/* Empty State */
+.empty-state-container {
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.empty-state-icon {
+    font-size: 3.5rem;
+    color: #ebedf2;
+    margin-bottom: 1.5rem;
+}
+
+/* Action Buttons */
+.btn-brand {
+    background-color: #5867dd !important;
+    border-color: #5867dd !important;
+    color: #ffffff !important;
+}
+
+.btn-brand:hover {
+    background-color: #4a59bb !important;
+    border-color: #4a59bb !important;
+}
+
+.btn-elevate {
+    box-shadow: 0px 4px 16px 0px rgba(88, 103, 221, 0.1);
+}
+
+.btn-wide {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}

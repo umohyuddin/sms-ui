@@ -136,6 +136,15 @@
 
             </li>
 
+            <li routerLink="/exams" class="kt-menu__item" aria-haspopup="true">
+              <a class="kt-menu__link">
+                <span class="kt-menu__link-icon">
+                  <i class="flaticon-event-calendar-symbol"></i>
+                </span>
+                <span class="kt-menu__link-text">Exam Management</span>
+              </a>
+            </li>
+
             <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true"
               (click)="handleSubmenuAccordion($event)">
               <a href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-icon"><svg
@@ -237,7 +246,7 @@
                       <span class="kt-menu__link-text">Timetables</span>
                     </a>
                   </li>
-                  <li routerLink="/academic/exams" class="kt-menu__item" aria-haspopup="true">
+                  <li routerLink="/exams" class="kt-menu__item" aria-haspopup="true">
                     <a class="kt-menu__link">
                       <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
                       <span class="kt-menu__link-text">Exams</span>
@@ -333,6 +342,14 @@
                         <span></span>
                       </i>
                       <span class="kt-menu__link-text">Campus Management</span>
+                    </a>
+                  </li>
+                  <li class="kt-menu__item " aria-haspopup="true">
+                    <a routerLink="/exams" class="kt-menu__link ">
+                      <i class="kt-menu__link-bullet kt-menu__link-bullet--dot">
+                        <span></span>
+                      </i>
+                      <span class="kt-menu__link-text">Manage Exams</span>
                     </a>
                   </li>
                   <li class="kt-menu__item " aria-haspopup="true">

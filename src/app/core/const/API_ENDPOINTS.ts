@@ -477,6 +477,15 @@ export const API_ENDPOINTS = {
                 SEARCH: (keyword: string) => `/api/academic/evaluation/exam-terms/search/${keyword}`,
                 DELETE: (id: string | number) => `/api/academic/evaluation/exam-terms/${id}`
             },
+            EXAMS: {
+                CREATE: '/api/academic/evaluation/exams',
+                UPDATE: (id: string | number) => `/api/academic/evaluation/exams/${id}`,
+                GET_ALL: '/api/academic/evaluation/exams',
+                GET_BY_ID: (id: string | number) => `/api/academic/evaluation/exams/${id}`,
+                GET_BY_SECTION: '/api/academic/evaluation/exams/section',
+                SEARCH: (keyword: string) => `/api/academic/evaluation/exams/search/${keyword}`,
+                DELETE: (id: string | number) => `/api/academic/evaluation/exams/${id}`
+            },
             ASSESSMENT_TYPES: {
                 CREATE: '/api/academic/evaluation/assessment-types',
                 UPDATE: (id: string | number) => `/api/academic/evaluation/assessment-types/${id}`,
@@ -484,13 +493,6 @@ export const API_ENDPOINTS = {
                 GET_BY_ID: (id: string | number) => `/api/academic/evaluation/assessment-types/${id}`,
                 SEARCH: (keyword: string) => `/api/academic/evaluation/assessment-types/search/${keyword}`,
                 DELETE: (id: string | number) => `/api/academic/evaluation/assessment-types/${id}`
-            },
-            EXAMS: {
-                CREATE: '/api/academic/evaluation/exams',
-                UPDATE: (id: string | number) => `/api/academic/evaluation/exams/${id}`,
-                GET_BY_ID: (id: string | number) => `/api/academic/evaluation/exams/${id}`,
-                GET_BY_SECTION: '/api/academic/evaluation/exams/section',
-                DELETE: (id: string | number) => `/api/academic/evaluation/exams/${id}`
             },
             EXAM_SUBJECTS: {
                 SCHEDULE: '/api/academic/evaluation/exam-subjects',

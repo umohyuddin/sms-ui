@@ -60,7 +60,7 @@ export class StudentCreateFormComponent {
     private studentService: StudentManagementService,
     private route: ActivatedRoute,
     private router: Router
-  , private logger: LoggerService) {}
+    , private logger: LoggerService) { }
 
   ngOnInit(): void {
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);
@@ -130,15 +130,15 @@ export class StudentCreateFormComponent {
   // ================= LOOKUPS =================
 
   private logInvalidFields(): void {
-  const invalidControls = Object.keys(this.createForm.controls)
-    .filter(key => this.createForm.get(key)?.invalid);
+    const invalidControls = Object.keys(this.createForm.controls)
+      .filter(key => this.createForm.get(key)?.invalid);
 
-  if (invalidControls.length > 0) {
-    console.log('Invalid fields:', invalidControls);
-  } else {
-    console.log('All fields are valid');
+    if (invalidControls.length > 0) {
+      console.log('Invalid fields:', invalidControls);
+    } else {
+      console.log('All fields are valid');
+    }
   }
-}
   private loadLookups(): void {
     this.studentService.getAdmissionType().subscribe(r => this.admissionTypesDD = r.body);
     this.studentService.getAddmissionMeta().subscribe(r => {
@@ -169,7 +169,7 @@ export class StudentCreateFormComponent {
       LoggerUtil.log(this.MODULE, 'CampusChange', id);
       this.createForm.patchValue({ standardId: '', sectionId: '' });
       this.sectionDD = [];
-      this.standardService.getCampusById(id).subscribe(r => this.standardDD = r.body);
+      this.standardService.getStandardsByCampusId(id).subscribe(r => this.standardDD = r.body);
     });
   }
 
@@ -201,7 +201,7 @@ export class StudentCreateFormComponent {
       .subscribe({
         next: r => {
           LoggerUtil.log(this.MODULE, 'Submit', 'Saved', r.body);
-            this.goToFeeCalculator(r.body);
+          this.goToFeeCalculator(r.body);
           //this.router.navigate(ROUTES.STUDENT.STUDENT_FEE_CALCULATOR.DETAILS);
         },
         error: e => LoggerUtil.error(this.MODULE, 'Submit', 'Save failed', e),
@@ -209,14 +209,14 @@ export class StudentCreateFormComponent {
       });
   }
 
-  goToFeeCalculator(resourceData:any) {
+  goToFeeCalculator(resourceData: any) {
     this.router.navigate(ROUTES.STUDENT.STUDENT_FEE_CALCULATOR.DETAILS, {
       queryParams: {
         studentId: resourceData.id,
         academicYearId: resourceData.academicYearId,
         campusId: resourceData.campusId,
         standardId: resourceData.standardId,
-        mode: 'create' 
+        mode: 'create'
       }
     })
   }
@@ -236,7 +236,7 @@ export class StudentCreateFormComponent {
 
   // ================= ERROR MESSAGES =================
 
-    getErrorMessage(controlName: keyof typeof this.validationMessages): string {
+  getErrorMessage(controlName: keyof typeof this.validationMessages): string {
     const control = this.createForm.get(controlName as string);
     if (!control || !control.errors) return '';
 
@@ -248,93 +248,93 @@ export class StudentCreateFormComponent {
     return '';
   }
 
-    goToListing() {
+  goToListing() {
     LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to Student list');
     this.router.navigate(ROUTES.STUDENT.LIST);
   }
 
-validationMessages = {
-  campusId: {
-    required: 'Campus is required.'
-  },
-  standardId: {
-    required: 'Standard is required.'
-  },
-  sectionId: {
-    required: 'Section is required.'
-  },
-  admissionTypeId: {
-    required: 'Admission Type is required.'
-  },
-  firstName: {
-    required: 'First Name is required.',
-    maxlength: 'First Name cannot exceed 50 characters.',
-    whitespace: 'First Name cannot be empty.'
-  },
-  lastName: {
-    required: 'Last Name is required.',
-    maxlength: 'Last Name cannot exceed 50 characters.',
-    whitespace: 'Last Name cannot be empty.'
-  },
-  studentCode: {
-    required: 'Student Code is required.',
-    maxlength: 'Student Code cannot exceed 20 characters.',
-    pattern: 'Student Code can contain letters and numbers only.'
-  },
-  cnic: {
-    required: 'National ID is required.',
-    pattern: 'Invalid CNIC / B-Form / Passport format.'
-  },
-  dateOfBirth: {
-    required: 'Date of Birth is required.'
-  },
-  phone: {
-    required: 'Phone number is required.',
-    pattern: 'Phone number must be valid.'
-  },
-  email: {
-    required: 'Email is required.',
-    email: 'Email must be valid.'
-  },
-  gender: {
-    required: 'Gender is required.'
-  },
-  religion: {
-    required: 'Religion is required.'
-  },
-  nationality: { required: 'Nationality is required.' }
-};
+  validationMessages = {
+    campusId: {
+      required: 'Campus is required.'
+    },
+    standardId: {
+      required: 'Standard is required.'
+    },
+    sectionId: {
+      required: 'Section is required.'
+    },
+    admissionTypeId: {
+      required: 'Admission Type is required.'
+    },
+    firstName: {
+      required: 'First Name is required.',
+      maxlength: 'First Name cannot exceed 50 characters.',
+      whitespace: 'First Name cannot be empty.'
+    },
+    lastName: {
+      required: 'Last Name is required.',
+      maxlength: 'Last Name cannot exceed 50 characters.',
+      whitespace: 'Last Name cannot be empty.'
+    },
+    studentCode: {
+      required: 'Student Code is required.',
+      maxlength: 'Student Code cannot exceed 20 characters.',
+      pattern: 'Student Code can contain letters and numbers only.'
+    },
+    cnic: {
+      required: 'National ID is required.',
+      pattern: 'Invalid CNIC / B-Form / Passport format.'
+    },
+    dateOfBirth: {
+      required: 'Date of Birth is required.'
+    },
+    phone: {
+      required: 'Phone number is required.',
+      pattern: 'Phone number must be valid.'
+    },
+    email: {
+      required: 'Email is required.',
+      email: 'Email must be valid.'
+    },
+    gender: {
+      required: 'Gender is required.'
+    },
+    religion: {
+      required: 'Religion is required.'
+    },
+    nationality: { required: 'Nationality is required.' }
+  };
 
-// ================= GETTERS =================
+  // ================= GETTERS =================
 
-get campusId() { return this.createForm.get('campusId'); }
-get standardId() { return this.createForm.get('standardId'); }
-get sectionId() { return this.createForm.get('sectionId'); }
+  get campusId() { return this.createForm.get('campusId'); }
+  get standardId() { return this.createForm.get('standardId'); }
+  get sectionId() { return this.createForm.get('sectionId'); }
 
-get admissionTypeId() { return this.createForm.get('admissionTypeId'); }
-get academicYearId() { return this.createForm.get('academicYearId'); }
-get academicYearName() { return this.createForm.get('academicYearName'); }
+  get admissionTypeId() { return this.createForm.get('admissionTypeId'); }
+  get academicYearId() { return this.createForm.get('academicYearId'); }
+  get academicYearName() { return this.createForm.get('academicYearName'); }
 
-get firstName() { return this.createForm.get('firstName'); }
-get middleName() { return this.createForm.get('middleName'); }
-get lastName() { return this.createForm.get('lastName'); }
-get fullName() { return this.createForm.get('fullName'); }
+  get firstName() { return this.createForm.get('firstName'); }
+  get middleName() { return this.createForm.get('middleName'); }
+  get lastName() { return this.createForm.get('lastName'); }
+  get fullName() { return this.createForm.get('fullName'); }
 
-get studentCode() { return this.createForm.get('studentCode'); }
+  get studentCode() { return this.createForm.get('studentCode'); }
 
-get dateOfBirth() { return this.createForm.get('dateOfBirth'); }
-get gender() { return this.createForm.get('gender'); }
+  get dateOfBirth() { return this.createForm.get('dateOfBirth'); }
+  get gender() { return this.createForm.get('gender'); }
 
-get cnic() { return this.createForm.get('cnic'); }
-get passportNumber() { return this.createForm.get('passportNumber'); }
+  get cnic() { return this.createForm.get('cnic'); }
+  get passportNumber() { return this.createForm.get('passportNumber'); }
 
-get phone() { return this.createForm.get('phone'); }
-get email() { return this.createForm.get('email'); }
+  get phone() { return this.createForm.get('phone'); }
+  get email() { return this.createForm.get('email'); }
 
-get religion() { return this.createForm.get('religion'); }
-get nationality() { return this.createForm.get('nationality'); }
-get bloodGroup() { return this.createForm.get('bloodGroup'); }
+  get religion() { return this.createForm.get('religion'); }
+  get nationality() { return this.createForm.get('nationality'); }
+  get bloodGroup() { return this.createForm.get('bloodGroup'); }
 
-get enrollmentDate() { return this.createForm.get('enrollmentDate'); }
+  get enrollmentDate() { return this.createForm.get('enrollmentDate'); }
 
 }

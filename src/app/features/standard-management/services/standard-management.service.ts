@@ -19,37 +19,37 @@ export class StandardManagementService {
 
 
   saveStandard(id: string | null, payload: any): Observable<any> {
-  const isUpdate = !!id;
+    const isUpdate = !!id;
 
-  const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
+    const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
 
-  const url = isUpdate
-    ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.UPDATE(id)}`
-    : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.CREATE}`;
+    const url = isUpdate
+      ? `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.UPDATE(id)}`
+      : `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.CREATE}`;
 
-  return this.http.request(method, url, {
-    observeResponse: true,
-    body: payload
-  });
-}
+    return this.http.request(method, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
   getAllStandards(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.GET_ALL}`, { observeResponse: true });
   }
 
   getStandardById(id: string): Observable<any> {
-  return this.http.request(
-    HTTP_METHOD.GET,
-    `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.GET_BY_ID(id)}`,
-    { observeResponse: true }
-  );
-}
- getCampusById(id: string): Observable<any> {
-  return this.http.request(
-    HTTP_METHOD.GET,
-    `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.GET_BY_CAMPUS_ID(id)}`,
-    { observeResponse: true }
-  );
-}
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.GET_BY_ID(id)}`,
+      { observeResponse: true }
+    );
+  }
+  getStandardsByCampusId(id: string): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.STANDARDS.GET_BY_CAMPUS_ID(id)}`,
+      { observeResponse: true }
+    );
+  }
 
   searchStandards(params: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET,

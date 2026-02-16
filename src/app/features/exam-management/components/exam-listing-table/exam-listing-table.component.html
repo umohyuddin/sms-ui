@@ -1,0 +1,212 @@
+<app-toaster #toaster></app-toaster>
+<app-loader *ngIf="loading" type="pulse" size="lg" color="primary" message="Loading..." [overlay]="true"
+    [fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
+</app-loader>
+
+<app-delete-popup [show]="isDeletePopupOpen" title="Delete Exam"
+    message="Are you sure you want to delete this exam? This action cannot be undone." (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()">
+</app-delete-popup>
+
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-dark flaticon-squares"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                Exam Listing
+            </h3>
+        </div>
+    </div>
+
+    <div class="kt-portlet__body">
+        <!-- Filters Section -->
+        <div class="kt-form kt-form--label-right kt-margin-t-20 kt-margin-b-10">
+            <div class="row align-items-center">
+                <div class="col-xl-12 order-2 order-xl-1">
+                    <div class="row">
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__group kt-form__group--inline">
+                                <div class="kt-form__label">
+                                    <label>Year:</label>
+                                </div>
+                                <div class="kt-form__control">
+                                    <select [formControl]="academicYearControl" class="form-control bootstrap-select">
+                                        <option value="">All Years</option>
+                                        <option *ngFor="let year of academicYears" [value]="year.id">{{ year.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__group kt-form__group--inline">
+                                <div class="kt-form__label">
+                                    <label>Campus:</label>
+                                </div>
+                                <div class="kt-form__control">
+                                    <select [formControl]="campusControl" class="form-control bootstrap-select">
+                                        <option value="">All Campuses</option>
+                                        <option *ngFor="let campus of campuses" [value]="campus.id">{{ campus.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__group kt-form__group--inline">
+                                <div class="kt-form__label">
+                                    <label>Standard:</label>
+                                </div>
+                                <div class="kt-form__control">
+                                    <select [formControl]="standardControl" class="form-control bootstrap-select">
+                                        <option value="">All Standards</option>
+                                        <option *ngFor="let std of standards" [value]="std.id">{{ std.name }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__group kt-form__group--inline">
+                                <div class="kt-form__label">
+                                    <label>Section:</label>
+                                </div>
+                                <div class="kt-form__control">
+                                    <select [formControl]="sectionControl" class="form-control bootstrap-select">
+                                        <option value="">All Sections</option>
+                                        <option *ngFor="let sec of sections" [value]="sec.id">{{ sec.name }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__group kt-form__group--inline">
+                                <div class="kt-form__label">
+                                    <label>Term:</label>
+                                </div>
+                                <div class="kt-form__control">
+                                    <select [formControl]="examTermControl" class="form-control bootstrap-select">
+                                        <option value="">All Terms</option>
+                                        <option *ngFor="let term of examTerms" [value]="term.id">{{ term.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-input-icon kt-input-icon--left">
+                                <input [formControl]="searchControl" type="text" class="form-control"
+                                    placeholder="Search..." id="generalSearch">
+                                <span class="kt-input-icon__icon kt-input-icon__icon--left">
+                                    <span><i class="la la-search"></i></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <div class="dataTables_length">
+                        <label>Show
+                            <select (change)="onPageSizeChange($event)"
+                                class="custom-select custom-select-sm form-control form-control-sm">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> entries</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <table *ngIf="exams.length > 0; else noDataAlert"
+                        class="table table-striped table-bordered table-hover table-checkable">
+                        <thead>
+                            <tr role="row">
+                                <th *ngFor="let col of columns">{{ col.label }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let exam of pagination.paginatedItems">
+                                <td>{{ exam.name }}</td>
+                                <td>{{ exam.academicYearName }}</td>
+                                <td>{{ exam.campusName }}</td>
+                                <td>{{ exam.standardName }}</td>
+                                <td>{{ exam.sectionName }}</td>
+                                <td>{{ exam.examTermName }}</td>
+                                <td>
+                                    <span class="kt-badge kt-badge--inline" [ngClass]="{
+                                        'kt-badge--brand': exam.status === 'DRAFT',
+                                        'kt-badge--info': exam.status === 'SCHEDULED',
+                                        'kt-badge--success': exam.status === 'PUBLISHED',
+                                        'kt-badge--warning': exam.status === 'IN_PROGRESS',
+                                        'kt-badge--danger': exam.status === 'LOCKED'
+                                    }">
+                                        {{ exam.status }}
+                                    </span>
+                                </td>
+                                <td nowrap>
+                                    <button (click)="editExam(exam.id)"
+                                        class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit">
+                                        <i class="la la-edit"></i>
+                                    </button>
+                                    <button (click)="deleteExam($event, exam.id)"
+                                        class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
+                                        <i class="la la-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ng-template #noDataAlert>
+                        <div class="alert alert-dark" role="alert" *ngIf="!loading">
+                            <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
+                            <div class="alert-text">No exams found</div>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="exams.length > 0">
+                <div class="col-sm-12 col-md-5">
+                    <div class="dataTables_info">Showing {{ pagination.startItem }} to {{ pagination.endItem }} of {{
+                        pagination.totalItems }} entries</div>
+                </div>
+                <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_full_numbers">
+                        <ul class="pagination">
+                            <li class="paginate_button page-item first" [class.disabled]="pagination.pageIndex === 0">
+                                <a class="page-link" (click)="pagination.first()"><i
+                                        class="la la-angle-double-left"></i></a>
+                            </li>
+                            <li class="paginate_button page-item previous"
+                                [class.disabled]="pagination.pageIndex === 0">
+                                <a class="page-link" (click)="pagination.prev()"><i class="la la-angle-left"></i></a>
+                            </li>
+                            <li class="paginate_button page-item" *ngFor="let page of pagination.visiblePages"
+                                [class.active]="pagination.pageIndex === page">
+                                <a class="page-link" (click)="pagination.goToPage(page)">{{ page + 1 }}</a>
+                            </li>
+                            <li class="paginate_button page-item next"
+                                [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
+                                <a class="page-link" (click)="pagination.next()"><i class="la la-angle-right"></i></a>
+                            </li>
+                            <li class="paginate_button page-item last"
+                                [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
+                                <a class="page-link" (click)="pagination.last()"><i
+                                        class="la la-angle-double-right"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

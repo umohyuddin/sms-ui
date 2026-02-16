@@ -406,6 +406,17 @@ export const routes: Routes = [
       }
     ]
   },
+  {
+    path: 'exams',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/exam-management/exam-management-module').then(m => m.ExamManagementModule)
+      }
+    ]
+  },
 
   {
     path: 'standard-subject-mapping',
@@ -415,17 +426,6 @@ export const routes: Routes = [
       {
         path: '',
         loadChildren: () => import('./features/standard-subject-mapping-management/standard-subject-mapping-management.module').then(m => m.StandardSubjectMappingManagementModule)
-      }
-    ]
-  },
-  {
-    path: 'teacher-assignment',
-    canActivate: [authGuard],
-    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
-    children: [
-      {
-        path: '',
-        loadChildren: () => import('./features/teacher-assignment-management/teacher-assignment-management-module').then(m => m.TeacherAssignmentManagementModule)
       }
     ]
   },

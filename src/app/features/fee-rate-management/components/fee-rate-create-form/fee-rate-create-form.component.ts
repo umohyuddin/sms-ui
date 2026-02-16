@@ -49,7 +49,7 @@ export class FeeRateCreateFormComponent {
     private feeCatalogManagementService: FeeCatalogManagementService,
     private feeComponentManageService: FeeCatalogComponentManagementService,
     private feeRateManagementService: FeeRateManagementService
-  , private logger: LoggerService) {}
+    , private logger: LoggerService) { }
 
   ngOnInit() {
     this.logger.log("ngOnInit called", this.constructor.name);
@@ -118,7 +118,7 @@ export class FeeRateCreateFormComponent {
 
   /** Load dependent dropdowns */
   private loadStandardByCampusId(campusId: any) {
-    this.standardManagemenetService.getCampusById(campusId).subscribe({
+    this.standardManagemenetService.getStandardsByCampusId(campusId).subscribe({
       next: res => this.standardData = res.body,
       error: err => LoggerUtil.error(this.MODULE, 'Standard', '❌ Failed to load standards', err)
     });

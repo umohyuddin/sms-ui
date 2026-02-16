@@ -38,7 +38,7 @@ export class SectionCreateFormComponent {
     private campusManagementService: CampusManagementService,
     private standardManagemenetService: StandardManagementService,
     private sectionManagementService: SectionManagementService
-  , private logger: LoggerService) {}
+    , private logger: LoggerService) { }
 
   ngOnInit() {
     this.logger.log("ngOnInit called", this.constructor.name);
@@ -86,7 +86,7 @@ export class SectionCreateFormComponent {
     if (!campusId) return;
 
     LoggerUtil.group(`📦 [${this.MODULE}] Load Standards`);
-    this.standardManagemenetService.getCampusById(campusId).subscribe({
+    this.standardManagemenetService.getStandardsByCampusId(campusId).subscribe({
       next: (response) => {
         LoggerUtil.log(this.MODULE, 'Standards', '✅ Standards loaded', response.body);
         this.standardData = response.body;

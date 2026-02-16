@@ -1,0 +1,210 @@
+<app-toaster #toaster></app-toaster>
+<app-loader *ngIf="loading" type="pulse" size="lg" color="primary" message="Processing..." [overlay]="true"
+    [fullScreen]="true" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;">
+</app-loader>
+
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+                {{ isEditMode ? 'Edit Exam' : 'Create New Exams (Matrix)' }}
+            </h3>
+        </div>
+    </div>
+
+    <!--begin::Form-->
+    <form class="kt-form kt-form--label-right" [formGroup]="examForm" (ngSubmit)="onSubmit()">
+        <div class="kt-portlet__body">
+            <!-- How it works helper matrix -->
+            <div class="kt-portlet kt-portlet--bordered mb-4" style="background: #fcfcfd;">
+                <div class="kt-portlet__body py-3 px-4">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                        <div class="d-flex align-items-center py-2 mr-3">
+                            <span class="kt-badge kt-badge--brand kt-badge--xl kt-badge--rounded mr-3">1</span>
+                            <div>
+                                <span class="kt-font-bold text-dark">Define Scope</span>
+                                <span class="text-muted d-block small">Select Year, Campus & Standard</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center py-2 mr-3 border-left pl-4">
+                            <span class="kt-badge kt-badge--success kt-badge--xl kt-badge--rounded mr-3">2</span>
+                            <div>
+                                <span class="kt-font-bold text-dark">Customize Matrix</span>
+                                <span class="text-muted d-block small">Review and override names & dates</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center py-2 border-left pl-4">
+                            <span class="kt-badge kt-badge--warning kt-badge--xl kt-badge--rounded mr-3">3</span>
+                            <div>
+                                <span class="kt-font-bold text-dark">Create Exams</span>
+                                <span class="text-muted d-block small">Submit to bulk create for sections</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cascading Filters Section -->
+            <div class="kt-section">
+                <div class="kt-section__body">
+                    <h3 class="kt-section__title kt-section__title-lg">Select Scope:</h3>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Academic Year:</label>
+                                <select class="form-control" formControlName="academicYearId">
+                                    <option value="">Select Year</option>
+                                    <option *ngFor="let year of academicYears" [value]="year.id">{{ year.name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Exam Term:</label>
+                                <select class="form-control" formControlName="examTermId">
+                                    <option value="">Select Term</option>
+                                    <option *ngFor="let term of examTerms" [value]="term.id">{{ term.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Campus:</label>
+                                <select class="form-control" formControlName="campusId">
+                                    <option value="">Select Campus</option>
+                                    <option *ngFor="let campus of campuses" [value]="campus.id">{{ campus.campusName }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Standard:</label>
+                                <select class="form-control" formControlName="standardId">
+                                    <option value="">Select Standard</option>
+                                    <option *ngFor="let std of standards" [value]="std.id">{{ std.standardName }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decent Metronic Matrix Section -->
+            <div class="matrix-container" *ngIf="sections.length > 0">
+                <div class="matrix-header">
+                    <div>
+                        <h3 class="matrix-title">Section Exam Matrix</h3>
+                        <p class="text-muted small m-0">Independently manage exam details for each selected section</p>
+                    </div>
+                    <div class="search-wrapper">
+                        <i class="la la-search"></i>
+                        <input type="text" class="form-control shadow-none" [formControl]="sectionSearchControl"
+                            placeholder="Search by section name...">
+                    </div>
+                </div>
+
+                <div class="matrix-table-wrapper">
+                    <div class="table-responsive">
+                        <table class="matrix-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px; text-align: center;">
+                                        <label
+                                            class="kt-checkbox kt-checkbox--single kt-checkbox--all kt-checkbox--brand m-0">
+                                            <input type="checkbox" (change)="toggleSelectAll($event)">
+                                            <span></span>
+                                        </label>
+                                    </th>
+                                    <th>Section</th>
+                                    <th style="min-width: 300px;">Exam Name (Customizable)</th>
+                                    <th style="width: 300px;">Internal Schedule</th>
+                                    <th style="width: 180px;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody formArrayName="selectedSections">
+                                <ng-container *ngFor="let section of filteredSections; let i = index">
+                                    <tr [formGroupName]="getSectionIndex(section.id)"
+                                        [class.matrix-row-selected]="selectedSections.at(getSectionIndex(section.id)).get('selected')?.value">
+                                        <td class="text-center">
+                                            <label class="kt-checkbox kt-checkbox--single kt-checkbox--brand m-0">
+                                                <input type="checkbox" formControlName="selected">
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <div class="section-name-cell">{{ section.sectionName }}</div>
+                                            <span class="scope-label">Sectional scope</span>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-sm">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="la la-pencil"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control" formControlName="examName"
+                                                    placeholder="Enter section-specific name">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <input type="date" class="form-control form-control-sm"
+                                                    formControlName="startDate">
+                                                <span class="px-2 text-muted">&mdash;</span>
+                                                <input type="date" class="form-control form-control-sm"
+                                                    formControlName="endDate">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <select class="form-control form-control-sm status-select"
+                                                formControlName="status">
+                                                <option *ngFor="let status of examStatuses" [value]="status">
+                                                    {{ status }}
+                                                </option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+
+                                <!-- Empty State -->
+                                <tr *ngIf="filteredSections.length === 0">
+                                    <td colspan="5">
+                                        <div class="empty-state-container">
+                                            <i class="la la-search empty-state-icon"></i>
+                                            <h5 class="text-dark font-weight-bold">No results found</h5>
+                                            <p class="text-muted mb-4">We couldn't find any sections matching "{{
+                                                sectionSearchControl.value }}".</p>
+                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                (click)="sectionSearchControl.setValue('')">
+                                                <i class="la la-refresh mr-1"></i> Reset Search
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="kt-portlet__foot">
+            <div class="kt-form__actions" style="padding: 2rem;">
+                <div class="row">
+                    <div class="col-lg-12 text-right">
+                        <button type="submit" class="btn btn-brand btn-elevate btn-bold btn-wide" [disabled]="loading">
+                            <i class="la la-check mr-2"></i>
+                            {{ isEditMode ? 'Update Exam' : 'Create Selected Exams' }}
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-wide ml-3"
+                            (click)="onCancel()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--end::Form-->
+</div>

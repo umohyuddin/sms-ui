@@ -106,7 +106,7 @@ export class StudentCollectFee {
     this.createForm.get("campusId")?.setValue('');
     this.createForm.get("studentId")?.setValue('');
     this.standardDD = []
-    this.studentsResponse=[];
+    this.studentsResponse = [];
 
   }
 
@@ -139,7 +139,7 @@ export class StudentCollectFee {
   }
 
   loadStandardByCampusId(campusId: any) {
-    this.standardManagemenetService.getCampusById(campusId).subscribe({
+    this.standardManagemenetService.getStandardsByCampusId(campusId).subscribe({
       next: response => this.standardDD = response.body,
       error: err => this.logger.error('Error loading standards', err)
     });
@@ -177,7 +177,7 @@ export class StudentCollectFee {
     this.studentManagementSerivce.saveFeePaymente(params).subscribe({
       next: response => {
         console.log("fee payment response", response);
-        
+
         if (this.selectedStudent) {
           this.getFeeDetailstDetails(this.selectedStudent);
         }
@@ -244,7 +244,7 @@ export class StudentCollectFee {
     this.showFeeSubmissionForm = !this.showFeeSubmissionForm;
 
     this.feeSubmitForm.get('amountPaid')?.setValue('');
-        
+
     // Optional smooth scroll when opening
     if (this.showFeeSubmissionForm) {
       setTimeout(() => {

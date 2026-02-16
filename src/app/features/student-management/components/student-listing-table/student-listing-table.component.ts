@@ -106,7 +106,7 @@ export class StudentListingTableComponent {
   }
   loadStandardByCampusId(campusId: any) {
     this.studentSearchForm.get('standardId')?.setValue('')
-    this.standardManagementService.getCampusById(campusId).subscribe({
+    this.standardManagementService.getStandardsByCampusId(campusId).subscribe({
       next: (response) => {
         this.logger.success('Success Status', response.status);
         this.logger.info('Response Body', response.body);

@@ -116,7 +116,7 @@ export class TeacherAssignmentListing implements OnInit, OnDestroy {
 
         this.loading = true;
         this.loaderMessage = 'Loading standards...';
-        this.standardService.getCampusById(this.selectedCampusId).pipe(takeUntil(this.destroy$)).subscribe({
+        this.standardService.getStandardsByCampusId(this.selectedCampusId).pipe(takeUntil(this.destroy$)).subscribe({
             next: (resp: any) => {
                 this.standards = resp.body || [];
                 this.sections = [];
