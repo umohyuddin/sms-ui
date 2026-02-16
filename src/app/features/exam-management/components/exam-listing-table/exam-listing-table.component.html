@@ -22,86 +22,61 @@
 
     <div class="kt-portlet__body">
         <!-- Filters Section -->
-        <div class="kt-form kt-form--label-right kt-margin-t-20 kt-margin-b-10">
+        <div class="kt-form kt-form--label-right mb-4">
             <div class="row align-items-center">
-                <div class="col-xl-12 order-2 order-xl-1">
+                <div class="col-xl-12">
                     <div class="row">
-                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
-                            <div class="kt-form__group kt-form__group--inline">
-                                <div class="kt-form__label">
-                                    <label>Year:</label>
-                                </div>
-                                <div class="kt-form__control">
-                                    <select [formControl]="academicYearControl" class="form-control bootstrap-select">
-                                        <option value="">All Years</option>
-                                        <option *ngFor="let year of academicYears" [value]="year.id">{{ year.name }}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="small font-weight-bold text-muted mb-1 d-block">Academic Year</label>
+                            <select [formControl]="academicYearControl" class="form-control kt-selectpicker">
+                                <option value="">All Years</option>
+                                <option *ngFor="let year of academicYears" [value]="year.id">{{ year.name }}</option>
+                            </select>
                         </div>
-                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
-                            <div class="kt-form__group kt-form__group--inline">
-                                <div class="kt-form__label">
-                                    <label>Campus:</label>
-                                </div>
-                                <div class="kt-form__control">
-                                    <select [formControl]="campusControl" class="form-control bootstrap-select">
-                                        <option value="">All Campuses</option>
-                                        <option *ngFor="let campus of campuses" [value]="campus.id">{{ campus.name }}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="small font-weight-bold text-muted mb-1 d-block">Campus</label>
+                            <select [formControl]="campusControl" class="form-control kt-selectpicker">
+                                <option value="">All Campuses</option>
+                                <option *ngFor="let campus of campuses" [value]="campus.id">{{ campus.campusName }}
+                                </option>
+                            </select>
                         </div>
-                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
-                            <div class="kt-form__group kt-form__group--inline">
-                                <div class="kt-form__label">
-                                    <label>Standard:</label>
-                                </div>
-                                <div class="kt-form__control">
-                                    <select [formControl]="standardControl" class="form-control bootstrap-select">
-                                        <option value="">All Standards</option>
-                                        <option *ngFor="let std of standards" [value]="std.id">{{ std.name }}</option>
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="small font-weight-bold text-muted mb-1 d-block">Standard</label>
+                            <select [formControl]="standardControl" class="form-control kt-selectpicker">
+                                <option value="">All Standards</option>
+                                <option *ngFor="let std of standards" [value]="std.id">{{ std.standardName }}</option>
+                            </select>
                         </div>
-                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
-                            <div class="kt-form__group kt-form__group--inline">
-                                <div class="kt-form__label">
-                                    <label>Section:</label>
-                                </div>
-                                <div class="kt-form__control">
-                                    <select [formControl]="sectionControl" class="form-control bootstrap-select">
-                                        <option value="">All Sections</option>
-                                        <option *ngFor="let sec of sections" [value]="sec.id">{{ sec.name }}</option>
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="small font-weight-bold text-muted mb-1 d-block">Section</label>
+                            <select [formControl]="sectionControl" class="form-control kt-selectpicker">
+                                <option value="">All Sections</option>
+                                <option *ngFor="let sec of sections" [value]="sec.id">{{ sec.sectionName }}</option>
+                            </select>
                         </div>
-                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
-                            <div class="kt-form__group kt-form__group--inline">
-                                <div class="kt-form__label">
-                                    <label>Term:</label>
-                                </div>
-                                <div class="kt-form__control">
-                                    <select [formControl]="examTermControl" class="form-control bootstrap-select">
-                                        <option value="">All Terms</option>
-                                        <option *ngFor="let term of examTerms" [value]="term.id">{{ term.name }}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="small font-weight-bold text-muted mb-1 d-block">Exam Term</label>
+                            <select [formControl]="examTermControl" class="form-control kt-selectpicker">
+                                <option value="">All Terms</option>
+                                <option *ngFor="let term of examTerms" [value]="term.id">{{ term.name }}</option>
+                            </select>
                         </div>
-                        <div class="col-md-2 kt-margin-b-20-tablet-and-mobile">
+                        <div class="col-md-3 mb-3">
+                            <label class="small font-weight-bold text-muted mb-1 d-block">Quick Search</label>
                             <div class="kt-input-icon kt-input-icon--left">
                                 <input [formControl]="searchControl" type="text" class="form-control"
-                                    placeholder="Search..." id="generalSearch">
+                                    placeholder="Keywords..." id="generalSearch">
                                 <span class="kt-input-icon__icon kt-input-icon__icon--left">
                                     <span><i class="la la-search"></i></span>
                                 </span>
                             </div>
+                        </div>
+                        <div class="col-md-3 mb-3 d-flex align-items-end">
+                            <button type="button" class="btn btn-secondary w-100" (click)="clearFilters()"
+                                title="Clear All Filters">
+                                <i class="la la-close"></i> Clear filters
+                            </button>
                         </div>
                     </div>
                 </div>

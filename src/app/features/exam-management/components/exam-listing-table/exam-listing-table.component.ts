@@ -16,6 +16,9 @@ import { ToasterComponent } from '../../../../shared/components/toaster/toaster.
 import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { DeletePopupComponent } from '../../../../shared/components/delete-popup/delete-popup.component';
+import { CampusResponse } from '../../../campus-management/models/campusResponse';
+import { StandardResponse } from '../../../standard-management/models/standardResponse';
+import { SectionResponse } from '../../../section-management/models/SectionResponse';
 
 @Component({
     selector: 'app-exam-listing-table',
@@ -41,9 +44,9 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
 
     // Data for dropdowns
     academicYears: any[] = [];
-    campuses: any[] = [];
-    standards: any[] = [];
-    sections: any[] = [];
+    campuses: CampusResponse[] = [];
+    standards: StandardResponse[] = [];
+    sections: SectionResponse[] = [];
     examTerms: any[] = [];
 
     isDeletePopupOpen = false;
@@ -91,9 +94,13 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
             this.campuses = resp.body || [];
         });
 
-        // Load Academic Years
+        // Load Academic Years and pre-select current
         this.academicYearService.getAcademicYears().subscribe((resp: any) => {
             this.academicYears = resp.body || [];
+            const currentYear = this.academicYears.find(y => y.isCurrent);
+            if (currentYear) {
+                this.academicYearControl.setValue(currentYear.id);
+            }
         });
     }
 
@@ -155,10 +162,8 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
 
     getExams() {
         this.loading = true;
-        // In a real scenario, we'd pass filters to the backend
-        // For now, let's just get all and log filters
         const filters = {
-            search: this.searchControl.value,
+            keyword: this.searchControl.value,
             academicYearId: this.academicYearControl.value,
             campusId: this.campusControl.value,
             standardId: this.standardControl.value,
@@ -167,7 +172,7 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
         };
         this.logger.info('Fetching exams with filters:', filters);
 
-        this.examService.getExams(filters).subscribe({
+        this.examService.searchExams(filters).subscribe({
             next: (resp) => {
                 this.exams = resp.body || [];
                 this.pagination = new Pagination(this.exams, this.pagination.pageSize || 10);
@@ -220,5 +225,31 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
     onCancelDelete() {
         this.isDeletePopupOpen = false;
         this.pendingDeleteId = undefined;
+    }
+
+    clearFilters() {
+        this.searchControl.setValue('', { emitEvent: false });
+        this.campusControl.setValue('', { emitEvent: false });
+        this.standardControl.setValue('', { emitEvent: false });
+        this.sectionControl.setValue('', { emitEvent: false });
+        this.examTermControl.setValue('', { emitEvent: false });
+
+        // Reset Academic Year to current if available
+        const currentYear = this.academicYears.find(y => y.isCurrent);
+        this.academicYearControl.setValue(currentYear ? currentYear.id : '', { emitEvent: false });
+
+        // Reset dependent data arrays
+        this.standards = [];
+        this.sections = [];
+        this.examTerms = [];
+
+        // If current year was selected, reload its terms
+        if (currentYear) {
+            this.examTermService.getTermsByYear(currentYear.id).subscribe((resp: any) => {
+                this.examTerms = resp.body || [];
+            });
+        }
+
+        this.getExams();
     }
 }

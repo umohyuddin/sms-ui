@@ -31,6 +31,22 @@ export class ExamManagementService {
         );
     }
 
+    /** Get exams by section, standard and academic year (Optimized) */
+    getExamsBySection(standardId: string | number, sectionId: string | number, academicYearId: string | number): Observable<any> {
+        return this.http.request(
+            HTTP_METHOD.GET,
+            `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.EVALUATION.EXAMS.GET_BY_SECTION}`,
+            {
+                observeResponse: true,
+                params: {
+                    standardId: standardId.toString(),
+                    sectionId: sectionId.toString(),
+                    academicYearId: academicYearId.toString()
+                }
+            }
+        );
+    }
+
     /** Get exam by ID */
     getExamById(id: string | number): Observable<any> {
         return this.http.request(
@@ -41,11 +57,14 @@ export class ExamManagementService {
     }
 
     /** Search exams */
-    searchExams(keyword: string): Observable<any> {
+    searchExams(filters: any = {}): Observable<any> {
         return this.http.request(
             HTTP_METHOD.GET,
-            `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.EVALUATION.EXAMS.SEARCH(keyword)}`,
-            { observeResponse: true }
+            `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.EVALUATION.EXAMS.SEARCH}`,
+            {
+                observeResponse: true,
+                params: filters
+            }
         );
     }
 

@@ -16,28 +16,28 @@
     <form class="kt-form kt-form--label-right" [formGroup]="examForm" (ngSubmit)="onSubmit()">
         <div class="kt-portlet__body">
             <!-- How it works helper matrix -->
-            <div class="kt-portlet kt-portlet--bordered mb-4" style="background: #fcfcfd;">
-                <div class="kt-portlet__body py-3 px-4">
+            <div class="kt-portlet kt-portlet--bordered mb-3">
+                <div class="kt-portlet__body py-2 px-4">
                     <div class="d-flex align-items-center justify-content-between flex-wrap">
                         <div class="d-flex align-items-center py-2 mr-3">
                             <span class="kt-badge kt-badge--brand kt-badge--xl kt-badge--rounded mr-3">1</span>
                             <div>
-                                <span class="kt-font-bold text-dark">Define Scope</span>
-                                <span class="text-muted d-block small">Select Year, Campus & Standard</span>
+                                <span class="kt-font-bold">Select Context</span>
+                                <span class="text-muted d-block small">Pick Year, Campus & Standard</span>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center py-2 mr-3 border-left pl-4">
+                        <div class="d-flex align-items-center py-2 mr-3 border-left pl-3">
                             <span class="kt-badge kt-badge--success kt-badge--xl kt-badge--rounded mr-3">2</span>
                             <div>
-                                <span class="kt-font-bold text-dark">Customize Matrix</span>
-                                <span class="text-muted d-block small">Review and override names & dates</span>
+                                <span class="kt-font-bold">Customize Matrix</span>
+                                <span class="text-muted d-block small">Adjust names and schedules</span>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center py-2 border-left pl-4">
+                        <div class="d-flex align-items-center py-2 border-left pl-3">
                             <span class="kt-badge kt-badge--warning kt-badge--xl kt-badge--rounded mr-3">3</span>
                             <div>
-                                <span class="kt-font-bold text-dark">Create Exams</span>
-                                <span class="text-muted d-block small">Submit to bulk create for sections</span>
+                                <span class="kt-font-bold">Bulk Create</span>
+                                <span class="text-muted d-block small">Submit to create all at once</span>
                             </div>
                         </div>
                     </div>
@@ -192,10 +192,10 @@
         </div>
 
         <div class="kt-portlet__foot">
-            <div class="kt-form__actions" style="padding: 2rem;">
+            <div class="kt-form__actions">
                 <div class="row">
                     <div class="col-lg-12 text-right">
-                        <button type="submit" class="btn btn-brand btn-elevate btn-bold btn-wide" [disabled]="loading">
+                        <button type="submit" class="btn btn-dark btn-elevate btn-bold btn-wide" [disabled]="loading">
                             <i class="la la-check mr-2"></i>
                             {{ isEditMode ? 'Update Exam' : 'Create Selected Exams' }}
                         </button>

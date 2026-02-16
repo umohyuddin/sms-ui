@@ -59,9 +59,9 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
         this.examForm = this.fb.group({
             academicYearId: ['', Validators.required],
             examTermId: ['', Validators.required],
-            commonName: ['', Validators.required],
-            startDate: ['', Validators.required],
-            endDate: ['', Validators.required],
+            commonName: [''],
+            startDate: [''],
+            endDate: [''],
             status: [ExamStatus.DRAFT, Validators.required],
             campusId: ['', Validators.required],
             standardId: ['', Validators.required],
@@ -160,7 +160,7 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
         this.examForm.get('commonName')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(name => {
             this.selectedSections.controls.forEach(control => {
                 const sectionName = control.get('sectionName')?.value;
-                control.get('examName')?.setValue(`${name} - ${sectionName}`, { emitEvent: false });
+                control.get('examName')?.setValue(`${name ? name + ' - ' : ''}${sectionName}`, { emitEvent: false });
             });
         });
 
@@ -219,15 +219,31 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
         const status = this.examForm.get('status')?.value;
 
         this.sections.forEach(section => {
-            this.selectedSections.push(this.fb.group({
+            const group = this.fb.group({
                 sectionId: [section.id],
                 sectionName: [section.sectionName],
                 selected: [false],
-                examName: [`${commonName} - ${section.sectionName}`],
+                examName: [`${commonName ? commonName + ' - ' : ''}${section.sectionName}`],
                 startDate: [startDate],
                 endDate: [endDate],
                 status: [status]
-            }));
+            });
+
+            // Dynamic validators based on selection
+            group.get('selected')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(selected => {
+                const fields = ['examName', 'startDate', 'endDate', 'status'];
+                fields.forEach(field => {
+                    const control = group.get(field);
+                    if (selected) {
+                        control?.setValidators(Validators.required);
+                    } else {
+                        control?.clearValidators();
+                    }
+                    control?.updateValueAndValidity({ emitEvent: false });
+                });
+            });
+
+            this.selectedSections.push(group);
         });
     }
 
@@ -259,6 +275,7 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
     }
 
     onSubmit() {
+        console.log(this.examForm.value);
         if (this.examForm.invalid) {
             this.examForm.markAllAsTouched();
             return;
