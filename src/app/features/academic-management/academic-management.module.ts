@@ -16,6 +16,8 @@ import { ExamTermListing } from '../exam-term-management/pages/exam-term-listing
 import { ExamTermCreate } from '../exam-term-management/pages/exam-term-create/exam-term-create';
 import { AssessmentTypeListing } from '../assessment-type-management/pages/assessment-type-listing/assessment-type-listing';
 import { AssessmentTypeCreate } from '../assessment-type-management/pages/assessment-type-create/assessment-type-create';
+import { GradeScaleListing } from '../grade-scale-management/pages/grade-scale-listing/grade-scale-listing';
+import { GradeScaleCreate } from '../grade-scale-management/pages/grade-scale-create/grade-scale-create';
 
 const routes: Routes = [
     { path: '', redirectTo: 'subjects', pathMatch: 'full' },
@@ -35,7 +37,11 @@ const routes: Routes = [
     { path: 'exams/assessment-types/edit/:id', component: AssessmentTypeCreate },
     { path: 'marks-entry', component: MarksEntryPage },
     { path: 'results', component: ResultProcessingPage },
-    { path: 'grade-scales', component: GradeScaleListingPage }
+    { path: 'results/grade-scales', component: GradeScaleListing },
+    { path: 'results/grade-scales/create', component: GradeScaleCreate },
+    { path: 'results/grade-scales/edit/:id', component: GradeScaleCreate },
+    { path: 'grade-scales', component: GradeScaleListing }, // Keep existing for compatibility or redirects if needed
+    { path: 'grade-scales/edit/:id', component: GradeScaleCreate }
 ];
 
 @NgModule({

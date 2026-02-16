@@ -533,6 +533,8 @@ export const API_ENDPOINTS = {
                 CREATE: '/api/academic/results/grade-scales',
                 UPDATE: (id: string | number) => `/api/academic/results/grade-scales/${id}`,
                 GET_ALL: '/api/academic/results/grade-scales',
+                GET_BY_ID: (id: string | number) => `/api/academic/results/grade-scales/${id}`,
+                SEARCH: (keyword: string) => `/api/academic/results/grade-scales/search/${keyword}`,
                 DELETE: (id: string | number) => `/api/academic/results/grade-scales/${id}`
             }
         }
