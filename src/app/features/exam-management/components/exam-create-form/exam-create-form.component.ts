@@ -294,7 +294,7 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
         if (this.isEditMode) {
             // Update individual exam
             const payload = {
-                name: formValue.commonName,
+                name: formValue.commonName, //common
                 academicYearId: formValue.academicYearId,
                 examTermId: formValue.examTermId,
                 campusId: formValue.campusId,
