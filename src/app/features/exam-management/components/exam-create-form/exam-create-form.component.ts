@@ -31,7 +31,9 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
     sectionSearchControl = new FormControl('');
     loading = false;
     isEditMode = false;
+    isBulkEditMode = false;
     examId?: string | number;
+    existingExams: any[] = [];
 
     // Data for dropdowns
     academicYears: any[] = [];
@@ -59,7 +61,6 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
         this.examForm = this.fb.group({
             academicYearId: ['', Validators.required],
             examTermId: ['', Validators.required],
-            commonName: [''],
             startDate: [''],
             endDate: [''],
             status: [ExamStatus.DRAFT, Validators.required],
@@ -81,6 +82,13 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
                 this.loadExamData(this.examId as any);
             }
         });
+
+        this.route.queryParams.subscribe(params => {
+            if (params['bulkEdit'] === 'true') {
+                this.isBulkEditMode = true;
+                this.handleBulkEditParams(params);
+            }
+        });
     }
 
     ngOnDestroy(): void {
@@ -94,6 +102,28 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
 
     getSectionIndex(sectionId: any): number {
         return (this.selectedSections.controls as FormGroup[]).findIndex(c => c.get('sectionId')?.value === sectionId);
+    }
+
+    private formatDate(date: any): string {
+        if (!date) return '';
+        if (typeof date === 'string') {
+            // If it's already in YYYY-MM-DD format (optionally followed by time), just take the date part
+            const match = date.match(/^(\d{4}-\d{2}-\d{2})/);
+            if (match) return match[1];
+        }
+
+        try {
+            const d = new Date(date);
+            if (isNaN(d.getTime())) return '';
+
+            // For Date objects, use UTC to avoid local timezone shifts
+            const year = d.getUTCFullYear();
+            const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+            const day = String(d.getUTCDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        } catch (e) {
+            return '';
+        }
     }
 
     private loadInitialData() {
@@ -146,7 +176,11 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
                 this.sectionService.getSectionByStandardId(standardId).subscribe((resp: any) => {
                     this.sections = resp.body || [];
                     this.filteredSections = [...this.sections];
-                    this.initializeSections();
+                    if ((this.isBulkEditMode || this.isEditMode) && this.existingExams.length > 0) {
+                        this.initializeSectionsWithData();
+                    } else {
+                        this.initializeSections();
+                    }
                 });
             }
         });
@@ -156,34 +190,8 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
     }
 
     private subscribeToCommonSync() {
-        // Sync Common Name
-        this.examForm.get('commonName')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(name => {
-            this.selectedSections.controls.forEach(control => {
-                const sectionName = control.get('sectionName')?.value;
-                control.get('examName')?.setValue(`${name ? name + ' - ' : ''}${sectionName}`, { emitEvent: false });
-            });
-        });
-
-        // Sync Start Date
-        this.examForm.get('startDate')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(date => {
-            this.selectedSections.controls.forEach(control => {
-                control.get('startDate')?.setValue(date, { emitEvent: false });
-            });
-        });
-
-        // Sync End Date
-        this.examForm.get('endDate')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(date => {
-            this.selectedSections.controls.forEach(control => {
-                control.get('endDate')?.setValue(date, { emitEvent: false });
-            });
-        });
-
-        // Sync Status
-        this.examForm.get('status')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(status => {
-            this.selectedSections.controls.forEach(control => {
-                control.get('status')?.setValue(status, { emitEvent: false });
-            });
-        });
+        // No-op: Common fields removed from UI. 
+        // Sync logic is no longer needed as we now trust matrix-level data.
     }
 
     private subscribeToSectionSearch() {
@@ -212,10 +220,90 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
         }
     }
 
+    private handleBulkEditParams(params: any) {
+        this.loading = true;
+
+        // Fetch existing exams for this group FIRST
+        const searchFilters = {
+            academicYearId: params.academicYearId,
+            campusId: params.campusId,
+            standardId: params.standardId,
+            examTermId: params.examTermId
+        };
+
+        this.examService.searchExams(searchFilters).subscribe({
+            next: (resp) => {
+                this.existingExams = resp.body || [];
+
+                // Now patch form values (this will trigger cascading filters including section load)
+                this.examForm.patchValue({
+                    academicYearId: +params.academicYearId,
+                    campusId: +params.campusId,
+                    standardId: +params.standardId,
+                    examTermId: +params.examTermId
+                });
+
+                if (this.existingExams.length > 0) {
+                    const first = this.existingExams[0];
+                    this.examForm.patchValue({
+                        startDate: this.formatDate(first.startDate),
+                        endDate: this.formatDate(first.endDate),
+                        status: first.status || ExamStatus.DRAFT
+                    }, { emitEvent: false });
+                }
+
+                this.loading = false;
+            },
+            error: () => this.loading = false
+        });
+    }
+
+    private initializeSectionsWithData() {
+        const startDate = this.formatDate(this.examForm.get('startDate')?.value);
+        const endDate = this.formatDate(this.examForm.get('endDate')?.value);
+        const status = this.examForm.get('status')?.value;
+
+        this.sections.forEach(section => {
+            const existingExam = this.existingExams.find(e => Number(e.sectionId) === Number(section.id));
+
+            const group = this.fb.group({
+                examId: [existingExam?.id || null],
+                sectionId: [section.id],
+                sectionName: [section.sectionName],
+                selected: [!!existingExam],
+                examName: [existingExam?.name || section.sectionName],
+                startDate: [this.formatDate(existingExam?.startDate || startDate)],
+                endDate: [this.formatDate(existingExam?.endDate || endDate)],
+                status: [existingExam?.status || status || ExamStatus.DRAFT]
+            });
+
+            // Set validator for pre-selected ones
+            if (existingExam) {
+                ['examName', 'startDate', 'endDate', 'status'].forEach(field => {
+                    group.get(field)?.setValidators(Validators.required);
+                });
+            }
+
+            group.get('selected')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(selected => {
+                const fields = ['examName', 'startDate', 'endDate', 'status'];
+                fields.forEach(field => {
+                    const control = group.get(field);
+                    if (selected) {
+                        control?.setValidators(Validators.required);
+                    } else {
+                        control?.clearValidators();
+                    }
+                    control?.updateValueAndValidity({ emitEvent: false });
+                });
+            });
+
+            this.selectedSections.push(group);
+        });
+    }
+
     private initializeSections() {
-        const commonName = this.examForm.get('commonName')?.value;
-        const startDate = this.examForm.get('startDate')?.value;
-        const endDate = this.examForm.get('endDate')?.value;
+        const startDate = this.formatDate(this.examForm.get('startDate')?.value);
+        const endDate = this.formatDate(this.examForm.get('endDate')?.value);
         const status = this.examForm.get('status')?.value;
 
         this.sections.forEach(section => {
@@ -223,7 +311,7 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
                 sectionId: [section.id],
                 sectionName: [section.sectionName],
                 selected: [false],
-                examName: [`${commonName ? commonName + ' - ' : ''}${section.sectionName}`],
+                examName: [section.sectionName],
                 startDate: [startDate],
                 endDate: [endDate],
                 status: [status]
@@ -252,18 +340,20 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
         this.examService.getExamById(id).subscribe({
             next: (resp) => {
                 const exam = resp.body;
+
+                // Set existingExams BEFORE patching standardId to avoid race condition in matrix init
+                this.existingExams = [exam];
+
                 this.examForm.patchValue({
                     academicYearId: exam.academicYearId,
                     examTermId: exam.examTermId,
-                    commonName: exam.name,
-                    startDate: exam.startDate,
-                    endDate: exam.endDate,
+                    startDate: this.formatDate(exam.startDate),
+                    endDate: this.formatDate(exam.endDate),
                     status: exam.status,
                     campusId: exam.campusId,
                     standardId: exam.standardId
                 });
-                // Note: In edit mode, we might only be editing ONE section exam
-                // The matrix is mainly for creation. For editing, we could show just the one.
+
                 this.loading = false;
             },
             error: (err) => {
@@ -294,7 +384,7 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
         if (this.isEditMode) {
             // Update individual exam
             const payload = {
-                name: formValue.commonName, //common
+                name: formValue.selectedSections[0]?.examName,
                 academicYearId: formValue.academicYearId,
                 examTermId: formValue.examTermId,
                 campusId: formValue.campusId,
@@ -317,6 +407,24 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
                     this.toaster?.show('Failed to update exam.', 'error');
                 }
             });
+        } else if (this.isBulkEditMode) {
+            // Bulk update/create for selected sections
+            const observables = selectedSections.map((s: any) => {
+                const payload = {
+                    name: s.examName,
+                    academicYearId: formValue.academicYearId,
+                    examTermId: formValue.examTermId,
+                    campusId: formValue.campusId,
+                    standardId: formValue.standardId,
+                    sectionId: s.sectionId,
+                    startDate: s.startDate,
+                    endDate: s.endDate,
+                    status: s.status
+                };
+                return this.examService.saveExam(s.examId || null, payload as any);
+            });
+
+            this.saveMultipleExams(observables, true);
         } else {
             // Bulk create for selected sections using matrix values
             const creationObservables = selectedSections.map((s: any) => {
@@ -334,37 +442,43 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
                 return this.examService.saveExam(null, payload as any);
             });
 
-            this.saveMultipleExams(creationObservables);
+            this.saveMultipleExams(creationObservables, false);
         }
     }
 
-    private saveMultipleExams(observables: any[]) {
+    private saveMultipleExams(observables: any[], isUpdate: boolean) {
         let completed = 0;
         let errors = 0;
+
+        if (observables.length === 0) {
+            this.loading = false;
+            return;
+        }
 
         observables.forEach(obs => {
             obs.subscribe({
                 next: () => {
                     completed++;
-                    this.checkCompletion(completed, errors, observables.length);
+                    this.checkCompletion(completed, errors, observables.length, isUpdate);
                 },
                 error: () => {
                     errors++;
                     completed++;
-                    this.checkCompletion(completed, errors, observables.length);
+                    this.checkCompletion(completed, errors, observables.length, isUpdate);
                 }
             });
         });
     }
 
-    private checkCompletion(completed: number, errors: number, total: number) {
+    private checkCompletion(completed: number, errors: number, total: number, isUpdate: boolean) {
         if (completed === total) {
             this.loading = false;
+            const actionLabel = isUpdate ? 'updated' : 'created';
             if (errors === 0) {
-                this.toaster?.show('Exams created successfully for all sections.', 'success');
+                this.toaster?.show(`Exams ${actionLabel} successfully for all sections.`, 'success');
                 this.router.navigate(['/exams']);
             } else {
-                this.toaster?.show(`Created ${total - errors} exams. ${errors} failed.`, 'warning');
+                this.toaster?.show(`${isUpdate ? 'Processed' : 'Created'} ${total - errors} exams. ${errors} failed.`, 'warning');
                 this.router.navigate(['/exams']);
             }
         }

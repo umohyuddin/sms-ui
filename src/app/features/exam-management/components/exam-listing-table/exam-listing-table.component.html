@@ -18,24 +18,6 @@
                 Exam Listing
             </h3>
         </div>
-        <div class="kt-portlet__head-toolbar">
-            <div class="kt-portlet__head-wrapper">
-                <div class="dropdown dropdown-inline">
-                    <button type="button" class="btn btn-brand btn-sm dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <i class="la la-filter"></i> Group By: {{ groupByMode | titlecase }}
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="javascript:;" (click)="changeGroupBy('campus')">
-                            <i class="la la-building"></i> Campus
-                        </a>
-                        <a class="dropdown-item" href="javascript:;" (click)="changeGroupBy('standard')">
-                            <i class="la la-graduation-cap"></i> Standard
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="kt-portlet__body">
@@ -112,6 +94,9 @@
                                 {{ groupName }}
                                 <span class="badge-count">{{ groupedExams[groupName].length }} Exams</span>
                             </h4>
+                            <button class="btn btn-sm btn-label-brand btn-bold" (click)="editGroup(groupName)">
+                                <i class="la la-edit"></i> Edit Group
+                            </button>
                         </div>
 
                         <div class="exam-grid">

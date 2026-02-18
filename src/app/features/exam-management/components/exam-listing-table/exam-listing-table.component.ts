@@ -32,7 +32,7 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
 
     exams: Exam[] = [];
     groupedExams: { [key: string]: Exam[] } = {};
-    groupByMode: 'campus' | 'standard' = 'campus';
+    groupByMode: 'campus' | 'standard' = 'standard';
     loading = false;
     searchControl = new FormControl('');
     pagination: Pagination<Exam> = new Pagination([], 10);
@@ -193,7 +193,7 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
         this.groupedExams = this.exams.reduce((groups, exam) => {
             const key = this.groupByMode === 'campus'
                 ? (exam.campusName || 'Unassigned Campus')
-                : (exam.standardName || 'Unassigned Standard');
+                : `${exam.campusName || 'Unassigned'} - ${exam.standardName || 'Unassigned Standard'}`;
 
             if (!groups[key]) {
                 groups[key] = [];
@@ -203,14 +203,10 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
         }, {} as { [key: string]: Exam[] });
     }
 
-    changeGroupBy(mode: 'campus' | 'standard') {
-        this.groupByMode = mode;
-        this.groupExams();
-    }
-
     get groupedKeys() {
         return Object.keys(this.groupedExams).sort();
     }
+
 
     onPageSizeChange(event: any) {
         const pageSize = +event.target.value;
@@ -219,6 +215,23 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
 
     editExam(id: number) {
         this.router.navigate(['/exams/edit', id]);
+    }
+
+
+    editGroup(groupName: string) {
+        const groupExams = this.groupedExams[groupName];
+        if (!groupExams || groupExams.length === 0) return;
+
+        const first = groupExams[0];
+        this.router.navigate(['/exams/create'], {
+            queryParams: {
+                bulkEdit: 'true',
+                academicYearId: first.academicYearId,
+                campusId: first.campusId,
+                standardId: first.standardId,
+                examTermId: first.examTermId
+            }
+        });
     }
 
     deleteExam(event: Event, id: number) {
