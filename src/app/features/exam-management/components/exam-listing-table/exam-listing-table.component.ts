@@ -31,6 +31,8 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
     @ViewChild('toaster') toaster!: ToasterComponent;
 
     exams: Exam[] = [];
+    groupedExams: { [key: string]: Exam[] } = {};
+    groupByMode: 'campus' | 'standard' = 'campus';
     loading = false;
     searchControl = new FormControl('');
     pagination: Pagination<Exam> = new Pagination([], 10);
@@ -175,6 +177,7 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
         this.examService.searchExams(filters).subscribe({
             next: (resp) => {
                 this.exams = resp.body || [];
+                this.groupExams();
                 this.pagination = new Pagination(this.exams, this.pagination.pageSize || 10);
                 this.loading = false;
             },
@@ -184,6 +187,29 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
                 this.toaster?.show('Failed to load exams.', 'error');
             }
         });
+    }
+
+    private groupExams() {
+        this.groupedExams = this.exams.reduce((groups, exam) => {
+            const key = this.groupByMode === 'campus'
+                ? (exam.campusName || 'Unassigned Campus')
+                : (exam.standardName || 'Unassigned Standard');
+
+            if (!groups[key]) {
+                groups[key] = [];
+            }
+            groups[key].push(exam);
+            return groups;
+        }, {} as { [key: string]: Exam[] });
+    }
+
+    changeGroupBy(mode: 'campus' | 'standard') {
+        this.groupByMode = mode;
+        this.groupExams();
+    }
+
+    get groupedKeys() {
+        return Object.keys(this.groupedExams).sort();
     }
 
     onPageSizeChange(event: any) {

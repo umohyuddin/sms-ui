@@ -18,6 +18,24 @@
                 Exam Listing
             </h3>
         </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="dropdown dropdown-inline">
+                    <button type="button" class="btn btn-brand btn-sm dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="la la-filter"></i> Group By: {{ groupByMode | titlecase }}
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="javascript:;" (click)="changeGroupBy('campus')">
+                            <i class="la la-building"></i> Campus
+                        </a>
+                        <a class="dropdown-item" href="javascript:;" (click)="changeGroupBy('standard')">
+                            <i class="la la-graduation-cap"></i> Standard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="kt-portlet__body">
@@ -83,104 +101,94 @@
             </div>
         </div>
 
-        <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
-                    <div class="dataTables_length">
-                        <label>Show
-                            <select (change)="onPageSizeChange($event)"
-                                class="custom-select custom-select-sm form-control form-control-sm">
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select> entries</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12">
-                    <table *ngIf="exams.length > 0; else noDataAlert"
-                        class="table table-striped table-bordered table-hover table-checkable">
-                        <thead>
-                            <tr role="row">
-                                <th *ngFor="let col of columns">{{ col.label }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let exam of pagination.paginatedItems">
-                                <td>{{ exam.name }}</td>
-                                <td>{{ exam.academicYearName }}</td>
-                                <td>{{ exam.campusName }}</td>
-                                <td>{{ exam.standardName }}</td>
-                                <td>{{ exam.sectionName }}</td>
-                                <td>{{ exam.examTermName }}</td>
-                                <td>
-                                    <span class="kt-badge kt-badge--inline" [ngClass]="{
-                                        'kt-badge--brand': exam.status === 'DRAFT',
-                                        'kt-badge--info': exam.status === 'SCHEDULED',
-                                        'kt-badge--success': exam.status === 'PUBLISHED',
-                                        'kt-badge--warning': exam.status === 'IN_PROGRESS',
-                                        'kt-badge--danger': exam.status === 'LOCKED'
-                                    }">
-                                        {{ exam.status }}
-                                    </span>
-                                </td>
-                                <td nowrap>
-                                    <button (click)="editExam(exam.id)"
-                                        class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit">
-                                        <i class="la la-edit"></i>
-                                    </button>
-                                    <button (click)="deleteExam($event, exam.id)"
-                                        class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
-                                        <i class="la la-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <ng-template #noDataAlert>
-                        <div class="alert alert-dark" role="alert" *ngIf="!loading">
-                            <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
-                            <div class="alert-text">No exams found</div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div *ngIf="exams.length > 0; else noDataAlert">
+                    <!-- Iterating over each Group (Campus or Standard) -->
+                    <div *ngFor="let groupName of groupedKeys" class="standard-group">
+                        <div class="standard-header">
+                            <h4 class="standard-title">
+                                <i [className]="groupByMode === 'campus' ? 'flaticon-buildings' : 'flaticon-medal'"></i>
+                                {{ groupName }}
+                                <span class="badge-count">{{ groupedExams[groupName].length }} Exams</span>
+                            </h4>
                         </div>
-                    </ng-template>
-                </div>
-            </div>
 
-            <div class="row" *ngIf="exams.length > 0">
-                <div class="col-sm-12 col-md-5">
-                    <div class="dataTables_info">Showing {{ pagination.startItem }} to {{ pagination.endItem }} of {{
-                        pagination.totalItems }} entries</div>
-                </div>
-                <div class="col-sm-12 col-md-7">
-                    <div class="dataTables_paginate paging_full_numbers">
-                        <ul class="pagination">
-                            <li class="paginate_button page-item first" [class.disabled]="pagination.pageIndex === 0">
-                                <a class="page-link" (click)="pagination.first()"><i
-                                        class="la la-angle-double-left"></i></a>
-                            </li>
-                            <li class="paginate_button page-item previous"
-                                [class.disabled]="pagination.pageIndex === 0">
-                                <a class="page-link" (click)="pagination.prev()"><i class="la la-angle-left"></i></a>
-                            </li>
-                            <li class="paginate_button page-item" *ngFor="let page of pagination.visiblePages"
-                                [class.active]="pagination.pageIndex === page">
-                                <a class="page-link" (click)="pagination.goToPage(page)">{{ page + 1 }}</a>
-                            </li>
-                            <li class="paginate_button page-item next"
-                                [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
-                                <a class="page-link" (click)="pagination.next()"><i class="la la-angle-right"></i></a>
-                            </li>
-                            <li class="paginate_button page-item last"
-                                [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
-                                <a class="page-link" (click)="pagination.last()"><i
-                                        class="la la-angle-double-right"></i></a>
-                            </li>
-                        </ul>
+                        <div class="exam-grid">
+                            <!-- Iterating over exams in this Group -->
+                            <div *ngFor="let exam of groupedExams[groupName]" class="exam-card">
+                                <div>
+                                    <div class="exam-card-header">
+                                        <h5 class="exam-name">{{ exam.name }}</h5>
+                                        <div class="status-indicator" [ngClass]="{
+                                            'status-draft': exam.status === 'DRAFT',
+                                            'status-scheduled': exam.status === 'SCHEDULED',
+                                            'status-published': exam.status === 'PUBLISHED',
+                                            'status-in-progress': exam.status === 'IN_PROGRESS',
+                                            'status-locked': exam.status === 'LOCKED'
+                                        }">
+                                            {{ exam.status }}
+                                        </div>
+                                    </div>
+
+                                    <div class="exam-details">
+                                        <!-- Show Standard if grouped by Campus, and vice-versa -->
+                                        <div class="detail-item" *ngIf="groupByMode === 'campus'" title="Standard">
+                                            <i class="la la-graduation-cap"></i>
+                                            <span>Standard: {{ exam.standardName }}</span>
+                                        </div>
+                                        <div class="detail-item" *ngIf="groupByMode === 'standard'" title="Campus">
+                                            <i class="la la-building"></i>
+                                            <span>Campus: {{ exam.campusName }}</span>
+                                        </div>
+
+                                        <div class="detail-item" title="Section">
+                                            <i class="la la-users"></i>
+                                            <span>Section: {{ exam.sectionName }}</span>
+                                        </div>
+                                        <div class="detail-item" title="Exam Term">
+                                            <i class="la la-calendar-check-o"></i>
+                                            <span>Term: {{ exam.examTermName }}</span>
+                                        </div>
+                                        <div class="detail-item" title="Date Range">
+                                            <i class="la la-clock-o"></i>
+                                            <span>{{ exam.startDate | date:'MMM d, y' }} - {{ exam.endDate | date:'MMM
+                                                d, y' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="exam-footer">
+                                    <div class="academic-year small text-muted">
+                                        <i class="la la-graduation-cap"></i> {{ exam.academicYearName }}
+                                    </div>
+                                    <div class="action-buttons">
+                                        <button (click)="editExam(exam.id)" class="btn-modern btn-edit"
+                                            title="Edit Exam">
+                                            <i class="la la-edit"></i>
+                                        </button>
+                                        <button (click)="deleteExam($event, exam.id)" class="btn-modern btn-delete"
+                                            title="Delete Exam">
+                                            <i class="la la-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <ng-template #noDataAlert>
+                    <div class="empty-state" *ngIf="!loading">
+                        <div class="alert-icon mb-3">
+                            <i class="flaticon-questions-circular-button kt-font-brand" style="font-size: 3.5rem;"></i>
+                        </div>
+                        <h4 class="text-dark">No Exams Found</h4>
+                        <p class="text-muted">We couldn't find any exams matching your criteria. Try adjusting your
+                            filters or search terms.</p>
+                        <button class="btn btn-primary mt-3" (click)="clearFilters()">Reset All Filters</button>
+                    </div>
+                </ng-template>
             </div>
         </div>
     </div>
