@@ -473,6 +473,7 @@ export const API_ENDPOINTS = {
                 CREATE: '/api/academic/evaluation/exam-terms',
                 UPDATE: (id: string | number) => `/api/academic/evaluation/exam-terms/${id}`,
                 GET_BY_YEAR: '/api/academic/evaluation/exam-terms',
+                GET_BY_TENANT: '/api/academic/evaluation/exam-terms/tenant',
                 GET_BY_ID: (id: string | number) => `/api/academic/evaluation/exam-terms/${id}`,
                 SEARCH: (keyword: string) => `/api/academic/evaluation/exam-terms/search/${keyword}`,
                 DELETE: (id: string | number) => `/api/academic/evaluation/exam-terms/${id}`
@@ -497,7 +498,8 @@ export const API_ENDPOINTS = {
             EXAM_SUBJECTS: {
                 SCHEDULE: '/api/academic/evaluation/exam-subjects',
                 GET_BY_EXAM: '/api/academic/evaluation/exam-subjects',
-                UNSCHEDULE: '/api/academic/evaluation/exam-subjects'
+                UNSCHEDULE: '/api/academic/evaluation/exam-subjects',
+                BULK_SCHEDULE: '/api/academic/evaluation/exam-subjects/bulk'
             },
             ASSESSMENTS: {
                 CREATE: '/api/academic/evaluation/assessments',

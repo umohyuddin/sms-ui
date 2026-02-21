@@ -61,6 +61,14 @@ export class StandardManagementService {
     );
   }
 
+  getSectionsByStandardId(id: string | number): Observable<any> {
+    return this.http.request(
+      HTTP_METHOD.GET,
+      `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SECTIONS.GET_BY_STANDARD_ID(id.toString())}`,
+      { observeResponse: true }
+    );
+  }
+
   deleteCampus(id: number): Observable<any> {
     return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}/${id}`, { observeResponse: true });
   }

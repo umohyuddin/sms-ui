@@ -33,6 +33,17 @@ export const routes: Routes = [
   },
 
   {
+    path: 'exam-subject-management',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/exam-subject-management/exam-subject-management-module').then(m => m.ExamSubjectManagementModule)
+      }
+    ]
+  },
+  {
     path: 'academic-years',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),

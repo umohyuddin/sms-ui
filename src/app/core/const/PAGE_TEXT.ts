@@ -33,16 +33,31 @@ export const PageTexts = {
   campus: {
     Module: 'Campus',
     icon: 'kt-font-dark flaticon-squares',
-    header: 'Departments Listing',
+    header: 'Campus Listing',
     buttons: {
-      add: 'Add Department',
-      edit: 'Edit Department',
-      delete: 'Delete Department',
-      view: 'View Department'
+      add: 'Add Campus',
+      edit: 'Edit Campus',
+      delete: 'Delete Campus',
+      view: 'View Campus'
     },
     messages: {
       noData: 'No campuses available at the moment. Please check back later or add a new campus.',
-      deleteConfirmation: 'Are you sure you want to delete this department?'
+      deleteConfirmation: 'Are you sure you want to delete this campus?'
+    }
+  },
+  examSubject: {
+    Module: 'Exam Subject',
+    icon: 'kt-font-dark flaticon-squares',
+    header: 'Exam Subject Listing',
+    buttons: {
+      add: 'Schedule Subject',
+      edit: 'Edit Schedule',
+      delete: 'Unschedule Subject',
+      view: 'View Schedule'
+    },
+    messages: {
+      noData: 'No subjects scheduled for this exam yet.',
+      deleteConfirmation: 'Are you sure you want to unschedule this subject?'
     }
   },
   roles: {

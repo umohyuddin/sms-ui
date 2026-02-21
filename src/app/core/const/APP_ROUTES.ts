@@ -232,5 +232,11 @@ export const ROUTES = {
     CREATE: ['teacher-assignment', 'create'],
     EDIT: (id: string) => ['teacher-assignment', 'edit', id],
     DETAILS: (id: string) => ['teacher-assignment', 'details', id]
+  },
+  EXAM_SUBJECT_MANAGEMENT: {
+    LIST: ['exam-subject-management'],
+    CREATE: ['exam-subject-management', 'create'],
+    EDIT: (id: string) => ['exam-subject-management', 'edit', id],
+    DETAILS: (id: string) => ['exam-subject-management', 'details', id]
   }
 };

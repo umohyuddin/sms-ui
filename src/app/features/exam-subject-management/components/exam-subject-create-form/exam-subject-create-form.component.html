@@ -1,0 +1,249 @@
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+                {{ isEditMode ? 'Update Exam Subject Schedule' : 'Bulk Schedule Subjects' }}
+            </h3>
+        </div>
+    </div>
+
+    <!--begin::Form-->
+    <form class="kt-form kt-form--label-right" [formGroup]="examSubjectForm" (ngSubmit)="onSubmit()">
+        <div class="kt-portlet__body">
+            <!-- How it works stepper -->
+            <div class="kt-portlet kt-portlet--bordered mb-3">
+                <div class="kt-portlet__body py-2 px-4">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap">
+                        <div class="d-flex align-items-center py-2 mr-3">
+                            <span class="kt-badge kt-badge--brand kt-badge--xl kt-badge--rounded mr-3">1</span>
+                            <div>
+                                <span class="kt-font-bold">Select Context</span>
+                                <span class="text-muted d-block small">Pick Term, Campus, Standard & Sections</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center py-2 mr-3 border-left pl-3">
+                            <span class="kt-badge kt-badge--success kt-badge--xl kt-badge--rounded mr-3">2</span>
+                            <div>
+                                <span class="kt-font-bold">Batch Fill</span>
+                                <span class="text-muted d-block small">Set common values & apply to rows</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center py-2 border-left pl-3">
+                            <span class="kt-badge kt-badge--warning kt-badge--xl kt-badge--rounded mr-3">3</span>
+                            <div>
+                                <span class="kt-font-bold">Schedule & Submit</span>
+                                <span class="text-muted d-block small">Customize per section & bulk schedule</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtering Section -->
+            <div class="kt-section kt-section--first">
+                <div class="kt-section__body">
+                    <h3 class="kt-section__title kt-section__title-sm">1. Exam & Section Details:</h3>
+                    <div class="form-group row">
+                        <div class="col-lg-4">
+                            <label class="required">Exam Term:</label>
+                            <select class="form-control" formControlName="examTermId">
+                                <option value="">Select Term</option>
+                                <option *ngFor="let term of examTerms" [value]="term.id">{{ term.name }}</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="required">Campus:</label>
+                            <select class="form-control" formControlName="campusId" (change)="onCampusChange()">
+                                <option value="">Select Campus</option>
+                                <option *ngFor="let c of campuses" [value]="c.id">{{ c.campusName }}</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4">
+                            <label class="required">Standard:</label>
+                            <select class="form-control" formControlName="standardId" (change)="onStandardChange()">
+                                <option value="">Select Standard</option>
+                                <option *ngFor="let std of standards" [value]="std.id">{{ std.standardName }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Multi-Section Selection -->
+                    <div class="form-group row" *ngIf="sections.length > 0">
+                        <div class="col-lg-12">
+                            <label class="required">Sections:
+                                <span class="badge badge-primary ml-2" *ngIf="getSelectedSectionCount() > 0">
+                                    {{ getSelectedSectionCount() }} selected
+                                </span>
+                            </label>
+                            <div class="border rounded p-2 bg-light d-flex flex-wrap align-items-center"
+                                style="gap: 12px;">
+                                <label class="kt-checkbox kt-checkbox--bold kt-checkbox--brand mb-0 mr-3"
+                                    style="border-right: 1px solid #ccc; padding-right: 12px;">
+                                    <input type="checkbox" (change)="toggleAllSections($event)"> Select All
+                                    <span></span>
+                                </label>
+                                <label *ngFor="let sec of sections"
+                                    class="kt-checkbox kt-checkbox--bold kt-checkbox--brand mb-0">
+                                    <input type="checkbox" [(ngModel)]="sec.selected"
+                                        [ngModelOptions]="{standalone: true}" (ngModelChange)="onSectionToggle()"> {{
+                                    sec.sectionName }}
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Values Section -->
+            <div class="kt-section" *ngIf="gridRows.length > 0">
+                <div class="kt-section__body bg-light p-3 border rounded">
+                    <h3 class="kt-section__title kt-section__title-sm">2. Batch Scheduling (Common Values):</h3>
+                    <div [formGroup]="commonValuesForm" class="form-group row mb-0">
+                        <div class="col-lg-2">
+                            <label>Exam Date:</label>
+                            <input type="date" formControlName="examDate" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Start Time:</label>
+                            <input type="time" formControlName="startTime" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-lg-2">
+                            <label>End Time:</label>
+                            <input type="time" formControlName="endTime" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-lg-1">
+                            <label>Max Marks:</label>
+                            <input type="number" formControlName="maxMarks" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-lg-1">
+                            <label>Pass Marks:</label>
+                            <input type="number" formControlName="minPassMarks" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Room:</label>
+                            <input type="text" formControlName="room" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-lg-2">
+                            <label>&nbsp;</label>
+                            <button type="button" (click)="applyCommonValues()"
+                                class="btn btn-primary btn-sm btn-block">
+                                <i class="la la-copy"></i> Apply to Selected
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid Section -->
+            <div class="kt-section" *ngIf="gridRows.length > 0">
+                <div class="kt-section__body">
+                    <h3 class="kt-section__title kt-section__title-sm">3. Subject Schedule Grid
+                        <small class="text-muted ml-2">({{ gridRows.length }} rows)</small>
+                    </h3>
+                    <div class="table-responsive"
+                        style="max-height: 500px; overflow-y: auto; border: 1px solid #ebedf2;">
+                        <table class="table table-bordered table-hover mb-0">
+                            <thead class="thead-light" style="position: sticky; top: 0; z-index: 1;">
+                                <tr>
+                                    <th style="width: 40px; text-align: center; vertical-align: middle;">
+                                        <input type="checkbox" (change)="toggleAllRows($event)">
+                                    </th>
+                                    <th style="vertical-align: middle;">Section</th>
+                                    <th style="vertical-align: middle;">Subject</th>
+                                    <th style="width: 150px;">Date <span class="text-danger">*</span></th>
+                                    <th style="width: 110px;">Start <span class="text-danger">*</span></th>
+                                    <th style="width: 110px;">End <span class="text-danger">*</span></th>
+                                    <th style="width: 80px;">Max <span class="text-danger">*</span></th>
+                                    <th style="width: 80px;">Pass <span class="text-danger">*</span></th>
+                                    <th style="width: 100px;">Room</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let row of gridRows; let i = index">
+                                    <!-- Section separator row -->
+                                    <tr *ngIf="i === 0 || row.sectionId !== gridRows[i - 1].sectionId"
+                                        class="bg-secondary">
+                                        <td colspan="9"
+                                            style="padding: 6px 12px; font-weight: 600; font-size: 13px; color: #fff; letter-spacing: 0.5px;">
+                                            <i class="la la-bookmark"></i> {{ row.sectionName }}
+                                        </td>
+                                    </tr>
+                                    <tr [class.table-active]="row.selected">
+                                        <td style="text-align: center; vertical-align: middle;">
+                                            <input type="checkbox" [(ngModel)]="row.selected"
+                                                [ngModelOptions]="{standalone: true}">
+                                        </td>
+                                        <td style="vertical-align: middle;">
+                                            <span class="badge badge-info">{{ row.sectionName }}</span>
+                                        </td>
+                                        <td style="vertical-align: middle; line-height: 1.2;">
+                                            <strong>{{ row.subjectName }}</strong><br>
+                                            <small class="text-muted">{{ row.subjectCode }}</small>
+                                        </td>
+                                        <td>
+                                            <input type="date" [(ngModel)]="row.examDate"
+                                                [ngModelOptions]="{standalone: true}"
+                                                class="form-control form-control-sm">
+                                        </td>
+                                        <td>
+                                            <input type="time" [(ngModel)]="row.startTime"
+                                                [ngModelOptions]="{standalone: true}"
+                                                class="form-control form-control-sm">
+                                        </td>
+                                        <td>
+                                            <input type="time" [(ngModel)]="row.endTime"
+                                                [ngModelOptions]="{standalone: true}"
+                                                class="form-control form-control-sm">
+                                        </td>
+                                        <td>
+                                            <input type="number" [(ngModel)]="row.maxMarks"
+                                                [ngModelOptions]="{standalone: true}"
+                                                class="form-control form-control-sm">
+                                        </td>
+                                        <td>
+                                            <input type="number" [(ngModel)]="row.minPassMarks"
+                                                [ngModelOptions]="{standalone: true}"
+                                                class="form-control form-control-sm">
+                                        </td>
+                                        <td>
+                                            <input type="text" [(ngModel)]="row.room"
+                                                [ngModelOptions]="{standalone: true}"
+                                                class="form-control form-control-sm">
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-secondary"
+                *ngIf="gridRows.length === 0 && getSelectedSectionCount() > 0 && examSubjectForm.get('standardId')?.value">
+                <div class="alert-icon"><i class="flaticon-info"></i></div>
+                <div class="alert-text">No subjects found for the selected standard. Please ensure subjects are mapped
+                    to this standard in the academic year.</div>
+            </div>
+
+            <div class="alert alert-info" *ngIf="sections.length > 0 && getSelectedSectionCount() === 0">
+                <div class="alert-icon"><i class="flaticon-info"></i></div>
+                <div class="alert-text">Select at least one section above to populate the scheduling grid.</div>
+            </div>
+        </div>
+
+        <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+                <div class="row">
+                    <div class="col-lg-5"></div>
+                    <div class="col-lg-7">
+                        <button type="submit" class="btn btn-dark mr-2" [disabled]="gridRows.length === 0">
+                            <i class="la la-check"></i> Schedule Subjects
+                        </button>
+                        <button type="button" class="btn btn-danger" (click)="cancel()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

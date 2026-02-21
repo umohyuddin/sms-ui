@@ -9,6 +9,7 @@ import { StandardManagementService } from '../../../standard-management/services
 import { SectionManagementService } from '../../../section-management/services/section-management.service';
 import { AcademicYearManagementService } from '../../../tenant-management/services/academic-year-management.service';
 import { ExamTermManagementService } from '../../../exam-term-management/services/exam-term-management.service';
+import { ExamTypeManagementService } from '../../../exam-type-management/services/exam-type-management.service';
 import { ExamStatus } from '../../models/exam.model';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
@@ -42,6 +43,7 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
     sections: SectionResponse[] = [];
     filteredSections: any[] = []; // For the matrix search
     examTerms: any[] = [];
+    examTypes: any[] = [];
     examStatuses = Object.values(ExamStatus);
 
     private destroy$ = new Subject<void>();
@@ -54,6 +56,7 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
         private sectionService: SectionManagementService,
         private academicYearService: AcademicYearManagementService,
         private examTermService: ExamTermManagementService,
+        private examTypeService: ExamTypeManagementService,
         private logger: LoggerService,
         private router: Router,
         private route: ActivatedRoute
@@ -61,6 +64,7 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
         this.examForm = this.fb.group({
             academicYearId: ['', Validators.required],
             examTermId: ['', Validators.required],
+            examTypeId: ['', Validators.required],
             startDate: [''],
             endDate: [''],
             status: [ExamStatus.DRAFT, Validators.required],
@@ -129,6 +133,10 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
     private loadInitialData() {
         this.campusService.getAllCampuses().subscribe((resp: any) => {
             this.campuses = resp.body || [];
+        });
+
+        this.examTypeService.getExamTypes().subscribe((resp: any) => {
+            this.examTypes = resp.body || [];
         });
 
         this.academicYearService.getAcademicYears().subscribe((resp: any) => {
@@ -347,6 +355,7 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
                 this.examForm.patchValue({
                     academicYearId: exam.academicYearId,
                     examTermId: exam.examTermId,
+                    examTypeId: exam.examTypeId,
                     startDate: this.formatDate(exam.startDate),
                     endDate: this.formatDate(exam.endDate),
                     status: exam.status,
@@ -387,6 +396,7 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
                 name: formValue.selectedSections[0]?.examName,
                 academicYearId: formValue.academicYearId,
                 examTermId: formValue.examTermId,
+                examTypeId: formValue.examTypeId,
                 campusId: formValue.campusId,
                 standardId: formValue.standardId,
                 sectionId: formValue.selectedSections[0]?.sectionId, // Fallback
@@ -414,6 +424,7 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
                     name: s.examName,
                     academicYearId: formValue.academicYearId,
                     examTermId: formValue.examTermId,
+                    examTypeId: formValue.examTypeId,
                     campusId: formValue.campusId,
                     standardId: formValue.standardId,
                     sectionId: s.sectionId,
@@ -432,6 +443,7 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
                     name: s.examName,
                     academicYearId: formValue.academicYearId,
                     examTermId: formValue.examTermId,
+                    examTypeId: formValue.examTypeId,
                     campusId: formValue.campusId,
                     standardId: formValue.standardId,
                     sectionId: s.sectionId,

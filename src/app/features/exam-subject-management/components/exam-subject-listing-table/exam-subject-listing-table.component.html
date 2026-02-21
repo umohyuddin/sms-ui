@@ -1,0 +1,225 @@
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i [className]="texts.icon"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                {{ texts.header }}
+            </h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+                    <button (click)="scheduleNewSubject()" class="btn btn-brand btn-elevate btn-icon-sm">
+                        <i class="la la-plus"></i>
+                        {{ texts.buttons.add }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="kt-portlet__body" style="position: relative; min-height: 400px;">
+
+        <!-- Filter Dropdowns -->
+        <div class="kt-section kt-section--first">
+            <div class="kt-section__body">
+                <div [formGroup]="filterForm" class="form-group row mb-3">
+                    <div class="col-lg-3">
+                        <label>Exam Term:</label>
+                        <select class="form-control" formControlName="examTermId" (change)="onStandardChange()">
+                            <option value="">Select Term</option>
+                            <option *ngFor="let term of examTerms" [value]="term.id">{{ term.name }}</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3">
+                        <label>Campus:</label>
+                        <select class="form-control" formControlName="campusId" (change)="onCampusChange()">
+                            <option value="">Select Campus</option>
+                            <option *ngFor="let c of campuses" [value]="c.id">{{ c.campusName }}</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3">
+                        <label>Standard:</label>
+                        <select class="form-control" formControlName="standardId" (change)="onStandardChange()">
+                            <option value="">Select Standard</option>
+                            <option *ngFor="let std of standards" [value]="std.id">{{ std.standardName }}</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3 d-flex align-items-end">
+                        <button type="button" class="btn btn-secondary btn-sm" (click)="clearFilters()">
+                            <i class="la la-refresh mr-1"></i> Clear Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prompt to select filters -->
+        <div class="alert alert-info" *ngIf="!showMatrix">
+            <div class="alert-icon"><i class="flaticon-info"></i></div>
+            <div class="alert-text">Select <strong>Exam Term</strong>, <strong>Campus</strong>, and
+                <strong>Standard</strong> above to view the subject schedule matrix.
+            </div>
+        </div>
+
+        <!-- Matrix Content (shown after filters applied) -->
+        <ng-container *ngIf="showMatrix">
+
+            <!-- Summary Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="kt-portlet kt-portlet--bordered mb-0">
+                        <div class="kt-portlet__body py-3 px-4 d-flex align-items-center">
+                            <span class="kt-badge kt-badge--brand kt-badge--xl kt-badge--rounded mr-3"
+                                style="min-width: 45px; height: 45px; line-height: 45px; font-size: 18px;">
+                                {{ dummyMatrix.length }}
+                            </span>
+                            <div>
+                                <span class="kt-font-bold d-block" style="font-size: 15px;">Sections</span>
+                                <span class="text-muted small">Total sections</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="kt-portlet kt-portlet--bordered mb-0">
+                        <div class="kt-portlet__body py-3 px-4 d-flex align-items-center">
+                            <span class="kt-badge kt-badge--success kt-badge--xl kt-badge--rounded mr-3"
+                                style="min-width: 45px; height: 45px; line-height: 45px; font-size: 18px;">
+                                {{ scheduledCount }}
+                            </span>
+                            <div>
+                                <span class="kt-font-bold d-block" style="font-size: 15px;">Scheduled</span>
+                                <span class="text-muted small">Exams ready</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="kt-portlet kt-portlet--bordered mb-0">
+                        <div class="kt-portlet__body py-3 px-4 d-flex align-items-center">
+                            <span class="kt-badge kt-badge--warning kt-badge--xl kt-badge--rounded mr-3"
+                                style="min-width: 45px; height: 45px; line-height: 45px; font-size: 18px;">
+                                {{ pendingCount }}
+                            </span>
+                            <div>
+                                <span class="kt-font-bold d-block" style="font-size: 15px;">Pending</span>
+                                <span class="text-muted small">Awaiting review</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="kt-portlet kt-portlet--bordered mb-0">
+                        <div class="kt-portlet__body py-3 px-4 d-flex align-items-center">
+                            <span class="kt-badge kt-badge--danger kt-badge--xl kt-badge--rounded mr-3"
+                                style="min-width: 45px; height: 45px; line-height: 45px; font-size: 18px;">
+                                {{ notScheduledCount }}
+                            </span>
+                            <div>
+                                <span class="kt-font-bold d-block" style="font-size: 15px;">Not Scheduled</span>
+                                <span class="text-muted small">Needs attention</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matrix Table -->
+            <div class="table-responsive" style="border: 1px solid #ebedf2; border-radius: 4px;">
+                <table class="table table-bordered table-hover mb-0">
+                    <thead class="thead-light" style="position: sticky; top: 0; z-index: 1;">
+                        <tr>
+                            <th style="width: 50px; text-align: center;">#</th>
+                            <th>Section</th>
+                            <th>Subject</th>
+                            <th style="width: 120px;">Date</th>
+                            <th style="width: 90px;">Start</th>
+                            <th style="width: 90px;">End</th>
+                            <th style="width: 70px;">Max</th>
+                            <th style="width: 70px;">Pass</th>
+                            <th style="width: 100px;">Room</th>
+                            <th style="width: 110px;">Status</th>
+                            <th style="width: 80px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let section of dummyMatrix">
+                            <!-- Section Header -->
+                            <tr class="bg-secondary">
+                                <td colspan="11"
+                                    style="padding: 8px 12px; font-weight: 600; font-size: 13px; color: #fff; letter-spacing: 0.5px;">
+                                    <i class="la la-bookmark mr-1"></i> {{ section.sectionName }}
+                                    <span class="badge badge-light ml-2">{{ section.subjects.length }} subjects</span>
+                                </td>
+                            </tr>
+                            <!-- Subject Rows -->
+                            <tr *ngFor="let subj of section.subjects; let idx = index">
+                                <td class="text-center text-muted" style="vertical-align: middle;">{{ idx + 1 }}</td>
+                                <td style="vertical-align: middle;">
+                                    <span class="badge badge-info">{{ section.sectionName }}</span>
+                                </td>
+                                <td style="vertical-align: middle; line-height: 1.2;">
+                                    <strong>{{ subj.subjectName }}</strong><br>
+                                    <small class="text-muted">{{ subj.subjectCode }}</small>
+                                </td>
+                                <td style="vertical-align: middle;">
+                                    <span *ngIf="subj.examDate">{{ subj.examDate }}</span>
+                                    <span *ngIf="!subj.examDate" class="text-danger">—</span>
+                                </td>
+                                <td style="vertical-align: middle;">
+                                    <span *ngIf="subj.startTime">{{ subj.startTime }}</span>
+                                    <span *ngIf="!subj.startTime" class="text-danger">—</span>
+                                </td>
+                                <td style="vertical-align: middle;">
+                                    <span *ngIf="subj.endTime">{{ subj.endTime }}</span>
+                                    <span *ngIf="!subj.endTime" class="text-danger">—</span>
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;">{{ subj.maxMarks }}</td>
+                                <td style="vertical-align: middle; text-align: center;">{{ subj.minPassMarks }}</td>
+                                <td style="vertical-align: middle;">
+                                    <span *ngIf="subj.room">{{ subj.room }}</span>
+                                    <span *ngIf="!subj.room" class="text-danger">—</span>
+                                </td>
+                                <td style="vertical-align: middle;">
+                                    <span class="badge" [ngClass]="getStatusClass(subj.status)">
+                                        {{ subj.status }}
+                                    </span>
+                                </td>
+                                <td style="vertical-align: middle;" nowrap="">
+                                    <a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit">
+                                        <i class="la la-edit"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
+                                        <i class="la la-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Context Footer -->
+            <div class="mt-3 p-3 bg-light border rounded">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted small">Showing for:</span>
+                        <span class="badge badge-primary ml-1" *ngIf="getSelectedTermName()">{{ getSelectedTermName()
+                            }}</span>
+                        <span class="badge badge-dark ml-1" *ngIf="getSelectedCampusName()">{{ getSelectedCampusName()
+                            }}</span>
+                        <span class="badge badge-info ml-1" *ngIf="getSelectedStandardName()">{{
+                            getSelectedStandardName() }}</span>
+                    </div>
+                    <div class="text-muted small">
+                        {{ totalSubjects }} total subject schedules across {{ dummyMatrix.length }} sections
+                    </div>
+                </div>
+            </div>
+
+        </ng-container>
+
+    </div>
+</div>
