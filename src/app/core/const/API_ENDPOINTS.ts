@@ -521,6 +521,10 @@ export const API_ENDPOINTS = {
                 GET_BY_SUBJECT: (id: string | number) => `/api/academic/results/marks/subject/${id}`,
                 GET_BY_STUDENT: (id: string | number) => `/api/academic/results/marks/student/${id}`
             },
+            EXAM_ATTENDANCE: {
+                RECORD: '/api/academic/results/exam-attendance',
+                GET_BY_SUBJECT: (id: string | number) => `/api/academic/results/exam-attendance/subject/${id}`
+            },
             WEIGHTAGES: {
                 SAVE: '/api/academic/results/weightages',
                 GET_BY_STANDARD: (id: string | number) => `/api/academic/results/weightages/standard/${id}`

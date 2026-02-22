@@ -55,6 +55,17 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'student-exam-attendance',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/student-exam-attendance-management/student-exam-attendance-management-module').then(m => m.StudentExamAttendanceManagementModule)
+      }
+    ]
+  },
+  {
     path: 'academic-years',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),

@@ -1,0 +1,131 @@
+<div class="kt-subheader  kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Manage Student Exam Attendance</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        </div>
+    </div>
+</div>
+
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+    <div class="kt-portlet">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">
+                    {{ isEditMode ? 'Edit' : 'Enter' }} Student Exam Attendance
+                </h3>
+            </div>
+        </div>
+        <form class="kt-form" [formGroup]="attendanceForm" (ngSubmit)="onSubmit()">
+            <div class="kt-portlet__body">
+                <!-- Selectors Rows -->
+                <div class="form-group row">
+                    <div class="col-lg-4">
+                        <label>Campus:</label>
+                        <select formControlName="campusId" class="form-control" (change)="onCampusChange()">
+                            <option value="">Select Campus</option>
+                            <option *ngFor="let campus of campuses" [value]="campus.id">{{ campus.campusName }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>Standard:</label>
+                        <select formControlName="standardId" class="form-control" (change)="onStandardChange()">
+                            <option value="">Select Standard</option>
+                            <option *ngFor="let standard of standards" [value]="standard.id">
+                                {{ standard.standardName }}</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>Section:</label>
+                        <select formControlName="sectionId" class="form-control" (change)="onSectionChange()">
+                            <option value="">Select Section</option>
+                            <option *ngFor="let section of sections" [value]="section.id">{{ section.sectionName }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-4">
+                        <label>Exam:</label>
+                        <select formControlName="examId" class="form-control" (change)="onExamChange()">
+                            <option value="">Select Exam</option>
+                            <option *ngFor="let exam of exams" [value]="exam.id">{{ exam.name }}</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>Subject:</label>
+                        <select formControlName="subjectId" class="form-control" (change)="onSubjectChange()">
+                            <option value="">Select Subject</option>
+                            <option *ngFor="let subject of subjects" [value]="subject.id">
+                                {{ subject.subjectName || subject.name }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+
+                <!-- Attendance Entry Grid -->
+                <div class="row" *ngIf="examAttendance.length > 0">
+                    <div class="col-lg-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10%">#</th>
+                                        <th style="width: 15%">Roll Number</th>
+                                        <th style="width: 25%">Student Name</th>
+                                        <th style="width: 25%">Attendance</th>
+                                        <th style="width: 25%">Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody formArrayName="examAttendance">
+                                    <tr *ngFor="let entry of examAttendance.controls; let i = index"
+                                        [formGroupName]="i">
+                                        <td>{{ i + 1 }}</td>
+                                        <td>{{ entry.get('rollNumber')?.value }}</td>
+                                        <td>{{ entry.get('studentName')?.value }}</td>
+                                        <td>
+                                            <div class="kt-radio-inline">
+                                                <label class="kt-radio kt-radio--success">
+                                                    <input type="radio" [value]="true" formControlName="isPresent">
+                                                    Present
+                                                    <span></span>
+                                                </label>
+                                                <label class="kt-radio kt-radio--danger">
+                                                    <input type="radio" [value]="false" formControlName="isPresent">
+                                                    Absent
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="text" formControlName="remarks" class="form-control"
+                                                placeholder="Optional remarks">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-secondary" role="alert"
+                    *ngIf="attendanceForm.get('subjectId')?.value && examAttendance.length === 0">
+                    <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
+                    <div class="alert-text">No students found for the selected section.</div>
+                </div>
+            </div>
+            <div class="kt-portlet__foot">
+                <div class="kt-form__actions">
+                    <button type="submit" class="btn btn-primary mr-2"
+                        [disabled]="isLoading || examAttendance.length === 0">
+                        {{ isEditMode ? 'Update' : 'Save' }} Attendance
+                    </button>
+                    <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

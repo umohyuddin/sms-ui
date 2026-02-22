@@ -1,0 +1,8 @@
+/* Student Exam Attendance Table Styles */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.kt-badge--inline {
+    padding: 0.3rem 0.75rem;
+}

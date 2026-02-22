@@ -1,0 +1,8 @@
+.kt-radio-inline {
+    display: flex;
+    gap: 20px;
+}
+
+.kt-radio {
+    margin-bottom: 0;
+}

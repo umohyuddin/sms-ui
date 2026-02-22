@@ -244,5 +244,11 @@ export const ROUTES = {
     CREATE: ['student-exam-marks', 'student-exam-marks-create'],
     EDIT: (id: string) => ['student-exam-marks', 'student-exam-marks-edit', id],
     DETAILS: (id: string) => ['student-exam-marks', 'student-exam-marks-details', id]
+  },
+  STUDENT_EXAM_ATTENDANCE: {
+    LIST: ['student-exam-attendance'],
+    CREATE: ['student-exam-attendance', 'student-exam-attendance-create'],
+    EDIT: (id: string) => ['student-exam-attendance', 'student-exam-attendance-edit', id],
+    DETAILS: (id: string) => ['student-exam-attendance', 'student-exam-attendance-details', id]
   }
 };
