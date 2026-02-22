@@ -1,0 +1,81 @@
+<div class="kt-subheader  kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Manage Student Exam Marks</h3>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+        </div>
+    </div>
+</div>
+
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+    <div class="kt-portlet">
+        <div class="kt-portlet__head">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">
+                    {{ isEditMode ? 'Edit' : 'Enter' }} Student Exam Marks
+                </h3>
+            </div>
+        </div>
+        <form class="kt-form" [formGroup]="marksForm" (ngSubmit)="onSubmit()">
+            <div class="kt-portlet__body">
+                <div class="form-group row">
+                    <div class="col-lg-4">
+                        <label>Exam:</label>
+                        <input type="text" formControlName="examId" class="form-control" placeholder="Enter Exam ID">
+                        <span class="form-text text-danger"
+                            *ngIf="marksForm.get('examId')?.touched && marksForm.get('examId')?.errors?.['required']">
+                            This field is required.
+                        </span>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>Subject:</label>
+                        <input type="text" formControlName="subjectId" class="form-control"
+                            placeholder="Enter Subject ID">
+                        <span class="form-text text-danger"
+                            *ngIf="marksForm.get('subjectId')?.touched && marksForm.get('subjectId')?.errors?.['required']">
+                            This field is required.
+                        </span>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>Student:</label>
+                        <input type="text" formControlName="studentId" class="form-control"
+                            placeholder="Enter Student ID">
+                        <span class="form-text text-danger"
+                            *ngIf="marksForm.get('studentId')?.touched && marksForm.get('studentId')?.errors?.['required']">
+                            This field is required.
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-4">
+                        <label>Obtained Marks:</label>
+                        <input type="number" formControlName="obtainedMarks" class="form-control"
+                            placeholder="Enter Marks">
+                        <span class="form-text text-danger"
+                            *ngIf="marksForm.get('obtainedMarks')?.touched && marksForm.get('obtainedMarks')?.errors?.['required']">
+                            This field is required.
+                        </span>
+                    </div>
+                    <div class="col-lg-8">
+                        <label>Remarks:</label>
+                        <input type="text" formControlName="remarks" class="form-control" placeholder="Enter Remarks">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-4">
+                        <label class="kt-checkbox">
+                            <input type="checkbox" formControlName="active"> Active
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="kt-portlet__foot">
+                <div class="kt-form__actions">
+                    <button type="submit" class="btn btn-primary mr-2" [disabled]="isLoading">Save</button>
+                    <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

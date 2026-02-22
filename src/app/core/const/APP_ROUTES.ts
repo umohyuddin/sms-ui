@@ -238,5 +238,11 @@ export const ROUTES = {
     CREATE: ['exam-subject-management', 'create'],
     EDIT: (id: string) => ['exam-subject-management', 'edit', id],
     DETAILS: (id: string) => ['exam-subject-management', 'details', id]
+  },
+  STUDENT_EXAM_MARKS: {
+    LIST: ['student-exam-marks'],
+    CREATE: ['student-exam-marks', 'student-exam-marks-create'],
+    EDIT: (id: string) => ['student-exam-marks', 'student-exam-marks-edit', id],
+    DETAILS: (id: string) => ['student-exam-marks', 'student-exam-marks-details', id]
   }
 };

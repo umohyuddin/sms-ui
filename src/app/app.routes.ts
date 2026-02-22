@@ -44,6 +44,17 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'student-exam-marks',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/student-exam-marks-management/student-exam-marks-management-module').then(m => m.StudentExamMarksManagementModule)
+      }
+    ]
+  },
+  {
     path: 'academic-years',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
