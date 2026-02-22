@@ -18,61 +18,105 @@
         </div>
         <form class="kt-form" [formGroup]="marksForm" (ngSubmit)="onSubmit()">
             <div class="kt-portlet__body">
+                <!-- Selectors Rows -->
+                <div class="form-group row">
+                    <div class="col-lg-4">
+                        <label>Campus:</label>
+                        <select formControlName="campusId" class="form-control" (change)="onCampusChange()">
+                            <option value="">Select Campus</option>
+                            <option *ngFor="let campus of campuses" [value]="campus.id">{{ campus.campusName }}</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>Standard:</label>
+                        <select formControlName="standardId" class="form-control" (change)="onStandardChange()">
+                            <option value="">Select Standard</option>
+                            <option *ngFor="let standard of standards" [value]="standard.id">{{ standard.standardName }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>Section:</label>
+                        <select formControlName="sectionId" class="form-control" (change)="onSectionChange()">
+                            <option value="">Select Section</option>
+                            <option *ngFor="let section of sections" [value]="section.id">{{ section.sectionName }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
                 <div class="form-group row">
                     <div class="col-lg-4">
                         <label>Exam:</label>
-                        <input type="text" formControlName="examId" class="form-control" placeholder="Enter Exam ID">
-                        <span class="form-text text-danger"
-                            *ngIf="marksForm.get('examId')?.touched && marksForm.get('examId')?.errors?.['required']">
-                            This field is required.
-                        </span>
+                        <select formControlName="examId" class="form-control" (change)="onExamChange()">
+                            <option value="">Select Exam</option>
+                            <option *ngFor="let exam of exams" [value]="exam.id">{{ exam.name }}</option>
+                        </select>
                     </div>
                     <div class="col-lg-4">
                         <label>Subject:</label>
-                        <input type="text" formControlName="subjectId" class="form-control"
-                            placeholder="Enter Subject ID">
-                        <span class="form-text text-danger"
-                            *ngIf="marksForm.get('subjectId')?.touched && marksForm.get('subjectId')?.errors?.['required']">
-                            This field is required.
-                        </span>
-                    </div>
-                    <div class="col-lg-4">
-                        <label>Student:</label>
-                        <input type="text" formControlName="studentId" class="form-control"
-                            placeholder="Enter Student ID">
-                        <span class="form-text text-danger"
-                            *ngIf="marksForm.get('studentId')?.touched && marksForm.get('studentId')?.errors?.['required']">
-                            This field is required.
-                        </span>
+                        <select formControlName="subjectId" class="form-control" (change)="onSubjectChange()">
+                            <option value="">Select Subject</option>
+                            <option *ngFor="let subject of subjects" [value]="subject.id">
+                                {{ subject.subjectName || subject.name }}</option>
+                        </select>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-lg-4">
-                        <label>Obtained Marks:</label>
-                        <input type="number" formControlName="obtainedMarks" class="form-control"
-                            placeholder="Enter Marks">
-                        <span class="form-text text-danger"
-                            *ngIf="marksForm.get('obtainedMarks')?.touched && marksForm.get('obtainedMarks')?.errors?.['required']">
-                            This field is required.
-                        </span>
-                    </div>
-                    <div class="col-lg-8">
-                        <label>Remarks:</label>
-                        <input type="text" formControlName="remarks" class="form-control" placeholder="Enter Remarks">
+
+                <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+
+                <!-- Marks Entry Grid -->
+                <div class="row" *ngIf="examMarks.length > 0">
+                    <div class="col-lg-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25%">Student Name</th>
+                                        <th style="width: 15%">Roll Number</th>
+                                        <th style="width: 20%">Obtained Marks</th>
+                                        <th style="width: 30%">Remarks</th>
+                                        <th style="width: 10%">Active</th>
+                                    </tr>
+                                </thead>
+                                <tbody formArrayName="examMarks">
+                                    <tr *ngFor="let mark of examMarks.controls; let i=index" [formGroupName]="i">
+                                        <td>
+                                            {{ mark.get('studentName')?.value }}
+                                        </td>
+                                        <td>
+                                            {{ mark.get('rollNumber')?.value }}
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="obtainedMarks" class="form-control"
+                                                placeholder="Marks">
+                                        </td>
+                                        <td>
+                                            <input type="text" formControlName="remarks" class="form-control"
+                                                placeholder="Remarks">
+                                        </td>
+                                        <td>
+                                            <label class="kt-checkbox kt-checkbox--single">
+                                                <input type="checkbox" formControlName="active">
+                                                <span></span>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-lg-4">
-                        <label class="kt-checkbox">
-                            <input type="checkbox" formControlName="active"> Active
-                            <span></span>
-                        </label>
-                    </div>
+
+                <div class="alert alert-secondary" role="alert"
+                    *ngIf="marksForm.get('subjectId')?.value && examMarks.length === 0">
+                    <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
+                    <div class="alert-text">No students found for the selected section.</div>
                 </div>
             </div>
             <div class="kt-portlet__foot">
                 <div class="kt-form__actions">
-                    <button type="submit" class="btn btn-primary mr-2" [disabled]="isLoading">Save</button>
+                    <button type="submit" class="btn btn-primary mr-2"
+                        [disabled]="isLoading || examMarks.length === 0">Save Marks</button>
                     <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
                 </div>
             </div>

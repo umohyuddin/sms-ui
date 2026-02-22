@@ -16,6 +16,28 @@ export class StudentExamMarksManagementService {
         this.baseUrl = appConfig.apiBaseUrl;
     }
 
+    searchExams(filters: any = {}): Observable<any> {
+        return this.http.request(
+            HTTP_METHOD.GET,
+            `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.EVALUATION.EXAMS.SEARCH}`,
+            {
+                observeResponse: true,
+                params: filters
+            }
+        );
+    }
+
+    getExamSubjects(examId: string | number): Observable<any> {
+        return this.http.request(
+            HTTP_METHOD.GET,
+            `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.EVALUATION.EXAM_SUBJECTS.GET_BY_EXAM}`,
+            {
+                observeResponse: true,
+                params: { examId: examId.toString() }
+            }
+        );
+    }
+
     recordMarks(payload: any): Observable<any> {
         return this.http.request(HTTP_METHOD.POST, `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.RESULTS.MARKS.RECORD}`, {
             observeResponse: true,
