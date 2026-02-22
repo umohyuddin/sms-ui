@@ -254,6 +254,7 @@ export class ExamCreateFormComponent implements OnInit, OnDestroy {
                 if (this.existingExams.length > 0) {
                     const first = this.existingExams[0];
                     this.examForm.patchValue({
+                        examTypeId: first.examTypeId,
                         startDate: this.formatDate(first.startDate),
                         endDate: this.formatDate(first.endDate),
                         status: first.status || ExamStatus.DRAFT

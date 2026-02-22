@@ -18,21 +18,22 @@
                             <span class="kt-badge kt-badge--brand kt-badge--xl kt-badge--rounded mr-3">1</span>
                             <div>
                                 <span class="kt-font-bold">Select Context</span>
-                                <span class="text-muted d-block small">Pick Term, Campus, Standard & Sections</span>
+                                <span class="text-muted d-block small">Pick Term, Type, Campus, Standard &amp;
+                                    Sections</span>
                             </div>
                         </div>
                         <div class="d-flex align-items-center py-2 mr-3 border-left pl-3">
                             <span class="kt-badge kt-badge--success kt-badge--xl kt-badge--rounded mr-3">2</span>
                             <div>
                                 <span class="kt-font-bold">Batch Fill</span>
-                                <span class="text-muted d-block small">Set common values & apply to rows</span>
+                                <span class="text-muted d-block small">Set common values &amp; apply to rows</span>
                             </div>
                         </div>
                         <div class="d-flex align-items-center py-2 border-left pl-3">
                             <span class="kt-badge kt-badge--warning kt-badge--xl kt-badge--rounded mr-3">3</span>
                             <div>
-                                <span class="kt-font-bold">Schedule & Submit</span>
-                                <span class="text-muted d-block small">Customize per section & bulk schedule</span>
+                                <span class="kt-font-bold">Schedule &amp; Submit</span>
+                                <span class="text-muted d-block small">Customize per section &amp; bulk schedule</span>
                             </div>
                         </div>
                     </div>
@@ -42,23 +43,32 @@
             <!-- Filtering Section -->
             <div class="kt-section kt-section--first">
                 <div class="kt-section__body">
-                    <h3 class="kt-section__title kt-section__title-sm">1. Exam & Section Details:</h3>
+                    <h3 class="kt-section__title kt-section__title-sm">1. Exam &amp; Section Details:</h3>
+
+                    <!-- Row 1: Exam Term + Exam Type -->
                     <div class="form-group row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <label class="required">Exam Term:</label>
-                            <select class="form-control" formControlName="examTermId">
+                            <select class="form-control" formControlName="examTermId" (change)="onExamTermChange()">
                                 <option value="">Select Term</option>
                                 <option *ngFor="let term of examTerms" [value]="term.id">{{ term.name }}</option>
                             </select>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
+                            <label class="required">Exam Type:</label>
+                            <select class="form-control" formControlName="examTypeId" (change)="onExamTypeChange()">
+                                <option value="">Select Type</option>
+                                <option *ngFor="let type of examTypes" [value]="type.id">{{ type.name }}</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3">
                             <label class="required">Campus:</label>
                             <select class="form-control" formControlName="campusId" (change)="onCampusChange()">
                                 <option value="">Select Campus</option>
                                 <option *ngFor="let c of campuses" [value]="c.id">{{ c.campusName }}</option>
                             </select>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <label class="required">Standard:</label>
                             <select class="form-control" formControlName="standardId" (change)="onStandardChange()">
                                 <option value="">Select Standard</option>
@@ -67,7 +77,25 @@
                         </div>
                     </div>
 
-                    <!-- Multi-Section Selection -->
+                    <!-- Info: no exams found -->
+                    <div class="alert alert-warning py-2"
+                        *ngIf="allExams.length === 0 && examSubjectForm.get('examTermId')?.value && examSubjectForm.get('examTypeId')?.value && examSubjectForm.get('campusId')?.value && examSubjectForm.get('standardId')?.value">
+                        <div class="alert-text">
+                            <i class="flaticon-warning mr-1"></i>
+                            No exams found for the selected filters. Please create exams first.
+                        </div>
+                    </div>
+
+                    <!-- Info: exams found -->
+                    <div class="alert alert-success py-2" *ngIf="allExams.length > 0">
+                        <div class="alert-text">
+                            <i class="la la-check-circle mr-1"></i>
+                            <strong>{{ allExams.length }}</strong> exam(s) found. Select sections below to schedule
+                            subjects.
+                        </div>
+                    </div>
+
+                    <!-- Multi-Section Selection (derived from exams) -->
                     <div class="form-group row" *ngIf="sections.length > 0">
                         <div class="col-lg-12">
                             <label class="required">Sections:

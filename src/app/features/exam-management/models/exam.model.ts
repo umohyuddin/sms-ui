@@ -27,6 +27,8 @@ export interface Exam {
     academicYearName?: string;
     examTermId: number;
     examTermName?: string;
+    examTypeId?: number;
+    examTypeName?: string;
     campusId: number;
     campusName?: string;
     standardId: number;

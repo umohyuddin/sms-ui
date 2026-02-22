@@ -8,6 +8,7 @@ import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
 import { AcademicYearManagementService } from '../../../tenant-management/services/academic-year-management.service';
+import { ExamTypeManagementService } from '../../../exam-type-management/services/exam-type-management.service';
 
 @Component({
     selector: 'app-exam-subject-create-form',
@@ -20,15 +21,21 @@ export class ExamSubjectCreateFormComponent implements OnInit {
     examSubjectForm!: FormGroup;
     commonValuesForm!: FormGroup;
     isEditMode = false;
-    examId: string | null = null;
     subjectScheduleId: string | null = null;
+
+    // Dropdown data (loaded from APIs)
+    examTerms: any[] = [];
+    examTypes: any[] = [];
     campuses: any[] = [];
     standards: any[] = [];
+
+    // Derived from exams after all 4 filters are selected
     sections: any[] = [];
-    examTerms: any[] = [];
+    allExams: any[] = [];
+
     currentAcademicYearId: string | number | null = null;
 
-    // Raw subjects from API (used as source for grid generation)
+    // Raw subjects from API
     private rawSubjects: any[] = [];
 
     // The grid rows: section × subject cross-product
@@ -41,11 +48,11 @@ export class ExamSubjectCreateFormComponent implements OnInit {
         private service: ExamSubjectManagementService,
         private campusService: CampusManagementService,
         private standardService: StandardManagementService,
-        private academicYearService: AcademicYearManagementService
+        private academicYearService: AcademicYearManagementService,
+        private examTypeService: ExamTypeManagementService
     ) { }
 
     ngOnInit(): void {
-        this.examId = this.route.snapshot.queryParamMap.get('examId');
         this.subjectScheduleId = this.route.snapshot.paramMap.get('id');
         this.isEditMode = !!this.subjectScheduleId;
 
@@ -55,8 +62,8 @@ export class ExamSubjectCreateFormComponent implements OnInit {
 
     private initializeForm(): void {
         this.examSubjectForm = this.fb.group({
-            examId: [this.examId, Validators.required],
             examTermId: ['', Validators.required],
+            examTypeId: ['', Validators.required],
             campusId: ['', Validators.required],
             standardId: ['', Validators.required]
         });
@@ -72,6 +79,7 @@ export class ExamSubjectCreateFormComponent implements OnInit {
     }
 
     private loadInitialData(): void {
+        // Load campuses from API
         this.campusService.getAllCampuses().subscribe({
             next: (resp: HttpResponse<any[]>) => {
                 this.campuses = resp.body || [];
@@ -79,6 +87,7 @@ export class ExamSubjectCreateFormComponent implements OnInit {
             error: (err: HttpErrorResponse) => console.error('Error loading campuses:', err)
         });
 
+        // Load current academic year → exam terms
         this.academicYearService.getCurrentAcademicYear().subscribe({
             next: (resp: HttpResponse<any>) => {
                 this.currentAcademicYearId = resp.body?.id || null;
@@ -87,6 +96,14 @@ export class ExamSubjectCreateFormComponent implements OnInit {
                 }
             },
             error: (err: HttpErrorResponse) => console.error('Error loading current academic year:', err)
+        });
+
+        // Load exam types from API
+        this.examTypeService.getExamTypes().subscribe({
+            next: (resp: any) => {
+                this.examTypes = resp.body || [];
+            },
+            error: (err: HttpErrorResponse) => console.error('Error loading exam types:', err)
         });
     }
 
@@ -99,13 +116,25 @@ export class ExamSubjectCreateFormComponent implements OnInit {
         });
     }
 
+    // ── Change handlers ──
+
+    onExamTermChange(): void {
+        this.tryLoadExams();
+    }
+
+    onExamTypeChange(): void {
+        this.tryLoadExams();
+    }
+
     onCampusChange(): void {
+        // Campus → load standards from API
         const campusId = this.examSubjectForm.get('campusId')?.value;
         this.standards = [];
         this.sections = [];
+        this.allExams = [];
         this.rawSubjects = [];
         this.gridRows = [];
-        this.examSubjectForm.patchValue({ standardId: '' });
+        this.examSubjectForm.patchValue({ standardId: '' }, { emitEvent: false });
 
         if (campusId) {
             this.standardService.getStandardsByCampusId(campusId).subscribe({
@@ -120,10 +149,12 @@ export class ExamSubjectCreateFormComponent implements OnInit {
     onStandardChange(): void {
         const standardId = this.examSubjectForm.get('standardId')?.value;
         this.sections = [];
+        this.allExams = [];
         this.rawSubjects = [];
         this.gridRows = [];
 
         if (standardId) {
+            // Load sections from API
             this.standardService.getSectionsByStandardId(standardId).subscribe({
                 next: (resp: HttpResponse<any[]>) => {
                     this.sections = (resp.body || []).map(sec => ({
@@ -134,17 +165,52 @@ export class ExamSubjectCreateFormComponent implements OnInit {
                 error: (err: HttpErrorResponse) => console.error('Error loading sections:', err)
             });
 
+            // Load subjects for this standard
             if (this.currentAcademicYearId) {
                 this.service.getStandardSubjects(standardId, this.currentAcademicYearId).subscribe({
                     next: (resp: HttpResponse<any[]>) => {
                         this.rawSubjects = resp.body || [];
-                        this.rebuildGrid();
                     },
                     error: (err: HttpErrorResponse) => console.error('Error loading subjects:', err)
                 });
             }
+
+            // Load exams for examId mapping
+            this.tryLoadExams();
         }
     }
+
+    // ── Load exams when all 4 filters are selected ──
+
+    private tryLoadExams(): void {
+        const examTermId = this.examSubjectForm.get('examTermId')?.value;
+        const examTypeId = this.examSubjectForm.get('examTypeId')?.value;
+        const campusId = this.examSubjectForm.get('campusId')?.value;
+        const standardId = this.examSubjectForm.get('standardId')?.value;
+
+        this.allExams = [];
+
+        if (examTermId && examTypeId && campusId && standardId) {
+            const params: any = {
+                examTermId,
+                examTypeId,
+                campusId,
+                standardId
+            };
+            if (this.currentAcademicYearId) {
+                params.academicYearId = this.currentAcademicYearId;
+            }
+
+            this.service.searchExams(params).subscribe({
+                next: (resp: HttpResponse<any[]>) => {
+                    this.allExams = resp.body || [];
+                },
+                error: (err: HttpErrorResponse) => console.error('Error loading exams:', err)
+            });
+        }
+    }
+
+    // ── Section selection ──
 
     toggleAllSections(event: any): void {
         const checked = event.target.checked;
@@ -162,19 +228,21 @@ export class ExamSubjectCreateFormComponent implements OnInit {
 
     /**
      * Rebuilds the grid as a cross-product of selected sections × subjects.
-     * Preserves existing row data if the section+subject combination already exists.
+     * Matches examId from allExams by sectionId.
      */
     private rebuildGrid(): void {
         const selectedSections = this.sections.filter(s => s.selected);
         const existingMap = new Map<string, any>();
 
-        // Index existing rows by sectionId_subjectId to preserve user's edits
         this.gridRows.forEach(row => {
             existingMap.set(`${row.sectionId}_${row.subjectId}`, row);
         });
 
         const newRows: any[] = [];
         for (const sec of selectedSections) {
+            // Find the matching exam for this section
+            const matchingExam = this.allExams.find(e => e.sectionId == sec.id);
+
             for (const subj of this.rawSubjects) {
                 const key = `${sec.id}_${subj.subjectId || subj.id}`;
                 const existing = existingMap.get(key);
@@ -182,6 +250,7 @@ export class ExamSubjectCreateFormComponent implements OnInit {
                     newRows.push(existing);
                 } else {
                     newRows.push({
+                        examId: matchingExam?.id || null,
                         sectionId: sec.id,
                         sectionName: sec.sectionName,
                         subjectId: subj.subjectId || subj.id,
@@ -201,6 +270,8 @@ export class ExamSubjectCreateFormComponent implements OnInit {
         }
         this.gridRows = newRows;
     }
+
+    // ── Batch fill ──
 
     applyCommonValues(): void {
         const selectedCount = this.gridRows.filter(r => r.selected).length;
@@ -231,6 +302,8 @@ export class ExamSubjectCreateFormComponent implements OnInit {
         this.gridRows.forEach(r => r.selected = checked);
     }
 
+    // ── Submit ──
+
     onSubmit(): void {
         if (this.examSubjectForm.invalid) {
             this.examSubjectForm.markAllAsTouched();
@@ -249,54 +322,26 @@ export class ExamSubjectCreateFormComponent implements OnInit {
             return;
         }
 
-        // Fetch exams to resolve sectionId → examId mapping
-        const formValue = this.examSubjectForm.getRawValue();
-        const searchParams: any = {
-            academicYearId: this.currentAcademicYearId?.toString(),
-            standardId: formValue.standardId,
-            examTermId: formValue.examTermId
-        };
-        const campusId = formValue.campusId;
-        if (campusId) searchParams.campusId = campusId;
+        // examId is already mapped on each grid row
+        const assignments = selectedRows.map(row => ({
+            examId: row.examId,
+            subjectId: row.subjectId,
+            totalMarks: row.maxMarks,
+            passingMarks: row.minPassMarks,
+            examDate: row.examDate,
+            startTime: row.startTime,
+            endTime: row.endTime,
+            room: row.room,
+            active: row.active
+        }));
 
-        this.service.searchExams(searchParams).subscribe({
-            next: (resp: HttpResponse<any[]>) => {
-                const exams = resp.body || [];
-                const assignments: any[] = [];
-
-                for (const row of selectedRows) {
-                    const exam = exams.find((e: any) => e.sectionId == row.sectionId || e.section?.id == row.sectionId);
-                    if (!exam) {
-                        alert(`No exam found for section "${row.sectionName}". Please create the exam first.`);
-                        return;
-                    }
-
-                    assignments.push({
-                        examId: exam.id,
-                        subjectId: row.subjectId,
-                        totalMarks: row.maxMarks,
-                        passingMarks: row.minPassMarks,
-                        examDate: row.examDate,
-                        startTime: row.startTime,
-                        endTime: row.endTime,
-                        room: row.room,
-                        active: row.active
-                    });
-                }
-
-                this.service.bulkScheduleSubjects({ assignments }).subscribe({
-                    next: () => {
-                        this.router.navigate(ROUTES.EXAM_SUBJECT_MANAGEMENT.LIST);
-                    },
-                    error: (err: HttpErrorResponse) => {
-                        console.error('Error saving schedules:', err);
-                        alert('Failed to save schedules. Please check if matches existing data.');
-                    }
-                });
+        this.service.bulkScheduleSubjects({ assignments }).subscribe({
+            next: () => {
+                this.router.navigate(ROUTES.EXAM_SUBJECT_MANAGEMENT.LIST);
             },
             error: (err: HttpErrorResponse) => {
-                console.error('Error searching exams:', err);
-                alert('Failed to find exams for selected sections.');
+                console.error('Error saving schedules:', err);
+                alert('Failed to save schedules. Please check if matches existing data.');
             }
         });
     }

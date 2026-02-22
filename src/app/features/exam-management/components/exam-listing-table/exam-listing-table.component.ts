@@ -9,6 +9,7 @@ import { StandardManagementService } from '../../../standard-management/services
 import { SectionManagementService } from '../../../section-management/services/section-management.service';
 import { AcademicYearManagementService } from '../../../tenant-management/services/academic-year-management.service';
 import { ExamTermManagementService } from '../../../exam-term-management/services/exam-term-management.service';
+import { ExamTypeManagementService } from '../../../exam-type-management/services/exam-type-management.service';
 import { Exam } from '../../models/exam.model';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
@@ -43,6 +44,7 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
     standardControl = new FormControl('');
     sectionControl = new FormControl('');
     examTermControl = new FormControl('');
+    examTypeControl = new FormControl('');
 
     // Data for dropdowns
     academicYears: any[] = [];
@@ -50,6 +52,7 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
     standards: StandardResponse[] = [];
     sections: SectionResponse[] = [];
     examTerms: any[] = [];
+    examTypes: any[] = [];
 
     isDeletePopupOpen = false;
     pendingDeleteId?: number | string;
@@ -74,6 +77,7 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
         private sectionService: SectionManagementService,
         private academicYearService: AcademicYearManagementService,
         private examTermService: ExamTermManagementService,
+        private examTypeService: ExamTypeManagementService,
         private logger: LoggerService,
         private router: Router
     ) { }
@@ -94,6 +98,11 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
         // Load Campuses
         this.campusService.getAllCampuses().subscribe((resp: any) => {
             this.campuses = resp.body || [];
+        });
+
+        // Load Exam Types
+        this.examTypeService.getExamTypes().subscribe((resp: any) => {
+            this.examTypes = resp.body || [];
         });
 
         // Load Academic Years and pre-select current
@@ -148,6 +157,7 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
         // Other filters
         this.sectionControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.getExams());
         this.examTermControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.getExams());
+        this.examTypeControl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.getExams());
     }
 
     private subscribeToSearch() {
@@ -170,7 +180,8 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
             campusId: this.campusControl.value,
             standardId: this.standardControl.value,
             sectionId: this.sectionControl.value,
-            examTermId: this.examTermControl.value
+            examTermId: this.examTermControl.value,
+            examTypeId: this.examTypeControl.value
         };
         this.logger.info('Fetching exams with filters:', filters);
 
@@ -272,6 +283,7 @@ export class ExamListingTableComponent implements OnInit, OnDestroy {
         this.standardControl.setValue('', { emitEvent: false });
         this.sectionControl.setValue('', { emitEvent: false });
         this.examTermControl.setValue('', { emitEvent: false });
+        this.examTypeControl.setValue('', { emitEvent: false });
 
         // Reset Academic Year to current if available
         const currentYear = this.academicYears.find(y => y.isCurrent);
