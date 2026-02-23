@@ -14,13 +14,10 @@
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <select class="form-control form-control-sm border-0 shadow-sm rounded-pill px-3"
-                    [(ngModel)]="selectedYearId" (change)="loadCampusSummary()" style="height: 36px; min-width: 160px;">
-                    <option *ngFor="let year of academicYears" [value]="year.id">{{year.name}}</option>
-                </select>
-                <button type="button" class="btn btn-brand btn-elevate btn-sm rounded-pill px-4"
-                    (click)="goToRecordAttendance()">
-                    <i class="la la-plus"></i> Record New
+               
+                <button type="button" class="btn btn-dark active" (click)="goToRecordAttendance()">
+                    <i class="la la-plus"></i>
+                    Record New
                 </button>
             </div>
         </div>
@@ -70,6 +67,13 @@
                     {{context.subject.name}}
                 </div>
             </ng-container>
+        </div>
+        <div class="breadcrumb-actions">
+            <select class="form-control form-control-sm border-0 shadow-sm rounded-pill px-3"
+                [(ngModel)]="selectedYearId" (change)="loadCampusSummary()"
+                style="height: 36px; min-width: 160px;">
+                <option *ngFor="let year of academicYears" [value]="year.id">{{year.name}}</option>
+            </select>
         </div>
     </div>
 
