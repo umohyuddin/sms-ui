@@ -1,26 +1,207 @@
-<div class="kt-subheader  kt-grid__item" id="kt_subheader">
-    <div class="kt-container  kt-container--fluid ">
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container kt-container--fluid">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Manage Student Exam Attendance</h3>
+            <h3 class="kt-subheader__title">Attendance Insights</h3>
             <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-
-            <div class="kt-input-icon kt-input-icon--right kt-subheader__search kt-hidden">
-                <input type="text" class="form-control" placeholder="Search..." id="generalSearch">
-                <span class="kt-input-icon__icon kt-input-icon__icon--right">
-                    <span><i class="flaticon2-search-1"></i></span>
-                </span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="javascript:;" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <span class="kt-subheader__breadcrumbs-link">Academic Reports</span>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Exam Attendance
+                    Dashboard</span>
             </div>
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <button type="button" class="btn btn-dark active" (click)="goToRecordAttendance()">
-                    <i class="la la-plus"></i>
-                    Record New Attendance</button>
+                <select class="form-control form-control-sm border-0 shadow-sm rounded-pill px-3"
+                    [(ngModel)]="selectedYearId" (change)="loadCampusSummary()" style="height: 36px; min-width: 160px;">
+                    <option *ngFor="let year of academicYears" [value]="year.id">{{year.name}}</option>
+                </select>
+                <button type="button" class="btn btn-brand btn-elevate btn-sm rounded-pill px-4"
+                    (click)="goToRecordAttendance()">
+                    <i class="la la-plus"></i> Record New
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
-    <app-student-exam-attendance-table></app-student-exam-attendance-table>
+<div class="report-container kt-container kt-container--fluid">
+
+    <!-- Modern Pill Breadcrumbs -->
+    <div class="breadcrumb-container">
+        <div class="breadcrumb-items">
+            <button *ngIf="currentLevel !== 'campus'" class="btn btn-sm btn-icon btn-clean rounded-circle" (click)="goBack()">
+                <i class="la la-arrow-left kt-font-brand"></i>
+            </button>
+            <div class="breadcrumb-item" (click)="loadCampusSummary()"
+                [ngClass]="{'active': currentLevel === 'campus'}">
+                <i class="la la-university mr-1"></i> All Campuses
+            </div>
+
+            <ng-container *ngIf="context.campus">
+                <span class="breadcrumb-separator"><i class="la la-angle-right"></i></span>
+                <div class="breadcrumb-item" (click)="drillDownToStandard(context.campus)"
+                    [ngClass]="{'active': currentLevel === 'standard'}">
+                    {{context.campus.name}}
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="context.standard">
+                <span class="breadcrumb-separator"><i class="la la-angle-right"></i></span>
+                <div class="breadcrumb-item" (click)="drillDownToSection(context.standard)"
+                    [ngClass]="{'active': currentLevel === 'section'}">
+                    {{context.standard.name}}
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="context.section">
+                <span class="breadcrumb-separator"><i class="la la-angle-right"></i></span>
+                <div class="breadcrumb-item" (click)="drillDownToSubject(context.section)"
+                    [ngClass]="{'active': currentLevel === 'subject'}">
+                    {{context.section.name}}
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="context.subject">
+                <span class="breadcrumb-separator"><i class="la la-angle-right"></i></span>
+                <div class="breadcrumb-item active">
+                    {{context.subject.name}}
+                </div>
+            </ng-container>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" *ngIf="isLoading">
+        <div class="kt-spinner kt-spinner--v2 kt-spinner--lg kt-spinner--brand"></div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div *ngIf="currentLevel !== 'detail'">
+        <div class="report-grid">
+            <div class="item-card" *ngFor="let item of summaries">
+                <div class="item-card-header">
+                    <span class="item-name">{{item.name}}</span>
+                    <span class="attendance-pill">{{item.attendancePercentage}}%</span>
+                </div>
+                <div class="item-card-body">
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-info">
+                                <div class="stat-icon icon-total"><i class="la la-users"></i></div>
+                                <span class="stat-label">Total Students</span>
+                            </div>
+                            <span class="stat-value">{{item.totalStudents}}</span>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-info">
+                                <div class="stat-icon icon-present"><i class="la la-check-circle"></i></div>
+                                <span class="stat-label">Present</span>
+                            </div>
+                            <span class="stat-value text-success">{{item.presentStudents}}</span>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-info">
+                                <div class="stat-icon icon-absent"><i class="la la-times-circle"></i></div>
+                                <span class="stat-label">Absent</span>
+                            </div>
+                            <span class="stat-value text-danger">{{item.absentStudents}}</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-section">
+                        <div class="percentage-label">
+                            <span>Attendance Progress</span>
+                            <span>{{item.attendancePercentage}}%</span>
+                        </div>
+                        <div class="percentage-bar">
+                            <div class="percentage-fill" [style.width]="item.attendancePercentage + '%'"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item-card-footer">
+                    <button class="btn-explore" (click)="currentLevel === 'campus' ? drillDownToStandard(item) : 
+                                 currentLevel === 'standard' ? drillDownToSection(item) : 
+                                 currentLevel === 'section' ? drillDownToSubject(item) : 
+                                 viewDetailedReport(item)">
+                        {{ currentLevel === 'campus' ? 'View Standards' :
+                        currentLevel === 'standard' ? 'View Sections' :
+                        currentLevel === 'section' ? 'View Subjects' : 'View Student Details' }}
+                        <i class="la la-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="kt-portlet mt-5" *ngIf="summaries.length === 0 && !isLoading">
+            <div class="kt-portlet__body">
+                <div class="text-center py-5">
+                    <i class="la la-inbox kt-font-brand" style="font-size: 4rem; opacity: 0.3;"></i>
+                    <h4 class="text-muted mt-3">No attendance records found for this selection.</h4>
+                    <p class="text-muted small">Try selecting a different academic year or navigating to another level.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Table View -->
+    <div class="kt-portlet" *ngIf="currentLevel === 'detail'">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+            <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon text-brand"><i class="la la-list-alt"></i></span>
+                <h3 class="kt-portlet__head-title">Subject Attendance: <span
+                        class="text-brand">{{context.subject?.name}}</span></h3>
+            </div>
+            <div class="kt-portlet__head-toolbar">
+                <span class="kt-badge kt-badge--unified-brand kt-badge--lg kt-badge--rounded kt-badge--bold">
+                    {{detailedRecords.length}} Students
+                </span>
+            </div>
+        </div>
+        <div class="kt-portlet__body kt-portlet__body--fit">
+            <div class="table-responsive">
+                <table class="table table-head-bg-brand table-hover">
+                    <thead>
+                        <tr>
+                            <th class="pl-4">Student ID</th>
+                            <th>Full Name</th>
+                            <th>Classification</th>
+                            <th class="text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let record of detailedRecords" class="align-middle">
+                            <td class="pl-4"><span class="kt-font-bold text-dark">{{record.studentCode}}</span></td>
+                            <td class="kt-font-medium text-dark">{{record.studentName}}</td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <span class="text-dark font-weight-bold smaller">{{record.campusName}}</span>
+                                    <span class="text-muted smallest">{{record.standardName}} •
+                                        {{record.sectionName}}</span>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <span class="status-badge" [ngClass]="{
+                                        'status-present': record.status === 'PRESENT',
+                                        'status-absent': record.status === 'ABSENT',
+                                        'status-ufm': record.status === 'UFM'
+                                    }">
+                                    <i class="la" [ngClass]="{
+                                        'la-check': record.status === 'PRESENT',
+                                        'la-close': record.status === 'ABSENT',
+                                        'la-warning': record.status === 'UFM'
+                                    }"></i>
+                                    {{record.status}}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>

@@ -178,6 +178,18 @@ export class StudentExamAttendanceCreate implements OnInit {
         // Logic to load data for edit mode
     }
 
+    markAllAsPresent(): void {
+        this.examAttendance.controls.forEach(control => {
+            control.get('isPresent')?.setValue(true);
+        });
+    }
+
+    markAllAsAbsent(): void {
+        this.examAttendance.controls.forEach(control => {
+            control.get('isPresent')?.setValue(false);
+        });
+    }
+
     onSubmit(): void {
         if (this.attendanceForm.invalid) {
             this.attendanceForm.markAllAsTouched();
@@ -186,12 +198,11 @@ export class StudentExamAttendanceCreate implements OnInit {
 
         this.isLoading = true;
         const formValue = this.attendanceForm.value;
-        const payload = {
-            examId: formValue.examId,
-            subjectId: formValue.subjectId,
-            academicYearId: this.currentAcademicYearId,
-            attendanceRecords: formValue.examAttendance
-        };
+        const payload = formValue.examAttendance.map((record: any) => ({
+            studentId: record.studentId,
+            examSubjectId: formValue.subjectId,
+            status: record.isPresent ? 'PRESENT' : 'ABSENT'
+        }));
 
         this.service.recordAttendance(payload).subscribe({
             next: (resp: HttpResponse<any>) => {

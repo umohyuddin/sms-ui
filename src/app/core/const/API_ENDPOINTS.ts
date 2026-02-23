@@ -513,6 +513,13 @@ export const API_ENDPOINTS = {
                 EVALUATE: '/api/academic/evaluation/student-assessments/evaluate',
                 GET_BY_ASSESSMENT: (id: string | number) => `/api/academic/evaluation/student-assessments/assessment/${id}`,
                 GET_BY_STUDENT: (id: string | number) => `/api/academic/evaluation/student-assessments/student/${id}`
+            },
+            REPORTS: {
+                CAMPUS_SUMMARY: '/api/academic/reports/exam-attendance/campus-summary',
+                STANDARD_SUMMARY: '/api/academic/reports/exam-attendance/standard-summary',
+                SECTION_SUMMARY: '/api/academic/reports/exam-attendance/section-summary',
+                SUBJECT_SUMMARY: '/api/academic/reports/exam-attendance/subject-summary',
+                DETAILED: '/api/academic/reports/exam-attendance/detail'
             }
         },
         RESULTS: {
@@ -522,8 +529,8 @@ export const API_ENDPOINTS = {
                 GET_BY_STUDENT: (id: string | number) => `/api/academic/results/marks/student/${id}`
             },
             EXAM_ATTENDANCE: {
-                RECORD: '/api/academic/results/exam-attendance',
-                GET_BY_SUBJECT: (id: string | number) => `/api/academic/results/exam-attendance/subject/${id}`
+                RECORD: '/api/academic/evaluation/mark-exam-attendance',
+                GET_BY_SUBJECT: '/api/academic/evaluation/exam-attendance'
             },
             WEIGHTAGES: {
                 SAVE: '/api/academic/results/weightages',

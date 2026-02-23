@@ -9,11 +9,18 @@ import { CampusManagementService } from '../../../campus-management/services/cam
 import { StandardManagementService } from '../../../standard-management/services/standard-management.service';
 import { AcademicYearManagementService } from '../../../tenant-management/services/academic-year-management.service';
 import { ExamTypeManagementService } from '../../../exam-type-management/services/exam-type-management.service';
+import { EmployeeManagementService } from '../../../employee-management/services/employee-management.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormControl } from '@angular/forms';
+import { map, startWith } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-exam-subject-create-form',
     standalone: true,
-    imports: [ReactiveFormsModule, FormsModule, CommonModule],
+    imports: [ReactiveFormsModule, FormsModule, CommonModule, MatAutocompleteModule, MatInputModule, MatFormFieldModule],
     templateUrl: './exam-subject-create-form.component.html',
     styleUrls: ['./exam-subject-create-form.component.css']
 })
@@ -23,11 +30,15 @@ export class ExamSubjectCreateFormComponent implements OnInit {
     isEditMode = false;
     subjectScheduleId: string | null = null;
 
+    evaluatorSearchControl = new FormControl('');
+    filteredEmployees$!: Observable<any[]>;
+
     // Dropdown data (loaded from APIs)
     examTerms: any[] = [];
     examTypes: any[] = [];
     campuses: any[] = [];
     standards: any[] = [];
+    employees: any[] = [];
 
     // Derived from exams after all 4 filters are selected
     sections: any[] = [];
@@ -49,7 +60,8 @@ export class ExamSubjectCreateFormComponent implements OnInit {
         private campusService: CampusManagementService,
         private standardService: StandardManagementService,
         private academicYearService: AcademicYearManagementService,
-        private examTypeService: ExamTypeManagementService
+        private examTypeService: ExamTypeManagementService,
+        private employeeService: EmployeeManagementService
     ) { }
 
     ngOnInit(): void {
@@ -74,6 +86,7 @@ export class ExamSubjectCreateFormComponent implements OnInit {
             endTime: [''],
             maxMarks: [''],
             minPassMarks: [''],
+            evaluatorId: [''],
             room: ['']
         });
     }
@@ -105,6 +118,14 @@ export class ExamSubjectCreateFormComponent implements OnInit {
             },
             error: (err: HttpErrorResponse) => console.error('Error loading exam types:', err)
         });
+
+        // Load employees for evaluator dropdown
+        this.employeeService.getAllEmployee().subscribe({
+            next: (resp: HttpResponse<any[]>) => {
+                this.employees = resp.body || [];
+            },
+            error: (err: HttpErrorResponse) => console.error('Error loading employees:', err)
+        });
     }
 
     private loadExamTerms(yearId: string | number): void {
@@ -114,6 +135,42 @@ export class ExamSubjectCreateFormComponent implements OnInit {
             },
             error: (err: HttpErrorResponse) => console.error('Error loading exam terms:', err)
         });
+    }
+
+    private setupEvaluatorAutocomplete(): void {
+        this.filteredEmployees$ = this.evaluatorSearchControl.valueChanges.pipe(
+            startWith(''),
+            map((value: any) => {
+                const name = typeof value === 'string' ? value : value?.fullName;
+                return name ? this._filterEmployees(name) : this.employees.slice();
+            })
+        );
+    }
+
+    private _filterEmployees(name: string): any[] {
+        const filterValue = name.toLowerCase();
+        return this.employees.filter((emp: any) =>
+            emp.fullName?.toLowerCase().includes(filterValue) ||
+            emp.employeeNo?.toLowerCase().includes(filterValue)
+        );
+    }
+
+    displayFn(emp: any): string {
+        return emp && emp.fullName ? emp.fullName : '';
+    }
+
+    onEvaluatorSelected(event: any): void {
+        const emp = event.option.value;
+        this.commonValuesForm.patchValue({ evaluatorId: emp.id });
+    }
+
+    onGridEvaluatorChange(row: any): void {
+        const emp = this.employees.find((e: any) => e.fullName === row.evaluatorName);
+        if (emp) {
+            row.evaluatorId = emp.id;
+        } else {
+            row.evaluatorId = null;
+        }
     }
 
     // ── Change handlers ──
@@ -262,6 +319,8 @@ export class ExamSubjectCreateFormComponent implements OnInit {
                         endTime: '',
                         maxMarks: '',
                         minPassMarks: '',
+                        evaluatorId: '',
+                        evaluatorName: '',
                         room: '',
                         active: true
                     });
@@ -290,6 +349,8 @@ export class ExamSubjectCreateFormComponent implements OnInit {
                     endTime: common.endTime || r.endTime,
                     maxMarks: common.maxMarks || r.maxMarks,
                     minPassMarks: common.minPassMarks || r.minPassMarks,
+                    evaluatorId: common.evaluatorId || r.evaluatorId,
+                    evaluatorName: this.employees.find(e => e.id === (common.evaluatorId || r.evaluatorId))?.fullName || '',
                     room: common.room || r.room
                 };
             }
@@ -331,6 +392,7 @@ export class ExamSubjectCreateFormComponent implements OnInit {
             examDate: row.examDate,
             startTime: row.startTime,
             endTime: row.endTime,
+            evaluatorId: row.evaluatorId || null,
             room: row.room,
             active: row.active
         }));

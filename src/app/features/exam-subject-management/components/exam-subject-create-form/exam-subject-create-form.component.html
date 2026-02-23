@@ -110,13 +110,15 @@
                                     <input type="checkbox" (change)="toggleAllSections($event)"> Select All
                                     <span></span>
                                 </label>
-                                <label *ngFor="let sec of sections"
-                                    class="kt-checkbox kt-checkbox--bold kt-checkbox--brand mb-0">
-                                    <input type="checkbox" [(ngModel)]="sec.selected"
-                                        [ngModelOptions]="{standalone: true}" (ngModelChange)="onSectionToggle()"> {{
-                                    sec.sectionName }}
-                                    <span></span>
-                                </label>
+                                <div class="sections-list d-flex flex-wrap" style="gap: 12px;">
+                                    <label *ngFor="let sec of sections"
+                                        class="kt-checkbox kt-checkbox--bold kt-checkbox--brand mb-0">
+                                        <input type="checkbox" [(ngModel)]="sec.selected"
+                                            [ngModelOptions]="{standalone: true}" (ngModelChange)="onSectionToggle()">
+                                        {{ sec.sectionName }}
+                                        <span></span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -153,6 +155,20 @@
                             <input type="text" formControlName="room" class="form-control form-control-sm">
                         </div>
                         <div class="col-lg-2">
+                            <label>Evaluator:</label>
+                            <div class="evaluator-search-container">
+                                <input type="text" placeholder="Search Evaluator..."
+                                    [formControl]="evaluatorSearchControl" [matAutocomplete]="auto"
+                                    class="form-control form-control-sm">
+                                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                                    (optionSelected)="onEvaluatorSelected($event)">
+                                    <mat-option *ngFor="let emp of filteredEmployees$ | async" [value]="emp">
+                                        {{ emp.fullName }} ({{ emp.employeeNo }})
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
                             <label>&nbsp;</label>
                             <button type="button" (click)="applyCommonValues()"
                                 class="btn btn-primary btn-sm btn-block">
@@ -179,12 +195,13 @@
                                     </th>
                                     <th style="vertical-align: middle;">Section</th>
                                     <th style="vertical-align: middle;">Subject</th>
-                                    <th style="width: 150px;">Date <span class="text-danger">*</span></th>
-                                    <th style="width: 110px;">Start <span class="text-danger">*</span></th>
-                                    <th style="width: 110px;">End <span class="text-danger">*</span></th>
-                                    <th style="width: 80px;">Max <span class="text-danger">*</span></th>
-                                    <th style="width: 80px;">Pass <span class="text-danger">*</span></th>
-                                    <th style="width: 100px;">Room</th>
+                                    <th style="width: 140px;">Date <span class="text-danger">*</span></th>
+                                    <th style="width: 100px;">Start <span class="text-danger">*</span></th>
+                                    <th style="width: 100px;">End <span class="text-danger">*</span></th>
+                                    <th style="width: 70px;">Max <span class="text-danger">*</span></th>
+                                    <th style="width: 70px;">Pass <span class="text-danger">*</span></th>
+                                    <th style="width: 180px;">Evaluator</th>
+                                    <th style="width: 80px;">Room</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -192,7 +209,7 @@
                                     <!-- Section separator row -->
                                     <tr *ngIf="i === 0 || row.sectionId !== gridRows[i - 1].sectionId"
                                         class="bg-secondary">
-                                        <td colspan="9"
+                                        <td colspan="10"
                                             style="padding: 6px 12px; font-weight: 600; font-size: 13px; color: #fff; letter-spacing: 0.5px;">
                                             <i class="la la-bookmark"></i> {{ row.sectionName }}
                                         </td>
@@ -235,6 +252,13 @@
                                                 class="form-control form-control-sm">
                                         </td>
                                         <td>
+                                            <!-- Lightweight Searchable Dropdown using list/datalist -->
+                                            <input type="text" list="employeesList" [(ngModel)]="row.evaluatorName"
+                                                [ngModelOptions]="{standalone: true}"
+                                                (change)="onGridEvaluatorChange(row)" placeholder="Search Evaluator..."
+                                                class="form-control form-control-sm">
+                                        </td>
+                                        <td>
                                             <input type="text" [(ngModel)]="row.room"
                                                 [ngModelOptions]="{standalone: true}"
                                                 class="form-control form-control-sm">
@@ -246,6 +270,13 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Datalist for Grid Evaluators -->
+            <datalist id="employeesList">
+                <option *ngFor="let emp of employees" [value]="emp.fullName">
+                    {{ emp.employeeNo ? emp.employeeNo + ' - ' : '' }}{{ emp.fullName }}
+                </option>
+            </datalist>
 
             <div class="alert alert-secondary"
                 *ngIf="gridRows.length === 0 && getSelectedSectionCount() > 0 && examSubjectForm.get('standardId')?.value">

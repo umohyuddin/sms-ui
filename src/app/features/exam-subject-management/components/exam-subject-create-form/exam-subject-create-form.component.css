@@ -1,1 +1,14 @@
-/* CSS for ExamSubjectCreateForm */
+.evaluator-search-container {
+    position: relative;
+    width: 100%;
+}
+
+.evaluator-search-container input {
+    width: 100%;
+}
+
+/* Ensure material autocomplete is styled consistently if needed */
+::ng-deep .mat-autocomplete-panel {
+    border-radius: 4px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}

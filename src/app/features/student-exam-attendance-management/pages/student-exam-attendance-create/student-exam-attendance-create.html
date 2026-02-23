@@ -66,6 +66,22 @@
 
                 <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
 
+                <!-- Quick Selection Buttons -->
+                <div class="row align-items-center mb-3" *ngIf="examAttendance.length > 0">
+                    <div class="col-lg-12">
+                        <div class="d-flex align-items-center">
+                            <span class="mr-3 kt-font-bold text-muted">Quick Selection:</span>
+                            <button type="button" class="btn btn-sm btn-outline-success mr-2"
+                                (click)="markAllAsPresent()">
+                                <i class="la la-check-circle"></i> Mark All Present
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" (click)="markAllAsAbsent()">
+                                <i class="la la-times-circle"></i> Mark All Absent
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Attendance Entry Grid -->
                 <div class="row" *ngIf="examAttendance.length > 0">
                     <div class="col-lg-12">
@@ -73,10 +89,18 @@
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th style="width: 10%">#</th>
+                                        <th style="width: 5%">#</th>
                                         <th style="width: 15%">Roll Number</th>
                                         <th style="width: 25%">Student Name</th>
-                                        <th style="width: 25%">Attendance</th>
+                                        <th style="width: 30%">
+                                            Attendance
+                                            <div class="mt-2">
+                                                <button type="button" class="btn btn-xs btn-link p-0 text-success mr-2"
+                                                    (click)="markAllAsPresent()">All Present</button>
+                                                <button type="button" class="btn btn-xs btn-link p-0 text-danger"
+                                                    (click)="markAllAsAbsent()">All Absent</button>
+                                            </div>
+                                        </th>
                                         <th style="width: 25%">Remarks</th>
                                     </tr>
                                 </thead>

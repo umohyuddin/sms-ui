@@ -22,9 +22,7 @@ const routes: Routes = [
 @NgModule({
     imports: [
         CommonModule,
-        RouterModule.forChild(routes),
-        StudentExamAttendanceListing,
-        StudentExamAttendanceCreate
+        RouterModule.forChild(routes)
     ]
 })
 export class StudentExamAttendanceManagementModule { }
