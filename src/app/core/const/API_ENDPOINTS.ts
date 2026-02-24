@@ -526,7 +526,8 @@ export const API_ENDPOINTS = {
             MARKS: {
                 RECORD: '/api/academic/results/marks',
                 GET_BY_SUBJECT: (id: string | number) => `/api/academic/results/marks/subject/${id}`,
-                GET_BY_STUDENT: (id: string | number) => `/api/academic/results/marks/student/${id}`
+                GET_BY_STUDENT: (id: string | number) => `/api/academic/results/marks/student/${id}`,
+                GET_ENTRY_LIST: '/api/academic/results/marks/entry'
             },
             EXAM_ATTENDANCE: {
                 RECORD: '/api/academic/evaluation/mark-exam-attendance',

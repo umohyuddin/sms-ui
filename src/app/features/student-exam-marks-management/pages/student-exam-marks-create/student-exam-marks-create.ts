@@ -150,12 +150,11 @@ export class StudentExamMarksCreate implements OnInit {
 
     onSubjectChange(): void {
         const subjectId = this.marksForm.get('subjectId')?.value;
-        const sectionId = this.marksForm.get('sectionId')?.value;
         this.students = [];
         this.examMarks.clear();
 
-        if (subjectId && sectionId) {
-            this.studentService.searchStudents({ sectionId: sectionId }).subscribe(resp => {
+        if (subjectId) {
+            this.service.getStudentsForMarkEntry(subjectId).subscribe(resp => {
                 this.students = resp.body;
                 this.populateMarksArray();
             });
@@ -166,12 +165,16 @@ export class StudentExamMarksCreate implements OnInit {
         this.examMarks.clear();
         this.students.forEach(student => {
             this.examMarks.push(this.fb.group({
-                studentId: [student.id],
-                studentName: [student.fullName || student.studentName],
-                rollNumber: [student.rollNumber],
-                obtainedMarks: ['', [Validators.required, Validators.min(0)]],
-                remarks: [''],
-                active: [true]
+                markId: [student.markId],
+                studentId: [student.studentId],
+                studentName: [student.studentName],
+                studentCode: [student.studentCode],
+                attendanceStatus: [student.attendanceStatus],
+                obtainedMarks: [student.obtainedMarks, [Validators.min(0)]],
+                graceMarks: [student.graceMarks || 0],
+                remarks: [student.remarks || ''],
+                locked: [student.locked || false],
+                active: [student.attendanceStatus !== 'ABSENT']
             }));
         });
     }
@@ -188,12 +191,16 @@ export class StudentExamMarksCreate implements OnInit {
 
         this.isLoading = true;
         const formValue = this.marksForm.value;
-        const payload = {
-            examId: formValue.examId,
-            subjectId: formValue.subjectId,
+        const payload = formValue.examMarks.map((mark: any) => ({
+            id: mark.markId,
+            studentId: mark.studentId,
+            examSubjectId: formValue.subjectId,
             academicYearId: this.currentAcademicYearId,
-            marksRecords: formValue.examMarks
-        };
+            obtainedMarks: mark.obtainedMarks,
+            graceMarks: mark.graceMarks,
+            remarks: mark.remarks,
+            attendanceStatus: mark.attendanceStatus
+        }));
 
         this.service.recordMarks(payload).subscribe({
             next: (resp: HttpResponse<any>) => {

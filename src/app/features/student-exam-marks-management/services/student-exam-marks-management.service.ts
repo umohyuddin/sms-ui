@@ -54,4 +54,15 @@ export class StudentExamMarksManagementService {
         const url = `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.RESULTS.MARKS.GET_BY_STUDENT(studentId)}`;
         return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
     }
+
+    getStudentsForMarkEntry(examSubjectId: string | number): Observable<any> {
+        return this.http.request(
+            HTTP_METHOD.GET,
+            `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.RESULTS.MARKS.GET_ENTRY_LIST}`,
+            {
+                observeResponse: true,
+                params: { examSubjectId: examSubjectId.toString() }
+            }
+        );
+    }
 }

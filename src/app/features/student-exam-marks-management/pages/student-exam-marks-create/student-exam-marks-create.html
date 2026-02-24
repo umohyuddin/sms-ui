@@ -71,10 +71,12 @@
                             <table class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th style="width: 25%">Student Name</th>
-                                        <th style="width: 15%">Roll Number</th>
-                                        <th style="width: 20%">Obtained Marks</th>
-                                        <th style="width: 30%">Remarks</th>
+                                        <th style="width: 20%">Student Name</th>
+                                        <th style="width: 10%">Student Code</th>
+                                        <th style="width: 10%">Status</th>
+                                        <th style="width: 15%">Obtained Marks</th>
+                                        <th style="width: 10%">Grace Marks</th>
+                                        <th style="width: 25%">Remarks</th>
                                         <th style="width: 10%">Active</th>
                                     </tr>
                                 </thead>
@@ -84,19 +86,36 @@
                                             {{ mark.get('studentName')?.value }}
                                         </td>
                                         <td>
-                                            {{ mark.get('rollNumber')?.value }}
+                                            {{ mark.get('studentCode')?.value }}
+                                        </td>
+                                        <td>
+                                            <span class="kt-badge kt-badge--inline kt-badge--pill" [ngClass]="{
+                                                    'kt-badge--success': mark.get('attendanceStatus')?.value === 'PRESENT',
+                                                    'kt-badge--danger': mark.get('attendanceStatus')?.value === 'ABSENT',
+                                                    'kt-badge--warning': mark.get('attendanceStatus')?.value === 'UFM'
+                                                }">
+                                                {{ mark.get('attendanceStatus')?.value }}
+                                            </span>
                                         </td>
                                         <td>
                                             <input type="number" formControlName="obtainedMarks" class="form-control"
-                                                placeholder="Marks">
+                                                placeholder="Marks"
+                                                [attr.disabled]="mark.get('locked')?.value ? true : null">
+                                        </td>
+                                        <td>
+                                            <input type="number" formControlName="graceMarks" class="form-control"
+                                                placeholder="Grace"
+                                                [attr.disabled]="mark.get('locked')?.value ? true : null">
                                         </td>
                                         <td>
                                             <input type="text" formControlName="remarks" class="form-control"
-                                                placeholder="Remarks">
+                                                placeholder="Remarks"
+                                                [attr.disabled]="mark.get('locked')?.value ? true : null">
                                         </td>
                                         <td>
                                             <label class="kt-checkbox kt-checkbox--single">
-                                                <input type="checkbox" formControlName="active">
+                                                <input type="checkbox" formControlName="active"
+                                                    [attr.disabled]="mark.get('locked')?.value ? true : null">
                                                 <span></span>
                                             </label>
                                         </td>
