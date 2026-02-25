@@ -12,12 +12,12 @@ import { StudentAttendance, AttendanceStatistics } from '../../models/student-at
 })
 export class StudentAttendanceListing implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  
+
   attendanceRecords: StudentAttendance[] = [];
   filteredRecords: StudentAttendance[] = [];
-  
+
   searchControl = new FormControl('');
-  
+
   filters = {
     standardId: null as number | null,
     sectionId: null as number | null,
@@ -26,7 +26,7 @@ export class StudentAttendanceListing implements OnInit, OnDestroy {
     dateFrom: null as string | null,
     dateTo: null as string | null
   };
-  
+
   statistics: AttendanceStatistics = {
     totalStudents: 0,
     present: 0,
@@ -34,12 +34,12 @@ export class StudentAttendanceListing implements OnInit, OnDestroy {
     leave: 0,
     attendancePercentage: 0
   };
-  
+
   // Pagination
   currentPage = 1;
   pageSize = 25;
   totalItems = 0;
-  
+
   // Date range shortcuts
   dateRanges = [
     { label: 'Today', value: 'today' },
@@ -51,7 +51,7 @@ export class StudentAttendanceListing implements OnInit, OnDestroy {
 
   constructor(
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadAttendanceRecords();
@@ -77,27 +77,26 @@ export class StudentAttendanceListing implements OnInit, OnDestroy {
   }
 
   loadAttendanceRecords(): void {
-    // TODO: Call API service
-    // Mock data for demonstration
+    // TODO: Call API service to load attendance records based on filters
     this.attendanceRecords = [];
-    this.filteredRecords = [...this.attendanceRecords];
-    this.totalItems = this.filteredRecords.length;
+    this.filteredRecords = [];
+    this.totalItems = 0;
   }
 
   loadTodayStatistics(): void {
-    // TODO: Call API service
+    // TODO: Call API service to get today's attendance statistics
     this.statistics = {
-      totalStudents: 450,
-      present: 420,
-      absent: 18,
-      leave: 12,
-      attendancePercentage: 93.3
+      totalStudents: 0,
+      present: 0,
+      absent: 0,
+      leave: 0,
+      attendancePercentage: 0
     };
   }
 
   applyFilters(): void {
     let filtered = [...this.attendanceRecords];
-    
+
     const searchTerm = this.searchControl.value?.toLowerCase() || '';
     if (searchTerm) {
       filtered = filtered.filter(record =>
@@ -106,19 +105,19 @@ export class StudentAttendanceListing implements OnInit, OnDestroy {
         record.standardName?.toLowerCase().includes(searchTerm)
       );
     }
-    
+
     if (this.filters.standardId) {
       filtered = filtered.filter(r => r.standardId === this.filters.standardId);
     }
-    
+
     if (this.filters.sectionId) {
       filtered = filtered.filter(r => r.sectionId === this.filters.sectionId);
     }
-    
+
     if (this.filters.status) {
       filtered = filtered.filter(r => r.status === this.filters.status);
     }
-    
+
     this.filteredRecords = filtered;
     this.totalItems = filtered.length;
     this.currentPage = 1;
@@ -145,7 +144,7 @@ export class StudentAttendanceListing implements OnInit, OnDestroy {
     const today = new Date();
     let fromDate: Date;
     let toDate = today;
-    
+
     switch (range) {
       case 'today':
         fromDate = today;
@@ -168,7 +167,7 @@ export class StudentAttendanceListing implements OnInit, OnDestroy {
       default:
         return;
     }
-    
+
     this.filters.dateFrom = fromDate.toISOString().split('T')[0];
     this.filters.dateTo = toDate.toISOString().split('T')[0];
     this.applyFilters();

@@ -85,12 +85,12 @@ export class Pagination<T> {
   }
 
   get startItem(): number {
-  return this.totalItems === 0 ? 0 : this.pageIndex * this.pageSize + 1;
-}
+    return this.totalItems === 0 ? 0 : this.pageIndex * this.pageSize + 1;
+  }
 
-get endItem(): number {
-  const end = (this.pageIndex + 1) * this.pageSize;
-  return end > this.totalItems ? this.totalItems : end;
-}
+  get endItem(): number {
+    const end = (this.pageIndex + 1) * this.pageSize;
+    return end > this.totalItems ? this.totalItems : end;
+  }
 
 }

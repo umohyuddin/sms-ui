@@ -7,12 +7,13 @@
                         <div class="kt-widget__content">
                             <div class="kt-widget__head">
                                 <a href="#" class="kt-widget__username">
-                                    Weightage Info - ID: {{ itemId }}
+                                    Weightage Info - {{ data?.subjectName }}
                                 </a>
                             </div>
                             <div class="kt-widget__subhead">
-                                <span><i class="flaticon2-line-chart"></i> Standard ID: {{ data?.standardId }}</span>
-                                <span><i class="flaticon2-calendar-3"></i> Exam Term ID: {{ data?.examTermId }}</span>
+                                <span><i class="flaticon2-line-chart"></i> Standard: {{ data?.standardName }}</span>
+                                <span><i class="flaticon2-calendar-3"></i> Term: {{ data?.examTermName }}</span>
+                                <span><i class="flaticon2-layers"></i> Year: {{ data?.academicYearName }}</span>
                             </div>
                         </div>
                     </div>
@@ -23,7 +24,7 @@
                             </div>
                             <div class="kt-widget__details">
                                 <span class="kt-widget__title">Weightage</span>
-                                <span class="kt-widget__value">{{ data?.weightage }}%</span>
+                                <span class="kt-widget__value">{{ data?.weightPercentage }}%</span>
                             </div>
                         </div>
 

@@ -17,6 +17,39 @@
     </div>
     <div class="kt-portlet__body" style="position: relative; min-height: 400px;">
 
+        <!-- Selection Filters -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Academic Year</label>
+                    <select class="form-control" [(ngModel)]="selectedYearId">
+                        <option [value]="null">Select Year</option>
+                        <option *ngFor="let year of academicYears" [value]="year.id">{{ year.name }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Campus</label>
+                    <select class="form-control" [(ngModel)]="selectedCampusId"
+                        (ngModelChange)="onCampusChange($event)">
+                        <option [value]="null">Select Campus</option>
+                        <option *ngFor="let campus of campuses" [value]="campus.id">{{ campus.campusName }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Standard</label>
+                    <select class="form-control" [(ngModel)]="selectedStandardId"
+                        (ngModelChange)="onStandardChange($event)">
+                        <option [value]="null">Select Standard</option>
+                        <option *ngFor="let std of standards" [value]="std.id">{{ std.standardName }}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
         <!--begin: Datatable -->
         <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
             <div class="row">
@@ -52,33 +85,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
+                            <tr *ngFor="let item of pagination.paginatedItems">
                                 <td>{{ item.id }}</td>
-                                <td>{{ item.standardId }}</td>
-                                <td>{{ item.examTermId }}</td>
-                                <td>{{ item.weightage }}</td>
+                                <td>{{ item.subjectName }}</td>
+                                <td>{{ item.examTermName }}</td>
+                                <td>{{ item.weightPercentage }}%</td>
                                 <td>
-                                    <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                                        [ngClass]="item.active ? 'kt-badge--brand' : 'kt-badge--danger'">
-                                        {{item.active? 'Active':'Inactive'}}
+                                    <span class="kt-badge kt-badge--inline"
+                                        [ngClass]="item.active ? 'kt-badge--success' : 'kt-badge--danger'">
+                                        {{ item.active ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
-                                <td nowrap="">
-                                    <span class="dropdown">
-                                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md"
-                                            data-toggle="dropdown" aria-expanded="true">
-                                            <i class="la la-ellipsis-h"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" href="#" (click)="editDetails(item,$event)"><i
-                                                    class="la la-edit"></i> Edit Details</a>
-                                            <a class="dropdown-item" href="#" (click)="viewDetails(item,$event)">
-                                                <i class="la la-eye"></i> View Details</a>
-                                        </div>
-                                    </span>
-                                    <a (click)="viewDetails(item,$event)"
-                                        class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
+                                <td>
+                                    <a (click)="viewDetails(item, $event)"
+                                        class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View Details">
                                         <i class="la la-eye"></i>
+                                    </a>
+                                    <a (click)="editDetails(item, $event)"
+                                        class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit">
+                                        <i class="la la-edit"></i>
                                     </a>
                                 </td>
                             </tr>

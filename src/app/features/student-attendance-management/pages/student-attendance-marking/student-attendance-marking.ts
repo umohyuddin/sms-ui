@@ -19,16 +19,16 @@ interface StudentForMarking {
 })
 export class StudentAttendanceMarking implements OnInit {
   @ViewChild('searchInput') searchInput: ElementRef | undefined;
-  
+
   attendanceDate: Date = new Date();
   standardId: number | null = null;
   sectionId: number | null = null;
-  
+
   students: StudentForMarking[] = [];
   filteredStudents: StudentForMarking[] = [];
-  
+
   searchControl = new FormControl('');
-  
+
   // Quick stats
   stats = {
     total: 0,
@@ -37,23 +37,23 @@ export class StudentAttendanceMarking implements OnInit {
     leave: 0,
     unmarked: 0
   };
-  
+
   // Bulk operations
   bulkStatus: 'PRESENT' | 'ABSENT' | 'LEAVE' | null = null;
-  
+
   // Quick filter
   filterStatus: string = 'unmarked'; // all, marked, unmarked (default to unmarked)
-  
+
   // History for undo
   private actionHistory: StudentForMarking[][] = [];
-  
+
   isSaving = false;
   showKeyboardHelp = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Get date from route params if available
@@ -61,11 +61,11 @@ export class StudentAttendanceMarking implements OnInit {
     if (dateParam) {
       this.attendanceDate = new Date(dateParam);
     }
-    
+
     this.searchControl.valueChanges.subscribe(() => {
       this.applyFilters();
     });
-    
+
     // Focus on search input for quick keyboard access
     setTimeout(() => this.searchInput?.nativeElement.focus(), 500);
   }
@@ -77,7 +77,7 @@ export class StudentAttendanceMarking implements OnInit {
     if (event.target instanceof HTMLInputElement && event.target.type !== 'date') {
       return;
     }
-    
+
     // Keyboard shortcuts for quick marking
     // P = Mark Present (filtered student)
     // A = Mark Absent
@@ -86,7 +86,7 @@ export class StudentAttendanceMarking implements OnInit {
     // U = Undo last action
     // ? = Show help
     // Esc = Toggle keyboard help
-    
+
     switch (event.key.toLowerCase()) {
       case 'p':
         event.preventDefault();
@@ -132,21 +132,8 @@ export class StudentAttendanceMarking implements OnInit {
 
   loadStudents(): void {
     // TODO: Call API to get students for the class
-    // Mock data for demonstration
-    this.students = [
-      { id: 1, name: 'Aarav Sharma', rollNo: '001', status: null },
-      { id: 2, name: 'Ananya Verma', rollNo: '002', status: null },
-      { id: 3, name: 'Arjun Patel', rollNo: '003', status: null },
-      { id: 4, name: 'Diya Singh', rollNo: '004', status: null },
-      { id: 5, name: 'Ishaan Kumar', rollNo: '005', status: null },
-      { id: 6, name: 'Kavya Reddy', rollNo: '006', status: null },
-      { id: 7, name: 'Myra Gupta', rollNo: '007', status: null },
-      { id: 8, name: 'Reyansh Joshi', rollNo: '008', status: null },
-      { id: 9, name: 'Saanvi Desai', rollNo: '009', status: null },
-      { id: 10, name: 'Vihaan Mehta', rollNo: '010', status: null }
-    ];
-    
-    this.filteredStudents = [...this.students];
+    this.students = [];
+    this.filteredStudents = [];
     this.updateStats();
   }
 
@@ -199,7 +186,7 @@ export class StudentAttendanceMarking implements OnInit {
 
   applyFilters(): void {
     let filtered = [...this.students];
-    
+
     // Search filter
     const searchTerm = this.searchControl.value?.toLowerCase() || '';
     if (searchTerm) {
@@ -208,14 +195,14 @@ export class StudentAttendanceMarking implements OnInit {
         s.rollNo.toLowerCase().includes(searchTerm)
       );
     }
-    
+
     // Status filter
     if (this.filterStatus === 'marked') {
       filtered = filtered.filter(s => s.status !== null);
     } else if (this.filterStatus === 'unmarked') {
       filtered = filtered.filter(s => s.status === null);
     }
-    
+
     this.filteredStudents = filtered;
   }
 
@@ -224,19 +211,19 @@ export class StudentAttendanceMarking implements OnInit {
       alert('Please select standard and section');
       return;
     }
-    
+
     const unmarked = this.students.filter(s => s.status === null);
     if (unmarked.length > 0) {
       if (!confirm(`${unmarked.length} students are unmarked. Do you want to continue?`)) {
         return;
       }
     }
-    
+
     this.isSaving = true;
-    
-    // TODO: Call API to save attendance
+
+    // TODO: Implement actual API call using a service
     const request: AttendanceMarkingRequest = {
-      organizationId: 1, // Get from auth service
+      organizationId: 0, // TODO: Get from auth service
       standardId: this.standardId,
       sectionId: this.sectionId,
       attendanceDate: this.attendanceDate.toISOString().split('T')[0],
@@ -248,14 +235,10 @@ export class StudentAttendanceMarking implements OnInit {
           remarks: s.remarks
         }))
     };
-    
-    console.log('Saving attendance:', request);
-    
-    setTimeout(() => {
-      this.isSaving = false;
-      alert('Attendance saved successfully!');
-      this.router.navigate(['/academic-management/student-attendance']);
-    }, 1500);
+
+    console.log('Attendance request ready for API:', request);
+    // Placeholder for service call:
+    // this.attendanceService.save(request).subscribe(...)
   }
 
   cancel(): void {

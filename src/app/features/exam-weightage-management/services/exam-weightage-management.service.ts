@@ -40,6 +40,14 @@ export class ExamWeightageManagementService {
         );
     }
 
+    getWeightagesByStandard(standardId: string | number, academicYearId: string | number): Observable<any> {
+        return this.http.request(
+            HTTP_METHOD.GET,
+            `${this.baseUrl}${API_ENDPOINTS.ACADEMIC.RESULTS.WEIGHTAGES.GET_BY_STANDARD(standardId)}?academicYearId=${academicYearId}`,
+            { observeResponse: true }
+        );
+    }
+
     saveWeightage(payload: any): Observable<any> {
         return this.http.request(
             HTTP_METHOD.POST,

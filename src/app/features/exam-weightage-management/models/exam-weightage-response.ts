@@ -1,9 +1,12 @@
 export interface ExamWeightageResponse {
     id: number;
-    standardId: number;
+    academicYearId: number;
+    academicYearName: string;
+    standardSubjectId: number;
+    standardName: string;
+    subjectName: string;
     examTermId: number;
-    weightage: number;
+    examTermName: string;
+    weightPercentage: number;
     active: boolean;
-    createdAt?: string;
-    updatedAt?: string;
 }
