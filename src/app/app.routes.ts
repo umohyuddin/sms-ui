@@ -474,6 +474,17 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'result-processing',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/result-processing/result-processing.module').then(m => m.ResultProcessingModule)
+      }
+    ]
+  },
+  {
     path: '',
     redirectTo: 'auth/login',
     pathMatch: 'full'

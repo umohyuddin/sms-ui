@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AcademicManagementService } from '../../services/academic-management.service';
+import { ResultProcessingService } from '../../services/result-processing.service';
 
 @Component({
     selector: 'app-result-processing',
@@ -17,7 +17,7 @@ export class ResultProcessingPage implements OnInit {
     loading = false;
     resultSummary: any = null;
 
-    constructor(private academicService: AcademicManagementService) { }
+    constructor(private academicService: ResultProcessingService) { }
 
     ngOnInit(): void {
         this.loadInitialData();

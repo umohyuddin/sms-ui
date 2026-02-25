@@ -219,7 +219,7 @@ export const ROUTES = {
       GRADE_SCALES: ['academic/results/grade-scales'],
       CREATE_GRADE_SCALE: ['academic/results/grade-scales', 'create'],
       EDIT_GRADE_SCALE: (id: string) => ['academic/results/grade-scales', 'edit', id],
-      PROCESSING: ['academic/results/process'],
+      PROCESSING: ['result-processing'],
       REPORT_CARDS: ['academic/results/report-cards'],
     },
     HISTORY: {
