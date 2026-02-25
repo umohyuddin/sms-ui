@@ -463,6 +463,17 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'exam-weightage-management',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/exam-weightage-management/exam-weightage-management-module').then(m => m.ExamWeightageManagementModule)
+      }
+    ]
+  },
+  {
     path: '',
     redirectTo: 'auth/login',
     pathMatch: 'full'

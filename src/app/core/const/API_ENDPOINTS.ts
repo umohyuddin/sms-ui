@@ -535,6 +535,7 @@ export const API_ENDPOINTS = {
             },
             WEIGHTAGES: {
                 SAVE: '/api/academic/results/weightages',
+                SAVE_BULK: '/api/academic/results/weightages/bulk',
                 GET_BY_STANDARD: (id: string | number) => `/api/academic/results/weightages/standard/${id}`
             },
             PROCESS: '/api/academic/results/process',

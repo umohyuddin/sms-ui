@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-xl-12">
+        <div class="kt-portlet">
+            <div class="kt-portlet__body">
+                <div class="kt-widget kt-widget--user-profile-3">
+                    <div class="kt-widget__top">
+                        <div class="kt-widget__content">
+                            <div class="kt-widget__head">
+                                <a href="#" class="kt-widget__username">
+                                    Weightage Info - ID: {{ itemId }}
+                                </a>
+                            </div>
+                            <div class="kt-widget__subhead">
+                                <span><i class="flaticon2-line-chart"></i> Standard ID: {{ data?.standardId }}</span>
+                                <span><i class="flaticon2-calendar-3"></i> Exam Term ID: {{ data?.examTermId }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kt-widget__bottom">
+                        <div class="kt-widget__item">
+                            <div class="kt-widget__icon">
+                                <i class="flaticon-pie-chart"></i>
+                            </div>
+                            <div class="kt-widget__details">
+                                <span class="kt-widget__title">Weightage</span>
+                                <span class="kt-widget__value">{{ data?.weightage }}%</span>
+                            </div>
+                        </div>
+
+                        <div class="kt-widget__item">
+                            <div class="kt-widget__icon">
+                                <i class="flaticon-confetti"></i>
+                            </div>
+                            <div class="kt-widget__details">
+                                <span class="kt-widget__title">Status</span>
+                                <span class="kt-widget__value">
+                                    <span class="kt-badge kt-badge--inline kt-badge--pill"
+                                        [ngClass]="data?.active ? 'kt-badge--success' : 'kt-badge--danger'">
+                                        {{ data?.active ? 'Active' : 'Inactive' }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
