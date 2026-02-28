@@ -236,16 +236,27 @@ export class SchoolProfileManagementService {
     });
   }
 
-  uploadInstituteDocs(payload: any): Observable<any> {
-    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DOCUMENTS.UPLOAD_DOCS}`;
+  uploadDocument(instituteId: number, documentType: string, file: File): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DOCUMENTS.UPLOAD_DOCS}?instituteId=${instituteId}&documentType=${documentType}`;
+    const formData = new FormData();
+    formData.append('file', file);
     return this.http.request(HTTP_METHOD.POST, url, {
       observeResponse: true,
-      body: payload
+      body: formData
     });
   }
 
   getInstituteDocs(id: string | number): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DOCUMENTS.GET_INSTITUTE_DOCS(id)}`, { observeResponse: true });
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DOCUMENTS.GET_BY_INSTITUTE_ID(id)}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
+  }
+
+  deleteInstituteDocument(id: string | number): Observable<any> {
+    return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DOCUMENTS.DELETE(id)}`, { observeResponse: true });
+  }
+
+  searchInstituteDocuments(keyword: string): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.DOCUMENTS.SEARCH(keyword)}`, { observeResponse: true });
   }
 
   getDocsMeta(): Observable<any> {

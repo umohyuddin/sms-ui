@@ -227,9 +227,11 @@ export const API_ENDPOINTS = {
             GET_ACTIVE: '/api/institute/accreditations/active'
         },
         DOCUMENTS: {
-            UPLOAD_DOCS: '/api/institute/documents/upload-document',
+            UPLOAD_DOCS: '/api/institute/documents',
             DOWNLOAD_DOCS: '/api/institute/documents/download-document',
-            GET_INSTITUTE_DOCS: (id: string | number) => `/api/institute/${id}/documents`
+            GET_BY_INSTITUTE_ID: (id: string | number) => `/api/institute/documents/institute/${id}`,
+            DELETE: (id: string | number) => `/api/institute/documents/${id}`,
+            SEARCH: (keyword: string) => `/api/institute/documents/search?keyword=${keyword}`
         },
         FINANCIAL_SETTINGS: {
             GET: (instituteId: string | number, academicYearId: string | number) => `/api/institute/financial-settings/${instituteId}/${academicYearId}`,

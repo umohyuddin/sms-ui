@@ -1,20 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { InstituteDocumentResponseDto } from '../../models/InstituteDocumentResponseDto';
 import { SchoolProfileManagementService } from '../../services/school-profile-management.service';
 import { LoggerService } from '../../../../core/services/logger.service';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { DeletePopupComponent } from '../../../../shared/components/delete-popup/delete-popup.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 
 @Component({
   selector: 'app-institute-document',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, LoaderComponent, DeletePopupComponent, ToasterComponent],
   templateUrl: './institute-document.component.html',
   styleUrl: './institute-document.component.css'
 })
 export class InstituteDocumentComponent {
   @Input() instituteId?: number;
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+  @ViewChild('fileInput', { static: false }) fileInput?: ElementRef<HTMLInputElement>;
 
   docsForm!: FormGroup;
   docsTypeDD: KeyValueOption[] = [];
@@ -22,6 +27,10 @@ export class InstituteDocumentComponent {
   fileInvalid: boolean = false;
   docsData: any;
   documentsByType: { [key: string]: InstituteDocumentResponseDto[] } = {};
+  isLoading = false;
+  loadingMessage = '';
+  isDeletePopupOpen = false;
+  pendingDeleteId?: number;
 
   constructor(
     private fb: FormBuilder,
@@ -64,19 +73,29 @@ export class InstituteDocumentComponent {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('docKey', this.docsForm.value.docKey);
-    formData.append('file', this.selectedFile);
-    formData.append('instituteId', this.instituteId.toString());
-
-    this.schoolProfileManagementService.uploadInstituteDocs(formData).subscribe({
+    this.isLoading = true;
+    this.loadingMessage = 'Uploading Document...';
+    this.schoolProfileManagementService.uploadDocument(
+      this.instituteId,
+      this.docsForm.value.docKey,
+      this.selectedFile
+    ).subscribe({
       next: (response) => {
         if (response?.body) {
           this.getInstituteAllDocs();
+          this.onDocsCancel();
+          this.toaster?.show('Document uploaded successfully.', 'success');
         }
       },
       error: (error) => {
+        this.isLoading = false;
+        this.loadingMessage = '';
         console.error('❌ Error:', error);
+        this.toaster?.show('Failed to upload document.', 'error');
+      },
+      complete: () => {
+        this.isLoading = false;
+        this.loadingMessage = '';
       }
     });
   }
@@ -99,17 +118,22 @@ export class InstituteDocumentComponent {
       return;
     }
 
+    this.isLoading = true;
+    this.loadingMessage = 'Loading Documents...';
     this.schoolProfileManagementService.getInstituteDocs(this.instituteId).subscribe({
       next: (response) => {
         const docs: InstituteDocumentResponseDto[] = response.body;
         this.documentsByType = this.groupByDocumentType(docs);
       },
       error: (error) => {
+        this.isLoading = false;
+        this.loadingMessage = '';
         console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.toaster?.show('Failed to load documents.', 'error');
       },
       complete: () => {
-        console.log('🔚 Request Complete');
+        this.isLoading = false;
+        this.loadingMessage = '';
       }
     });
   }
@@ -124,10 +148,6 @@ export class InstituteDocumentComponent {
         },
         error: (error) => {
           console.error('❌ Request Error Status:', error.status);
-          console.error('Message:', error.message);
-        },
-        complete: () => {
-          console.log('🔚 Request Complete');
         }
       });
   }
@@ -161,7 +181,9 @@ export class InstituteDocumentComponent {
       case 'docx': return './assets/media/files/doc.svg';
       case 'js': return './assets/media/files/javascript.svg';
       case 'zip': return './assets/media/files/zip.svg';
-      default: return './assets/media/files/file.svg';
+
+      default:
+        return './assets/media/files/file.svg';
     }
   }
 
@@ -182,11 +204,51 @@ export class InstituteDocumentComponent {
     this.schoolProfileManagementService.downloadInstituteDocument(doc.id, this.instituteId.toString(), doc.fileName || `document_${doc.id}`, fileType);
   }
 
+  onDeleteDocument(id: number, event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.pendingDeleteId = id;
+    this.isDeletePopupOpen = true;
+  }
+
+  confirmDelete(): void {
+    if (!this.pendingDeleteId) {
+      this.isDeletePopupOpen = false;
+      return;
+    }
+
+    this.isDeletePopupOpen = false;
+    this.isLoading = true;
+    this.loadingMessage = 'Deleting Document...';
+    this.schoolProfileManagementService.deleteInstituteDocument(this.pendingDeleteId).subscribe({
+      next: (response: any) => {
+        this.getInstituteAllDocs();
+        const successMessage = response?.body?.message || 'Document deleted successfully.';
+        this.toaster?.show(successMessage, 'success');
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+        this.loadingMessage = '';
+        console.error('❌ Error deleting document:', error);
+        this.toaster?.show('Failed to delete document.', 'error');
+      }
+    });
+  }
+
+  cancelDelete(): void {
+    this.isDeletePopupOpen = false;
+    this.pendingDeleteId = undefined;
+  }
+
   onDocsCancel(): void {
     this.docsForm.reset();
     this.docsForm.markAsPristine();
     this.docsForm.markAsUntouched();
     this.selectedFile = null;
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
+    }
   }
 
   get docKey() { return this.docsForm.get('docKey'); }
