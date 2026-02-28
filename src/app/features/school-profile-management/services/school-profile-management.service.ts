@@ -151,8 +151,8 @@ export class SchoolProfileManagementService {
     });
   }
 
-  getInstituteSocialLinksByInstituteId(instituteId: string | number): Observable<any> {
-    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SOCIAL_LINKS.GET_BY_INSTITUTE_ID(instituteId)}`;
+  getInstituteSocialLinksByInstituteId(): Observable<any> {
+    const url = `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.SOCIAL_LINKS.GET_BY_INSTITUTE_ID}`;
     return this.http.request(HTTP_METHOD.GET, url, {
       observeResponse: true
     });
@@ -419,6 +419,6 @@ export class SchoolProfileManagementService {
       observeResponse: true
     });
   }
-  
+
 
 }

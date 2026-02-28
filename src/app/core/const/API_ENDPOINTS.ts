@@ -201,7 +201,7 @@ export const API_ENDPOINTS = {
             UPDATE: (id: string | number) => `/api/institute/social-links/${id}`,
             GET_ALL: '/api/institute/social-links',
             GET_BY_ID: (id: string | number) => `/api/institute/social-links/${id}`,
-            GET_BY_INSTITUTE_ID: (instituteId: string | number) => `/api/institute/social-links/institute/${instituteId}`,
+            GET_BY_INSTITUTE_ID: `/api/institute/social-links`,
             DELETE: (id: string | number) => `/api/institute/social-links/${id}`,
             SEARCH: (keyword: string) => `/api/institute/social-links/search?keyword=${keyword}`
         },
@@ -232,7 +232,7 @@ export const API_ENDPOINTS = {
             GET_INSTITUTE_DOCS: (id: string | number) => `/api/institute/${id}/documents`
         },
         FINANCIAL_SETTINGS: {
-            GET: (instituteId: string | number, academicYearId: string | number) => `/api/institute/${instituteId}/financial-settings/${academicYearId}`,
+            GET: (instituteId: string | number, academicYearId: string | number) => `/api/institute/financial-settings/${instituteId}/${academicYearId}`,
             UPDATE: (id: string | number) => `/api/institute/financial-settings/${id}`,
             CREATE: '/api/institute/financial-settings'
         },

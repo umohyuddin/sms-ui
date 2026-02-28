@@ -82,7 +82,8 @@ export class InstituteSocialLinkCreateFormComponent implements OnChanges {
         this.isLoadingInstitute = false;
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
-        this.toaster?.show('Failed to load institute.', 'error');
+        const errorMessage = error.error?.message || 'Failed to load institute.';
+        this.toaster?.show(errorMessage, 'error');
       },
       complete: () => {
         this.isLoadingInstitute = false;
@@ -118,7 +119,8 @@ export class InstituteSocialLinkCreateFormComponent implements OnChanges {
         this.isLoadingSocialLink = false;
         console.error('❌ Load Social Link Error Status:', error.status);
         console.error('Message:', error.message);
-        this.toaster?.show('Failed to load social link.', 'error');
+        const errorMessage = error.error?.message || 'Failed to load social link.';
+        this.toaster?.show(errorMessage, 'error');
       },
       complete: () => {
         this.isLoadingSocialLink = false;
@@ -154,7 +156,8 @@ export class InstituteSocialLinkCreateFormComponent implements OnChanges {
         this.isSaving = false;
         console.error('❌ Save Error Status:', error.status);
         console.error('Message:', error.message);
-        this.toaster?.show('Failed to save social link.', 'error');
+        const errorMessage = error.error?.message || 'Failed to save social link.';
+        this.toaster?.show(errorMessage, 'error');
       },
       complete: () => {
         this.isSaving = false;

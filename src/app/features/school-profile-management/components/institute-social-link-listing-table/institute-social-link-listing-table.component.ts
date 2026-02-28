@@ -33,7 +33,7 @@ export class InstituteSocialLinkListingTableComponent implements OnChanges {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private schoolProfileManagementService: SchoolProfileManagementService, private logger: LoggerService) {}
+  constructor(private schoolProfileManagementService: SchoolProfileManagementService, private logger: LoggerService) { }
 
   columns = [
     { key: 'platform', label: 'Platform', sortable: true },
@@ -84,7 +84,7 @@ export class InstituteSocialLinkListingTableComponent implements OnChanges {
           if (keyword) {
             return this.schoolProfileManagementService.searchInstituteSocialLinks(instituteId, keyword);
           }
-          return this.schoolProfileManagementService.getInstituteSocialLinksByInstituteId(instituteId);
+          return this.schoolProfileManagementService.getInstituteSocialLinksByInstituteId();
         }),
         takeUntil(this.destroy$)
       )
@@ -96,13 +96,14 @@ export class InstituteSocialLinkListingTableComponent implements OnChanges {
         error: (error: any) => {
           this.isLoading = false;
           console.error('Search error:', error);
-          this.toaster?.show('Search failed.', 'error');
+          const errorMessage = error.error?.message || 'Search failed.';
+          this.toaster?.show(errorMessage, 'error');
         }
       });
   }
 
   private getSocialLinksByInstituteId(instituteId: number) {
-    this.schoolProfileManagementService.getInstituteSocialLinksByInstituteId(instituteId).subscribe({
+    this.schoolProfileManagementService.getInstituteSocialLinksByInstituteId().subscribe({
       next: (response: any) => {
         this.applySocialLinksResponse(response.body);
       },
@@ -110,7 +111,8 @@ export class InstituteSocialLinkListingTableComponent implements OnChanges {
         this.isLoading = false;
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
-        this.toaster?.show('Failed to load social links.', 'error');
+        const errorMessage = error.error?.message || 'Failed to load social links.';
+        this.toaster?.show(errorMessage, 'error');
       },
       complete: () => {
         this.isLoading = false;
@@ -153,7 +155,8 @@ export class InstituteSocialLinkListingTableComponent implements OnChanges {
         this.isLoading = false;
         console.error('❌ Delete Error Status:', error.status);
         console.error('Message:', error.message);
-        this.toaster?.show('Failed to delete social link.', 'error');
+        const errorMessage = error.error?.message || 'Failed to delete social link.';
+        this.toaster?.show(errorMessage, 'error');
       }
     });
   }
@@ -162,7 +165,6 @@ export class InstituteSocialLinkListingTableComponent implements OnChanges {
     this.isDeletePopupOpen = false;
     this.pendingDeleteId = undefined;
   }
-
   onPageSizeChange(event: any) {
     const newSize = +event.target.value;
     this.pagination.changePageSize(newSize);

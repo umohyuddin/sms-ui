@@ -25,7 +25,7 @@ export class InstituteFacilityCreateFormComponent implements OnChanges {
   @Input() instituteId?: number;
   @Output() facilitySaved = new EventEmitter<void>();
   @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
-  
+
   facilitySelections: FacilitySelection[] = [];
   isSaving = false;
   isLoadingFacilityTypes = false;
@@ -120,7 +120,7 @@ export class InstituteFacilityCreateFormComponent implements OnChanges {
 
   onSubmit(): void {
     const selectedFacilities = this.facilitySelections.filter(f => f.selected);
-    
+
     if (selectedFacilities.length === 0) {
       this.toaster?.show('Please select at least one facility type.', 'error');
       return;
@@ -143,7 +143,7 @@ export class InstituteFacilityCreateFormComponent implements OnChanges {
 
     this.schoolProfileManagementService.createFacilities(payload).subscribe({
       next: () => {
-        this.toaster?.show('Facilities created successfully.', 'success');
+        this.toaster?.show('Facilities saved successfully.', 'success');
         setTimeout(() => {
           this.facilitySaved.emit();
           this.resetForm();
@@ -151,7 +151,7 @@ export class InstituteFacilityCreateFormComponent implements OnChanges {
       },
       error: (error) => {
         console.error('❌ Save Error:', error);
-        this.toaster?.show('Failed to create facilities.', 'error');
+        this.toaster?.show('Failed to save facilities.', 'error');
       },
       complete: () => {
         this.isSaving = false;

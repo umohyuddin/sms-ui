@@ -6,13 +6,12 @@ import { SchoolProfileManagementService } from '../../services/school-profile-ma
 import { InstituteFinancialSettings } from '../../models/InstituteFinancialSettings';
 import { TaxTypeResponse } from '../../models/TaxTypeResponse';
 import { FeeRecurrenceRuleResponse } from '../../models/FeeRecurrenceRuleResponse';
-import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 
 @Component({
     selector: 'app-institute-financial-settings-form',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, LoaderComponent, ToasterComponent],
+    imports: [CommonModule, ReactiveFormsModule, ToasterComponent],
     templateUrl: './institute-financial-settings-form.component.html',
     styleUrl: './institute-financial-settings-form.component.css'
 })
@@ -35,7 +34,7 @@ export class InstituteFinancialSettingsFormComponent implements OnInit, OnChange
     constructor(
         private fb: FormBuilder,
         private schoolService: SchoolProfileManagementService
-    , private logger: LoggerService) {
+        , private logger: LoggerService) {
         this.initForm();
     }
 
@@ -60,23 +59,25 @@ export class InstituteFinancialSettingsFormComponent implements OnInit, OnChange
             currencyId: [null, Validators.required],
             languageId: [null],
             locale: ['en-PK', [Validators.required, Validators.maxLength(10)]],
-            feeRecurrenceRuleId: ['MONTHLY', Validators.required],
+            feeRecurrenceRuleId: [null, Validators.required],
             allowPartialPayments: [false],
             lateFeeApplicable: [false],
             lateFeeType: ['FIXED'],
-            lateFeeValue: [0],
+            lateFeeValue: [0, [Validators.required, Validators.min(0)]],
             taxApplicable: [false],
             taxTypeId: [null],
             taxIncludedInFee: [false],
             refundsAllowed: [false],
             refundPolicyUrl: ['', Validators.maxLength(255)],
-            refundWindowDays: [30],
-            maxRefundPercentage: [0, [Validators.min(0), Validators.max(100)]],
-            maxRefundAmount: [0, Validators.min(0)],
+            refundWindowDays: [30, [Validators.required, Validators.min(0)]],
+            refundType: ['FIXED'],
+            refundValue: [0, [Validators.required, Validators.min(0)]],
+            maxRefundPercentage: [0],
+            maxRefundAmount: [0],
             invoiceMandatory: [false],
             receiptMandatory: [true],
             isActive: [true],
-            academicYearId:[1]
+            academicYearId: [1]
         });
     }
 
@@ -132,6 +133,11 @@ export class InstituteFinancialSettingsFormComponent implements OnInit, OnChange
                 if (res.body) {
                     this.settingsId = res.body.id;
                     this.financialForm.patchValue(res.body);
+
+                    // Map backend fields to single UI field
+                    const type = res.body.refundType || 'FIXED';
+                    const value = type === 'PERCENTAGE' ? (res.body.maxRefundPercentage || 0) : (res.body.maxRefundAmount || 0);
+                    this.financialForm.patchValue({ refundValue: value });
                 }
                 this.isLoading = false;
             },
@@ -152,11 +158,17 @@ export class InstituteFinancialSettingsFormComponent implements OnInit, OnChange
         }
 
         this.isSaving = true;
+        const formData = this.financialForm.value;
         const payload: InstituteFinancialSettings = {
-            ...this.financialForm.value,
+            ...formData,
+            maxRefundPercentage: formData.refundType === 'PERCENTAGE' ? formData.refundValue : 0,
+            maxRefundAmount: formData.refundType === 'FIXED' ? formData.refundValue : 0,
             instituteId: this.instituteId,
             academicYearId: this.currentAcademicYearId!
         };
+
+        // Remove UI-only field from payload
+        delete (payload as any).refundValue;
 
         const request$ = this.settingsId
             ? this.schoolService.updateFinancialSettings(this.settingsId, payload)

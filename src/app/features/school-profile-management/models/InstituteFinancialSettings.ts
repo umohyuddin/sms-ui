@@ -9,27 +9,29 @@ export interface InstituteFinancialSettings {
     locale?: string;
 
     // Fee Structure Rules
-    feeFrequency: string; // MONTHLY, TERM, ANNUAL
-    allowPartialPayments: boolean;
-    lateFeeApplicable: boolean;
+    feeRecurrenceRuleId?: number;
+    allowPartialPayments?: boolean;
+    lateFeeApplicable?: boolean;
     lateFeeType?: string; // FIXED, PERCENTAGE
     lateFeeValue?: number;
 
     // Tax Rules
-    taxApplicable: boolean;
+    taxApplicable?: boolean;
     taxTypeId?: number;
-    taxIncludedInFee: boolean;
+    taxIncludedInFee?: boolean;
 
     // Refund Rules
-    refundsAllowed: boolean;
+    refundsAllowed?: boolean;
     refundPolicyUrl?: string;
     refundWindowDays?: number;
+    refundType?: string; // FIXED, PERCENTAGE
+    refundValue?: number;
     maxRefundPercentage?: number;
     maxRefundAmount?: number;
 
     // Compliance Flags
-    invoiceMandatory: boolean;
-    receiptMandatory: boolean;
+    invoiceMandatory?: boolean;
+    receiptMandatory?: boolean;
 
-    isActive: boolean;
+    isActive?: boolean;
 }
