@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Pagination } from '../../../../core/pagar/pagination';
@@ -10,13 +10,17 @@ import { SectionManagementService } from '../../services/section-management.serv
 import { LoggerService } from '../../../../core/services/logger.service';
 import { StandardResponse } from '../../../standard-management/models/standardResponse';
 import { Campus, SectionResponse } from '../../models/SectionResponse';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-section-listing-table',
   standalone: true,
   imports: [CommonModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ToasterComponent,
+    LoaderComponent
   ],
   templateUrl: './section-listing-table.component.html',
   styleUrls: ['./section-listing-table.component.css']
@@ -29,6 +33,10 @@ export class SectionListingTableComponent {
 
   sectionsSearchForm !: FormGroup;
   campusesResponseDD: Campus[] = [];
+
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+  isLoading: boolean = false;
+  loadingMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -99,6 +107,7 @@ export class SectionListingTableComponent {
       error: (error) => {
         this.logger.error('Request Error Status', error.status);
         this.logger.error('Message', error.message);
+        this.toaster?.show('Failed to load campuses.', 'error');
       },
       complete: () => {
         this.logger.complete('Request Complete');
@@ -125,6 +134,8 @@ export class SectionListingTableComponent {
   }
 
   getAllSections() {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading sections...';
     this.sectionManagementService.getAllSection().subscribe({
       next: (response) => {
         this.logger.success('Success Status', response.status);
@@ -135,9 +146,12 @@ export class SectionListingTableComponent {
       error: (error) => {
         this.logger.error('Request Error Status', error.status);
         this.logger.error('Message', error.message);
+        this.toaster?.show('Failed to load sections.', 'error');
+        this.isLoading = false;
       },
       complete: () => {
         this.logger.complete('Request Complete');
+        this.isLoading = false;
       }
     })
   }
@@ -168,6 +182,9 @@ export class SectionListingTableComponent {
       keyword: formValues.keyword?.trim() || ''
     };
 
+    this.isLoading = true;
+    this.loadingMessage = 'Searching sections...';
+
     this.sectionManagementService.searchSections(params).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
@@ -178,9 +195,12 @@ export class SectionListingTableComponent {
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
+        this.toaster?.show('Search failed.', 'error');
+        this.isLoading = false;
       },
       complete: () => {
         console.log('🔚 Request Complete');
+        this.isLoading = false;
       }
     })
   }

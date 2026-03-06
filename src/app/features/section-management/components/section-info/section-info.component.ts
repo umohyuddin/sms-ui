@@ -6,11 +6,12 @@ import { SectionResponse } from '../../models/SectionResponse';
 import { SectionManagementService } from '../../services/section-management.service';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-section-info',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoaderComponent],
   templateUrl: './section-info.component.html',
   styleUrls: ['./section-info.component.css']
 })
@@ -18,6 +19,8 @@ export class SectionInfoComponent {
   sectionData?: SectionResponse;
   sectionId!: string;
   URL = '';
+  isLoading: boolean = false;
+  loadingMessage: string = '';
   constructor(
     private sectionManagementService: SectionManagementService,
     private route: ActivatedRoute,
@@ -31,6 +34,8 @@ export class SectionInfoComponent {
   }
 
   getSectionDetails(sectionId: string): void {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading section details...';
     this.sectionManagementService.getSectionById(sectionId).subscribe({
       next: (response) => {
         this.logger.success('Success Status', response.status);
@@ -41,14 +46,16 @@ export class SectionInfoComponent {
       error: (error) => {
         this.logger.error('Request Error Status', error.status);
         this.logger.error('Message', error.message);
+        this.isLoading = false;
       },
       complete: () => {
         this.logger.complete('Request Complete');
+        this.isLoading = false;
       }
     })
   }
 
   getInitials(name?: string): string {
-      return SmsUtil.getInitials(name ?? '');
-    }
+    return SmsUtil.getInitials(name ?? '');
+  }
 }

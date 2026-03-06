@@ -25,7 +25,7 @@ export class CampusManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.META}`, { observeResponse: true });
   }
 
-  saveCampuse(id: string | null, payload: any): Observable<any> {
+  saveCampus(id: string | null, payload: any): Observable<any> {
     const isUpdate = !!id;
 
     const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
@@ -54,7 +54,7 @@ export class CampusManagementService {
   getCampusById(id: any): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.GET_BY_ID(id)}`, { observeResponse: true });
   }
-  deleteCampus(id: number): Observable<any> {
-    return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}/${id}`, { observeResponse: true });
+  deleteCampus(id: any): Observable<any> {
+    return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}${API_ENDPOINTS.INSTITUTE.CAMPUSES.DELETE(id)}`, { observeResponse: true });
   }
 }

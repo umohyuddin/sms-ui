@@ -7,11 +7,12 @@ import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { StandardManagementService } from '../../services/standard-management.service';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-standard-info',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule],
+  imports: [CommonModule, MatExpansionModule, LoaderComponent],
   templateUrl: './standard-info.component.html',
   styleUrls: ['./standard-info.component.css']
 })
@@ -19,10 +20,12 @@ export class StandardInfoComponent {
   standardData?: StandardResponse;
   standardId!: string;
   URL = '';
+  isLoading: boolean = false;
+  loadingMessage: string = '';
   constructor(
     private standardManagementService: StandardManagementService,
     private route: ActivatedRoute
-  , private logger: LoggerService) { }
+    , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.standardId = this.route.snapshot.paramMap.get('id') ?? '';
@@ -31,6 +34,8 @@ export class StandardInfoComponent {
   }
 
   getStandardDetails(standardId: string): void {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading standard details...';
     this.standardManagementService.getStandardById(standardId).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
@@ -41,13 +46,15 @@ export class StandardInfoComponent {
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
+        this.isLoading = false;
       },
       complete: () => {
         console.log('🔚 Request Complete');
+        this.isLoading = false;
       }
     })
   }
-   getInitials(name?: string): string {
+  getInitials(name?: string): string {
     return SmsUtil.getInitials(name ?? '');
   }
 }

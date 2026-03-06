@@ -24,7 +24,7 @@
                     <div class="kt-widget__head">
                         <div class="kt-widget__user">
                             <a href="#" class="kt-widget__username">
-                             Section Name: {{sectionData?.sectionName}}
+                                Section Name: {{sectionData?.sectionName}}
                             </a>
                         </div>
                     </div>
@@ -64,3 +64,4 @@
         </div>
     </div>
 </div>
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

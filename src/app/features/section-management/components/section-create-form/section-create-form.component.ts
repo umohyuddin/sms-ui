@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -12,11 +12,13 @@ import { StandardManagementService } from '../../../standard-management/services
 import { SectionManagementService } from '../../services/section-management.service';
 import { SectionResponse } from '../../models/SectionResponse';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-section-create-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, ToasterComponent, LoaderComponent],
   templateUrl: './section-create-form.component.html',
   styleUrls: ['./section-create-form.component.css']
 })
@@ -30,6 +32,10 @@ export class SectionCreateFormComponent {
 
   private readonly MODULE = 'Section';
   private readonly COMPONENT = 'SectionForm';
+
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+  isLoading: boolean = false;
+  loadingMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -86,30 +92,50 @@ export class SectionCreateFormComponent {
     if (!campusId) return;
 
     LoggerUtil.group(`📦 [${this.MODULE}] Load Standards`);
+    this.isLoading = true;
+    this.loadingMessage = 'Loading standards...';
     this.standardManagemenetService.getStandardsByCampusId(campusId).subscribe({
       next: (response) => {
         LoggerUtil.log(this.MODULE, 'Standards', '✅ Standards loaded', response.body);
         this.standardData = response.body;
       },
-      error: (error) => LoggerUtil.error(this.MODULE, 'Standards', '❌ Failed to load standards', error),
-      complete: () => LoggerUtil.groupEnd()
+      error: (error) => {
+        LoggerUtil.error(this.MODULE, 'Standards', '❌ Failed to load standards', error);
+        this.toaster?.show('Failed to load standards.', 'error');
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+        LoggerUtil.groupEnd();
+      }
     });
   }
 
   private getCampuses() {
     LoggerUtil.group(`🏫 [${this.MODULE}] Load Campuses`);
+    this.isLoading = true;
+    this.loadingMessage = 'Loading campuses...';
     this.campusManagementService.getAllCampuses().subscribe({
       next: (response) => {
         LoggerUtil.log(this.MODULE, 'Campuses', '✅ Campuses loaded', response.body);
         this.campuses = response.body;
       },
-      error: (error) => LoggerUtil.error(this.MODULE, 'Campuses', '❌ Failed to load campuses', error),
-      complete: () => LoggerUtil.groupEnd()
+      error: (error) => {
+        LoggerUtil.error(this.MODULE, 'Campuses', '❌ Failed to load campuses', error);
+        this.toaster?.show('Failed to load campuses.', 'error');
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+        LoggerUtil.groupEnd();
+      }
     });
   }
 
   getSectionDetails(sectionId: string) {
     LoggerUtil.group(`📌 [${this.MODULE}] Load Section Details`);
+    this.isLoading = true;
+    this.loadingMessage = 'Loading section details...';
     this.sectionManagementService.getSectionById(sectionId).subscribe({
       next: (response) => {
         LoggerUtil.log(this.MODULE, 'Details', '✅ Section data loaded', response.body);
@@ -122,8 +148,15 @@ export class SectionCreateFormComponent {
           standardId: this.sectionData?.standard.id
         });
       },
-      error: (error) => LoggerUtil.error(this.MODULE, 'Details', '❌ Failed to load section details', error),
-      complete: () => LoggerUtil.groupEnd()
+      error: (error) => {
+        LoggerUtil.error(this.MODULE, 'Details', '❌ Failed to load section details', error);
+        this.toaster?.show('Failed to load section details.', 'error');
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+        LoggerUtil.groupEnd();
+      }
     });
   }
 
@@ -132,19 +165,32 @@ export class SectionCreateFormComponent {
     if (this.createSectionForm.invalid) {
       LoggerUtil.warn(this.MODULE, 'Submit', '❌ Form invalid');
       this.createSectionForm.markAllAsTouched();
+      this.toaster?.show('Please fill all required fields correctly.', 'warning');
       LoggerUtil.groupEnd();
       return;
     }
 
     LoggerUtil.log(this.MODULE, 'Submit', '📤 Submitting form', this.createSectionForm.getRawValue());
+    this.isLoading = true;
+    this.loadingMessage = 'Saving section...';
     this.sectionManagementService.saveSection(this.sectionId, this.createSectionForm.getRawValue())
       .subscribe({
         next: (response) => {
           LoggerUtil.log(this.MODULE, 'Submit', '✅ Section saved successfully', response.body);
-          this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
+          const message = this.isEditMode ? 'Section details updated successfully.' : 'Section added successfully.';
+          this.toaster?.show(message, 'success');
+          setTimeout(() => {
+            this.router.navigate(ROUTES.CAMPUS.SECTION.LIST);
+          }, 1500);
         },
-        error: (error) => LoggerUtil.error(this.MODULE, 'Submit', '❌ Save failed', error),
-        complete: () => LoggerUtil.groupEnd()
+        error: (error) => {
+          LoggerUtil.error(this.MODULE, 'Submit', '❌ Save failed', error);
+          this.toaster?.show('Failed to save section.', 'error');
+          this.isLoading = false;
+        },
+        complete: () => {
+          LoggerUtil.groupEnd();
+        }
       });
   }
 

@@ -1,3 +1,4 @@
+<app-toaster #toaster></app-toaster>
 <div class="kt-portlet">
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
@@ -76,7 +77,8 @@
       <div class="form-group row kt-margin-t-40">
         <label class="col-lg-1 col-form-label">Description:</label>
         <div class="col-lg-11">
-          <textarea class="form-control" id="sectionDescription" rows="3" placeholder="Enter description" formControlName="description"></textarea>
+          <textarea class="form-control" id="sectionDescription" rows="3" placeholder="Enter description"
+            formControlName="description"></textarea>
         </div>
       </div>
     </div>
@@ -98,3 +100,4 @@
   </form>
   <!--end::Form-->
 </div>
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

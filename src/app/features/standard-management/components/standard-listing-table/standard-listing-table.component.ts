@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +11,8 @@ import { Subject } from 'rxjs';
 import { StandardManagementService } from '../../services/standard-management.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-standard-listing-table',
@@ -19,7 +21,9 @@ import { CampusManagementService } from '../../../campus-management/services/cam
     RouterModule,
     MatIconModule,
     MatButtonModule,
-    ReactiveFormsModule],
+    ReactiveFormsModule,
+    ToasterComponent,
+    LoaderComponent],
   templateUrl: './standard-listing-table.component.html',
   styleUrls: ['./standard-listing-table.component.css']
 })
@@ -29,19 +33,23 @@ export class StandardListingTableComponent {
   standardSearchForm !: FormGroup;
   campusesResponse: any;
 
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+  isLoading: boolean = false;
+  loadingMessage: string = '';
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private standardManagementService: StandardManagementService,
     private campusManagementService: CampusManagementService
-  , private logger: LoggerService) { }
+    , private logger: LoggerService) { }
 
   columns = [
     { key: 'standardName', label: 'Standard Name', sortable: true },
     { key: 'standardCode', label: 'Standard Code', sortable: true },
     { key: 'campusName', label: 'Campus Name', sortable: true },
     { key: 'campusCode', label: 'Campus Code', sortable: true },
-        { key: 'action', label: 'Action', sortable: true }
+    { key: 'action', label: 'Action', sortable: true }
   ];
 
   ngOnInit() {
@@ -66,6 +74,7 @@ export class StandardListingTableComponent {
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
+        this.toaster?.show('Failed to load campuses.', 'error');
       },
       complete: () => {
         console.log('🔚 Request Complete');
@@ -84,6 +93,8 @@ export class StandardListingTableComponent {
     this.getStandards(); // reload all data
   }
   getStandards() {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading standards...';
     this.standardManagementService.getAllStandards().subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
@@ -94,9 +105,12 @@ export class StandardListingTableComponent {
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
+        this.toaster?.show('Failed to load standards.', 'error');
+        this.isLoading = false;
       },
       complete: () => {
         console.log('🔚 Request Complete');
+        this.isLoading = false;
       }
     })
   }
@@ -118,20 +132,26 @@ export class StandardListingTableComponent {
 
     console.log('Deleting standard', standardId);
     if (confirm('Are you sure you want to delete this Standard?')) {
+      this.isLoading = true;
+      this.loadingMessage = 'Deleting standard...';
 
       this.standardManagementService.deleteCampus(standardId).subscribe({
         next: (response) => {
           console.log('  Delete Success Status:', response.status);
           console.log('📦 Delete Response Body:', response.body);
-          // this.CampusData = this.CampusData.filter(t => t.CampusId !== CampusId);
+          this.toaster?.show('Standard deleted successfully.', 'success');
           console.log(`Campus ${standardId} deleted successfully`);
+          this.getStandards();
         },
         error: (error) => {
           console.error('❌ Delete Error Status:', error.status);
           console.error('Message:', error.message);
+          this.toaster?.show('Failed to delete standard.', 'error');
+          this.isLoading = false;
         },
         complete: () => {
           console.log('🔚 Delete Complete');
+          this.isLoading = false;
         }
       })
     }
@@ -149,6 +169,9 @@ export class StandardListingTableComponent {
       keyword: formValues.keyword?.trim() || ''
     };
 
+    this.isLoading = true;
+    this.loadingMessage = 'Searching standards...';
+
     this.standardManagementService.searchStandards(params).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
@@ -159,10 +182,12 @@ export class StandardListingTableComponent {
       error: (error) => {
         console.error('❌ Post Error Status:', error.status);
         console.error('Message:', error.message);
-        this.router.navigate(['/Campuss']);
+        this.toaster?.show('Search failed.', 'error');
+        this.isLoading = false;
       },
       complete: () => {
         console.log('🔚 Post Complete');
+        this.isLoading = false;
       }
     })
   }

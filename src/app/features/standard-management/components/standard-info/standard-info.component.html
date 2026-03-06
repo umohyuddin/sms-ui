@@ -18,7 +18,7 @@
         <div class="kt-widget kt-widget--user-profile-3">
             <div class="kt-widget__top">
                 <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-bolder kt-font-light">
-                   {{getInitials(standardData?.standardName)}}
+                    {{getInitials(standardData?.standardName)}}
                 </div>
                 <div class="kt-widget__content">
                     <div class="kt-widget__head">
@@ -62,3 +62,4 @@
         </div>
     </div>
 </div>
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

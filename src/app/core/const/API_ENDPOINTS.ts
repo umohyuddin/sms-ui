@@ -271,7 +271,8 @@ export const API_ENDPOINTS = {
             GET_ALL: '/api/institute/campuses',
             META: '/api/institute/campuses/meta',
             SEARCH: (keyword: string) => `/api/institute/campuses/search/${keyword}`,
-            GET_BY_ID: (id: string) => `/api/institute/campuses/${id}`
+            GET_BY_ID: (id: string) => `/api/institute/campuses/${id}`,
+            DELETE: (id: string) => `/api/institute/campuses/${id}`
         },
         DEPARTMENTS: {
             CREATE: '/api/institute/departments',
@@ -313,12 +314,12 @@ export const API_ENDPOINTS = {
         },
 
         SECTIONS: {
-            CREATE: '/api/institute/campuses/standards/sections',
-            UPDATE: (id: string) => `/api/institute/campuses/standards/sections/${id}`,
-            GET_ALL: '/api/institute/campuses/standards/sections',
-            SEARCH: '/api/institute/campuses/standards/sections/search',
-            GET_BY_ID: (id: string) => `/api/institute/campuses/standards/sections/${id}`,
-            GET_BY_STANDARD_ID: (id: string) => `/api/institute/campuses/standards/${id}/sections`
+            CREATE: '/api/institute/campuses-standards/sections',
+            UPDATE: (id: string) => `/api/institute/campuses-standards/sections/${id}`,
+            GET_ALL: '/api/institute/campuses-standards/sections',
+            SEARCH: '/api/institute/campuses-standards/sections/search',
+            GET_BY_ID: (id: string) => `/api/institute/campuses-standards/sections/${id}`,
+            GET_BY_STANDARD_ID: (id: string) => `/api/institute/campuses-standards/sections/standards/${id}`
         }
     },
     FEE: {

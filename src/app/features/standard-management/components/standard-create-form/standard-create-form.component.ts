@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,6 +15,8 @@ import { CampusResponse } from '../../../campus-management/models/campusResponse
 import { StandardResponse } from '../../models/standardResponse';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-standard-create-form',
@@ -26,7 +28,9 @@ import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    ToasterComponent,
+    LoaderComponent
   ],
   templateUrl: './standard-create-form.component.html',
   styleUrls: ['./standard-create-form.component.css']
@@ -39,6 +43,10 @@ export class StandardCreateFormComponent {
   campuses: CampusResponse[] = [];
   private readonly MODULE = 'Standard';
   private readonly COMPONENT = 'StandardForm';
+
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+  isLoading: boolean = false;
+  loadingMessage: string = '';
 
   validationMessages = {
     standardName: {
@@ -64,7 +72,7 @@ export class StandardCreateFormComponent {
     private route: ActivatedRoute,
     private campusManagementService: CampusManagementService,
     private standardManagementService: StandardManagementService
-  , private logger: LoggerService) {}
+    , private logger: LoggerService) { }
 
   ngOnInit() {
     this.logger.log("ngOnInit called", this.constructor.name);
@@ -99,13 +107,22 @@ export class StandardCreateFormComponent {
 
   private loadCampuses() {
     LoggerUtil.group(`🏫 [${this.MODULE}] Load Campuses`);
+    this.isLoading = true;
+    this.loadingMessage = 'Loading campuses...';
     this.campusManagementService.getAllCampuses().subscribe({
       next: (response) => {
         this.campuses = response.body;
         LoggerUtil.log(this.MODULE, 'Campuses', '📦 Campuses loaded', this.campuses);
       },
-      error: (error) => LoggerUtil.error(this.MODULE, 'Campuses', '❌ Failed to load campuses', error),
-      complete: () => LoggerUtil.log(this.MODULE, 'Campuses', '🔚 Load campuses completed')
+      error: (error) => {
+        LoggerUtil.error(this.MODULE, 'Campuses', '❌ Failed to load campuses', error);
+        this.toaster?.show('Failed to load campuses.', 'error');
+        this.isLoading = false;
+      },
+      complete: () => {
+        LoggerUtil.log(this.MODULE, 'Campuses', '🔚 Load campuses completed');
+        this.isLoading = false;
+      }
     });
     LoggerUtil.groupEnd();
   }
@@ -113,6 +130,8 @@ export class StandardCreateFormComponent {
   private getStandardDetails(standardId: string) {
     LoggerUtil.group(`📦 [${this.MODULE}] Load Standard Details`);
     LoggerUtil.log(this.MODULE, 'Details', '📌 Fetching standard by ID', standardId);
+    this.isLoading = true;
+    this.loadingMessage = 'Loading standard details...';
 
     this.standardManagementService.getStandardById(standardId).subscribe({
       next: (response) => {
@@ -126,8 +145,15 @@ export class StandardCreateFormComponent {
           campusId: this.standardData?.campus?.id
         });
       },
-      error: (error) => LoggerUtil.error(this.MODULE, 'Details', '❌ Failed to load standard details', error),
-      complete: () => LoggerUtil.log(this.MODULE, 'Details', '🔚 Standard details flow completed')
+      error: (error) => {
+        LoggerUtil.error(this.MODULE, 'Details', '❌ Failed to load standard details', error);
+        this.toaster?.show('Failed to load standard details.', 'error');
+        this.isLoading = false;
+      },
+      complete: () => {
+        LoggerUtil.log(this.MODULE, 'Details', '🔚 Standard details flow completed');
+        this.isLoading = false;
+      }
     });
     LoggerUtil.groupEnd();
   }
@@ -138,21 +164,32 @@ export class StandardCreateFormComponent {
 
     if (this.createStandardForm.invalid) {
       this.createStandardForm.markAllAsTouched();
+      this.toaster?.show('Please fill all required fields correctly.', 'warning');
       LoggerUtil.error(this.MODULE, 'Submit', '❌ Form validation failed', this.createStandardForm.errors);
       LoggerUtil.groupEnd();
       return;
     }
 
     LoggerUtil.log(this.MODULE, 'Submit', '📤 Submitting form data', this.createStandardForm.getRawValue());
+    this.isLoading = true;
+    this.loadingMessage = 'Saving standard details...';
 
     this.standardManagementService.saveStandard(this.standardId, this.createStandardForm.getRawValue())
       .subscribe({
         next: (response) => {
           LoggerUtil.log(this.MODULE, 'Submit', '✅ Save successful', response.body);
-          LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to standard list');
-          this.router.navigate(ROUTES.CAMPUS.STANDARD.LIST);
+          const message = this.isEditMode ? 'Standard details updated successfully.' : 'Standard added successfully.';
+          this.toaster?.show(message, 'success');
+          setTimeout(() => {
+            LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to standard list');
+            this.router.navigate(ROUTES.CAMPUS.STANDARD.LIST);
+          }, 1500);
         },
-        error: (error) => LoggerUtil.error(this.MODULE, 'Submit', '❌ Save failed', error),
+        error: (error) => {
+          LoggerUtil.error(this.MODULE, 'Submit', '❌ Save failed', error);
+          this.toaster?.show('Failed to save standard details.', 'error');
+          this.isLoading = false;
+        },
         complete: () => {
           LoggerUtil.log(this.MODULE, 'Submit', '🔚 Submit flow completed');
           LoggerUtil.groupEnd();

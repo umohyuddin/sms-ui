@@ -18,6 +18,8 @@ import { InstituteAccreditationListingTableComponent } from '../institute-accred
 import { InstituteFinancialSettingsFormComponent } from '../institute-financial-settings-form/institute-financial-settings-form.component';
 import { InstituteFacilityCreateFormComponent } from '../institute-facility-create-form/institute-facility-create-form.component';
 import { InstituteFacilityListingTableComponent } from '../institute-facility-listing-table/institute-facility-listing-table.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 
 @Component({
   selector: 'app-school-profile-listing-table',
@@ -36,7 +38,9 @@ import { InstituteFacilityListingTableComponent } from '../institute-facility-li
     InstituteAccreditationListingTableComponent,
     InstituteFinancialSettingsFormComponent,
     InstituteFacilityCreateFormComponent,
-    InstituteFacilityListingTableComponent
+    InstituteFacilityListingTableComponent,
+    LoaderComponent,
+    ToasterComponent
   ],
   templateUrl: './school-profile-listing-table.component.html',
   styleUrl: './school-profile-listing-table.component.css'
@@ -56,8 +60,11 @@ export class SchoolProfileListingTableComponent {
   private accreditationListingTable?: InstituteAccreditationListingTableComponent;
   @ViewChild(InstituteFacilityListingTableComponent)
   private facilityListingTable?: InstituteFacilityListingTableComponent;
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
 
   selectedAccreditationId?: number;
+  isLoading = false;
+  loadingMessage = '';
 
   texts = PageTexts.SCHOOL_PROFILE;
 
@@ -69,7 +76,7 @@ export class SchoolProfileListingTableComponent {
   constructor(
     private router: Router,
     private schoolProfileManagementService: SchoolProfileManagementService
-  , private logger: LoggerService) { }
+    , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.getProfileDetails();
@@ -80,19 +87,22 @@ export class SchoolProfileListingTableComponent {
   }
 
   getProfileDetails(): void {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading Profile Details...';
     this.schoolProfileManagementService.getInstitute().subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
         this.school = response.body;
         this.instituteId = this.school?.id;
       },
       error: (error) => {
+        this.isLoading = false;
+        this.loadingMessage = '';
         console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
+        this.toaster?.show('Failed to load profile details.', 'error');
       },
       complete: () => {
-        console.log('🔚 Request Complete');
+        this.isLoading = false;
+        this.loadingMessage = '';
       }
     })
   }
@@ -137,5 +147,3 @@ export class SchoolProfileListingTableComponent {
     this.facilityListingTable?.reloadFacilities();
   }
 }
-
-

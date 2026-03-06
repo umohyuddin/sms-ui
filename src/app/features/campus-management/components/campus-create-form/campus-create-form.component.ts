@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -9,28 +9,36 @@ import { AppConfigService } from '../../../../core/services/app-config.service';
 import { API_ENDPOINTS } from '../../../../core/const/API_ENDPOINTS';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CampusManagementService } from '../../services/campus-management.service';
-import { CampusMetaData } from '../../models/CampusMetaData';
+import { SchoolProfileManagementService } from '../../../school-profile-management/services/school-profile-management.service';
+import { InstituteResponse } from '../../../school-profile-management/models/InstituteResponse';
 import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { PageTexts } from '../../../../core/const/PAGE_TEXT';
 import { LoggerService } from '../../../../core/services/logger.service';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 
 @Component({
   selector: 'app-campus-create-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoaderComponent, ToasterComponent],
   templateUrl: './campus-create-form.component.html',
   styleUrls: ['./campus-create-form.component.css']
 })
 export class CampusCreateFormComponent {
   pageConst = PageTexts;
-  meta?: CampusMetaData;
+  meta?: any;
   createCampusForm!: FormGroup;
   isEditMode = false;
   campusId: string | null = null;
   campusData: any;
   provinceDD: KeyValueOption[] = [];
   citiesDD: KeyValueOption[] = [];
+  isLoading = false;
+  loadingMessage = '';
+
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+
   private readonly MODULE = 'Campus';
   private readonly COMPONENT = 'CampusForm';
 
@@ -41,26 +49,26 @@ export class CampusCreateFormComponent {
     private route: ActivatedRoute,
     private router: Router,
     private campusManagementService: CampusManagementService,
+    private schoolProfileService: SchoolProfileManagementService,
     private logger: LoggerService
-  ) {}
+  ) { }
 
   ngOnInit() {
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);
     LoggerUtil.log(this.MODULE, this.COMPONENT, '⚙️ Initializing component');
 
     this.initializeForm();
-    this.loadCampusMeta();
 
     this.campusId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.campusId;
     LoggerUtil.log(this.MODULE, this.COMPONENT, '📝 Mode detected', this.isEditMode ? 'EDIT' : 'CREATE');
 
-    if (this.isEditMode && this.campusId) {
-      LoggerUtil.log(this.MODULE, this.COMPONENT, '🔹 Campus ID found', this.campusId);
-      this.getCampusDetails(this.campusId);
+    if (this.isEditMode) {
+      this.loadCampusDetails(this.campusId!);
     }
 
-    this.onProvinceChange();
+    this.setupFormListeners();
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Component initialization complete');
     LoggerUtil.groupEnd(); // Close Init group
   }
 
@@ -69,6 +77,7 @@ export class CampusCreateFormComponent {
     this.createCampusForm = this.fb.group({
       instituteId: ['', Validators.required],
       instituteName: ['', Validators.required],
+      countryId: ['', Validators.required],
       provinceId: ['', Validators.required],
       cityId: ['', Validators.required],
       campusName: ['', [Validators.required, this.noWhitespaceValidator]],
@@ -83,31 +92,41 @@ export class CampusCreateFormComponent {
     LoggerUtil.groupEnd(); // Close Form Initialization group
   }
 
-  onProvinceChange() {
-    LoggerUtil.group(`🌐 [${this.MODULE}] Province Change`);
-    LoggerUtil.log(this.MODULE, 'Province', '🔄 Subscribing to province changes');
+  private setupFormListeners() {
+    LoggerUtil.group(`🔄 [${this.MODULE}] Form Listeners`);
 
-    this.createCampusForm.get('provinceId')?.valueChanges.subscribe(provinceId => {
-      if (!provinceId) return;
-
-      LoggerUtil.group(`📌 Province Selected`);
-      LoggerUtil.log(this.MODULE, 'Province', 'Selected Province ID', provinceId);
-
-      this.createCampusForm.get('cityId')?.reset('');
-      this.createCampusForm.get('cityId')?.markAsUntouched();
-      this.createCampusForm.get('cityId')?.updateValueAndValidity();
-
-      this.loadCitiesByProvince(provinceId);
-
-      LoggerUtil.groupEnd(); // Close Province Selected
+    this.createCampusForm.get('countryId')?.valueChanges.subscribe(countryId => {
+      if (!countryId) {
+        this.provinceDD = [];
+        this.citiesDD = [];
+        return;
+      }
+      LoggerUtil.log(this.MODULE, 'Country', '🔄 Country changed', countryId);
+      this.loadProvinces(countryId);
     });
 
-    LoggerUtil.groupEnd(); // Close Province Change subscription group
+    this.createCampusForm.get('provinceId')?.valueChanges.subscribe(provinceId => {
+      this.createCampusForm.get('cityId')?.reset('');
+      if (!provinceId) {
+        this.citiesDD = [];
+        return;
+      }
+      LoggerUtil.log(this.MODULE, 'Province', '🔄 Province changed', provinceId);
+      this.loadCities(provinceId);
+    });
+
+    LoggerUtil.groupEnd();
   }
 
-  goToCampusList(): void {
-    LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to /Campuss');
-    this.router.navigate(['/Campuss']);
+  toggleActive(): void {
+    const currentValue = this.createCampusForm.get('active')?.value;
+    LoggerUtil.log(this.MODULE, this.COMPONENT, '🔄 Toggling active', !currentValue);
+    this.createCampusForm.get('active')?.setValue(!currentValue);
+  }
+
+  goToCampusListing(): void {
+    LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to campus list');
+    this.router.navigate(ROUTES.CAMPUS.LIST);
   }
 
   onSubmit(): void {
@@ -123,114 +142,124 @@ export class CampusCreateFormComponent {
 
     LoggerUtil.log(this.MODULE, 'Submit', '📤 Submitting form data', this.createCampusForm.getRawValue());
 
-    this.campusManagementService.saveCampuse(this.campusId, this.createCampusForm.getRawValue())
+    this.isLoading = true;
+    this.loadingMessage = this.isEditMode ? 'Updating Campus Details...' : 'Adding New Campus...';
+    this.campusManagementService.saveCampus(this.campusId, this.createCampusForm.getRawValue())
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           LoggerUtil.log(this.MODULE, 'Submit', '✅ Save successful', response.body);
-          LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to campus list');
-          this.router.navigate(ROUTES.CAMPUS.LIST);
+          const message = response?.body?.message || (this.isEditMode ? 'Campus updated successfully' : 'Campus created successfully');
+          this.toaster?.show(message, 'success');
+          setTimeout(() => {
+            this.router.navigate(ROUTES.CAMPUS.LIST);
+          }, 1500);
         },
-        error: (error) => {
+        error: (error: any) => {
+          this.isLoading = false;
+          this.loadingMessage = '';
           LoggerUtil.error(this.MODULE, 'Submit', '❌ Save failed', error);
+          this.toaster?.show('Failed to save campus details.', 'error');
         },
         complete: () => {
+          this.isLoading = false;
+          this.loadingMessage = '';
           LoggerUtil.log(this.MODULE, 'Submit', '🔚 Submit flow completed');
           LoggerUtil.groupEnd(); // Close Submit group
         }
       });
   }
 
-  private loadCitiesByProvince(provinceId: any, callback?: () => void) {
-    LoggerUtil.group(`🏙️ [${this.MODULE}] Load Cities`);
-    LoggerUtil.log(this.MODULE, 'City', '📌 Request started for province', provinceId);
-
-    if (!provinceId) {
-      LoggerUtil.log(this.MODULE, 'City', '⚠️ Province ID missing — aborting');
-      LoggerUtil.groupEnd();
-      return;
-    }
-
-    this.httpClientService.request<any>(
-      HTTP_METHOD.GET,
-      this.appConfig.apiBaseUrl + API_ENDPOINTS.LOOKUP.CITY.GET_BY_PROVINCE_ID(provinceId),
-      { observeResponse: true }
-    ).subscribe({
+  private loadProvinces(countryId: any, callback?: () => void) {
+    LoggerUtil.log(this.MODULE, 'Province', '📌 Fetching provinces for country', countryId);
+    this.isLoading = true;
+    this.loadingMessage = 'Loading Provinces...';
+    this.schoolProfileService.getProvincesByCountryId(countryId).subscribe({
       next: (response) => {
-        this.citiesDD = response.body.map((item: any) => ({
+        this.provinceDD = response.body.map((item: any) => ({
           key: item.id,
           label: item.name
         }));
-        LoggerUtil.log(this.MODULE, 'City', '📦 Cities loaded successfully', this.citiesDD);
+        LoggerUtil.log(this.MODULE, 'Province', '✅ Provinces loaded', this.provinceDD.length);
       },
-      error: (error) => LoggerUtil.error(this.MODULE, 'City', '❌ Failed to load cities', error),
+      error: (error: any) => {
+        LoggerUtil.error(this.MODULE, 'Province', '❌ Failed to load provinces', error);
+      },
       complete: () => {
-        LoggerUtil.log(this.MODULE, 'City', '🔚 Request completed');
-        LoggerUtil.groupEnd(); // Close Load Cities group
+        this.isLoading = false;
+        this.loadingMessage = '';
         callback?.();
       }
     });
   }
 
-  loadCampusMeta(): void {
-    LoggerUtil.group(`📦 [${this.MODULE}] Load Meta`);
-    LoggerUtil.log(this.MODULE, 'Meta', '📌 Fetching campus meta');
-
-    this.campusManagementService.getCampusMeta().subscribe({
+  private loadCities(provinceId: any, callback?: () => void) {
+    LoggerUtil.log(this.MODULE, 'City', '📌 Fetching cities for province', provinceId);
+    this.isLoading = true;
+    this.loadingMessage = 'Loading Cities...';
+    this.schoolProfileService.getCitiesByProvinceId(provinceId).subscribe({
       next: (response) => {
-        this.meta = response.body;
-        LoggerUtil.log(this.MODULE, 'Meta', '✅ Meta loaded', this.meta);
-
-        this.provinceDD = this.meta?.provinces.map((item: any) => ({
+        this.citiesDD = response.body.map((item: any) => ({
           key: item.id,
           label: item.name
-        })) || [];
-
-        this.createCampusForm.patchValue({
-          instituteId: this.meta?.institute.id,
-          instituteName: this.meta?.institute.name
-        });
+        }));
+        LoggerUtil.log(this.MODULE, 'City', '✅ Cities loaded', this.citiesDD.length);
       },
-      error: (error) => LoggerUtil.error(this.MODULE, 'Meta', '❌ Failed to load meta', error),
+      error: (error: any) => {
+        LoggerUtil.error(this.MODULE, 'City', '❌ Failed to load cities', error);
+      },
       complete: () => {
-        LoggerUtil.log(this.MODULE, 'Meta', '🔚 Meta request completed');
-        LoggerUtil.groupEnd(); // Close Load Meta group
+        this.isLoading = false;
+        this.loadingMessage = '';
+        callback?.();
       }
     });
   }
 
-  getCampusDetails(campusId: string): void {
-    LoggerUtil.group(`🏫 [${this.MODULE}] Load Campus Details`);
-    LoggerUtil.log(this.MODULE, 'Details', '📌 Fetching campus by ID', campusId);
 
+  loadCampusDetails(campusId: string): void {
+    LoggerUtil.log(this.MODULE, 'Details', '📌 Fetching campus by ID', campusId);
+    this.isLoading = true;
     this.campusManagementService.getCampusById(campusId).subscribe({
       next: (response) => {
-        this.campusData = response.body;
-        LoggerUtil.log(this.MODULE, 'Details', '✅ Campus data loaded', this.campusData);
+        const data = response.body;
+        LoggerUtil.log(this.MODULE, 'Details', '✅ Campus data loaded', data);
 
-        this.createCampusForm.patchValue(this.campusData, { emitEvent: false });
+        // Patch non-cascading fields first
+        this.createCampusForm.patchValue({
+          instituteId: data.instituteId,
+          instituteName: data.instituteName,
+          campusName: data.campusName,
+          campusCode: data.campusCode,
+          active: data.active,
+          contactNumber: data.contactNumber,
+          email: data.email,
+          website: data.website,
+          address: data.address,
+          countryId: data.countryId
+        }, { emitEvent: false });
 
-        this.loadCitiesByProvince(this.campusData.provinceId, () => {
-          this.createCampusForm.get('cityId')?.setValue(this.campusData.cityId);
-          LoggerUtil.log(this.MODULE, 'Details', '🏙️ City restored in edit mode');
+        // Load Cascading Dropdowns sequentially
+        this.loadProvinces(data.countryId, () => {
+          this.createCampusForm.get('provinceId')?.setValue(data.provinceId, { emitEvent: false });
+          this.loadCities(data.provinceId, () => {
+            this.createCampusForm.get('cityId')?.setValue(data.cityId, { emitEvent: false });
+            LoggerUtil.log(this.MODULE, 'Details', '✅ All cascading fields restored');
+          });
         });
       },
-      error: (error) => LoggerUtil.error(this.MODULE, 'Details', '❌ Failed to load campus details', error),
-      complete: () => {
-        LoggerUtil.log(this.MODULE, 'Details', '🔚 Campus details flow completed');
-        LoggerUtil.groupEnd(); // Close Campus Details group
-      }
+      error: (error: any) => {
+        LoggerUtil.error(this.MODULE, 'Details', '❌ Failed to load campus details', error);
+      },
+      complete: () => this.isLoading = false
     });
   }
 
-  goToCampusListing() {
-    LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to campus list');
-    this.router.navigate(ROUTES.CAMPUS.LIST);
-  }
 
   // getters
   get campusName() { return this.createCampusForm.get('campusName'); }
   get contactNumber() { return this.createCampusForm.get('contactNumber'); }
   get email() { return this.createCampusForm.get('email'); }
+  get countryId() { return this.createCampusForm.get('countryId'); }
   get provinceId() { return this.createCampusForm.get('provinceId'); }
   get cityId() { return this.createCampusForm.get('cityId'); }
 
@@ -250,7 +279,7 @@ export class CampusCreateFormComponent {
 
     return '';
   }
-  
+
 
   validationMessages = {
     campusName: {
@@ -271,6 +300,7 @@ export class CampusCreateFormComponent {
     },
     provinceId: { required: 'Province is required.' },
     cityId: { required: 'City is required.' },
+    countryId: { required: 'Country is required.' },
     campusCode: {
       maxlength: 'Campus Code cannot exceed 20 characters.',
       whitespace: 'Campus Code cannot be empty.'

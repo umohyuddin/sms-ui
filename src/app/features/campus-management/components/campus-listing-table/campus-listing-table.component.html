@@ -1,3 +1,5 @@
+<app-toaster #toaster></app-toaster>
+
 <div class="kt-portlet kt-portlet--mobile">
   <div class="kt-portlet__head kt-portlet__head--lg">
     <div class="kt-portlet__head-label">
@@ -75,14 +77,16 @@
                       <i class="la la-ellipsis-h"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item" href="#" (click)="editCampusDetails(campus,$event)"><i
+                      <a class="dropdown-item" href="javascript:void(0)" (click)="editCampusDetails(campus,$event)"><i
                           class="la la-edit"></i> Edit Details</a>
-                      <a class="dropdown-item" href="#" (click)="viewCampusDetails(campus,$event)">
+                      <a class="dropdown-item" href="javascript:void(0)" (click)="viewCampusDetails(campus,$event)">
                         <i class="la la-eye"></i> View Details</a>
-                      <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
+                      <a class="dropdown-item" href="javascript:void(0)" (click)="deleteCampus(campus.id,$event)"><i
+                          class="la la-trash"></i> Delete Campus</a>
                     </div>
                   </span>
-                  <a (click)="viewCampusDetails(campus,$event)" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
+                  <a (click)="viewCampusDetails(campus,$event)" class="btn btn-sm btn-clean btn-icon btn-icon-md"
+                    title="View">
                     <i class="la la-eye"></i>
                   </a>
                 </td>
@@ -170,3 +174,10 @@
 
 
 </div>
+
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>
+
+<app-delete-popup [show]="showDeletePopup" title="Delete Campus"
+  message="Are you sure you want to delete this campus? This action cannot be undone." (confirm)="onConfirmDelete()"
+  (cancel)="onCancelDelete()">
+</app-delete-popup>

@@ -1,3 +1,5 @@
+<app-toaster #toaster></app-toaster>
+
 <div *ngIf="school; else emptyState">
     <div class="kt-portlet kt-portlet--solid-warning kt-portlet--height-fluid" style="background-image: url(./assets/media/bg/bg-9.jpg); background-size: cover;
               background-position: center center; background-repeat: no-repeat;">
@@ -306,3 +308,5 @@
         <!--End:: Portlet-->
     </div>
 </div>
+
+<app-loader *ngIf="isLoading" [message]="loadingMessage"></app-loader>

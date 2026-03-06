@@ -1,3 +1,5 @@
+<app-toaster #toaster></app-toaster>
+
 <div class="kt-portlet">
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
@@ -10,19 +12,17 @@
   <!--begin::Form-->
   <form class="kt-form kt-form--label-right" [formGroup]="createCampusForm" (ngSubmit)="onSubmit()">
     <div class="kt-portlet__body">
-      <h4>Campus Information</h4>
+      <h4>General Information</h4>
       <div class="form-group row form-group-marginless kt-margin-t-20">
         <label class="col-lg-1 col-form-label">Institute Name:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Institute Name" formControlName="instituteName" readonly>
         </div>
-
         <label class="col-lg-1 col-form-label required">Campus Name:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Campus name" formControlName="campusName"
             [class.is-invalid]="campusName?.invalid && (campusName?.touched || campusName?.dirty)"
             [class.is-valid]="campusName?.valid && (campusName?.touched || campusName?.dirty)">
-          <span class="form-text text-muted">Please enter your Campus name</span>
           <span class="invalid-feedback" *ngIf="campusName?.invalid && (campusName?.touched || campusName?.dirty)">
             {{ getErrorMessage('campusName') }}
           </span>
@@ -33,7 +33,8 @@
           <input type="text" class="form-control" placeholder="Campus Code" formControlName="campusCode"
             [class.is-invalid]="createCampusForm.get('campusCode')?.invalid && (createCampusForm.get('campusCode')?.touched || createCampusForm.get('campusCode')?.dirty)"
             [class.is-valid]="createCampusForm.get('campusCode')?.valid && (createCampusForm.get('campusCode')?.touched || createCampusForm.get('campusCode')?.dirty)">
-          <span class="invalid-feedback" *ngIf="createCampusForm.get('campusCode')?.invalid && (createCampusForm.get('campusCode')?.touched || createCampusForm.get('campusCode')?.dirty)">
+          <span class="invalid-feedback"
+            *ngIf="createCampusForm.get('campusCode')?.invalid && (createCampusForm.get('campusCode')?.touched || createCampusForm.get('campusCode')?.dirty)">
             {{ getErrorMessage('campusCode') }}
           </span>
         </div>
@@ -59,7 +60,8 @@
             [class.is-invalid]="contactNumber?.invalid && (contactNumber?.touched || contactNumber?.dirty)"
             [class.is-valid]="contactNumber?.valid && (contactNumber?.touched || contactNumber?.dirty)">
           <span class="form-text text-muted">Please enter your contact</span>
-          <span class="invalid-feedback" *ngIf="contactNumber?.invalid && (contactNumber?.touched || contactNumber?.dirty)">
+          <span class="invalid-feedback"
+            *ngIf="contactNumber?.invalid && (contactNumber?.touched || contactNumber?.dirty)">
             {{ getErrorMessage('contactNumber') }}
           </span>
         </div>
@@ -118,10 +120,12 @@
       <div class="form-group row">
         <label class="col-lg-1 col-form-label">Address:</label>
         <div class="col-lg-11">
-          <textarea class="form-control" placeholder="Enter full address" id="exampleTextarea" rows="3" formControlName="address"
+          <textarea class="form-control" placeholder="Enter full address" id="exampleTextarea" rows="3"
+            formControlName="address"
             [class.is-invalid]="createCampusForm.get('address')?.invalid && (createCampusForm.get('address')?.touched || createCampusForm.get('address')?.dirty)"
             [class.is-valid]="createCampusForm.get('address')?.valid && (createCampusForm.get('address')?.touched || createCampusForm.get('address')?.dirty)"></textarea>
-          <span class="invalid-feedback" *ngIf="createCampusForm.get('address')?.invalid && (createCampusForm.get('address')?.touched || createCampusForm.get('address')?.dirty)">
+          <span class="invalid-feedback"
+            *ngIf="createCampusForm.get('address')?.invalid && (createCampusForm.get('address')?.touched || createCampusForm.get('address')?.dirty)">
             {{ getErrorMessage('address') }}
           </span>
         </div>
@@ -144,3 +148,5 @@
   </form>
   <!--end::Form-->
 </div>
+
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

@@ -1,3 +1,4 @@
+<app-toaster #toaster></app-toaster>
 <div class="kt-portlet">
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
@@ -12,7 +13,7 @@
     <div class="kt-portlet__body">
       <h4>Standard Information</h4>
       <div class="form-group row form-group-marginless kt-margin-t-20">
-        
+
         <!-- Campus Dropdown -->
         <label class="col-lg-1 col-form-label required">Campus:</label>
         <div class="col-lg-3">
@@ -35,7 +36,8 @@
             [class.is-invalid]="standardName?.invalid && (standardName?.touched || standardName?.dirty)"
             [class.is-valid]="standardName?.valid && (standardName?.touched || standardName?.dirty)">
           <span class="form-text text-muted">Enter Standard Name</span>
-          <span class="invalid-feedback" *ngIf="standardName?.invalid && (standardName?.touched || standardName?.dirty)">
+          <span class="invalid-feedback"
+            *ngIf="standardName?.invalid && (standardName?.touched || standardName?.dirty)">
             {{ getErrorMessage('standardName') }}
           </span>
         </div>
@@ -47,7 +49,8 @@
             [class.is-invalid]="standardCode?.invalid && (standardCode?.touched || standardCode?.dirty)"
             [class.is-valid]="standardCode?.valid && (standardCode?.touched || standardCode?.dirty)">
           <span class="form-text text-muted">Enter Standard Code</span>
-          <span class="invalid-feedback" *ngIf="standardCode?.invalid && (standardCode?.touched || standardCode?.dirty)">
+          <span class="invalid-feedback"
+            *ngIf="standardCode?.invalid && (standardCode?.touched || standardCode?.dirty)">
             {{ getErrorMessage('standardCode') }}
           </span>
         </div>
@@ -87,3 +90,4 @@
   </form>
   <!--end::Form-->
 </div>
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>
