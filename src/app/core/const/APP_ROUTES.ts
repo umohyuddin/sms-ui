@@ -117,6 +117,18 @@ export const ROUTES = {
       EDIT: (id: string) => ['fee/catalog/component/rate', 'fee-rate-edit', id],
       DETAILS: (id: string) => ['fee/catalog/component/rate', 'fee-rate-details', id],
     },
+    FEE_RECURRENCE_RULE: {
+      LIST: ['fee/recurrence-rule'],
+      CREATE: ['fee/recurrence-rule', 'fee-recurrence-rule-create'],
+      EDIT: (id: string) => ['fee/recurrence-rule', 'fee-recurrence-rule-edit', id],
+      DETAILS: (id: string) => ['fee/recurrence-rule', 'fee-recurrence-rule-details', id],
+    },
+    CHARGE_TYPE: {
+      LIST: ['fee/charge-type'],
+      CREATE: ['fee/charge-type', 'charge-type-create'],
+      EDIT: (id: string) => ['fee/charge-type', 'charge-type-edit', id],
+      DETAILS: (id: string) => ['fee/charge-type', 'charge-type-details', id],
+    },
   },
   CONCESSION: {
     CONCESSION_TYPE: {

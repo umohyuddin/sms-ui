@@ -1,0 +1,22 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container kt-container--fluid">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Charge Type Details</h3>
+            <span class="kt-subheader__separator kt-hidden"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="" (click)="$event.preventDefault(); goBack()" class="kt-subheader__breadcrumbs-link">Charge
+                    Type Listing</a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Details</span>
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <button (click)="goToEdit()" class="btn btn-brand btn-bold">Edit Charge Type</button>
+            <button (click)="goBack()" class="btn btn-secondary ml-2">Back to Listing</button>
+        </div>
+    </div>
+</div>
+
+<app-charge-type-info [typeId]="typeId"></app-charge-type-info>

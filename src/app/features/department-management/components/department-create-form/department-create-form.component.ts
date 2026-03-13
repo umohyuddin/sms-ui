@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
@@ -11,10 +11,12 @@ import { EmployeeManagementService } from '../../../employee-management/services
 import { Pagination } from '../../../../core/pagar/pagination';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 import { LoggerService } from '../../../../core/services/logger.service';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 @Component({
   selector: 'app-department-create-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ToasterComponent, LoaderComponent],
   templateUrl: './department-create-form.component.html',
   styleUrl: './department-create-form.component.css'
 })
@@ -33,6 +35,10 @@ export class DepartmentCreateFormComponent {
   filteredProvinces: any[] = [];
   filteredData: any[] = [];
   searchText: string = '';
+
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+  isLoading: boolean = false;
+  loadingMessage: string = '';
 
   private search$ = new Subject<string>();
   private destroy$ = new Subject<void>();
@@ -133,32 +139,44 @@ export class DepartmentCreateFormComponent {
   }
 
   onSubmit(): void {
-    console.log('  Campus Form Data:', this.createForm.getRawValue());
     if (this.createForm.invalid) {
       // Mark all controls as touched to show validation errors
       this.createForm.markAllAsTouched();
+      this.toaster?.show('Please fill all required fields correctly.', 'warning');
       console.warn('❌ Form is invalid');
       return;
     }
 
-    this.departmentManagementService.saveDepartment(this.routedId, this.createForm.getRawValue()).subscribe({
+    const { employeeSearch, ...payload } = this.createForm.getRawValue();
+
+    this.isLoading = true;
+    this.loadingMessage = 'Saving department...';
+    this.departmentManagementService.saveDepartment(this.routedId, payload).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);
-        this.router.navigate(ROUTES.DEPARTMENTS.LIST);
+        const message = this.isEditMode ? 'Department details updated successfully.' : 'Department added successfully.';
+        this.toaster?.show(message, 'success');
+        setTimeout(() => {
+          this.router.navigate(ROUTES.DEPARTMENTS.LIST);
+        }, 1500);
       },
       error: (error) => {
         console.error('❌ Post Error Status:', error.status);
         console.error('Message:', error.message);
+        this.toaster?.show('Failed to save department.', 'error');
+        this.isLoading = false;
       },
       complete: () => {
         console.log('🔚 Post Complete');
       }
-    })
+    });
   }
 
 
   getAllDepartments(): void {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading departments...';
     this.departmentManagementService.getAllDepartments().subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
@@ -173,13 +191,18 @@ export class DepartmentCreateFormComponent {
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
+        this.toaster?.show('Failed to load departments.', 'error');
+        this.isLoading = false;
       },
       complete: () => {
         console.log('🔚 Request Complete');
+        this.isLoading = false;
       }
     })
   }
   getDepartmentDetails(departmentId: string): void {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading department details...';
     this.departmentManagementService.getDepartmentById(departmentId).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
@@ -194,20 +217,23 @@ export class DepartmentCreateFormComponent {
             description: this.responseData.description,
             active: this.responseData.active
           });
-           if (this.responseData.headEmployeeCode && this.responseData.headEmployeeName) {
-          this.createForm.patchValue({
-            employeeSearch: `${this.responseData.headEmployeeCode} - ${this.responseData.headEmployeeName}`
-          });
-        }
+          if (this.responseData.headEmployeeCode && this.responseData.headEmployeeName) {
+            this.createForm.patchValue({
+              employeeSearch: `${this.responseData.headEmployeeCode} - ${this.responseData.headEmployeeName}`
+            });
+          }
         }
 
       },
       error: (error) => {
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
+        this.toaster?.show('Failed to load department details.', 'error');
+        this.isLoading = false;
       },
       complete: () => {
         console.log('🔚 Request Complete');
+        this.isLoading = false;
       }
     })
   }

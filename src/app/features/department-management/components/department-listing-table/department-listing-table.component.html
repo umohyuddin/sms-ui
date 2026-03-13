@@ -1,38 +1,39 @@
+<app-toaster #toaster></app-toaster>
 <div class="kt-portlet kt-portlet--mobile">
     <app-portlet-header [iconClass]="texts.icon" [title]="texts.header">
     </app-portlet-header>
     <div class="kt-portlet__body">
 
-     
-            <!--begin: Datatable -->
-            <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                <div class="row">
-                    <div class="col-sm-12 col-md-6">
-                        <div class="dataTables_length" id="kt_table_1_length">
-                            <label>Show
-                                <select (change)="onPageSizeChange($event)" name="kt_table_1_length"
-                                    aria-controls="kt_table_1"
-                                    class="custom-select custom-select-sm form-control form-control-sm">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select> entries
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6">
-                        <div id="kt_table_1_filter" class="dataTables_filter">
-                            <label>Search:
-                                <input [formControl]="searchControl" type="search" class="form-control form-control-sm"
-                                    placeholder="" aria-controls="kt_table_1">
-                            </label>
-                        </div>
+
+        <!--begin: Datatable -->
+        <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <div class="dataTables_length" id="kt_table_1_length">
+                        <label>Show
+                            <select (change)="onPageSizeChange($event)" name="kt_table_1_length"
+                                aria-controls="kt_table_1"
+                                class="custom-select custom-select-sm form-control form-control-sm">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> entries
+                        </label>
                     </div>
                 </div>
+                <div class="col-sm-12 col-md-6">
+                    <div id="kt_table_1_filter" class="dataTables_filter">
+                        <label>Search:
+                            <input [formControl]="searchControl" type="search" class="form-control form-control-sm"
+                                placeholder="" aria-controls="kt_table_1">
+                        </label>
+                    </div>
+                </div>
+            </div>
 
-                <!-- Table -->
-                    <ng-container *ngIf="departments && departments.length > 0; else noData">
+            <!-- Table -->
+            <ng-container *ngIf="departments && departments.length > 0; else noData">
 
                 <div class="row">
                     <div class="col-sm-12">
@@ -89,76 +90,75 @@
                         </table>
                     </div>
                 </div>
-        </ng-container>
-                <!-- Pagination -->
-                <div class="row">
-                    <div class="col-sm-12 col-md-5">
-                        <div class="dataTables_info" id="kt_table_1_info" role="status" aria-live="polite">Showing {{
-                            pagination.startItem }} to {{ pagination.endItem }} of {{ pagination.totalItems }} entries
-                        </div>
+            </ng-container>
+            <!-- Pagination -->
+            <div class="row">
+                <div class="col-sm-12 col-md-5">
+                    <div class="dataTables_info" id="kt_table_1_info" role="status" aria-live="polite">Showing {{
+                        pagination.startItem }} to {{ pagination.endItem }} of {{ pagination.totalItems }} entries
                     </div>
-                    <div class="col-sm-12 col-md-7">
-                        <div class="dataTables_paginate paging_full_numbers" id="kt_table_1_paginate">
-                            <ul class="pagination">
+                </div>
+                <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_full_numbers" id="kt_table_1_paginate">
+                        <ul class="pagination">
 
-                                <!-- FIRST -->
-                                <li class="paginate_button page-item first"
-                                    [class.disabled]="pagination.pageIndex === 0">
-                                    <a class="page-link" (click)="pagination.first()">
-                                        <i class="la la-angle-double-left"></i>
-                                    </a>
-                                </li>
+                            <!-- FIRST -->
+                            <li class="paginate_button page-item first" [class.disabled]="pagination.pageIndex === 0">
+                                <a class="page-link" (click)="pagination.first()">
+                                    <i class="la la-angle-double-left"></i>
+                                </a>
+                            </li>
 
-                                <!-- PREVIOUS -->
-                                <li class="paginate_button page-item previous"
-                                    [class.disabled]="pagination.pageIndex === 0">
-                                    <a class="page-link" (click)="pagination.prev()">
-                                        <i class="la la-angle-left"></i>
-                                    </a>
-                                </li>
+                            <!-- PREVIOUS -->
+                            <li class="paginate_button page-item previous"
+                                [class.disabled]="pagination.pageIndex === 0">
+                                <a class="page-link" (click)="pagination.prev()">
+                                    <i class="la la-angle-left"></i>
+                                </a>
+                            </li>
 
-                                <!-- LEFT ELLIPSIS -->
-                                <li class="paginate_button page-item disabled" *ngIf="pagination.showLeftEllipsis">
-                                    <a class="page-link">...</a>
-                                </li>
+                            <!-- LEFT ELLIPSIS -->
+                            <li class="paginate_button page-item disabled" *ngIf="pagination.showLeftEllipsis">
+                                <a class="page-link">...</a>
+                            </li>
 
-                                <!-- PAGE NUMBERS -->
-                                <li class="paginate_button page-item" *ngFor="let page of pagination.visiblePages"
-                                    [class.active]="pagination.pageIndex === page">
+                            <!-- PAGE NUMBERS -->
+                            <li class="paginate_button page-item" *ngFor="let page of pagination.visiblePages"
+                                [class.active]="pagination.pageIndex === page">
 
-                                    <a class="page-link" (click)="pagination.goToPage(page)">
-                                        {{ page + 1 }}
-                                    </a>
-                                </li>
+                                <a class="page-link" (click)="pagination.goToPage(page)">
+                                    {{ page + 1 }}
+                                </a>
+                            </li>
 
-                                <!-- RIGHT ELLIPSIS -->
-                                <li class="paginate_button page-item disabled" *ngIf="pagination.showRightEllipsis">
-                                    <a class="page-link">...</a>
-                                </li>
+                            <!-- RIGHT ELLIPSIS -->
+                            <li class="paginate_button page-item disabled" *ngIf="pagination.showRightEllipsis">
+                                <a class="page-link">...</a>
+                            </li>
 
-                                <!-- NEXT -->
-                                <li class="paginate_button page-item next"
-                                    [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
-                                    <a class="page-link" (click)="pagination.next()">
-                                        <i class="la la-angle-right"></i>
-                                    </a>
-                                </li>
+                            <!-- NEXT -->
+                            <li class="paginate_button page-item next"
+                                [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
+                                <a class="page-link" (click)="pagination.next()">
+                                    <i class="la la-angle-right"></i>
+                                </a>
+                            </li>
 
-                                <!-- LAST -->
-                                <li class="paginate_button page-item last"
-                                    [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
-                                    <a class="page-link" (click)="pagination.last()">
-                                        <i class="la la-angle-double-right"></i>
-                                    </a>
-                                </li>
+                            <!-- LAST -->
+                            <li class="paginate_button page-item last"
+                                [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
+                                <a class="page-link" (click)="pagination.last()">
+                                    <i class="la la-angle-double-right"></i>
+                                </a>
+                            </li>
 
-                            </ul>
+                        </ul>
 
-                        </div>
                     </div>
                 </div>
             </div>
-            <!--end: Datatable -->
+        </div>
+        <!--end: Datatable -->
 
 
 
@@ -168,3 +168,4 @@
         </ng-template>
     </div>
 </div>
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

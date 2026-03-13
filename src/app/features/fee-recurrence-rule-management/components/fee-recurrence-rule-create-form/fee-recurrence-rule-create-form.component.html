@@ -1,0 +1,77 @@
+<app-toaster #toaster></app-toaster>
+
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">
+                {{ isEditMode ? 'Update Rule Details' : 'Add New Rule' }}
+            </h3>
+        </div>
+    </div>
+
+    <!--begin::Form-->
+    <form class="kt-form kt-form--label-right" [formGroup]="ruleForm" (ngSubmit)="onSubmit()">
+        <div class="kt-portlet__body">
+            <h4>General Information</h4>
+            <div class="form-group row form-group-marginless kt-margin-t-20">
+                <label class="col-lg-1 col-form-label required">Name:</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" placeholder="Rule name" formControlName="name"
+                        [class.is-invalid]="ruleForm.get('name')?.invalid && (ruleForm.get('name')?.touched || ruleForm.get('name')?.dirty)"
+                        [class.is-valid]="ruleForm.get('name')?.valid && (ruleForm.get('name')?.touched || ruleForm.get('name')?.dirty)">
+                    <span class="invalid-feedback"
+                        *ngIf="ruleForm.get('name')?.invalid && (ruleForm.get('name')?.touched || ruleForm.get('name')?.dirty)">
+                        {{ getErrorMessage('name') }}
+                    </span>
+                </div>
+
+                <label class="col-lg-1 col-form-label required">Code:</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" placeholder="Rule code" formControlName="code"
+                        [class.is-invalid]="ruleForm.get('code')?.invalid && (ruleForm.get('code')?.touched || ruleForm.get('code')?.dirty)"
+                        [class.is-valid]="ruleForm.get('code')?.valid && (ruleForm.get('code')?.touched || ruleForm.get('code')?.dirty)">
+                    <span class="invalid-feedback"
+                        *ngIf="ruleForm.get('code')?.invalid && (ruleForm.get('code')?.touched || ruleForm.get('code')?.dirty)">
+                        {{ getErrorMessage('code') }}
+                    </span>
+                </div>
+
+                <label class="col-lg-1 col-form-label">Status:</label>
+                <div class="col-lg-3">
+                    <label class="kt-checkbox kt-margin-t-10">
+                        <input type="checkbox" formControlName="isActive"> Is Active
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit">
+            </div>
+
+            <div class="form-group row">
+                <label class="col-lg-1 col-form-label">Description:</label>
+                <div class="col-lg-11">
+                    <textarea class="form-control" placeholder="Enter description" rows="3"
+                        formControlName="description"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+                <div class="row">
+                    <div class="col-lg-5"></div>
+                    <div class="col-lg-7">
+                        <button type="submit" class="btn btn-dark mr-2">
+                            {{ isEditMode ? 'Update Rule' : 'Add New Rule' }}
+                        </button>
+                        <button type="button" class="btn btn-danger" (click)="goToRuleListing()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!--end::Form-->
+</div>
+
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

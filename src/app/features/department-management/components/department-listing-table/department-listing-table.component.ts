@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs';
@@ -10,6 +10,8 @@ import { NoDataComponent } from '../../../../shared/components/no-data/no-data.c
 import { PortletHeaderComponent } from '../../../../shared/components/portlet-header/portlet-header.component';
 import { PageTexts } from '../../../../core/const/PAGE_TEXT';
 import { LoggerService } from '../../../../core/services/logger.service';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-department-listing-table',
@@ -17,7 +19,9 @@ import { LoggerService } from '../../../../core/services/logger.service';
   imports: [CommonModule,
     ReactiveFormsModule,
     NoDataComponent,
-    PortletHeaderComponent],
+    PortletHeaderComponent,
+    ToasterComponent,
+    LoaderComponent],
   templateUrl: './department-listing-table.component.html',
   styleUrl: './department-listing-table.component.css'
 })
@@ -29,6 +33,10 @@ export class DepartmentListingTableComponent {
   texts = PageTexts.departments;
 
   private destroy$ = new Subject<void>();
+
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+  isLoading: boolean = false;
+  loadingMessage: string = '';
 
   constructor(private router: Router,
     private departmentService: DepartmentManagementService,
@@ -62,17 +70,29 @@ export class DepartmentListingTableComponent {
           this.departments = response.body;
           this.pagination = new Pagination(this.departments, 10);
         },
-        error: error => console.error('Search error:', error)
+        error: error => {
+          console.error('Search error:', error);
+          this.toaster?.show('Search failed.', 'error');
+        }
       });
   }
 
   getDepartments() {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading departments...';
     this.departmentService.getAllDepartments().subscribe({
       next: response => {
         this.departments = response.body;
         this.pagination = new Pagination(this.departments, 10);
       },
-      error: error => console.error('Request Error:', error)
+      error: error => {
+        console.error('Request Error:', error);
+        this.toaster?.show('Failed to load departments.', 'error');
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
     });
   }
 
@@ -89,13 +109,23 @@ export class DepartmentListingTableComponent {
   deleteDepartment(departmentId: number, event: Event): void {
     event.stopPropagation();
     if (confirm('Are you sure you want to delete this Department?')) {
+      this.isLoading = true;
+      this.loadingMessage = 'Deleting department...';
       this.departmentService.deleteDepartment(departmentId).subscribe({
         next: response => {
           console.log(`Department ${departmentId} deleted successfully`);
+          this.toaster?.show('Department deleted successfully.', 'success');
           this.departments = this.departments.filter(d => d.id !== departmentId);
           this.pagination = new Pagination(this.departments, 10);
         },
-        error: error => console.error('Delete Error:', error)
+        error: error => {
+          console.error('Delete Error:', error);
+          this.toaster?.show('Failed to delete department.', 'error');
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
       });
     }
   }

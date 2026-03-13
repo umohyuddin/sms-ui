@@ -9,6 +9,7 @@ import { FeeCatalogManagementService } from '../../services/fee-catalog-manageme
 import { FeeCatalogResponse } from '../../models/FeeCatalogResponse';
 import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
+import { FeeRecurrenceRuleResponse } from '../../models/FeeRecurrenceRuleResponse';
 
 @Component({
   selector: 'app-fee-catalog-create-form',
@@ -34,7 +35,7 @@ export class FeeCatalogCreateFormComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router
-  , private logger: LoggerService) {}
+    , private logger: LoggerService) { }
 
   ngOnInit() {
     this.logger.log("ngOnInit called", this.constructor.name);
@@ -43,6 +44,7 @@ export class FeeCatalogCreateFormComponent {
 
     this.initializeForm();
     this.getFeeCatalogMeta();
+    this.getFeeRecurrenceRules();
 
     this.routedId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.routedId;
@@ -78,22 +80,38 @@ export class FeeCatalogCreateFormComponent {
       next: (response) => {
         LoggerUtil.log(this.MODULE, 'Meta', '📦 Response Body', response.body);
 
-        this.recurrenceRuleOptions = Object.entries(response.body.recurrenceRules).map(
-          ([key, label]) => ({ key, label: label as string })
-        );
-
         this.chargeTypeOptions = Object.entries(response.body.chargeTypes).map(
           ([key, label]) => ({ key, label: label as string })
         );
 
         LoggerUtil.log(this.MODULE, 'Meta', '✅ Meta loaded', {
-          recurrenceRuleOptions: this.recurrenceRuleOptions,
           chargeTypeOptions: this.chargeTypeOptions
         });
       },
       error: (error) => LoggerUtil.error(this.MODULE, 'Meta', '❌ Failed to load meta', error),
       complete: () => {
         LoggerUtil.log(this.MODULE, 'Meta', '🔚 Meta request completed');
+        LoggerUtil.groupEnd();
+      }
+    });
+  }
+
+  private getFeeRecurrenceRules() {
+    LoggerUtil.group(`📦 [${this.MODULE}] Load Recurrence Rules`);
+    this.feeCatalogManagementService.getFeeRecurrenceRules().subscribe({
+      next: (response) => {
+        LoggerUtil.log(this.MODULE, 'RecurrenceRules', '📦 Response Body', response.body);
+
+        this.recurrenceRuleOptions = response.body.map((rule: FeeRecurrenceRuleResponse) => ({
+          key: rule.code,
+          label: rule.name
+        }));
+
+        LoggerUtil.log(this.MODULE, 'RecurrenceRules', '✅ Recurrence rules loaded', this.recurrenceRuleOptions);
+      },
+      error: (error) => LoggerUtil.error(this.MODULE, 'RecurrenceRules', '❌ Failed to load recurrence rules', error),
+      complete: () => {
+        LoggerUtil.log(this.MODULE, 'RecurrenceRules', '🔚 Recurrence rules request completed');
         LoggerUtil.groupEnd();
       }
     });

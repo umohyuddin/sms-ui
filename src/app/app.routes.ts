@@ -264,6 +264,28 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'fee/recurrence-rule',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/fee-recurrence-rule-management/fee-recurrence-rule-management.module').then(m => m.FeeRecurrenceRuleManagementModule)
+      }
+    ]
+  },
+  {
+    path: 'fee/charge-type',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/charge-type-management/charge-type-management.module').then(m => m.ChargeTypeManagementModule)
+      }
+    ]
+  },
+  {
     path: 'concession/catalog',
     canActivate: [authGuard],
     loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
@@ -355,9 +377,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () =>
-          import('./features/teacher-assignment-management/teacher-assignment-management-module')
-            .then(m => m.TeacherAssignmentManagementModule)
+        loadChildren: () => import('./features/teacher-assignment-management/teacher-assignment-management-module').then(m => m.TeacherAssignmentManagementModule)
       }
     ]
   },
@@ -450,7 +470,6 @@ export const routes: Routes = [
       }
     ]
   },
-
   {
     path: 'standard-subject-mapping',
     canActivate: [authGuard],

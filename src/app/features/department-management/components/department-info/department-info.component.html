@@ -14,7 +14,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="kt-portlet__body">
     <div class="kt-widget kt-widget--user-profile-3">
       <div class="kt-widget__top">
@@ -33,7 +33,7 @@
               </span>
             </div>
           </div>
-          
+
           <div class="kt-widget__subhead row">
             <div class="col-4">
               <a><b>Department Code:</b> {{ departmentData?.departmentCode ?? '-' }}</a>
@@ -45,16 +45,17 @@
               <a><b>Head Employee:</b> {{ departmentData?.headEmployeeName ?? '-' }}</a>
             </div>
           </div>
-          
+
           <div class="kt-widget__info">
             <div class="kt-widget__desc">
               <i style="font-size: 1.5rem !important;" class="flaticon-information mr-2"></i>
               <b>{{ departmentData?.description ?? '-' }}</b>
             </div>
           </div>
-          
+
         </div>
       </div>
     </div>
   </div>
 </div>
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

@@ -1,0 +1,9 @@
+/* Custom styles for fee recurrence rule form */
+.kt-switch span {
+    margin-left: 0 !important;
+}
+
+.ml-3 {
+    margin-left: 1rem !important;
+    vertical-align: middle;
+}

@@ -1,3 +1,4 @@
+<app-toaster #toaster></app-toaster>
 <div class="kt-portlet">
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
@@ -123,3 +124,4 @@
     </div>
   </form>
 </div>
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

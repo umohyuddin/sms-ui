@@ -154,5 +154,35 @@ export const PageTexts = {
       studentHeader: 'Student Attendance',
       employeeHeader: 'Employee Attendance'
     }
+  },
+  feeRecurrenceRule: {
+    Module: 'Fee Recurrence Rule',
+    icon: 'kt-font-dark flaticon-squares',
+    header: 'Fee Recurrence Rule Listing',
+    buttons: {
+      add: 'Add Recurrence Rule',
+      edit: 'Edit Recurrence Rule',
+      delete: 'Delete Recurrence Rule',
+      view: 'View Recurrence Rule'
+    },
+    messages: {
+      noData: 'No fee recurrence rules available at the moment. Please check back later or add a new rule.',
+      deleteConfirmation: 'Are you sure you want to delete this fee recurrence rule?'
+    }
+  },
+  chargeType: {
+    Module: 'Charge Type',
+    icon: 'kt-font-dark flaticon-squares',
+    header: 'Charge Type Listing',
+    buttons: {
+      add: 'Add Charge Type',
+      edit: 'Edit Charge Type',
+      delete: 'Delete Charge Type',
+      view: 'View Charge Type'
+    },
+    messages: {
+      noData: 'No charge types available at the moment. Please check back later or add a new charge type.',
+      deleteConfirmation: 'Are you sure you want to delete this charge type?'
+    }
   }
 };

@@ -378,7 +378,22 @@ export const API_ENDPOINTS = {
         STUDENT_ADMISSION_META: '/api/lookup/admission/metadata',
         EMPLOYEE_DOCS_META: '/api/lookup/docs/metadata',
         FEE_RECURRENCE_RULES: {
-            GET_ALL: '/api/lookups/fee-recurrence-rules'
+            GET_ALL: (id?: string | number) => `/api/lookups/fee-recurrence-rules${id ? `/${id}` : ''}`,
+            GET_BY_ID: (id: string | number) => `/api/lookups/fee-recurrence-rules/${id}`,
+            CREATE: '/api/lookups/fee-recurrence-rules',
+            UPDATE: (id: string | number) => `/api/lookups/fee-recurrence-rules/${id}`,
+            SEARCH: (keyword: string) => `/api/lookups/fee-recurrence-rules/search?keyword=${keyword}`,
+            DELETE: (id: string | number) => `/api/lookups/fee-recurrence-rules/${id}`,
+            STATISTICS: '/api/lookups/fee-recurrence-rules/statistics',
+        },
+        CHARGE_TYPES: {
+            GET_ALL: '/api/lookups/charge-type',
+            GET_ACTIVE: '/api/lookups/charge-type/active',
+            GET_BY_ID: (id: string | number) => `/api/lookups/charge-type/${id}`,
+            CREATE: '/api/lookups/charge-type',
+            UPDATE: (id: string | number) => `/api/lookups/charge-type/${id}`,
+            DELETE: (id: string | number) => `/api/lookups/charge-type/${id}`,
+            SEARCH: (keyword: string) => `/api/lookups/charge-type/search?keyword=${keyword}`,
         },
         PROVINCE: {
             GET_ALL: '/api/lookup/provinces',
