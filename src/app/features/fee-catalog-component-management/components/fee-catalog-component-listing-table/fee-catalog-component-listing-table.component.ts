@@ -6,9 +6,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { FeeCatalogComponentManagementService } from '../../services/fee-catalog-component-management.service';
-import { FeeCatalogComponentResponse } from '../../models/FeeCatalogComponentResponse';
 import { FeeCatalogManagementService } from '../../../fee-catalog-management/services/fee-catalog-management.service';
 import { FeeCatalogResponse } from '../../../fee-catalog-management/models/FeeCatalogResponse';
+import { FeeComponentResponseDTO } from '../../models/FeeComponentResponseDTO';
 
 @Component({
   selector: 'app-fee-catalog-component-listing-table',
@@ -21,8 +21,8 @@ import { FeeCatalogResponse } from '../../../fee-catalog-management/models/FeeCa
   styleUrls: ['./fee-catalog-component-listing-table.component.css']
 })
 export class FeeCatalogComponentListingTableComponent {
-  pagination: Pagination<FeeCatalogComponentResponse> = new Pagination([], 10);
-  feeCatalogComponentResponse: FeeCatalogComponentResponse[] = [];
+  pagination: Pagination<FeeComponentResponseDTO> = new Pagination([], 10);
+  feeCatalogComponentResponse: FeeComponentResponseDTO[] = [];
   feeCatalogResponseDD: FeeCatalogResponse[] = [];
 
   searchForm !: FormGroup;
@@ -33,7 +33,7 @@ export class FeeCatalogComponentListingTableComponent {
     private router: Router,
     private feeCatalogManagementService: FeeCatalogManagementService,
     private feeCatalogComponentManagementService: FeeCatalogComponentManagementService
-  , private logger: LoggerService) { }
+    , private logger: LoggerService) { }
 
   columns = [
     { key: 'componentName', label: 'Fee Component Name', sortable: true },
@@ -95,13 +95,13 @@ export class FeeCatalogComponentListingTableComponent {
       }
     });
   }
-  viewSectionDetails(feeCatalogComponent: FeeCatalogComponentResponse, event: Event): void {
+  viewSectionDetails(feeCatalogComponent: FeeComponentResponseDTO, event: Event): void {
     console.log('Viewing details for Fee Catalog Component ID:', feeCatalogComponent.id);
     event.preventDefault();  // prevents anchor default behavior
     this.router.navigate(ROUTES.FEE.FEE_CATALOG_COMPONENT.DETAILS(feeCatalogComponent.id.toString()));
   }
 
-  editSectionDetails(feeCatalogComponent: FeeCatalogComponentResponse, event: Event): void {
+  editSectionDetails(feeCatalogComponent: FeeComponentResponseDTO, event: Event): void {
     event.preventDefault();  // prevents anchor default behavior
     console.log('Editing Fee Catalog Component ID:', feeCatalogComponent.id);
     this.router.navigate(ROUTES.FEE.FEE_CATALOG_COMPONENT.EDIT(feeCatalogComponent.id.toString()));
@@ -120,7 +120,7 @@ export class FeeCatalogComponentListingTableComponent {
       keyword: formValues.keyword?.trim() || ''
     };
 
-    this.feeCatalogComponentManagementService.searchFeeCatalogComponents(params).subscribe({
+    this.feeCatalogComponentManagementService.searchFeeCatalogComponents(params.feeCatalogId, params.keyword).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);

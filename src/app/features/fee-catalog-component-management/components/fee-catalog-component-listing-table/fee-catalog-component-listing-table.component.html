@@ -82,12 +82,12 @@
                     {{item.active? 'Active':'Inactive'}}
                   </span>
                 </td>
-                <td>{{ item.feeCatalog.name }}</td>
-                <td>{{ item.feeCatalog.code }}</td>
+                <td>{{ item.feeCatalog?.name }}</td>
+                <td>{{ item.feeCatalog?.code }}</td>
                 @if(item.discountable){
-                  <td class="kt-align-center"><i class="flaticon2-correct kt-font-success"></i></td>
+                <td class="kt-align-center"><i class="flaticon2-correct kt-font-success"></i></td>
                 }@else {
-                  <td class="kt-align-center"><i class="flaticon2-cross kt-font-danger"></i></td>
+                <td class="kt-align-center"><i class="flaticon2-cross kt-font-danger"></i></td>
                 }
                 <td nowrap="" class="kt-align-center">
                   <span class="dropdown">

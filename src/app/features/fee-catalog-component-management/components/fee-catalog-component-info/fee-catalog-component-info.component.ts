@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { FeeCatalogComponentManagementService } from '../../services/fee-catalog-component-management.service';
-import { FeeCatalogComponentResponse } from '../../models/FeeCatalogComponentResponse';
 import { SmsUtil } from '../../../../core/utils/smsUtil';
+import { FeeComponentResponseDTO } from '../../models/FeeComponentResponseDTO';
 
 
 @Component({
@@ -16,12 +16,12 @@ import { SmsUtil } from '../../../../core/utils/smsUtil';
   styleUrls: ['./fee-catalog-component-info.component.css']
 })
 export class FeeCatalogComponentInfoComponent {
-  resourceData?: FeeCatalogComponentResponse;
+  resourceData?: FeeComponentResponseDTO;
   routedId!: string;
   constructor(
     private feeCatalogComponentManagementService: FeeCatalogComponentManagementService,
     private route: ActivatedRoute
-  , private logger: LoggerService) { }
+    , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.routedId = this.route.snapshot.paramMap.get('id') ?? '';
@@ -30,7 +30,7 @@ export class FeeCatalogComponentInfoComponent {
   }
 
   getFeeCatalogComponentDetails(routedId: string): void {
-    this.feeCatalogComponentManagementService.getFeeCatalogComponentsById(routedId).subscribe({
+    this.feeCatalogComponentManagementService.getFeeCatalogComponentById(routedId).subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
         console.log('📦 Response Body:', response.body);

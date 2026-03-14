@@ -5,11 +5,11 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoggerService } from '../../../../core/services/logger.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
-import { FeeCatalogComponentResponse } from '../../models/FeeCatalogComponentResponse';
 import { FeeCatalogResponse } from '../../../fee-catalog-management/models/FeeCatalogResponse';
 import { FeeCatalogComponentManagementService } from '../../services/fee-catalog-component-management.service';
 import { FeeCatalogManagementService } from '../../../fee-catalog-management/services/fee-catalog-management.service';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
+import { FeeComponentResponseDTO } from '../../models/FeeComponentResponseDTO';
 
 @Component({
   selector: 'app-fee-catalog-component-create-form',
@@ -22,7 +22,7 @@ export class FeeCatalogComponentCreateFormComponent {
   createForm!: FormGroup;
   routedId: string | null = null;
   feeCatalogDD: FeeCatalogResponse[] = [];
-  feeCatalogComponentData?: FeeCatalogComponentResponse;
+  feeCatalogComponentData?: FeeComponentResponseDTO;
   isEditMode: boolean = false;
   private readonly MODULE = 'FeeCatalogComponent';
   private readonly COMPONENT = 'Form';
@@ -47,7 +47,7 @@ export class FeeCatalogComponentCreateFormComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router
-  , private logger: LoggerService) {}
+    , private logger: LoggerService) { }
 
   ngOnInit() {
     this.logger.log("ngOnInit called", this.constructor.name);
@@ -97,16 +97,16 @@ export class FeeCatalogComponentCreateFormComponent {
 
   private loadFeeComponentDetails(componentId: string) {
     LoggerUtil.group(`📦 [${this.MODULE}] Load Component Details`);
-    this.feeCatalogComponentManagementService.getFeeCatalogComponentsById(componentId).subscribe({
+    this.feeCatalogComponentManagementService.getFeeCatalogComponentById(componentId).subscribe({
       next: (response) => {
         this.feeCatalogComponentData = response.body;
         LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Component data loaded', this.feeCatalogComponentData);
 
         this.createForm.patchValue({
-          feeCatalogId: this.feeCatalogComponentData?.feeCatalog.id,
+          feeCatalogId: this.feeCatalogComponentData?.feeCatalog?.id,
           componentName: this.feeCatalogComponentData?.componentName,
           componentCode: this.feeCatalogComponentData?.componentCode,
-          description: this.feeCatalogComponentData?.description || '',
+          //description: this.feeCatalogComponentData?.description || '',
           active: this.feeCatalogComponentData?.active,
           discountable: this.feeCatalogComponentData?.discountable
         });

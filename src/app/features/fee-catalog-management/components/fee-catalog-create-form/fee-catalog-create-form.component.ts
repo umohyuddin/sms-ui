@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -10,15 +10,22 @@ import { FeeCatalogResponse } from '../../models/FeeCatalogResponse';
 import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 import { FeeRecurrenceRuleResponse } from '../../models/FeeRecurrenceRuleResponse';
+import { ChargeTypeManagementService } from '../../../charge-type-management/services/charge-type-management.service';
+import { ChargeTypeResponse } from '../../../charge-type-management/models/ChargeTypeResponse';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 
 @Component({
   selector: 'app-fee-catalog-create-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [CommonModule, ReactiveFormsModule, LoaderComponent, ToasterComponent],
   templateUrl: './fee-catalog-create-form.component.html',
   styleUrls: ['./fee-catalog-create-form.component.css']
 })
 export class FeeCatalogCreateFormComponent {
+  isLoading = false;
+  loadingMessage = '';
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
   createForm!: FormGroup;
   routedId: string | null = null;
   isEditMode = false;
@@ -32,6 +39,7 @@ export class FeeCatalogCreateFormComponent {
 
   constructor(
     private feeCatalogManagementService: FeeCatalogManagementService,
+    private chargeTypeService: ChargeTypeManagementService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router
@@ -45,6 +53,7 @@ export class FeeCatalogCreateFormComponent {
     this.initializeForm();
     this.getFeeCatalogMeta();
     this.getFeeRecurrenceRules();
+    this.getChargeTypes();
 
     this.routedId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.routedId;
@@ -65,8 +74,8 @@ export class FeeCatalogCreateFormComponent {
       name: ['', [Validators.required, this.noWhitespaceValidator]],
       code: ['', [Validators.maxLength(20), this.noWhitespaceValidator]],
       active: [true],
-      chargeType: ['', Validators.required],
-      recurrenceRule: ['', Validators.required],
+      chargeTypeId: ['', Validators.required],
+      recurrenceRuleId: ['', []],
       description: ['', [Validators.maxLength(500), this.noWhitespaceValidator]]
     });
 
@@ -76,21 +85,51 @@ export class FeeCatalogCreateFormComponent {
 
   private getFeeCatalogMeta() {
     LoggerUtil.group(`📦 [${this.MODULE}] Load Meta`);
+    this.isLoading = true;
+    this.loadingMessage = 'Loading Metadata...';
     this.feeCatalogManagementService.getFeeCatalogMeta().subscribe({
       next: (response) => {
         LoggerUtil.log(this.MODULE, 'Meta', '📦 Response Body', response.body);
-
-        this.chargeTypeOptions = Object.entries(response.body.chargeTypes).map(
-          ([key, label]) => ({ key, label: label as string })
-        );
-
-        LoggerUtil.log(this.MODULE, 'Meta', '✅ Meta loaded', {
-          chargeTypeOptions: this.chargeTypeOptions
-        });
+        LoggerUtil.log(this.MODULE, 'Meta', '✅ Meta loaded');
       },
-      error: (error) => LoggerUtil.error(this.MODULE, 'Meta', '❌ Failed to load meta', error),
+      error: (error) => {
+        this.isLoading = false;
+        this.loadingMessage = '';
+        LoggerUtil.error(this.MODULE, 'Meta', '❌ Failed to load meta', error);
+      },
       complete: () => {
+        this.isLoading = false;
+        this.loadingMessage = '';
         LoggerUtil.log(this.MODULE, 'Meta', '🔚 Meta request completed');
+        LoggerUtil.groupEnd();
+      }
+    });
+  }
+
+  private getChargeTypes() {
+    LoggerUtil.group(`📦 [${this.MODULE}] Load Charge Types`);
+    this.isLoading = true;
+    this.loadingMessage = 'Loading Charge Types...';
+    this.chargeTypeService.getActive().subscribe({
+      next: (response) => {
+        LoggerUtil.log(this.MODULE, 'ChargeTypes', '📦 Response Body', response.body);
+
+        this.chargeTypeOptions = response.body.map((type: ChargeTypeResponse) => ({
+          key: type.id.toString(),
+          label: type.name
+        }));
+
+        LoggerUtil.log(this.MODULE, 'ChargeTypes', '✅ Charge types loaded', this.chargeTypeOptions);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.loadingMessage = '';
+        LoggerUtil.error(this.MODULE, 'ChargeTypes', '❌ Failed to load charge types', error);
+      },
+      complete: () => {
+        this.isLoading = false;
+        this.loadingMessage = '';
+        LoggerUtil.log(this.MODULE, 'ChargeTypes', '🔚 Charge types request completed');
         LoggerUtil.groupEnd();
       }
     });
@@ -98,19 +137,27 @@ export class FeeCatalogCreateFormComponent {
 
   private getFeeRecurrenceRules() {
     LoggerUtil.group(`📦 [${this.MODULE}] Load Recurrence Rules`);
+    this.isLoading = true;
+    this.loadingMessage = 'Loading Recurrence Rules...';
     this.feeCatalogManagementService.getFeeRecurrenceRules().subscribe({
-      next: (response) => {
+      next: (response: any) => {
         LoggerUtil.log(this.MODULE, 'RecurrenceRules', '📦 Response Body', response.body);
 
         this.recurrenceRuleOptions = response.body.map((rule: FeeRecurrenceRuleResponse) => ({
-          key: rule.code,
+          key: rule.id.toString(),
           label: rule.name
         }));
 
         LoggerUtil.log(this.MODULE, 'RecurrenceRules', '✅ Recurrence rules loaded', this.recurrenceRuleOptions);
       },
-      error: (error) => LoggerUtil.error(this.MODULE, 'RecurrenceRules', '❌ Failed to load recurrence rules', error),
+      error: (error: any) => {
+        this.isLoading = false;
+        this.loadingMessage = '';
+        LoggerUtil.error(this.MODULE, 'RecurrenceRules', '❌ Failed to load recurrence rules', error);
+      },
       complete: () => {
+        this.isLoading = false;
+        this.loadingMessage = '';
         LoggerUtil.log(this.MODULE, 'RecurrenceRules', '🔚 Recurrence rules request completed');
         LoggerUtil.groupEnd();
       }
@@ -128,16 +175,35 @@ export class FeeCatalogCreateFormComponent {
       return;
     }
 
-    LoggerUtil.log(this.MODULE, 'Submit', '📤 Submitting form data', this.createForm.getRawValue());
+    const formValue = this.createForm.getRawValue();
+    const payload = {
+      ...formValue,
+      chargeTypeId: formValue.chargeTypeId ? Number(formValue.chargeTypeId) : null,
+      recurrenceRuleId: formValue.recurrenceRuleId ? Number(formValue.recurrenceRuleId) : null
+    };
 
-    this.feeCatalogManagementService.saveFeeCatalog(this.routedId, this.createForm.getRawValue()).subscribe({
+    LoggerUtil.log(this.MODULE, 'Submit', '📤 Submitting form data', payload);
+
+    this.isLoading = true;
+    this.loadingMessage = this.isEditMode ? 'Updating Fee Catalog...' : 'Adding Fee Catalog...';
+    this.feeCatalogManagementService.saveFeeCatalog(this.routedId, payload).subscribe({
       next: (response) => {
         LoggerUtil.log(this.MODULE, 'Submit', '✅ Save successful', response.body);
-        LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to fee catalog list');
-        this.router.navigate(ROUTES.FEE.FEE_CATALOG.LIST);
+        const message = this.isEditMode ? 'Fee Catalog updated successfully' : 'Fee Catalog created successfully';
+        this.toaster?.show(message, 'success');
+        setTimeout(() => {
+          this.router.navigate(ROUTES.FEE.FEE_CATALOG.LIST);
+        }, 1500);
       },
-      error: (error) => LoggerUtil.error(this.MODULE, 'Submit', '❌ Save failed', error),
+      error: (error) => {
+        this.isLoading = false;
+        this.loadingMessage = '';
+        LoggerUtil.error(this.MODULE, 'Submit', '❌ Save failed', error);
+        this.toaster?.show('Failed to save Fee Catalog.', 'error');
+      },
       complete: () => {
+        this.isLoading = false;
+        this.loadingMessage = '';
         LoggerUtil.log(this.MODULE, 'Submit', '🔚 Submit flow completed');
         LoggerUtil.groupEnd();
       }
@@ -148,15 +214,33 @@ export class FeeCatalogCreateFormComponent {
     LoggerUtil.group(`📦 [${this.MODULE}] Load Fee Catalog Details`);
     LoggerUtil.log(this.MODULE, 'Details', '📌 Fetching fee catalog by ID', routedId);
 
+    this.isLoading = true;
+    this.loadingMessage = 'Loading Fee Catalog Details...';
     this.feeCatalogManagementService.getFeeCatalogById(routedId).subscribe({
       next: (response) => {
         this.resourceData = response.body;
         LoggerUtil.log(this.MODULE, 'Details', '✅ Fee catalog data loaded', this.resourceData);
 
-        this.createForm.patchValue(this.resourceData ?? {});
+        if (this.resourceData) {
+          this.createForm.patchValue({
+            name: this.resourceData.name,
+            code: this.resourceData.code,
+            active: this.resourceData.active,
+            description: this.resourceData.description,
+            chargeTypeId: this.resourceData.chargeType?.id?.toString(),
+            recurrenceRuleId: this.resourceData.recurrenceRule?.id?.toString()
+          });
+        }
       },
-      error: (error) => LoggerUtil.error(this.MODULE, 'Details', '❌ Failed to load fee catalog', error),
+      error: (error) => {
+        this.isLoading = false;
+        this.loadingMessage = '';
+        LoggerUtil.error(this.MODULE, 'Details', '❌ Failed to load fee catalog', error);
+        this.toaster?.show('Failed to load fee catalog details.', 'error');
+      },
       complete: () => {
+        this.isLoading = false;
+        this.loadingMessage = '';
         LoggerUtil.log(this.MODULE, 'Details', '🔚 Fee catalog details flow completed');
         LoggerUtil.groupEnd();
       }
@@ -194,8 +278,8 @@ export class FeeCatalogCreateFormComponent {
       maxlength: 'Code cannot exceed 20 characters.',
       whitespace: 'Code cannot be empty.'
     },
-    chargeType: { required: 'Charge Type is required.' },
-    recurrenceRule: { required: 'Recurrence Rule is required.' },
+    chargeTypeId: { required: 'Charge Type is required.' },
+    recurrenceRuleId: { required: 'Recurrence Rule is required.' },
     description: {
       maxlength: 'Description cannot exceed 500 characters.',
       whitespace: 'Description cannot be empty.'
@@ -205,8 +289,8 @@ export class FeeCatalogCreateFormComponent {
   // Getters
   get name() { return this.createForm.get('name'); }
   get code() { return this.createForm.get('code'); }
-  get chargeType() { return this.createForm.get('chargeType'); }
-  get recurrenceRule() { return this.createForm.get('recurrenceRule'); }
+  get chargeTypeId() { return this.createForm.get('chargeTypeId'); }
+  get recurrenceRuleId() { return this.createForm.get('recurrenceRuleId'); }
   get description() { return this.createForm.get('description'); }
   get active() { return this.createForm.get('active'); }
 }

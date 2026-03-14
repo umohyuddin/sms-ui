@@ -46,19 +46,19 @@
                     </div>
                     <div class="kt-widget__subhead row">
                         <div class="col-4">
-                            <a> <b>Fee Catalog Charge Type:</b> {{resourceData?.feeCatalog?.chargeType}} </a>
+                            <a> <b>Fee Catalog Charge Type:</b> {{resourceData?.chargeType?.name}} </a>
                         </div>
 
                         <div class="col-4">
-                            <a><b>Fee Catalog Recurrence Rule: </b>{{resourceData?.feeCatalog?.recurrenceRule}}</a>
+                            <a><b>Fee Catalog Recurrence Rule: </b>{{resourceData?.recurrenceRule?.name}}</a>
                         </div>
 
                         <div class="col-4">
                             <a style="padding: 5px !important;"> <b>Discountable:</b></a>
-                                <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline"
-                                    [ngClass]="resourceData?.discountable ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">{{resourceData?.active
-                                    ? 'YES' : 'NO'}}</span>
-                            
+                            <span class="kt-badge kt-badge--bolder kt-badge kt-badge--inline"
+                                [ngClass]="resourceData?.discountable ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">{{resourceData?.active
+                                ? 'YES' : 'NO'}}</span>
+
                         </div>
                     </div>
                     <div class="kt-widget__info">

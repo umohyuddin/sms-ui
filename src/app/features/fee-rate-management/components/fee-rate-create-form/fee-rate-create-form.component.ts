@@ -125,7 +125,7 @@ export class FeeRateCreateFormComponent {
   }
 
   private loadFeeComponentByFeeCatalogId(feeCatalogId: any) {
-    this.feeComponentManageService.getByFeeCatalogId(feeCatalogId).subscribe({
+    this.feeComponentManageService.getFeeCatalogComponentById(feeCatalogId).subscribe({
       next: res => this.feeCompnentDD = res.body,
       error: err => LoggerUtil.error(this.MODULE, 'FeeComponent', '❌ Failed to load components', err)
     });

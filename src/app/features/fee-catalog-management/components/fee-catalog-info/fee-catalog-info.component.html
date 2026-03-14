@@ -41,12 +41,12 @@
                         </div>
 
                         <div class="col-4">
-                            <a> <b> Charge Type:</b> {{feeCatalogData?.chargeTypeLabel}}</a>
+                            <a> <b> Charge Type:</b> {{feeCatalogData?.chargeType?.name}}</a>
                         </div>
                     </div>
                     <div class="kt-widget__subhead row">
                         <div class="col-4">
-                            <a> <b>Recurrence Type : </b> {{feeCatalogData?.recurrenceRuleLabel}}</a>
+                            <a> <b>Recurrence Type : </b> {{feeCatalogData?.recurrenceRule?.name}}</a>
                         </div>
                     </div>
 
@@ -62,3 +62,5 @@
         </div>
     </div>
 </div>
+
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

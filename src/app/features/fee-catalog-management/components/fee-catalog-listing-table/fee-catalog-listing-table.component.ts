@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -9,13 +9,17 @@ import { FeeCatalogResponse } from '../../models/FeeCatalogResponse';
 import { FeeCatalogManagementService } from '../../services/fee-catalog-management.service';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CHARGE_TYPE_CLASSES, RECURRENCE_RULE_CLASSES } from '../../../../core/const/COLOR_CONST';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
 
 @Component({
   selector: 'app-fee-catalog-listing-table',
   standalone: true,
   imports: [CommonModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    LoaderComponent,
+    ToasterComponent
   ],
   templateUrl: './fee-catalog-listing-table.component.html',
   styleUrls: ['./fee-catalog-listing-table.component.css']
@@ -26,18 +30,21 @@ export class FeeCatalogListingTableComponent {
   feeCatalogResponse: FeeCatalogResponse[] = [];
   RECURRENCE_RULE_CLASSES = RECURRENCE_RULE_CLASSES;
   CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
+  isLoading = false;
+  loadingMessage = '';
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router,
     private feeCatalogManagementService: FeeCatalogManagementService,
-   private logger: LoggerService) { }
+    private logger: LoggerService) { }
 
   columns = [
-    { key: 'feeCatalogName', label: 'Fee Catalog Name', sortable: true },
-    { key: 'feeCatalogCode', label: 'Fee Catalog Code', sortable: true },
+    { key: 'name', label: 'Fee Catalog Name', sortable: true },
+    { key: 'code', label: 'Fee Catalog Code', sortable: true },
     { key: 'chargeType', label: 'Charge Type', sortable: true },
     { key: 'recurrenceRule', label: 'Recurrence Rule', sortable: false },
-    { key: 'status', label: 'Status', sortable: true },
+    { key: 'active', label: 'Status', sortable: true },
     { key: 'actions', label: 'Actions', sortable: true }
   ];
 
@@ -52,21 +59,32 @@ export class FeeCatalogListingTableComponent {
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
-        switchMap(search => this.feeCatalogManagementService.searchFeeCatalogs(search || '')),
+        switchMap(search => {
+          this.isLoading = true;
+          this.loadingMessage = 'Searching Fee Catalogs...';
+          return this.feeCatalogManagementService.searchFeeCatalogs(search || '');
+        }),
         takeUntil(this.destroy$)
       )
       .subscribe({
         next: (response) => {
           this.feeCatalogResponse = response.body;
           this.pagination = new Pagination(this.feeCatalogResponse, 10);
+          this.isLoading = false;
+          this.loadingMessage = '';
         },
         error: (error) => {
+          this.isLoading = false;
+          this.loadingMessage = '';
           console.error('Search error:', error);
+          this.toaster?.show('Search failed.', 'error');
         }
       });
   }
 
   getFeeCatalogs() {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading Fee Catalogs...';
     this.feeCatalogManagementService.getAllFeeCatalogs().subscribe({
       next: (response) => {
         console.log('  Success Status:', response.status);
@@ -75,10 +93,15 @@ export class FeeCatalogListingTableComponent {
         this.pagination = new Pagination(this.feeCatalogResponse, 10);
       },
       error: (error) => {
+        this.isLoading = false;
+        this.loadingMessage = '';
         console.error('❌ Request Error Status:', error.status);
         console.error('Message:', error.message);
+        this.toaster?.show('Failed to load Fee Catalogs.', 'error');
       },
       complete: () => {
+        this.isLoading = false;
+        this.loadingMessage = '';
         console.log('🔚 Request Complete');
       }
     })
@@ -99,5 +122,10 @@ export class FeeCatalogListingTableComponent {
   onPageSizeChange(event: any) {
     const newSize = +event.target.value;
     this.pagination.changePageSize(newSize);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

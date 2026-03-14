@@ -1,3 +1,5 @@
+<app-toaster #toaster></app-toaster>
+
 <div class="kt-portlet kt-portlet--mobile">
   <div class="kt-portlet__head kt-portlet__head--lg">
     <div class="kt-portlet__head-label">
@@ -11,11 +13,12 @@
     <div class="kt-portlet__head-toolbar">
       <div class="kt-portlet__head-wrapper">
         <div class="kt-portlet__head-actions">
-       
+
         </div>
       </div>
     </div>
   </div>
+
   <div class="kt-portlet__body">
 
 
@@ -60,17 +63,17 @@
               <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
                 <td>{{ item.name }}</td>
                 <td>{{ item.code }}</td>
-               
+
                 <td>
                   <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                  [ngClass]="CHARGE_TYPE_CLASSES[item.chargeType || 'NONE']">
-                  {{ item.chargeTypeLabel }}</span>
+                    [ngClass]="CHARGE_TYPE_CLASSES[item.chargeType?.code || 'NONE']">
+                    {{ item.chargeType?.name }}</span>
                 </td>
 
                 <td><span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                  [ngClass]="RECURRENCE_RULE_CLASSES[item.recurrenceRule || 'NONE']">
-                  {{ item.recurrenceRuleLabel }}
-                </span>
+                    [ngClass]="RECURRENCE_RULE_CLASSES[item.recurrenceRule?.code || 'NONE']">
+                    {{ item.recurrenceRule?.name }}
+                  </span>
 
                 </td>
                 <td>
@@ -86,8 +89,8 @@
                       <i class="la la-ellipsis-h"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item" href="#" (click)="editDetails(item,$event)"><i
-                          class="la la-edit"></i> Edit Details</a>
+                      <a class="dropdown-item" href="#" (click)="editDetails(item,$event)"><i class="la la-edit"></i>
+                        Edit Details</a>
                       <a class="dropdown-item" href="#" (click)="viewDetails(item,$event)">
                         <i class="la la-eye"></i> View Details</a>
                       <!-- <a class="dropdown-item" href="#"><i class="la la-print"></i> Generate Report</a> -->
@@ -179,3 +182,5 @@
     <!--end: Datatable -->
   </div>
 </div>
+
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

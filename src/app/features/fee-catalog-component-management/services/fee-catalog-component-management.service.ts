@@ -9,46 +9,65 @@ import { API_ENDPOINTS } from '../../../core/const/API_ENDPOINTS';
   providedIn: 'root'
 })
 export class FeeCatalogComponentManagementService {
-
   private baseUrl = '';
 
   constructor(private http: HttpClientService, private appConfig: AppConfigService) {
     this.baseUrl = appConfig.apiBaseUrl;
-    console.log('API Base URL:', this.appConfig.apiBaseUrl);
+    console.log('API Base URL:', this.baseUrl);
   }
 
-
+  // ====================================
+  // CREATE OR UPDATE FEE COMPONENT
+  // ====================================
   saveFeeCatalogComponent(id: string | null, payload: any): Observable<any> {
     const isUpdate = !!id;
     const method = isUpdate ? HTTP_METHOD.PUT : HTTP_METHOD.POST;
-    const url = isUpdate ? `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.UPDATE(id)}` : `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.CREATE}`;
+    const url = isUpdate
+      ? `${this.baseUrl}/api/fee/components/${id}`
+      : `${this.baseUrl}/api/fee/components`;
     return this.http.request(method, url, { observeResponse: true, body: payload });
   }
 
+  // ====================================
+  // GET ALL COMPONENTS
+  // ====================================
   getAllFeeCatalogComponents(): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.GET_ALL}`, { observeResponse: true });
+    const url = `${this.baseUrl}/api/fee/components`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
   }
 
-  getFeeCatalogComponentsById(id: string): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.GET_BY_ID(id)}`, { observeResponse: true });
+  // ====================================
+  // GET COMPONENT BY ID
+  // ====================================
+  getFeeCatalogComponentById(id: string): Observable<any> {
+    const url = `${this.baseUrl}/api/fee/components/${id}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
   }
 
-  getByFeeCatalogId(id: string): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.GET_BY_FEE_CATALOG(id)}`, { observeResponse: true });
+  // ====================================
+  // GET COMPONENTS BY FEE CATALOG
+  // ====================================
+  getFeeCatalogComponentsByCatalogId(catalogId: string): Observable<any> {
+    const url = `${this.baseUrl}/api/fee/components/catalog/${catalogId}`;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true });
   }
 
-  searchFeeCatalogComponents(params: any): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET,
-      `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_CATALOG_COMPONENT.SEARCH}`,
-      {
-        observeResponse: true,
-        params: params
-      }
-    );
+  // ====================================
+  // SEARCH COMPONENTS
+  // ====================================
+  searchFeeCatalogComponents(feeCatalogId?: string, keyword?: string): Observable<any> {
+    const url = `${this.baseUrl}/api/fee/components/search`;
+    const params: any = {};
+    if (feeCatalogId) params.feeCatalogId = feeCatalogId;
+    if (keyword) params.keyword = keyword;
+    return this.http.request(HTTP_METHOD.GET, url, { observeResponse: true, params });
   }
 
-  // deleteCampus(id: number): Observable<any> {
-  //   return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}/${id}`, { observeResponse: true });
-  // }
-
+  // ====================================
+  // DELETE COMPONENT (Optional)
+  // ====================================
+  deleteFeeCatalogComponent(id: string): Observable<any> {
+    const url = `${this.baseUrl}/api/fee/components/${id}`;
+    return this.http.request(HTTP_METHOD.DELETE, url, { observeResponse: true });
+  }
 }

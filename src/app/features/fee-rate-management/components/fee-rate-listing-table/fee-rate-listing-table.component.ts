@@ -73,22 +73,22 @@ export class FeeRateListingTableComponent {
       }
     });
   }
-  
+
   loadFeeComponents(feeCatalogId: any) {
-    this.feeCatalogComponentManagementService.getByFeeCatalogId(feeCatalogId).subscribe({
-      next: (response) => {
-        this.logger.success('Success Status', response.status);
-        this.logger.info('Response Body', response.body);
-        this.feeComponentDD = response.body;
-      },
-      error: (error) => {
-        this.logger.error('Request Error Status', error.status);
-        this.logger.error('Message', error.message);
-      },
-      complete: () => {
-        this.logger.complete('Request Complete');
-      }
-    });
+    // this.feeCatalogComponentManagementService.getFeeCatalogComponentById(feeCatalogId).subscribe({
+    //   next: (response) => {
+    //     this.logger.success('Success Status', response.status);
+    //     this.logger.info('Response Body', response.body);
+    //     this.feeComponentDD = response.body;
+    //   },
+    //   error: (error) => {
+    //     this.logger.error('Request Error Status', error.status);
+    //     this.logger.error('Message', error.message);
+    //   },
+    //   complete: () => {
+    //     this.logger.complete('Request Complete');
+    //   }
+    // });
   }
 
   getFeeCatalogs() {
