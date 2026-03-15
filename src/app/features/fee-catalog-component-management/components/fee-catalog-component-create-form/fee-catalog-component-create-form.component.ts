@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -24,6 +24,8 @@ export class FeeCatalogComponentCreateFormComponent {
   feeCatalogDD: FeeCatalogResponse[] = [];
   feeCatalogComponentData?: FeeComponentResponseDTO;
   isEditMode: boolean = false;
+  isVisible: boolean = false;
+  @Output() saved = new EventEmitter<void>();
   private readonly MODULE = 'FeeCatalogComponent';
   private readonly COMPONENT = 'Form';
 
@@ -131,7 +133,8 @@ export class FeeCatalogComponentCreateFormComponent {
       .subscribe({
         next: (response) => {
           LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Save successful', response.body);
-          this.goToListing();
+          this.saved.emit();
+          this.close();
         },
         error: (error) => LoggerUtil.error(this.MODULE, this.COMPONENT, '❌ Save failed', error),
         complete: () => LoggerUtil.groupEnd()
@@ -139,8 +142,21 @@ export class FeeCatalogComponentCreateFormComponent {
   }
 
   goToListing() {
-    LoggerUtil.log(this.MODULE, this.COMPONENT, '➡️ Redirecting to fee catalog components list');
-    this.router.navigate(ROUTES.FEE.FEE_CATALOG_COMPONENT.LIST);
+    this.close();
+  }
+
+  show(id: string | null = null) {
+    this.routedId = id;
+    this.isEditMode = !!id;
+    this.isVisible = true;
+    this.initializeForm();
+    if (this.isEditMode && id) {
+      this.loadFeeComponentDetails(id);
+    }
+  }
+
+  close() {
+    this.isVisible = false;
   }
 
   // Getters for form controls

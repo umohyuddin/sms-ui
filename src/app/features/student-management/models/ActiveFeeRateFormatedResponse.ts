@@ -20,7 +20,9 @@ export interface Rate {
   code?: string | null;
   name?: string | null;
   description: string;
-  amount: number;
+  fixedAmount?: number | null;
+  percentageValue?: number | null;
+  unitPrice?: number | null;
   currency: string;
   effectiveFrom: string;
   effectiveTo?: string | null;

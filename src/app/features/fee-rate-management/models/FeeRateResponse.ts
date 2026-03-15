@@ -3,7 +3,13 @@ export interface FeeRateResponse {
   code: string;
   name: string;
   description: string;
-  amount: number;
+  fixedAmount: number | null;
+  percentageValue: number | null;
+  unitPrice: number | null;
+  percentageOfComponent: FeeComponent | null;
+  slabGroup: any | null; // Can type this better later if needed
+  chargeType: ChargeType;
+  priority: number;
   currency: string;
   effectiveFrom: string;   // ISO date string
   effectiveTo: string | null;
@@ -13,6 +19,7 @@ export interface FeeRateResponse {
   feeComponent: FeeComponent;
   academicYear: AcademicYear;
 }
+
 
 export interface Campus {
   id: number;
@@ -38,8 +45,17 @@ export interface FeeComponent {
   componentName: string;
   accountCode: string;
   taxable: boolean;
-    discountable: boolean;
+  discountable: boolean;
   feeCatalog: FeeCatalog;   // added FeeCatalog
+  chargeType: ChargeType;
+  recurrenceRule: any;
+  institute: any;
+}
+
+export interface ChargeType {
+  id: number;
+  code: string;
+  name: string;
 }
 
 export interface FeeCatalog {

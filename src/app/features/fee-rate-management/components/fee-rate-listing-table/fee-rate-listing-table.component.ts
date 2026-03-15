@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Pagination } from '../../../../core/pagar/pagination';
@@ -29,6 +30,9 @@ export class FeeRateListingTableComponent {
   searchForm !: FormGroup;
   feeCatalogDD: FeeCatalogResponse[] = [];
   feeComponentDD: FeeComponent[] = [];
+  private destroy$ = new Subject<void>();
+
+  @Output() editRequested = new EventEmitter<any>();
 
   constructor(
     private appConfig: AppConfigService,
@@ -61,9 +65,14 @@ export class FeeRateListingTableComponent {
     this.subscribeToFeeCatalogChange();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
 
   private subscribeToFeeCatalogChange() {
-    this.searchForm.get('feeCatalogId')?.valueChanges.subscribe(feeCatalogId => {
+    this.searchForm.get('feeCatalogId')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(feeCatalogId => {
       if (feeCatalogId) {
         this.logger.info('Fee Catalog changed', feeCatalogId);
         this.loadFeeComponents(feeCatalogId);
@@ -75,20 +84,20 @@ export class FeeRateListingTableComponent {
   }
 
   loadFeeComponents(feeCatalogId: any) {
-    // this.feeCatalogComponentManagementService.getFeeCatalogComponentById(feeCatalogId).subscribe({
-    //   next: (response) => {
-    //     this.logger.success('Success Status', response.status);
-    //     this.logger.info('Response Body', response.body);
-    //     this.feeComponentDD = response.body;
-    //   },
-    //   error: (error) => {
-    //     this.logger.error('Request Error Status', error.status);
-    //     this.logger.error('Message', error.message);
-    //   },
-    //   complete: () => {
-    //     this.logger.complete('Request Complete');
-    //   }
-    // });
+    this.feeCatalogComponentManagementService.getFeeCatalogComponentsByCatalogId(feeCatalogId).subscribe({
+      next: (response) => {
+        this.logger.success('Success Status', response.status);
+        this.logger.info('Response Body', response.body);
+        this.feeComponentDD = response.body;
+      },
+      error: (error) => {
+        this.logger.error('Request Error Status', error.status);
+        this.logger.error('Message', error.message);
+      },
+      complete: () => {
+        this.logger.complete('Request Complete');
+      }
+    });
   }
 
   getFeeCatalogs() {
@@ -149,8 +158,13 @@ export class FeeRateListingTableComponent {
 
   editFeeRateDetails(feeRate: FeeRateResponse, event: Event): void {
     event.preventDefault();  // prevents anchor default behavior
+    event.stopPropagation();
     console.log('Editing Fee Rate ID:', feeRate.id);
     this.router.navigate(ROUTES.FEE.FEE_RATE.EDIT(feeRate.id.toString()));
+  }
+
+  addNewFeeRate(): void {
+    this.router.navigate(ROUTES.FEE.FEE_RATE.CREATE);
   }
 
   onPageSizeChange(event: any) {

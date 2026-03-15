@@ -38,4 +38,8 @@ export class FeeRateManagementService {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_RATES.SEARCH}`, { observeResponse: true, params: params }
     );
   }
+
+  getFeeSlabGroups(): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.FEE.FEE_SLAB_GROUPS.GET_ALL}`, { observeResponse: true });
+  }
 }

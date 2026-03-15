@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Pagination } from '../../../../core/pagar/pagination';
@@ -27,6 +27,7 @@ export class FeeCatalogComponentListingTableComponent {
 
   searchForm !: FormGroup;
   campusesResponse: any;
+  @Output() editRequested = new EventEmitter<any>();
 
   constructor(
     private fb: FormBuilder,
@@ -103,8 +104,9 @@ export class FeeCatalogComponentListingTableComponent {
 
   editSectionDetails(feeCatalogComponent: FeeComponentResponseDTO, event: Event): void {
     event.preventDefault();  // prevents anchor default behavior
+    event.stopPropagation();
     console.log('Editing Fee Catalog Component ID:', feeCatalogComponent.id);
-    this.router.navigate(ROUTES.FEE.FEE_CATALOG_COMPONENT.EDIT(feeCatalogComponent.id.toString()));
+    this.editRequested.emit(feeCatalogComponent);
   }
 
 

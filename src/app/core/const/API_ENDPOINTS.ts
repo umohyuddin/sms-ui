@@ -346,6 +346,9 @@ export const API_ENDPOINTS = {
             SEARCH: `/api/fee/rates/search`,
             GET_BY_ID: (id: string) => `/api/fee/rates/${id}`,
             GET_ACTIVE_RATES: '/api/fee/rates/active'
+        },
+        FEE_SLAB_GROUPS: {
+            GET_ALL: '/api/student/fee-slab-groups'
         }
     },
     DISCOUNT: {

@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnDestroy, OnInit } from '@angular/core';
+import { Component, ViewChild, OnDestroy, OnInit, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -33,6 +33,7 @@ export class FeeCatalogListingTableComponent {
   isLoading = false;
   loadingMessage = '';
   @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+  @Output() editRequested = new EventEmitter<any>();
   private destroy$ = new Subject<void>();
 
   constructor(private router: Router,
@@ -115,8 +116,9 @@ export class FeeCatalogListingTableComponent {
 
   editDetails(item: FeeCatalogResponse, event: Event): void {
     event.preventDefault();  // prevents anchor default behavior
-    console.log('Editing Resoruce ID:', item.id);
-    this.router.navigate(ROUTES.FEE.FEE_CATALOG.EDIT(item.id.toString()));
+    event.stopPropagation();
+    console.log('Editing Resource ID:', item.id);
+    this.editRequested.emit(item);
   }
 
   onPageSizeChange(event: any) {

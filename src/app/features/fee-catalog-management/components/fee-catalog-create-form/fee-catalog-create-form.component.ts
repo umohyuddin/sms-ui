@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -30,6 +30,8 @@ export class FeeCatalogCreateFormComponent {
   routedId: string | null = null;
   isEditMode = false;
   resourceData: FeeCatalogResponse | null = null;
+  isVisible: boolean = false;
+  @Output() saved = new EventEmitter<void>();
 
   recurrenceRuleOptions: KeyValueOption[] = [];
   chargeTypeOptions: KeyValueOption[] = [];
@@ -188,11 +190,11 @@ export class FeeCatalogCreateFormComponent {
     this.loadingMessage = this.isEditMode ? 'Updating Fee Catalog...' : 'Adding Fee Catalog...';
     this.feeCatalogManagementService.saveFeeCatalog(this.routedId, payload).subscribe({
       next: (response) => {
-        LoggerUtil.log(this.MODULE, 'Submit', '✅ Save successful', response.body);
         const message = this.isEditMode ? 'Fee Catalog updated successfully' : 'Fee Catalog created successfully';
         this.toaster?.show(message, 'success');
+        this.saved.emit();
         setTimeout(() => {
-          this.router.navigate(ROUTES.FEE.FEE_CATALOG.LIST);
+          this.close();
         }, 1500);
       },
       error: (error) => {
@@ -248,8 +250,21 @@ export class FeeCatalogCreateFormComponent {
   }
 
   goToFeeCatalogList(): void {
-    LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to fee catalog list');
-    this.router.navigate(ROUTES.FEE.FEE_CATALOG.LIST);
+    this.close();
+  }
+
+  show(id: string | null = null) {
+    this.routedId = id;
+    this.isEditMode = !!id;
+    this.isVisible = true;
+    this.initializeForm();
+    if (this.isEditMode && id) {
+      this.getFeeCatalogDetails(id);
+    }
+  }
+
+  close() {
+    this.isVisible = false;
   }
 
   // Validators

@@ -491,33 +491,33 @@ export class StudentFeeCaculator implements OnInit {
     const rate = comp.rates?.[0];
     if (!rate) return 0;
 
-    const baseAmount = rate.amount;
+    const baseAmount = rate.fixedAmount;
     const recurrence = this.getRecurrenceMultiplier(comp.recurrenceRule);
 
 
     switch (comp.chargeType) {
 
-      case 'FIXED':
-      case 'VARIABLE':
-      case 'DISCOUNTED':
-        return baseAmount * recurrence;
+      // case 'FIXED':
+      // case 'VARIABLE':
+      // case 'DISCOUNTED':
+      //   return baseAmount * recurrence;
 
-      case 'PER_CREDIT':
-        return (context?.totalCredits ?? 0) * baseAmount * recurrence;
+      // case 'PER_CREDIT':
+      //   return (context?.totalCredits ?? 0) * baseAmount * recurrence;
 
-      case 'PER_SUBJECT':
-        return (context?.subjectCount ?? 0) * baseAmount * recurrence;
+      // case 'PER_SUBJECT':
+      //   return (context?.subjectCount ?? 0) * baseAmount * recurrence;
 
-      case 'USAGE_BASED':
-        return (context?.usageUnits ?? 0) * baseAmount;
+      // case 'USAGE_BASED':
+      //   return (context?.usageUnits ?? 0) * baseAmount;
 
-      case 'SLAB_BASED':
-        // Slab logic handled in backend
-        return baseAmount * recurrence;
+      // case 'SLAB_BASED':
+      //   // Slab logic handled in backend
+      //   return baseAmount * recurrence;
 
-      case 'PERCENTAGE':
-        // Applied elsewhere (discount / penalty)
-        return 0;
+      // case 'PERCENTAGE':
+      //   // Applied elsewhere (discount / penalty)
+      //   return 0;
 
       default:
         return 0; //   SAFETY NET
