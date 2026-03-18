@@ -1,261 +1,235 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CHARGE_TYPE_CLASSES, RECURRENCE_RULE_CLASSES } from '../../../../core/const/COLOR_CONST';
 import { ConcessionRateResponse } from '../../models/ConcessionRateResponse';
 import { ConcessionRateManagementService } from '../../services/concession-rate-management.service';
-import { KeyValueOption } from '../../../../core/models/KeyValueOption';
-import { FeeCatalogManagementService } from '../../../fee-catalog-management/services/fee-catalog-management.service';
-import { ConcessionResponse } from '../../../concession-management/models/ConcessionResponse';
-import { ConcessionManagementService } from '../../../concession-management/services/concession-management.service';
-import { ConcessionComponentResponse, DiscountType } from '../../../concession-component-management/models/ConcessionComponentResponse';
 import { ConcessionComponentManagementService } from '../../../concession-component-management/services/concession-component-management.service';
-import { HttpParams } from '@angular/common/http';
+import { ConcessionManagementService } from '../../../concession-management/services/concession-management.service';
+import { ConcessionResponse } from '../../../concession-management/models/ConcessionResponse';
+import { ConcessionComponentResponse } from '../../../concession-component-management/models/ConcessionComponentResponse';
+import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
+import { CampusResponse } from '../../../campus-management/models/campusResponse';
+import { AppConfigService } from '../../../../core/services/app-config.service';
+import { AcademicYearResponse } from '../../../tenant-management/models/AcademicYearResponse';
 import { LoggerService } from '../../../../core/services/logger.service';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-concession-rate-listing-table',
   standalone: true,
-  imports: [CommonModule,
-    ReactiveFormsModule,
-    RouterModule
-  ],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, LoaderComponent, ToasterComponent],
   templateUrl: './concession-rate-listing-table.component.html',
   styleUrls: ['./concession-rate-listing-table.component.css']
 })
-export class ConcessionRateListingTableComponent {
+export class ConcessionRateListingTableComponent implements OnInit, OnDestroy {
   pagination: Pagination<ConcessionRateResponse> = new Pagination([], 10);
+  searchForm!: FormGroup;
   resourceData: ConcessionRateResponse[] = [];
-  concessionComponentDD: ConcessionComponentResponse[] = [];
-  recurrenceRuleDD: KeyValueOption[] = [];
-  chargeTypeDD: KeyValueOption[] = [];
-  feeCatalogResponse: ConcessionResponse[] = [];
-  RECURRENCE_RULE_CLASSES = RECURRENCE_RULE_CLASSES;
+  
   CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
-  discountTypesDD: DiscountType[] = [];
-  searchForm !: FormGroup;
-  constructor(private router: Router,
+  RECURRENCE_RULE_CLASSES = RECURRENCE_RULE_CLASSES;
+  
+  discountTypesDD: ConcessionResponse[] = [];
+  concessionComponentDD: ConcessionComponentResponse[] = [];
+  campuseDD: CampusResponse[] = [];
+  academicYear: AcademicYearResponse | null = null;
+  
+  isLoading = false;
+  loadingMessage = '';
+  viewMode: 'grid' | 'table' = 'grid';
+
+  toggleView(mode: 'grid' | 'table'): void {
+    this.viewMode = mode;
+  }
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+  private destroy$ = new Subject<void>();
+  private readonly MODULE = 'ConcessionRate';
+
+  constructor(
+    private router: Router,
     private fb: FormBuilder,
     private concessionRateManagementService: ConcessionRateManagementService,
     private concessionComponentManagementService: ConcessionComponentManagementService,
     private concessionManagementService: ConcessionManagementService,
-    private feeCatalogManagementService: FeeCatalogManagementService,
-   private logger: LoggerService) { }
+    private campusManagementService: CampusManagementService,
+    private configService: AppConfigService,
+    private logger: LoggerService
+  ) { }
 
   columns = [
-    // { key: 'id', label: 'Id', sortable: true },
-    { key: 'DiscountComponentName', label: 'Concession Component Name', sortable: true },
-    { key: 'DiscountType', label: 'Concession Type', sortable: true },
+    { key: 'concessionSubType', label: 'Concession Component', sortable: true },
+    { key: 'ConcessionType', label: 'Concession Type', sortable: true },
     { key: 'chargeType', label: 'Charge Type', sortable: true },
-    { key: 'recurrenceRule', label: 'Recurrence Rule', sortable: false },
-    { key: 'value', label: 'Value', sortable: false },
-    { key: 'academicYearName', label: 'Academic Year', sortable: false },
-    { key: 'campus', label: 'Assigned Campus', sortable: false },
+    { key: 'recurrenceRule', label: 'Recurrence Rule', sortable: true },
+    { key: 'value', label: 'Rate Value', sortable: true },
+    { key: 'effectiveDate', label: 'Effective Date', sortable: true },
+    { key: 'academicYearName', label: 'Academic Year', sortable: true },
+    { key: 'campusName', label: 'Campus', sortable: true },
     { key: 'status', label: 'Status', sortable: true },
-    { key: 'actions', label: 'Actions', sortable: true }
+    { key: 'actions', label: 'Actions', sortable: false }
   ];
 
   ngOnInit() {
-    this.logger.log("ngOnInit called", this.constructor.name);
-    this.getAllDiscountTypes()
-    this.getConcessionCatalogMeta();
-    this.getAllConcessionRates();
+    this.academicYear = this.configService.getAcademicYear();
     this.initializeForm();
-    this.onConcessionTypeChange();
+    this.loadDropdowns();
+    this.getAllConcessionRates();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private initializeForm() {
     this.searchForm = this.fb.group({
       discountTypeId: [''],
       discountSubTypeId: [''],
-      chargeTypeId: [''],
-      recurrenceRuleId: [''],
+      campusId: [''],
+      academicYearId: [this.academicYear?.id],
       keyword: ['']
     });
-  }
-  getAllDiscountTypes() {
-    this.concessionManagementService.getAllConcessions().subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.discountTypesDD = response.body;
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
+
+    this.searchForm.get('discountTypeId')?.valueChanges.subscribe(typeId => {
+      this.searchForm.get('discountSubTypeId')?.setValue('');
+      if (typeId) {
+        this.loadComponentsByConcessionId(typeId);
+      } else {
+        this.concessionComponentDD = [];
       }
     });
-
   }
 
+  private loadDropdowns() {
+    this.campusManagementService.getAllCampuses().subscribe({
+      next: (res) => this.campuseDD = res.body,
+      error: (err) => LoggerUtil.error(this.MODULE, 'Dropdowns', '❌ Campuses failed', err)
+    });
 
+    this.concessionManagementService.getAllConcessions().subscribe({
+      next: (res) => this.discountTypesDD = res.body,
+      error: (err) => LoggerUtil.error(this.MODULE, 'Dropdowns', '❌ Types failed', err)
+    });
+  }
 
+  private loadComponentsByConcessionId(concessionTypeId: any) {
+    this.concessionComponentManagementService.getConcessionComponentsByTypeId(concessionTypeId).subscribe({
+      next: (res) => this.concessionComponentDD = res.body || [],
+      error: (err) => LoggerUtil.error(this.MODULE, 'Dropdowns', '❌ SubTypes failed', err)
+    });
+  }
 
   getAllConcessionRates() {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading Rates...';
     this.concessionRateManagementService.getAllConcessionRates().subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
         this.resourceData = response.body;
         this.pagination = new Pagination(this.resourceData, 10);
+        this.isLoading = false;
+        this.loadingMessage = '';
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    })
-  }
-
-  private getConcessionCatalogMeta() {
-    this.feeCatalogManagementService.getFeeCatalogMeta().subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-
-        this.recurrenceRuleDD = Object.entries(response.body.recurrenceRules).map(
-          ([key, label]) => ({ key, label: label as string })
-        );
-
-        this.chargeTypeDD = Object.entries(response.body.discountChargeTypes).map(
-          ([key, label]) => ({ key, label: label as string })
-        );
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
+        LoggerUtil.error(this.MODULE, 'List', '❌ Failed to load', error);
+        this.toaster?.show('Failed to load Concession Rates', 'error');
+        this.isLoading = false;
       }
     });
   }
 
   viewDetails(item: ConcessionRateResponse, event: Event): void {
-    console.log('Viewing details for item ID:', item.id);
-    event.preventDefault();  // prevents anchor default behavior
+    event.preventDefault();
     this.router.navigate(ROUTES.CONCESSION.CONCESSION_RATE.DETAILS(item.id.toString()));
   }
 
   editDetails(item: ConcessionRateResponse, event: Event): void {
-    event.preventDefault();  // prevents anchor default behavior
-    console.log('Editing item item ID:', item.id);
+    event.preventDefault();
+    event.stopPropagation();
     this.router.navigate(ROUTES.CONCESSION.CONCESSION_RATE.EDIT(item.id.toString()));
   }
 
-  onConcessionTypeChange() {
-    this.searchForm.get('discountTypeId')?.valueChanges.subscribe(discountTypeId => {
-      console.log("Discount changed:", discountTypeId);
-      this.loadComponentsByConcessionId(discountTypeId);
-    });
+  refreshList(): void {
+    this.onSubmitSearch(); // refresh with current filters
   }
-  loadComponentsByConcessionId(concessionTypeId: any) {
-    this.concessionComponentManagementService.getConcessionComponentsByTypeId(concessionTypeId).subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.concessionComponentDD = response.body;
+
+  toggleActive(item: ConcessionRateResponse, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isLoading = true;
+    this.loadingMessage = 'Updating status...';
+    this.concessionRateManagementService.toggleActive(item.id, !item.isActive).subscribe({
+      next: () => {
+        this.toaster?.show('Status updated successfully', 'success');
+        this.refreshList();
       },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-        //this.router.navigate(['/Campuses']);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
+      error: (err) => {
+        LoggerUtil.error(this.MODULE, 'Toggle', '❌ Failed to toggle active', err);
+        this.toaster?.show('Failed to update status', 'error');
+        this.isLoading = false;
+        this.loadingMessage = '';
       }
     });
   }
 
-
-  // deleteCampus(campusId: any, event: Event): void {
-  //   event.stopPropagation();
-
-  //   console.log('Deleting Campus:', campusId);
-  //   if (confirm('Are you sure you want to delete this Campus?')) {
-
-  //     this.feeCatalogManagementService.deleteCampus(campusId).subscribe({
-  //       next: (response) => {
-  //         console.log('  Delete Success Status:', response.status);
-  //         console.log('📦 Delete Response Body:', response.body);
-  //         // this.CampusData = this.CampusData.filter(t => t.CampusId !== CampusId);
-  //         console.log(`Campus ${campusId} deleted successfully`);
-  //       },
-  //       error: (error) => {
-  //         console.error('❌ Delete Error Status:', error.status);
-  //         console.error('Message:', error.message);
-  //       },
-  //       complete: () => {
-  //         console.log('🔚 Delete Complete');
-  //       }
-  //     })
-  //   }
-  // }
-
-  onSubmitSearch(): void {
-    console.log(' Search Form Data:', this.searchForm.getRawValue());
-    let formValues = this.searchForm.value;
-    let params = new HttpParams();
-
-    if (formValues.discountTypeId != null) {
-      params = params.set('discountTypeId', formValues.discountTypeId);
+  deleteConcessionRate(item: ConcessionRateResponse, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (confirm(`Are you sure you want to delete this Concession Rate?`)) {
+      this.isLoading = true;
+      this.loadingMessage = 'Deleting...';
+      this.concessionRateManagementService.deleteConcessionRate(item.id).subscribe({
+        next: () => {
+          this.toaster?.show('Concession Rate deleted successfully', 'success');
+          this.refreshList();
+        },
+        error: (err) => {
+          LoggerUtil.error(this.MODULE, 'Delete', '❌ Failed to delete', err);
+          this.toaster?.show('Failed to delete', 'error');
+          this.isLoading = false;
+          this.loadingMessage = '';
+        }
+      });
     }
+  }
 
-    if (formValues.discountSubTypeId != null) {
-      params = params.set('discountSubTypeId', formValues.discountSubTypeId);
-    }
-
-    if (formValues.chargeTypeId) {
-      params = params.set('chargeTypeId', formValues.chargeTypeId);
-    }
-
-    if (formValues.recurrenceRuleId) {
-      params = params.set('recurrenceRuleId', formValues.recurrenceRuleId);
-    }
-
-    if (formValues.keyword?.trim()) {
-      params = params.set('keyword', formValues.keyword.trim());
-    }
-
-    this.concessionRateManagementService.search(params).subscribe({
-      next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
-        this.resourceData = response.body;
-        this.pagination = new Pagination(this.resourceData, 10);
-      },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
-    })
+  onPageSizeChange(event: any) {
+    const newSize = +event.target.value;
+    this.pagination.changePageSize(newSize);
   }
 
   resetForm() {
     this.searchForm.reset({
+      academicYearId: this.academicYear?.id,
+      campusId: '',
       discountTypeId: '',
       discountSubTypeId: '',
-      chargeTypeId: '',
-      recurrenceRuleId: '',
       keyword: ''
     });
-    this.concessionComponentDD = []
-    this.getAllConcessionRates(); // reload all data
+    this.getAllConcessionRates();
   }
-  onPageSizeChange(event: any) {
-    const newSize = +event.target.value;
-    this.pagination.changePageSize(newSize);
+
+  onSubmitSearch(): void {
+    const formValues = this.searchForm.value;
+    this.isLoading = true;
+    this.loadingMessage = 'Searching...';
+    this.concessionRateManagementService.search(formValues).subscribe({
+      next: (response) => {
+        this.resourceData = response.body;
+        this.pagination = new Pagination(this.resourceData, 10);
+        this.isLoading = false;
+      },
+      error: (error) => {
+        LoggerUtil.error(this.MODULE, 'Search', '❌ Failed to search', error);
+        this.toaster?.show('Search failed', 'error');
+        this.isLoading = false;
+      }
+    });
   }
 }

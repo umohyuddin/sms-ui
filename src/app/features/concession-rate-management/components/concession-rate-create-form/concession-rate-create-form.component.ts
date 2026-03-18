@@ -1,14 +1,9 @@
-import { Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoggerService } from '../../../../core/services/logger.service';
-import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CampusResponse } from '../../../campus-management/models/campusResponse';
 import { CampusManagementService } from '../../../campus-management/services/campus-management.service';
-import { FeeComponent } from '../../../fee-rate-management/models/FeeRateResponse';
-import { FeeRateManagementService } from '../../../fee-rate-management/services/fee-rate-management.service';
 import { AppConfigService } from '../../../../core/services/app-config.service';
 import { AcademicYearResponse } from '../../../tenant-management/models/AcademicYearResponse';
 import { ConcessionResponse } from '../../../concession-management/models/ConcessionResponse';
@@ -18,28 +13,33 @@ import { ConcessionComponentResponse } from '../../../concession-component-manag
 import { ConcessionRateManagementService } from '../../services/concession-rate-management.service';
 import { ConcessionRateResponse } from '../../models/ConcessionRateResponse';
 import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { ROUTES } from '../../../../core/const/APP_ROUTES';
 
 @Component({
   selector: 'app-concession-rate-create-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoaderComponent, ToasterComponent],
   templateUrl: './concession-rate-create-form.component.html',
   styleUrls: ['./concession-rate-create-form.component.css']
 })
-export class ConcessionRateCreateFormComponent {
-  private readonly MODULE = 'ConcessionRate';
-  private readonly COMPONENT = 'ConcessionRateForm';
+export class ConcessionRateCreateFormComponent implements OnInit {
+  isLoading = false;
+  loadingMessage = '';
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
 
   academicYear: AcademicYearResponse | null = null;
   createForm!: FormGroup;
-  resourceData?: ConcessionRateResponse;
-  routedId?: string | null = null;
+  routedId: string | null = null;
   isEditMode: boolean = false;
 
   concessionComponentDD: ConcessionComponentResponse[] = [];
   campuseDD: CampusResponse[] = [];
   concessionTypeDD: ConcessionResponse[] = [];
-  feeCompnentDD: FeeComponent[] = [];
+
+  private readonly MODULE = 'ConcessionRate';
+  private readonly COMPONENT = 'CreateForm';
 
   constructor(
     private campusManagementService: CampusManagementService,
@@ -49,255 +49,195 @@ export class ConcessionRateCreateFormComponent {
     private configService: AppConfigService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
-   private logger: LoggerService) { }
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    this.logger.log("ngOnInit called", this.constructor.name);
     LoggerUtil.group(`📌 [${this.MODULE}] Init`);
-    LoggerUtil.log(this.MODULE, this.COMPONENT, '⚙️ Initializing component');
-
     this.academicYear = this.configService.getAcademicYear();
+    this.initializeForm();
+    this.handlePercentageValidation();
+    
     this.routedId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.routedId;
     LoggerUtil.log(this.MODULE, this.COMPONENT, '📝 Mode detected', this.isEditMode ? 'EDIT' : 'CREATE');
 
-    this.initializeForm();
-    this.handlePercentageValidation();
-
-    this.loadCampuses();
-    this.loadConcessionTypes();
-
-    if (this.isEditMode && this.routedId) {
-      LoggerUtil.log(this.MODULE, this.COMPONENT, '🔹 Loading concession rate details', this.routedId);
-      this.getConcessionRateDetails(this.routedId);
-    }
-
+    this.loadDropdowns();
     this.onConcessionTypeChange();
-    LoggerUtil.groupEnd(); // Init
+    LoggerUtil.groupEnd();
   }
 
   private initializeForm() {
-    LoggerUtil.group(`⚙️ [${this.MODULE}] Form Initialization`);
     this.createForm = this.fb.group({
       academicYearId: [this.academicYear?.id, Validators.required],
-      academicYearName: [this.academicYear?.name, Validators.required],
+      academicYearName: [this.academicYear?.name],
       discountTypeId: ['', Validators.required],
       discountSubTypeId: ['', Validators.required],
-      campusId: ['', Validators.required],
-      isPercentage: [{ value: false, disabled: true }, Validators.required],
+      campusId: [''],
+      isPercentage: [{ value: false, disabled: true }],
       value: [0, [Validators.required, Validators.min(0)]],
-      effectiveFrom: [{ value: null, disabled: true }, Validators.required],
-      effectiveTo: [{ value: null, disabled: true }, Validators.required],
-      active: [true]
+      effectiveFrom: [{ value: null, disabled: false }, Validators.required],
+      effectiveTo: [{ value: null, disabled: false }, Validators.required],
+      isActive: [true]
     });
     this.setAcademicYearDates(this.academicYear);
-    LoggerUtil.log(this.MODULE, this.COMPONENT, '✅ Form initialized');
-    LoggerUtil.groupEnd(); // Form Initialization
   }
+
   private setAcademicYearDates(academicYear: AcademicYearResponse | null) {
     if (!academicYear) return;
-
-    const startDate = academicYear.startDate; // e.g., '2026-01-01'
-    const endDate = academicYear.endDate;     // e.g., '2026-12-31'
-
     this.createForm.patchValue({
-      effectiveFrom: startDate,
-      effectiveTo: endDate
+      effectiveFrom: academicYear.startDate,
+      effectiveTo: academicYear.endDate
     });
   }
 
-
-  private loadCampuses() {
-    LoggerUtil.group(`🏫 [${this.MODULE}] Load Campuses`);
+  private loadDropdowns() {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading Options...';
+    
+    // Load Campuses
     this.campusManagementService.getAllCampuses().subscribe({
-      next: (res) => {
-        this.campuseDD = res.body;
-        LoggerUtil.log(this.MODULE, 'Campus', '📦 Campuses loaded', this.campuseDD);
-      },
-      error: (err) => LoggerUtil.error(this.MODULE, 'Campus', '❌ Failed to load campuses', err),
-      complete: () => LoggerUtil.log(this.MODULE, 'Campus', '🔚 Campus load complete')
+      next: (res) => this.campuseDD = res.body || [],
+      error: (err) => LoggerUtil.error(this.MODULE, 'Campus', '❌ Failed to load campuses', err)
     });
-    LoggerUtil.groupEnd();
-  }
 
-  private subscribeToConcessionTypeChanges() {
-    const discountTypeCtrl = this.createForm.get('discountTypeId');
-    if (!discountTypeCtrl) return;
-
-    discountTypeCtrl.valueChanges.subscribe(discountTypeId => {
-      if (!discountTypeId) return;
-
-      const selectedConcession = this.concessionTypeDD.find(c => c.id == discountTypeId);
-      if (selectedConcession) {
-        // Automatically set isPercentage based on chargeType
-        this.createForm.patchValue({ isPercentage: selectedConcession.chargeType === 'PERCENTAGE' }, { emitEvent: true });
-      }
-
-      // Load the corresponding components
-      this.loadComponentsByConcessionId(discountTypeId);
-    });
-  }
-
-  private loadConcessionTypes() {
-    LoggerUtil.group(`📦 [${this.MODULE}] Load Concession Types`);
-    this.concessionManagementService.getAllConcessions().subscribe({
+    // Load Concession Types
+    this.concessionManagementService.getActiveConcessions().subscribe({
       next: (res) => {
         this.concessionTypeDD = res.body || [];
-        LoggerUtil.log(this.MODULE, 'ConcessionType', '📦 Concession types loaded', this.concessionTypeDD);
-
-        // Subscribe to dropdown changes for user selection
-        this.subscribeToConcessionTypeChanges();
-
-        // Handle edit mode after concessions are loaded
-        if (this.isEditMode && this.resourceData) {
-          const discountTypeId = this.resourceData.discountSubType.discountType.id;
-
-          // Patch discountTypeId WITHOUT triggering valueChanges
-          this.createForm.patchValue({ discountTypeId }, { emitEvent: false });
-
-          // Set isPercentage based on chargeType
-          const selectedConcession = this.concessionTypeDD.find(c => c.id === discountTypeId);
-          if (selectedConcession) {
-            this.createForm.patchValue({ isPercentage: selectedConcession.chargeType === 'PERCENTAGE' }, { emitEvent: false });
-          }
-
-          // Load components for edit mode
-          this.loadComponentsByConcessionId(discountTypeId, () => {
-            // After components loaded, patch discountSubTypeId
-            this.createForm.patchValue({ discountSubTypeId: this.resourceData?.discountSubType.id }, { emitEvent: false });
-          });
-        }
       },
-      error: (err) => LoggerUtil.error(this.MODULE, 'ConcessionType', '❌ Failed to load concession types', err)
+      error: (err) => {
+        LoggerUtil.error(this.MODULE, 'ConcessionType', '❌ Failed to load concession types', err);
+      },
+      complete: () => {
+        this.isLoading = false;
+        
+        if (this.isEditMode && this.routedId) {
+          this.getConcessionRateDetails(this.routedId);
+        }
+      }
     });
-    LoggerUtil.groupEnd();
   }
 
-
   onConcessionTypeChange() {
-    LoggerUtil.group(`🔄 [${this.MODULE}] Concession Type Change`);
     this.createForm.get('discountTypeId')?.valueChanges.subscribe(discountTypeId => {
-      LoggerUtil.log(this.MODULE, 'ConcessionType', 'Selected discount type ID', discountTypeId);
+      if (!discountTypeId) {
+        this.concessionComponentDD = [];
+        this.createForm.get('discountSubTypeId')?.setValue('');
+        return;
+      }
+      
+      const selectedConcession = this.concessionTypeDD.find((c: any) => c.id == discountTypeId);
+      if (selectedConcession) {
+        this.createForm.patchValue({ isPercentage: selectedConcession.chargeType?.code === 'PERCENTAGE' }, { emitEvent: true });
+      }
       this.loadComponentsByConcessionId(discountTypeId);
     });
-    LoggerUtil.groupEnd();
   }
 
   private loadComponentsByConcessionId(concessionTypeId: any, callback?: () => void) {
-    LoggerUtil.group(`📦 [${this.MODULE}] Load Concession Components`);
     this.concessionComponentManagementService.getConcessionComponentsByTypeId(concessionTypeId).subscribe({
       next: (res) => {
         this.concessionComponentDD = res.body || [];
-        LoggerUtil.log(this.MODULE, 'ConcessionComponent', '📦 Components loaded', this.concessionComponentDD);
-
         if (callback) callback();
       },
-      error: (err) => LoggerUtil.error(this.MODULE, 'ConcessionComponent', '❌ Failed to load components', err),
-      complete: () => LoggerUtil.log(this.MODULE, 'ConcessionComponent', '🔚 Load complete')
+      error: (err) => LoggerUtil.error(this.MODULE, 'ConcessionComponent', '❌ Failed to load components', err)
     });
-    LoggerUtil.groupEnd();
   }
 
-
-  // private loadComponentsByConcessionId(concessionTypeId: any) {
-  //   LoggerUtil.group(`📦 [${this.MODULE}] Load Concession Components`);
-  //   this.concessionComponentManagementService.getConcessionComponentsByTypeId(concessionTypeId).subscribe({
-  //     next: (res) => {
-  //       this.concessionComponentDD = res.body;
-  //       LoggerUtil.log(this.MODULE, 'ConcessionComponent', '📦 Components loaded', this.concessionComponentDD);
-  //     },
-  //     error: (err) => LoggerUtil.error(this.MODULE, 'ConcessionComponent', '❌ Failed to load components', err),
-  //     complete: () => LoggerUtil.log(this.MODULE, 'ConcessionComponent', '🔚 Load complete')
-  //   });
-  //   LoggerUtil.groupEnd();
-  // }
-
-  getConcessionRateDetails(routedId: string) {
-    LoggerUtil.group(`🏷️ [${this.MODULE}] Load Rate Details`);
+  getConcessionRateDetails(routedId: string | number) {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading details...';
     this.concessionRateManagementService.getConcessionRateById(routedId).subscribe({
       next: (res) => {
-        this.resourceData = res.body;
-        LoggerUtil.log(this.MODULE, 'Details', '📦 Concession rate loaded', this.resourceData);
-
+        const resourceData = res.body;
+        const discountTypeId = resourceData?.discountSubType?.discountType?.id;
+        
         this.createForm.patchValue({
-          academicYearId: this.resourceData?.academicYearId,
-          campusId: this.resourceData?.campusId,
-          discountTypeId: this.resourceData?.discountSubType.discountType.id,
-          discountSubTypeId: this.resourceData?.discountSubType.id,
-          value: this.resourceData?.value,
-          isPercentage: this.resourceData?.isPercentage,
-          effectiveFrom: this.resourceData?.effectiveFrom,
-          effectiveTo: this.resourceData?.effectiveTo,
-          active: this.resourceData?.isActive
-        });
+          academicYearId: resourceData?.academicYear?.id,
+          academicYearName: resourceData?.academicYear?.name,
+          campusId: resourceData?.campus?.id || '',
+          discountTypeId: discountTypeId,
+          value: resourceData?.value,
+          isPercentage: resourceData?.isPercentage,
+          effectiveFrom: resourceData?.effectiveFrom,
+          effectiveTo: resourceData?.effectiveTo,
+          isActive: resourceData?.isActive
+        }, { emitEvent: false });
+
+        if (discountTypeId) {
+          this.loadComponentsByConcessionId(discountTypeId, () => {
+             this.createForm.patchValue({ discountSubTypeId: resourceData?.discountSubType?.id }, { emitEvent: false });
+             this.isLoading = false;
+          });
+        } else {
+          this.isLoading = false;
+        }
       },
-      error: (err) => LoggerUtil.error(this.MODULE, 'Details', '❌ Failed to load rate details', err),
-      complete: () => LoggerUtil.log(this.MODULE, 'Details', '🔚 Rate details load complete')
-    });
-    LoggerUtil.groupEnd();
-  }
-
-
-
-  onSubmit() {
-    LoggerUtil.group(`🚀 [${this.MODULE}] Submit`);
-    LoggerUtil.log(this.MODULE, 'Submit', '📋 Form submit triggered');
-
-    if (this.createForm.invalid) {
-      this.createForm.markAllAsTouched();
-      LoggerUtil.error(this.MODULE, 'Submit', '❌ Form validation failed', this.createForm.errors);
-      LoggerUtil.groupEnd();
-      return;
-    }
-
-    LoggerUtil.log(this.MODULE, 'Submit', '📤 Submitting form data', this.createForm.getRawValue());
-    this.concessionRateManagementService.save(this.routedId ?? null, this.createForm.getRawValue()).subscribe({
-      next: (res) => {
-        LoggerUtil.log(this.MODULE, 'Submit', '✅ Save successful', res.body);
-        LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to list');
-        this.router.navigate(ROUTES.CONCESSION.CONCESSION_RATE.LIST);
-      },
-      error: (err) => LoggerUtil.error(this.MODULE, 'Submit', '❌ Save failed', err),
-      complete: () => {
-        LoggerUtil.log(this.MODULE, 'Submit', '🔚 Submit flow completed');
-        LoggerUtil.groupEnd();
+      error: (err) => {
+        LoggerUtil.error(this.MODULE, 'Details', '❌ Failed to load rate', err);
+        this.toaster?.show('Failed to load rate details', 'error');
+        this.isLoading = false;
       }
     });
   }
 
-  goToListing() {
-    LoggerUtil.log(this.MODULE, 'Navigation', '➡️ Redirecting to list');
+  onSubmit() {
+    if (this.createForm.invalid) {
+      this.createForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.createForm.getRawValue();
+    const payload = {
+      discountSubTypeId: Number(formValue.discountSubTypeId),
+      campusId: formValue.campusId ? Number(formValue.campusId) : null,
+      academicYearId: formValue.academicYearId ? Number(formValue.academicYearId) : null,
+      value: Number(formValue.value),
+      isPercentage: formValue.isPercentage,
+      effectiveFrom: formValue.effectiveFrom,
+      effectiveTo: formValue.effectiveTo,
+      isActive: formValue.isActive
+    };
+
+    this.isLoading = true;
+    this.loadingMessage = this.isEditMode ? 'Updating Concession Rate...' : 'Adding Concession Rate...';
+    
+    this.concessionRateManagementService.saveConcessionRate(this.routedId, payload).subscribe({
+      next: (res) => {
+        const message = res?.body?.message || (this.isEditMode ? 'Updated successfully' : 'Created successfully');
+        this.toaster?.show(message, 'success');
+        setTimeout(() => this.goToListing(), 1500);
+      },
+      error: (err) => {
+        LoggerUtil.error(this.MODULE, 'Submit', '❌ Save failed', err);
+        this.toaster?.show('Failed to save Concession Rate', 'error');
+        this.isLoading = false;
+      }
+    });
+  }
+
+  goToListing(): void {
     this.router.navigate(ROUTES.CONCESSION.CONCESSION_RATE.LIST);
   }
-private handlePercentageValidation() {
-  const valueCtrl = this.createForm.get('value');
-  const isPercentageCtrl = this.createForm.get('isPercentage');
 
-  if (!valueCtrl || !isPercentageCtrl) return;
+  private handlePercentageValidation() {
+    const valueCtrl = this.createForm.get('value');
+    const isPercentageCtrl = this.createForm.get('isPercentage');
+    if (!valueCtrl || !isPercentageCtrl) return;
 
-  // Whenever isPercentage changes (or we patch it), update the validators for 'value'
-  const updateValidators = () => {
-    valueCtrl.clearValidators();
-    if (isPercentageCtrl.value) {
-      // If it's a percentage, value must be between 0 and 100
-      valueCtrl.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
-    } else {
-      // If it's a fixed amount, minimum 1
-      valueCtrl.setValidators([Validators.required, Validators.min(1)]);
-    }
-    valueCtrl.updateValueAndValidity();
-  };
-
-  // Run once initially in case isPercentage is patched (like in edit mode)
-  updateValidators();
-
-  // Subscribe to changes if isPercentage is patched dynamically
-  isPercentageCtrl.valueChanges.subscribe(() => updateValidators());
-}
-
-
-  minDate = new Date().toISOString().split('T')[0];
+    const updateValidators = () => {
+      valueCtrl.clearValidators();
+      if (isPercentageCtrl.value) {
+        valueCtrl.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+      } else {
+        valueCtrl.setValidators([Validators.required, Validators.min(1)]);
+      }
+      valueCtrl.updateValueAndValidity();
+    };
+    updateValidators();
+    isPercentageCtrl.valueChanges.subscribe(() => updateValidators());
+  }
 
   // getters
   get academicYearId() { return this.createForm.get('academicYearId'); }
@@ -307,12 +247,11 @@ private handlePercentageValidation() {
   get value() { return this.createForm.get('value'); }
   get effectiveFrom() { return this.createForm.get('effectiveFrom'); }
   get effectiveTo() { return this.createForm.get('effectiveTo'); }
-  get active() { return this.createForm.get('active'); }
+  get isActive() { return this.createForm.get('isActive'); }
 
   getErrorMessage(controlName: keyof typeof this.validationMessages): string {
     const control = this.createForm.get(controlName as string);
     if (!control || !control.errors) return '';
-
     for (const error in control.errors) {
       const key = error as keyof typeof this.validationMessages[typeof controlName];
       if (this.validationMessages[controlName][key]) return this.validationMessages[controlName][key];
@@ -324,11 +263,7 @@ private handlePercentageValidation() {
     campusId: { required: 'Campus is required.' },
     discountTypeId: { required: 'Concession Type is required.' },
     discountSubTypeId: { required: 'Concession Component is required.' },
-    value: {
-      required: 'Value is required.',
-      min: 'Value must be greater than zero.',
-      max: 'Percentage cannot exceed 100%.'
-    },
+    value: { required: 'Value is required.', min: 'Value must be greater than zero.', max: 'Percentage cannot exceed 100%.' },
     effectiveFrom: { required: 'Effective From date is required.' },
     effectiveTo: { required: 'Effective To date is required.' }
   };

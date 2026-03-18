@@ -1,71 +1,122 @@
-<div class="kt-portlet kt-portlet--mobile">
-    <div class="kt-portlet__head kt-portlet__head--lg">
+<div class="kt-portlet kt-portlet--mobile shadow-sm border-top-brand">
+    <div class="kt-portlet__head kt-portlet__head--lg kt-portlet__head--noborder">
         <div class="kt-portlet__head-label">
             <span class="kt-portlet__head-icon">
-                <i class="kt-font-dark flaticon-squares"></i>
+                <i class="kt-font-brand flaticon2-information"></i>
             </span>
-            <h3 class="kt-portlet__head-title">
-                Campus Details
+            <h3 class="kt-portlet__head-title text-dark font-weight-bold">
+                Concession Rate Details
             </h3>
         </div>
-        <div class="kt-portlet__head-toolbar">
-            <div class="kt-portlet__head-wrapper">
+    </div>
+    
+    <div class="kt-portlet__body pt-2">
+        <!-- Header Section -->
+        <div class="elite-header-container d-flex align-items-center mb-3 p-2 rounded shadow-soft glass-effect border">
+            <div class="elite-avatar-wrapper mr-3">
+                <div class="elite-avatar">
+                    {{getInitials(resourceData?.discountSubType?.name)}}
+                </div>
+            </div>
+            <div class="d-flex flex-column">
+                <h2 class="elite-title font-weight-boldest mb-1">
+                    {{resourceData?.discountSubType?.name}}
+                </h2>
+                <div class="elite-badge-group">
+                    <span class="elite-badge elite-badge-primary">
+                        <i class="flaticon-price-tag mr-1"></i>
+                        {{resourceData?.discountSubType?.code}}
+                    </span>
+                    <span class="elite-badge"
+                        [ngClass]="resourceData?.isActive ? 'elite-badge-success' : 'elite-badge-danger'">
+                        <i class="flaticon2-correct mr-1" *ngIf="resourceData?.isActive"></i>
+                        <i class="flaticon2-cross mr-1" *ngIf="!resourceData?.isActive"></i>
+                        {{resourceData?.isActive ? 'Active' : 'Inactive'}}
+                    </span>
+                </div>
+            </div>
+        </div>
 
+        <!-- Details Grid -->
+        <div class="row mb-1">
+            <!-- Concession Info -->
+            <div class="col-lg-4 mb-4">
+                <div class="p-3 border rounded h-100 bg-white shadow-xs">
+                    <h6 class="text-muted font-weight-bold mb-3 border-bottom pb-2">
+                        <i class="flaticon2-layers-1 text-primary mr-2"></i> Concession Info
+                    </h6>
+                    <div class="mb-2">
+                        <span class="text-dark-75 font-weight-bold mr-2">Concession Name:</span>
+                        <span class="text-muted">{{resourceData?.discountSubType?.discountType?.name}}</span>
+                    </div>
+                    <div>
+                        <span class="text-dark-75 font-weight-bold mr-2">Description:</span>
+                        <p class="text-muted mb-0 small">{{resourceData?.discountSubType?.description || 'N/A'}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Info -->
+            <div class="col-lg-4 mb-4">
+                <div class="p-3 border rounded h-100 bg-white shadow-xs">
+                    <h6 class="text-muted font-weight-bold mb-3 border-bottom pb-2">
+                        <i class="flaticon2-analytics-2 text-success mr-2"></i> Pricing & Charge
+                    </h6>
+                    <div class="mb-2">
+                        <span class="text-dark-75 font-weight-bold mr-2">Charge Type:</span>
+                        <span class="badge badge-pill badge-secondary">
+                          {{resourceData?.chargeType?.name || resourceData?.discountSubType?.discountType?.chargeType?.name}}
+                        </span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-dark-75 font-weight-bold mr-2">Recurrence:</span>
+                        <span class="badge badge-pill badge-info">
+                          {{resourceData?.discountSubType?.discountType?.recurrenceRule?.name}}
+                        </span>
+                    </div>
+                    <div class="font-size-h3 font-weight-boldest text-brand mt-2">
+                        <ng-container *ngIf="resourceData?.isPercentage">
+                            {{resourceData?.value}}%
+                        </ng-container>
+                        <ng-container *ngIf="!resourceData?.isPercentage">
+                            {{resourceData?.value}} PKR
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applicability Info -->
+            <div class="col-lg-4 mb-4">
+                <div class="p-3 border rounded h-100 bg-white shadow-xs">
+                    <h6 class="text-muted font-weight-bold mb-3 border-bottom pb-2">
+                        <i class="flaticon2-map text-warning mr-2"></i> Applicability
+                    </h6>
+                    <div class="mb-2">
+                        <span class="text-dark-75 font-weight-bold mr-2">Campus:</span>
+                        <span class="text-muted">{{resourceData?.campus?.name || 'All Campuses'}}</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="text-dark-75 font-weight-bold mr-2">Academic Year:</span>
+                        <span class="text-muted">{{resourceData?.academicYear?.name}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline & Rules -->
+        <div class="bg-light p-3 rounded border">
+            <div class="row">
+                <div class="col-md-6">
+                    <span class="text-dark-75 font-weight-bold mr-2"><i class="la la-calendar-check-o mr-1"></i>
+                        Effective From:</span>
+                    <span class="text-muted">{{resourceData?.effectiveFrom | date:'mediumDate'}}</span>
+                </div>
+                <div class="col-md-6">
+                    <span class="text-dark-75 font-weight-bold mr-2"><i class="la la-calendar-times-o mr-1"></i>
+                        Effective To:</span>
+                    <span class="text-muted">{{resourceData?.effectiveTo ? (resourceData?.effectiveTo | date:'mediumDate') : 'Permanent'}}</span>
+                </div>
             </div>
         </div>
     </div>
-    <!-- <div class="kt-portlet__body">
-        <div class="kt-widget kt-widget--user-profile-3">
-            <div class="kt-widget__top">
-                <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-bolder kt-font-light">
-                    JM
-                </div>
-                <div class="kt-widget__content">
-                    <div class="kt-widget__head">
-                        <div class="kt-widget__user">
-                            <a href="#" class="kt-widget__username">
-                                {{campusData?.campusName}}
-                            </a>
-                            <span class=" ml-2 kt-badge kt-badge--bolder kt-badge kt-badge--inline"
-                                [ngClass]="campusData?.active ? 'kt-badge--unified-success' : 'kt-badge--unified-danger'">{{campusData?.active
-                            ? 'Active' : 'Inactive'}}</span>
-                        </div>
-                    </div>
-                    <div class="kt-widget__subhead row">
-                        <div class="col-4">
-                            <a> <b>Campus Code :</b> {{campusData?.campusCode}}</a>
-                        </div>
-
-                        <div class="col-4">
-                            <a><b>Contact Number : </b>{{campusData?.contactNumber}}</a>
-                        </div>
-
-                        <div class="col-4">
-                            <a> <b> Email:</b> {{campusData?.email}}</a>
-                        </div>
-                    </div>
-                    <div class="kt-widget__subhead row">
-                        <div class="col-4">
-                            <a> <b>Website: </b> {{campusData?.website}}</a>
-                        </div>
-
-                        <div class="col-4">
-                            <a> <b>Province: </b> {{campusData?.province?.name}}</a>
-                        </div>
-
-                        <div class="col-4">
-                            <a> <b>Province: </b> {{campusData?.city?.name}}</a>
-                        </div>
-                    </div>
-
-                    <div class="kt-widget__info">
-                        <div class="kt-widget__desc"><i style="font-size: 1.5rem !important;"
-                                class="flaticon-placeholder-3 mr-2"></i>
-                            <b>{{campusData?.address}}</b>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
 </div>

@@ -24,10 +24,7 @@ export class ConcessionRateListing implements OnInit {
 
   ngOnInit(): void {}
 
-
-  goToConcessionComponent(): void {
+  goToConcessionRate(): void {
     this.router.navigate(ROUTES.CONCESSION.CONCESSION_RATE.CREATE);
   }
 }
-
-

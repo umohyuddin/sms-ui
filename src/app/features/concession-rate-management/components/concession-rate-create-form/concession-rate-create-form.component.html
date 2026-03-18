@@ -1,8 +1,10 @@
+<app-toaster #toaster></app-toaster>
+
 <div class="kt-portlet">
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
       <h3 class="kt-portlet__head-title">
-        {{isEditMode ? 'Update Fee Rate & Matrix Details' : 'Add New Fee Rate & Matrix Component'}}
+        {{ isEditMode ? 'Update Concession Rate Details' : 'Add New Concession Rate' }}
       </h3>
     </div>
   </div>
@@ -11,21 +13,23 @@
   <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
     <div class="kt-portlet__body">
 
+      <!-- Configuration: Academic Year, Campus, Concession Type -->
+      <h4>Configuration</h4>
       <div class="form-group row form-group-marginless kt-margin-t-20">
+
         <label class="col-lg-1 col-form-label required">Academic Year:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="Enter Academic Year" formControlName="academicYearName" readonly>
+          <input type="text" class="form-control" formControlName="academicYearName" readonly>
         </div>
 
-        <label class="col-lg-1 col-form-label required">Campus:</label>
+        <label class="col-lg-1 col-form-label">Campus:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="campusId"
-            [class.is-invalid]="campusId?.invalid && (campusId?.touched || campusId?.dirty)"
-            [class.is-valid]="campusId?.valid && (campusId?.touched || campusId?.dirty)">
-            <option value='' selected>Select Campus</option>
+            [class.is-invalid]="campusId?.invalid && (campusId?.touched || campusId?.dirty)">
+            <option value=''>All Campuses</option>
             <option *ngFor="let p of campuseDD" [value]="p.id">{{ p.campusName }}</option>
           </select>
-          <span class="form-text text-muted">Please select Campus</span>
+          <span class="form-text text-muted">Optional (applies to all if left blank)</span>
           <span class="invalid-feedback" *ngIf="campusId?.invalid && (campusId?.touched || campusId?.dirty)">
             {{ getErrorMessage('campusId') }}
           </span>
@@ -34,39 +38,41 @@
         <label class="col-lg-1 col-form-label required">Concession Type:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="discountTypeId"
-            [class.is-invalid]="discountTypeId?.invalid && (discountTypeId?.touched || discountTypeId?.dirty)"
-            [class.is-valid]="discountTypeId?.valid && (discountTypeId?.touched || discountTypeId?.dirty)">
-            <option value='' selected>Select Concession Type</option>
+            [class.is-invalid]="discountTypeId?.invalid && (discountTypeId?.touched || discountTypeId?.dirty)">
+            <option value=''>Select Concession Type</option>
             <option *ngFor="let p of concessionTypeDD" [value]="p.id">{{ p.name }}</option>
           </select>
-          <span class="form-text text-muted">Please select Concession Type</span>
           <span class="invalid-feedback" *ngIf="discountTypeId?.invalid && (discountTypeId?.touched || discountTypeId?.dirty)">
             {{ getErrorMessage('discountTypeId') }}
           </span>
         </div>
+
       </div>
 
-      <div class="form-group row form-group-marginless kt-margin-t-20">
-        <label class="col-lg-1 col-form-label required">Concession Component:</label>
+      <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+
+      <!-- Rate Settings: Sub Type, Value, isPercentage -->
+      <h4 class="kt-margin-b-20">Rate Application</h4>
+
+      <div class="form-group row form-group-marginless">
+
+        <label class="col-lg-1 col-form-label required">Sub Type:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="discountSubTypeId"
-            [class.is-invalid]="discountSubTypeId?.invalid && (discountSubTypeId?.touched || discountSubTypeId?.dirty)"
-            [class.is-valid]="discountSubTypeId?.valid && (discountSubTypeId?.touched || discountSubTypeId?.dirty)">
-            <option value='' selected>Select Fee Catalog</option>
+            [class.is-invalid]="discountSubTypeId?.invalid && (discountSubTypeId?.touched || discountSubTypeId?.dirty)">
+            <option value=''>Select Concession Sub Type</option>
             <option *ngFor="let p of concessionComponentDD" [value]="p.id">{{ p.name }}</option>
           </select>
-          <span class="form-text text-muted">Please select Fee Catalog</span>
+          <span class="form-text text-muted">Select specific component/sub-type for this rate</span>
           <span class="invalid-feedback" *ngIf="discountSubTypeId?.invalid && (discountSubTypeId?.touched || discountSubTypeId?.dirty)">
             {{ getErrorMessage('discountSubTypeId') }}
           </span>
         </div>
 
-        <label class="col-lg-1 col-form-label required">Value:</label>
+        <label class="col-lg-1 col-form-label required">Value Amount:</label>
         <div class="col-lg-3">
-          <input type="number" class="form-control" placeholder="Enter amount (e.g., 2500)" formControlName="value"
-            [class.is-invalid]="value?.invalid && (value?.touched || value?.dirty)"
-            [class.is-valid]="value?.valid && (value?.touched || value?.dirty)" min="0">
-          <span class="form-text text-muted">Please enter the fee component amount.</span>
+          <input type="number" class="form-control" placeholder="Enter amount" formControlName="value"
+            [class.is-invalid]="value?.invalid && (value?.touched || value?.dirty)" min="0">
           <span class="invalid-feedback" *ngIf="value?.invalid && (value?.touched || value?.dirty)">
             {{ getErrorMessage('value') }}
           </span>
@@ -78,16 +84,22 @@
             <input type="checkbox" formControlName="isPercentage"> Is Percentage
             <span></span>
           </label>
+          <span class="form-text text-muted">Percentage rates are determined automatically by the Concession Type</span>
         </div>
+
       </div>
 
-      <div class="form-group row form-group-marginless kt-margin-t-20">
+      <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+
+      <!-- Validity Dates & Status -->
+      <h4 class="kt-margin-b-20">Validity</h4>
+      
+      <div class="form-group row form-group-marginless">
+
         <label class="col-lg-1 col-form-label required">Effective From:</label>
         <div class="col-lg-3">
-          <input type="date" class="form-control" formControlName="effectiveFrom" [min]="minDate"
-            [class.is-invalid]="effectiveFrom?.invalid && (effectiveFrom?.touched || effectiveFrom?.dirty)"
-            [class.is-valid]="effectiveFrom?.valid && (effectiveFrom?.touched || effectiveFrom?.dirty)">
-          <span class="form-text text-muted">Select the start date for this fee rate.</span>
+          <input type="date" class="form-control" formControlName="effectiveFrom"
+            [class.is-invalid]="effectiveFrom?.invalid && (effectiveFrom?.touched || effectiveFrom?.dirty)">
           <span class="invalid-feedback" *ngIf="effectiveFrom?.invalid && (effectiveFrom?.touched || effectiveFrom?.dirty)">
             {{ getErrorMessage('effectiveFrom') }}
           </span>
@@ -95,10 +107,8 @@
 
         <label class="col-lg-1 col-form-label required">Effective To:</label>
         <div class="col-lg-3">
-          <input type="date" class="form-control" formControlName="effectiveTo" [min]="minDate"
-            [class.is-invalid]="effectiveTo?.invalid && (effectiveTo?.touched || effectiveTo?.dirty)"
-            [class.is-valid]="effectiveTo?.valid && (effectiveTo?.touched || effectiveTo?.dirty)">
-          <span class="form-text text-muted">Select the End date for this fee rate.</span>
+          <input type="date" class="form-control" formControlName="effectiveTo"
+            [class.is-invalid]="effectiveTo?.invalid && (effectiveTo?.touched || effectiveTo?.dirty)">
           <span class="invalid-feedback" *ngIf="effectiveTo?.invalid && (effectiveTo?.touched || effectiveTo?.dirty)">
             {{ getErrorMessage('effectiveTo') }}
           </span>
@@ -107,27 +117,32 @@
         <label class="col-lg-1 col-form-label">Status:</label>
         <div class="col-lg-3">
           <label class="kt-checkbox kt-margin-t-10">
-            <input type="checkbox" formControlName="active"> Is Active
+            <input type="checkbox" formControlName="isActive"> Is Active
             <span></span>
           </label>
         </div>
+
       </div>
 
     </div>
 
+    <!-- Footer Actions -->
     <div class="kt-portlet__foot">
       <div class="kt-form__actions">
         <div class="row">
           <div class="col-lg-5"></div>
           <div class="col-lg-7">
             <button type="submit" class="btn btn-dark mr-2">
-              {{isEditMode ? 'Update Fee Component Rate & Matrix Details' : 'Add New Fee Component Rate & Matrix'}}
+              {{ isEditMode ? 'Update Rate Details' : 'Add Concession Rate' }}
             </button>
-            <button type="button" class="btn btn-secondary" (click)="goToListing()">Cancel</button>
+            <button type="button" class="btn btn-danger" (click)="goToListing()">Cancel</button>
           </div>
         </div>
       </div>
     </div>
+
   </form>
   <!--end::Form-->
 </div>
+
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

@@ -1,8 +1,10 @@
+<app-toaster #toaster></app-toaster>
+
 <div class="kt-portlet">
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
       <h3 class="kt-portlet__head-title">
-        {{ isEditMode ? 'Update Concession Component Details' : 'Add New Concession Component' }}
+        {{ isEditMode ? 'Update Concession Sub Type' : 'Add New Concession Sub Type' }}
       </h3>
     </div>
   </div>
@@ -10,67 +12,82 @@
   <!--begin::Form-->
   <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
     <div class="kt-portlet__body">
-      <h4>Concession Component Information</h4>
 
-      <!-- Concession Catalog, Component Name, Component Code -->
+      <!-- General Information -->
+      <h4>General Information</h4>
       <div class="form-group row form-group-marginless kt-margin-t-20">
-        <label class="col-lg-1 col-form-label required">Concession Catalog:</label>
+
+        <label class="col-lg-1 col-form-label required">Code:</label>
         <div class="col-lg-3">
-          <select class="form-control" formControlName="discountTypeId"
-            [class.is-invalid]="discountTypeId?.invalid && (discountTypeId?.touched || discountTypeId?.dirty)"
-            [class.is-valid]="discountTypeId?.valid && (discountTypeId?.touched || discountTypeId?.dirty)">
-            <option value="">Select Concession Catalog</option>
-            <option *ngFor="let p of concessionDD" [value]="p.id">{{ p.name }}</option>
-          </select>
-          <span class="form-text text-muted">Select the catalog this component belongs to</span>
-          <span class="invalid-feedback" *ngIf="discountTypeId?.invalid && (discountTypeId?.touched || discountTypeId?.dirty)">
-            {{ getErrorMessage('discountTypeId') }}
+          <input type="text" class="form-control" placeholder="e.g. SUB-MERIT-01" formControlName="code"
+            [class.is-invalid]="code?.invalid && (code?.touched || code?.dirty)"
+            [class.is-valid]="code?.valid && (code?.touched || code?.dirty)">
+          <span class="invalid-feedback" *ngIf="code?.invalid && (code?.touched || code?.dirty)">
+            {{ getErrorMessage('code') }}
           </span>
         </div>
 
-        <label class="col-lg-1 col-form-label required">Component Name:</label>
+        <label class="col-lg-1 col-form-label required">Name:</label>
         <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="Enter Component Name" formControlName="name"
+          <input type="text" class="form-control" placeholder="Sub Type Name" formControlName="name"
             [class.is-invalid]="name?.invalid && (name?.touched || name?.dirty)"
             [class.is-valid]="name?.valid && (name?.touched || name?.dirty)">
-          <span class="form-text text-muted">Enter a descriptive name for the component</span>
           <span class="invalid-feedback" *ngIf="name?.invalid && (name?.touched || name?.dirty)">
             {{ getErrorMessage('name') }}
           </span>
         </div>
 
-        <label class="col-lg-1 col-form-label required">Component Code:</label>
-        <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="Enter Component Code" formControlName="code"
-            [class.is-invalid]="code?.invalid && (code?.touched || code?.dirty)"
-            [class.is-valid]="code?.valid && (code?.touched || code?.dirty)">
-          <span class="form-text text-muted">Short unique code for the component</span>
-          <span class="invalid-feedback" *ngIf="code?.invalid && (code?.touched || code?.dirty)">
-            {{ getErrorMessage('code') }}
-          </span>
-        </div>
-      </div>
-
-      <!-- Status Checkbox -->
-      <div class="form-group row form-group-marginless kt-margin-t-20">
         <label class="col-lg-1 col-form-label">Status:</label>
-        <div class="col-lg-3">
+        <div class="col-lg-2">
           <label class="kt-checkbox kt-margin-t-10">
             <input type="checkbox" formControlName="isActive"> Is Active
             <span></span>
           </label>
         </div>
+
       </div>
 
-      <!-- Description -->
-      <div class="form-group row kt-margin-t-40">
+      <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+
+      <!-- Configuration -->
+      <h4 class="kt-margin-b-20">Configuration</h4>
+
+      <div class="form-group row form-group-marginless">
+
+        <label class="col-lg-1 col-form-label required">Concession Type:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="discountTypeId"
+            [class.is-invalid]="discountTypeId?.invalid && (discountTypeId?.touched || discountTypeId?.dirty)"
+            [class.is-valid]="discountTypeId?.valid && (discountTypeId?.touched || discountTypeId?.dirty)">
+            <option value=''>Select Concession Type</option>
+            <option *ngFor="let c of concessionDD" [value]="c.id">{{ c.name }}</option>
+          </select>
+          <span class="form-text text-muted">Select applicable parent concession type</span>
+          <span class="invalid-feedback"
+            *ngIf="discountTypeId?.invalid && (discountTypeId?.touched || discountTypeId?.dirty)">
+            {{ getErrorMessage('discountTypeId') }}
+          </span>
+        </div>
+
+      </div>
+
+      <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
+
+      <!-- Additional Details -->
+      <h4 class="kt-margin-b-20">Additional Details</h4>
+
+
+
+      <div class="form-group row kt-margin-t-20">
         <label class="col-lg-1 col-form-label">Description:</label>
         <div class="col-lg-11">
-          <textarea class="form-control" placeholder="Optional: Add description for the component" rows="3" formControlName="description"
-            [class.is-invalid]="description?.invalid && (description?.touched || description?.dirty)"
-            [class.is-valid]="description?.valid && (description?.touched || description?.dirty)"></textarea>
-          <span class="form-text text-muted">Provide optional details about the component</span>
-          <span class="invalid-feedback" *ngIf="description?.invalid && (description?.touched || description?.dirty)">
+          <textarea class="form-control" placeholder="Enter a brief description..." rows="3"
+            formControlName="description"
+            [class.is-invalid]="createForm.get('description')?.invalid && (createForm.get('description')?.touched || createForm.get('description')?.dirty)"
+            [class.is-valid]="createForm.get('description')?.valid && (createForm.get('description')?.touched || createForm.get('description')?.dirty)">
+          </textarea>
+          <span class="invalid-feedback"
+            *ngIf="createForm.get('description')?.invalid && (createForm.get('description')?.touched || createForm.get('description')?.dirty)">
             {{ getErrorMessage('description') }}
           </span>
         </div>
@@ -78,20 +95,23 @@
 
     </div>
 
-    <!-- Form Actions -->
+    <!-- Footer Actions -->
     <div class="kt-portlet__foot">
       <div class="kt-form__actions">
         <div class="row">
           <div class="col-lg-5"></div>
           <div class="col-lg-7">
             <button type="submit" class="btn btn-dark mr-2">
-              {{ isEditMode ? 'Update Concession Component Details' : 'Add New Concession Component' }}
+              {{ isEditMode ? 'Update Concession Sub Type' : 'Add New Concession Sub Type' }}
             </button>
-            <button type="button" class="btn btn-secondary" (click)="goToSectionsList()">Cancel</button>
+            <button type="button" class="btn btn-danger" (click)="goToListing()">Cancel</button>
           </div>
         </div>
       </div>
     </div>
+
   </form>
   <!--end::Form-->
 </div>
+
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

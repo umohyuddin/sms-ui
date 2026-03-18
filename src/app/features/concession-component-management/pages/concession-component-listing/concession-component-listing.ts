@@ -24,10 +24,7 @@ export class ConcessionListing implements OnInit {
 
   ngOnInit(): void {}
 
-
   goToConcessionComponent(): void {
     this.router.navigate(ROUTES.CONCESSION.CONCESSION__SUB_TYPE.CREATE);
   }
 }
-
-

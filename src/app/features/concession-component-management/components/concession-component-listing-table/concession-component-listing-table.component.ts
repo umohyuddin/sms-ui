@@ -1,34 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Pagination } from '../../../../core/pagar/pagination';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { CHARGE_TYPE_CLASSES, RECURRENCE_RULE_CLASSES } from '../../../../core/const/COLOR_CONST';
-import { ConcessionComponentResponse, DiscountType } from '../../models/ConcessionComponentResponse';
+import { ConcessionComponentResponse } from '../../models/ConcessionComponentResponse';
+import { ConcessionResponse } from '../../../concession-management/models/ConcessionResponse';
 import { ConcessionComponentManagementService } from '../../services/concession-component-management.service';
 import { ConcessionManagementService } from '../../../concession-management/services/concession-management.service';
 import { LoggerService } from '../../../../core/services/logger.service';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-concession-component-listing-table',
   standalone: true,
-  imports: [CommonModule,
-    ReactiveFormsModule,
-    RouterModule
-  ],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, LoaderComponent, ToasterComponent],
   templateUrl: './concession-component-listing-table.component.html',
   styleUrls: ['./concession-component-listing-table.component.css']
 })
-export class ConcessionListingTableComponent {
+export class ConcessionListingTableComponent implements OnInit, OnDestroy {
   pagination: Pagination<ConcessionComponentResponse> = new Pagination([], 10);
-  searchControl = new FormControl('');
+  searchForm!: FormGroup;
   concessionComponentResponse: ConcessionComponentResponse[] = [];
   RECURRENCE_RULE_CLASSES = RECURRENCE_RULE_CLASSES;
   CHARGE_TYPE_CLASSES = CHARGE_TYPE_CLASSES;
-  searchForm !: FormGroup;
-  discountTypesDD: DiscountType[] = [];
-  
+  discountTypesDD: ConcessionResponse[] = [];
+
+  isLoading = false;
+  loadingMessage = '';
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+  private destroy$ = new Subject<void>();
+  private readonly MODULE = 'ConcessionSubType';
+
   constructor(private router: Router,
     private fb: FormBuilder,
     private concessionComponentManagementService: ConcessionComponentManagementService,
@@ -37,21 +44,22 @@ export class ConcessionListingTableComponent {
   ) { }
 
   columns = [
-    // { key: 'id', label: 'Id', sortable: true },
     { key: 'concessionSubType', label: 'Concession Sub Type', sortable: true },
-    { key: 'concessionSubCode', label: 'Concession Sub Type Code', sortable: true },
-    { key: 'status', label: 'Status', sortable: true },
+    { key: 'concessionSubCode', label: 'Code', sortable: true },
     { key: 'Concession Type', label: 'Concession Type', sortable: true },
-    // { key: 'chargeType', label: 'Charge Type', sortable: false },
-    // { key: 'recurrenceRule', label: 'Recurrence Rule', sortable: false },
-
-    { key: 'actions', label: 'Actions', sortable: true }
+    { key: 'status', label: 'Status', sortable: true },
+    { key: 'actions', label: 'Actions', sortable: false }
   ];
 
   ngOnInit() {
-    this.getAllDiscountTypes()
+    this.getAllDiscountTypes();
     this.getAllConcessionComponents();
     this.initializeForm();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private initializeForm() {
@@ -60,113 +68,122 @@ export class ConcessionListingTableComponent {
       keyword: ['']
     });
   }
+
   getAllDiscountTypes() {
     this.concessionManagementService.getAllConcessions().subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
         this.discountTypesDD = response.body;
       },
-      error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
-      }
+      error: (error) => LoggerUtil.error(this.MODULE, 'Dropdowns', '❌ Failed to load discount types', error)
     });
-
   }
 
   getAllConcessionComponents() {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading Sub Types...';
     this.concessionComponentManagementService.getAllConcessionComponent().subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
         this.concessionComponentResponse = response.body;
         this.pagination = new Pagination(this.concessionComponentResponse, 10);
+        this.isLoading = false;
+        this.loadingMessage = '';
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
+        LoggerUtil.error(this.MODULE, 'List', '❌ Failed to load', error);
+        this.toaster?.show('Failed to load Concession Sub Types', 'error');
+        this.isLoading = false;
       }
-    })
+    });
   }
 
   viewDetails(item: ConcessionComponentResponse, event: Event): void {
-    console.log('Viewing details for item ID:', item.id);
-    event.preventDefault();  // prevents anchor default behavior
+    event.preventDefault();
     this.router.navigate(ROUTES.CONCESSION.CONCESSION__SUB_TYPE.DETAILS(item.id.toString()));
   }
 
   editDetails(item: ConcessionComponentResponse, event: Event): void {
-    event.preventDefault();  // prevents anchor default behavior
-    console.log('Editing item item ID:', item.id);
+    event.preventDefault();
+    event.stopPropagation();
     this.router.navigate(ROUTES.CONCESSION.CONCESSION__SUB_TYPE.EDIT(item.id.toString()));
   }
 
-  // deleteCampus(campusId: any, event: Event): void {
-  //   event.stopPropagation();
+  refreshList(): void {
+    this.getAllConcessionComponents();
+  }
 
-  //   console.log('Deleting Campus:', campusId);
-  //   if (confirm('Are you sure you want to delete this Campus?')) {
+  toggleActive(item: ConcessionComponentResponse, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isLoading = true;
+    this.loadingMessage = 'Updating status...';
+    this.concessionComponentManagementService.toggleActive(item.id, !item.isActive).subscribe({
+      next: () => {
+        this.toaster?.show('Status updated successfully', 'success');
+        this.refreshList();
+      },
+      error: (err) => {
+        LoggerUtil.error(this.MODULE, 'Toggle', '❌ Failed to toggle active', err);
+        this.toaster?.show('Failed to update status', 'error');
+        this.isLoading = false;
+        this.loadingMessage = '';
+      }
+    });
+  }
 
-  //     this.feeCatalogManagementService.deleteCampus(campusId).subscribe({
-  //       next: (response) => {
-  //         console.log('  Delete Success Status:', response.status);
-  //         console.log('📦 Delete Response Body:', response.body);
-  //         // this.CampusData = this.CampusData.filter(t => t.CampusId !== CampusId);
-  //         console.log(`Campus ${campusId} deleted successfully`);
-  //       },
-  //       error: (error) => {
-  //         console.error('❌ Delete Error Status:', error.status);
-  //         console.error('Message:', error.message);
-  //       },
-  //       complete: () => {
-  //         console.log('🔚 Delete Complete');
-  //       }
-  //     })
-  //   }
-  // }
+  deleteConcessionComponent(item: ConcessionComponentResponse, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (confirm(`Are you sure you want to delete ${item.name}?`)) {
+      this.isLoading = true;
+      this.loadingMessage = 'Deleting...';
+      this.concessionComponentManagementService.deleteConcessionComponent(item.id).subscribe({
+        next: () => {
+          this.toaster?.show('Concession Sub Type deleted successfully', 'success');
+          this.refreshList();
+        },
+        error: (err) => {
+          LoggerUtil.error(this.MODULE, 'Delete', '❌ Failed to delete', err);
+          this.toaster?.show('Failed to delete', 'error');
+          this.isLoading = false;
+          this.loadingMessage = '';
+        }
+      });
+    }
+  }
 
   onPageSizeChange(event: any) {
     const newSize = +event.target.value;
     this.pagination.changePageSize(newSize);
   }
+
   resetForm() {
     this.searchForm.reset({
       discountTypeId: '',
       keyword: ''
     });
-    this.getAllConcessionComponents(); // reload all data
+    this.getAllConcessionComponents();
   }
 
   onSubmitSearch(): void {
-    console.log('  Standard Search Form Data:', this.searchForm.getRawValue());
-    let formValues = this.searchForm.value;
-    let params = {
-      discountTypeId: formValues.discountTypeId,
-      keyword: formValues.keyword?.trim() || ''
-    };
-
-    this.concessionComponentManagementService.searchConcessionComponents(params).subscribe({
+    const formValues = this.searchForm.value;
+    this.isLoading = true;
+    this.loadingMessage = 'Searching...';
+    this.concessionComponentManagementService.searchConcessionComponents(
+      formValues.discountTypeId || undefined,
+      formValues.keyword?.trim() || undefined
+    ).subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
         this.concessionComponentResponse = response.body;
         this.pagination = new Pagination(this.concessionComponentResponse, 10);
+        this.isLoading = false;
+        this.loadingMessage = '';
       },
       error: (error) => {
-        console.error('❌ Request Error Status:', error.status);
-        console.error('Message:', error.message);
-      },
-      complete: () => {
-        console.log('🔚 Request Complete');
+        LoggerUtil.error(this.MODULE, 'Search', '❌ Failed to search', error);
+        this.toaster?.show('Search failed', 'error');
+        this.isLoading = false;
+        this.loadingMessage = '';
       }
-    })
+    });
   }
-
 }

@@ -3,15 +3,14 @@ export interface ConcessionComponentResponse {
   code: string;
   name: string;
   description: string;
-  discountType: DiscountType;
   isActive: boolean;
-}
-
-export interface DiscountType {
-  id: number;
-  name: string;
-  chargeType?: string;
-  chargeTypeLabel: string
-  recurrenceRule?: string;
-  recurrenceRuleLabel?: string
+  priority?: number;
+  displayOrder?: number;
+  discountType?: {
+    id: number;
+    code: string;
+    name: string;
+    chargeType?: { id: number; code: string; name: string };
+    recurrenceRule?: { id: number; code: string; name: string };
+  };
 }

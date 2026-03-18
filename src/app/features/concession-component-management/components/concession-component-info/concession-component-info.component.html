@@ -46,14 +46,14 @@
                         <div class="col-6">
                             <a> <b>Charge Type: </b> <span
                                     class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                                    [ngClass]="CHARGE_TYPE_CLASSES[resourceData?.discountType?.chargeType || 'NONE']">
-                                    {{ resourceData?.discountType?.chargeTypeLabel }}</span></a>
+                                    [ngClass]="CHARGE_TYPE_CLASSES[resourceData?.discountType?.chargeType?.code || 'NONE']">
+                                    {{ resourceData?.discountType?.chargeType?.name }}</span></a>
                         </div>
                         <div class="col-4">
                             <a> <b>Recurrence Rule: </b> <span
                                     class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                                    [ngClass]="RECURRENCE_RULE_CLASSES[resourceData?.discountType?.recurrenceRule || 'NONE']">
-                                    {{ resourceData?.discountType?.recurrenceRule }}
+                                    [ngClass]="RECURRENCE_RULE_CLASSES[resourceData?.discountType?.recurrenceRule?.code || 'NONE']">
+                                    {{ resourceData?.discountType?.recurrenceRule?.name }}
                                 </span></a>
                         </div>
                     </div>

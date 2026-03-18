@@ -43,16 +43,16 @@
                         <div class="col-4">
                             <a> <b> Charge Type: </b> <span
                                     class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                                    [ngClass]="CHARGE_TYPE_CLASSES[resourceResponse?.chargeType || 'NONE']">
-                                    {{ resourceResponse?.chargeTypeLabel }}</span></a>
+                                    [ngClass]="CHARGE_TYPE_CLASSES[resourceResponse?.chargeType?.code || 'NONE']">
+                                    {{ resourceResponse?.chargeType?.name }}</span></a>
                         </div>
                     </div>
                     <div class="kt-widget__subhead row">
                         <div class="col-4">
                             <a> <b>Recurrence Type: </b><span
                                     class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                                    [ngClass]="RECURRENCE_RULE_CLASSES[resourceResponse?.recurrenceRule || 'NONE']">
-                                    {{ resourceResponse?.recurrenceRuleLabel }}
+                                    [ngClass]="RECURRENCE_RULE_CLASSES[resourceResponse?.recurrenceRule?.code || 'NONE']">
+                                    {{ resourceResponse?.recurrenceRule?.name }}
                                 </span>
                             </a>
                         </div>

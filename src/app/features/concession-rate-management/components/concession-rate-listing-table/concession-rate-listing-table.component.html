@@ -1,247 +1,276 @@
+<app-toaster #toaster></app-toaster>
+
 <div class="kt-portlet kt-portlet--mobile">
-  <div class="kt-portlet__head kt-portlet__head--lg">
+  <div class="kt-portlet__head kt-portlet__head--lg shadow-sm">
     <div class="kt-portlet__head-label">
       <span class="kt-portlet__head-icon">
-        <i class="kt-font-dark flaticon-squares"></i>
+        <i class="kt-font-brand flaticon-squares"></i>
       </span>
-      <h3 class="kt-portlet__head-title">
-        Concession Types Listing
+      <h3 class="kt-portlet__head-title text-dark font-weight-bold">
+        Concession Rates Directory
+        <small class="text-muted ml-2">Manage and view active concession structures</small>
       </h3>
     </div>
     <div class="kt-portlet__head-toolbar">
       <div class="kt-portlet__head-wrapper">
-        <div class="kt-portlet__head-actions">
+        <div class="btn-group btn-group-sm mr-3" role="group">
+          <button type="button" class="btn border" [class.btn-primary]="viewMode === 'grid'"
+            [class.btn-light]="viewMode !== 'grid'" (click)="toggleView('grid')">
+            <i class="flaticon2-dashboard"></i> Grid
+          </button>
+          <button type="button" class="btn border" [class.btn-primary]="viewMode === 'table'"
+            [class.btn-light]="viewMode !== 'table'" (click)="toggleView('table')">
+            <i class="flaticon2-list-2"></i> Table
+          </button>
         </div>
       </div>
     </div>
   </div>
   <div class="kt-portlet__body">
-    <form class="kt-form kt-form--fit kt-margin-b-20" [formGroup]="searchForm" (ngSubmit)="onSubmitSearch()">
-      <div class="row kt-margin-b-20">
-        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-          <label>Concession Types:</label>
-          <select class="form-control kt-input" data-col-index="2" formControlName="discountTypeId">
-            <option value='' selected>Select Concession Type</option>
-            @for (c of discountTypesDD; track c.id) {
-            <option [value]="c.id">{{ c.name }}</option>
-            }
-          </select>
+    <!--begin: Search-->
+    <div class="bg-light p-4 rounded mb-5 border shadow-sm">
+      <form class="kt-form kt-form--fit" [formGroup]="searchForm" (ngSubmit)="onSubmitSearch()">
+        <div class="row align-items-end">
+          <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+            <label class="font-weight-bold text-dark"><i class="flaticon2-architecture-and-city mr-1 text-primary"></i> Campus:</label>
+            <select class="form-control kt-input border-primary-soft" formControlName="campusId">
+              <option value='' selected>All Campuses</option>
+              <option *ngFor="let c of campuseDD" [value]="c.id">{{ c.campusName }}</option>
+            </select>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+            <label class="font-weight-bold text-dark"><i class="flaticon2-list-3 mr-1 text-success"></i> Concession Types:</label>
+            <select class="form-control kt-input border-success-soft" formControlName="discountTypeId">
+              <option value='' selected>All Types</option>
+              <option *ngFor="let c of discountTypesDD" [value]="c.id">{{ c.name }}</option>
+            </select>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+            <label class="font-weight-bold text-dark"><i class="flaticon2-layers-1 mr-1 text-info"></i> Concession Component:</label>
+            <select class="form-control kt-input border-info-soft" formControlName="discountSubTypeId">
+              <option value='' selected>All Components</option>
+              <option *ngFor="let c of concessionComponentDD" [value]="c.id">{{ c.name }}</option>
+            </select>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+            <label class="font-weight-bold text-dark"><i class="flaticon2-search-1 mr-1 text-warning"></i> Keyword:</label>
+             <input type="text" class="form-control kt-input border-warning-soft" placeholder="Search..." formControlName="keyword">
+          </div>
         </div>
-        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-          <label>Concession Component:</label>
-          <select class="form-control kt-input" data-col-index="2" formControlName="discountSubTypeId">
-            <option value='' selected>Select Concession Component</option>
-            @for (c of concessionComponentDD; track c.id) {
-            <option [value]="c.id">{{ c.name }}</option>
-            }
-          </select>
+        <div class="row align-items-end mt-3">
+          <div class="col-lg-12 d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary btn-brand--icon shadow-sm mb-2 mr-2">
+              <span><i class="la la-search"></i> <span>Search</span></span>
+            </button>
+            <button type="button" class="btn btn-secondary btn-secondary--icon mb-2" (click)="resetForm()">
+              <span><i class="la la-close"></i> <span>Reset</span></span>
+            </button>
+          </div>
         </div>
-        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-          <label>Charge Type:</label>
-          <select class="form-control kt-input" data-col-index="2" formControlName="chargeTypeId">
-            <option value='' selected>Select Charge Type</option>
-            @for (s of chargeTypeDD; track s.key) {
-            <option [value]="s.key">{{ s.label }}</option>
-            }
-          </select>
-        </div>
-        <div class="col-lg-3 kt-margin-b-10-tablet-and-mobile">
-          <label>Recurrence Rule:</label>
-          <select class="form-control kt-input" data-col-index="2" formControlName="recurrenceRuleId">
-            <option value='' selected>Select Recurrence Rule</option>
-            @for (s of recurrenceRuleDD; track s.key) {
-            <option [value]="s.key">{{ s.label }}</option>
-            }
-          </select>
-
-
-          <!-- <input type="text" class="form-control kt-input" placeholder="E.g: 1st grade" data-col-index="0"
-            formControlName="keyword"> -->
-        </div>
-      </div>
-         <div class="row kt-margin-b-20">
-
-        <div class="col-lg-12 kt-margin-b-10-tablet-and-mobile">
-          <label>Keyword:</label>
-          <input type="text" class="form-control kt-input" placeholder="E.g: 1st grade" data-col-index="0"
-            formControlName="keyword">
-        </div>
-      </div>
-      <div class="kt-separator kt-separator--md kt-separator--dashed"></div>
-      <div class="row">
-        <div class="col-lg-12 d-flex justify-content-end">
-          <button class="btn btn-dark btn-brand--icon" id="kt_search">
-            <span>
-              <i class="la la-search"></i>
-              <span>Search</span>
-            </span>
-          </button>
-          &nbsp;&nbsp;
-          <button class="btn btn-secondary btn-secondary--icon" id="kt_reset" (click)="resetForm()">
-            <span>
-              <i class="la la-close"></i>
-              <span>Reset</span>
-            </span>
-          </button>
-        </div>
-      </div>
-    </form>
-    <!--begin: Datatable -->
+      </form>
+    </div>
+    <!--end: Search-->
 
     <div id="kt_table_1_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-      <div class="row">
-        <div class="col-sm-12">
-          @if(resourceData && resourceData.length > 0){
-          <table class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline"
-            id="kt_table_1" role="grid" aria-describedby="kt_table_1_info" style="width: 1162px;">
-            <thead>
-              <tr role="row">
-                <th tabindex="0" aria-controls="kt_table_1" rowspan="1" colspan="1" aria-sort="ascending"
-                  aria-label="Record ID: activate to sort column descending" *ngFor="let col of columns">{{ col.label }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-
-              <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
-                <td>{{ item.discountSubType.name }}</td>
-                <td>{{ item.discountSubType.discountType.name }}</td>
-
-                <td>
-                  <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                    [ngClass]="CHARGE_TYPE_CLASSES[item.discountSubType.discountType.chargeType]">
-                    {{ item.discountSubType.discountType.chargeTypeLabel }}</span>
-                </td>
-
-                <td><span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                    [ngClass]="RECURRENCE_RULE_CLASSES[item.discountSubType.discountType.recurrenceRule]">
-                    {{ item.discountSubType.discountType.recurrenceRuleLabel }}
+      @if(resourceData && resourceData.length > 0){
+        <!-- GRID VIEW -->
+        <div class="row" *ngIf="viewMode === 'grid'">
+          <div class="col-xl-4 col-lg-6 col-md-12 mb-5" *ngFor="let item of pagination.paginatedItems">
+            <div class="kt-portlet kt-portlet--height-fluid shadow-lg border-0 hover-elevate-up transition-all rounded-xl overflow-hidden bg-white">
+              <!-- Card Top -->
+              <div class="d-flex justify-content-between align-items-stretch" style="min-height: 80px;">
+                <div class="pl-5 pt-5 pb-2 d-flex flex-column justify-content-center">
+                  <div class="d-flex align-items-baseline">
+                    <span class="font-weight-boldest text-dark" style="font-size: 2.2rem; line-height: 1;">
+                      {{ item.isPercentage ? item.value + '%' : item.value + ' PKR' }}
+                    </span>
+                  </div>
+                  <span class="text-muted font-weight-boldest font-size-xs text-uppercase tracking-widest mt-1">
+                    {{ item.discountSubType?.discountType?.chargeType?.name || 'Structure' }}
                   </span>
-                </td>
-                @if(item.isPercentage){
-                <td>{{ item.value}} %</td>
+                </div>
+                <div class="d-flex align-items-center px-4 font-weight-boldest text-white text-uppercase shadow-sm" style="background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); letter-spacing: 1.5px; min-width: 140px; font-size: 0.8rem; border-bottom-left-radius: 40px; text-align: right; justify-content: flex-end;">
+                  {{ item.discountSubType?.name }}
+                </div>
+              </div>
 
-                }@else{
-                <td>{{ item.value}} PKR</td>
-
-                }
-                <td>{{ item.academicYearName }}</td>
-                <td>{{ item.campusName }}</td>
-
-                <td>
-                  <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
-                    [ngClass]="item.isActive ? 'kt-badge--brand' : 'kt-badge--danger'">
-                    {{item.isActive? 'Active':'Inactive'}}
-                  </span>
-                </td>
-                <td nowrap="">
-                  <span class="dropdown">
-                    <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown"
-                      aria-expanded="true">
-                      <i class="la la-ellipsis-h"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item" href="#" (click)="editDetails(item,$event)"><i class="la la-edit"></i>
-                        Edit Details</a>
-                      <a class="dropdown-item" href="#" (click)="viewDetails(item,$event)">
-                        <i class="la la-eye"></i> View Details</a>
+              <div class="kt-portlet__body px-5 pt-3 pb-4">
+                <div class="d-flex flex-column gap-2 mb-4">
+                  <!-- Concession Type -->
+                  <div class="d-flex align-items-center mb-1">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 22px; height: 22px; min-width: 22px; background: #eeefff; color: #6a11cb; border: 1px solid rgba(106, 17, 203, 0.1);">
+                      <i class="la la-check font-size-xs font-weight-bold"></i>
                     </div>
-                  </span>
-                  <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View"
-                    (click)="viewDetails(item,$event)">
-                    <i class="la la-eye"></i>
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          }
-          @else{
-          <div class="alert alert-dark" role="alert">
-            <div class="alert-icon"><i class="flaticon-questions-circular-button"></i></div>
-            <div class="alert-text">Please check back later or add a new Fee Catalog.
+                    <div class="d-flex align-items-center justify-content-between w-100 border-bottom border-light pb-1">
+                      <span class="text-dark font-weight-boldest" style="font-size: 0.85rem;">{{ item.discountSubType?.discountType?.name || 'N/A' }}</span>
+                      <span class="text-muted font-weight-boldest text-uppercase" style="font-size: 0.6rem; letter-spacing: 0.5px;">Type</span>
+                    </div>
+                  </div>
+                  <!-- Campus -->
+                  <div class="d-flex align-items-center mb-1">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 22px; height: 22px; min-width: 22px; background: #eeefff; color: #6a11cb; border: 1px solid rgba(106, 17, 203, 0.1);">
+                      <i class="la la-check font-size-xs font-weight-bold"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between w-100 border-bottom border-light pb-1">
+                      <span class="text-dark font-weight-boldest" style="font-size: 0.85rem;">{{ item.campus?.campusName || 'All Campuses' }}</span>
+                      <span class="text-muted font-weight-boldest text-uppercase" style="font-size: 0.6rem; letter-spacing: 0.5px;">Campus</span>
+                    </div>
+                  </div>
+                  <!-- Validity -->
+                  <div class="d-flex align-items-center mb-1">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 22px; height: 22px; min-width: 22px; background: #eeefff; color: #6a11cb; border: 1px solid rgba(106, 17, 203, 0.1);">
+                      <i class="la la-check font-size-xs font-weight-bold"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between w-100 border-bottom border-light pb-1">
+                      <span class="text-dark font-weight-boldest" style="font-size: 0.85rem;">{{ item.academicYear?.name }}</span>
+                      <span class="text-muted font-weight-boldest text-uppercase" style="font-size: 0.6rem; letter-spacing: 0.5px;">Validity</span>
+                    </div>
+                  </div>
+                  <!-- Recurrence -->
+                  <div class="d-flex align-items-center mb-1">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 22px; height: 22px; min-width: 22px; background: #eeefff; color: #6a11cb; border: 1px solid rgba(106, 17, 203, 0.1);">
+                      <i class="la la-check font-size-xs font-weight-bold"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between w-100 border-bottom border-light pb-1">
+                      <span class="text-dark font-weight-boldest" style="font-size: 0.85rem;">{{ item.discountSubType?.discountType?.recurrenceRule?.name || 'N/A' }}</span>
+                      <span class="text-muted font-weight-boldest text-uppercase" style="font-size: 0.6rem; letter-spacing: 0.5px;">Recurrence</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex align-items-center pt-2">
+                  <button (click)="viewDetails(item, $event)" class="btn btn-block flex-grow-1 mr-2 py-2 font-weight-boldest text-white rounded-pill shadow-lg border-0 transition-all hover-elevate-up" style="background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%); letter-spacing: 1px; font-size: 0.75rem;">
+                    VIEW DETAILS
+                  </button>
+                  <button type="button" class="btn btn-icon btn-light-brand btn-circle btn-sm shadow-sm mr-1" (click)="editDetails(item, $event)" title="Edit">
+                    <i class="flaticon2-edit font-size-sm"></i>
+                  </button>
+                  <button type="button" class="btn btn-icon btn-light-danger btn-circle btn-sm shadow-sm mr-1" (click)="deleteConcessionRate(item, $event)" title="Delete">
+                    <i class="flaticon2-trash font-size-sm"></i>
+                  </button>
+                  <button type="button" class="btn btn-icon btn-circle btn-sm shadow-sm" [ngClass]="item.isActive ? 'btn-light-danger' : 'btn-light-success'" (click)="toggleActive(item, $event)" [title]="item.isActive ? 'Deactivate' : 'Activate'">
+                    <i [ngClass]="item.isActive ? 'la la-ban' : 'la la-check'"></i>
+                  </button>
+                </div>
+                <div class="d-flex align-items-center justify-content-center mt-3">
+                  <span class="badge badge-dot mr-2" [ngClass]="item.isActive ? 'badge-success' : 'badge-danger'"></span>
+                  <span class="text-muted font-weight-boldest font-size-xs text-uppercase" style="font-size: 0.6rem;">{{ item.isActive ? 'Active' : 'Inactive' }}</span>
+                </div>
+              </div>
             </div>
           </div>
-          }
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-5">
-          <div class="col-sm-12 col-md-6">
-            <div class="dataTables_length" id="kt_table_1_length">
-              <label>Show <select (change)="onPageSizeChange($event)" name="kt_table_1_length"
-                  aria-controls="kt_table_1" class="custom-select custom-select-sm form-control form-control-sm">
-                  <option value="10">10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select> entries</label>
+
+        <!-- TABLE VIEW -->
+        <div class="row" *ngIf="viewMode === 'table'">
+          <div class="col-sm-12">
+            <div class="table-responsive">
+              <table class="table table-striped- table-bordered table-hover table-checkable dataTable no-footer dtr-inline" id="kt_table_1" role="grid" aria-describedby="kt_table_1_info">
+                <thead>
+                  <tr role="row">
+                    <th tabindex="0" aria-controls="kt_table_1" rowspan="1" colspan="1" *ngFor="let col of columns">{{ col.label }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr role="row" class="odd" *ngFor="let item of pagination.paginatedItems">
+                    <td>{{ item.discountSubType?.name }}</td>
+                    <td>{{ item.discountSubType?.discountType?.name }}</td>
+                    <td>
+                      <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
+                        [ngClass]="CHARGE_TYPE_CLASSES[item.discountSubType?.discountType?.chargeType?.code || 'NONE']">
+                        {{ item.discountSubType?.discountType?.chargeType?.name }}</span>
+                    </td>
+                    <td>
+                      <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
+                        [ngClass]="RECURRENCE_RULE_CLASSES[item.discountSubType?.discountType?.recurrenceRule?.code || 'NONE']">
+                        {{ item.discountSubType?.discountType?.recurrenceRule?.name }}
+                      </span>
+                    </td>
+                    <td>{{ item.isPercentage ? item.value + '%' : item.value + ' PKR' }}</td>
+                    <td class="text-nowrap">{{ item.effectiveFrom | date: 'dd/MM/yyyy' }} <span *ngIf="item.effectiveTo"><br>to {{ item.effectiveTo | date: 'dd/MM/yyyy' }}</span></td>
+                    <td>{{ item.academicYear?.name }}</td>
+                    <td>{{ item.campus?.campusName || 'All Campuses' }}</td>
+                    <td>
+                      <span class="kt-badge kt-badge--inline kt-badge--pill kt-badge--rounded"
+                        [ngClass]="item.isActive ? 'kt-badge--brand' : 'kt-badge--danger'">
+                        {{item.isActive ? 'Active':'Inactive'}}
+                      </span>
+                    </td>
+                    <td nowrap="">
+                      <a (click)="editDetails(item,$event)" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit">
+                        <i class="la la-edit"></i>
+                      </a>
+                      <a (click)="viewDetails(item,$event)" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View details">
+                        <i class="la la-eye"></i>
+                      </a>
+                      <a (click)="toggleActive(item, $event)" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Toggle Status">
+                        <i class="la" [ngClass]="item.isActive ? 'la-ban text-danger' : 'la-check-circle text-success'"></i>
+                      </a>
+                      <a (click)="deleteConcessionRate(item, $event)" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
+                        <i class="la la-trash text-danger"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
-          <div class="dataTables_info" id="kt_table_1_info" role="status" aria-live="polite">Showing {{
-            pagination.startItem }} to {{ pagination.endItem }} of {{ pagination.totalItems }} entries</div>
         </div>
-        <div class="col-sm-12 col-md-7">
-          <div class="dataTables_paginate paging_full_numbers" id="kt_table_1_paginate">
-            <ul class="pagination">
 
-              <!-- FIRST -->
-              <li class="paginate_button page-item first" [class.disabled]="pagination.pageIndex === 0">
-                <a class="page-link" (click)="pagination.first()">
-                  <i class="la la-angle-double-left"></i>
-                </a>
-              </li>
-
-              <!-- PREVIOUS -->
-              <li class="paginate_button page-item previous" [class.disabled]="pagination.pageIndex === 0">
-                <a class="page-link" (click)="pagination.prev()">
-                  <i class="la la-angle-left"></i>
-                </a>
-              </li>
-
-              <!-- LEFT ELLIPSIS -->
-              <li class="paginate_button page-item disabled" *ngIf="pagination.showLeftEllipsis">
-                <a class="page-link">...</a>
-              </li>
-
-              <!-- PAGE NUMBERS -->
-              <li class="paginate_button page-item" *ngFor="let page of pagination.visiblePages"
-                [class.active]="pagination.pageIndex === page">
-
-                <a class="page-link" (click)="pagination.goToPage(page)">
-                  {{ page + 1 }}
-                </a>
-              </li>
-
-              <!-- RIGHT ELLIPSIS -->
-              <li class="paginate_button page-item disabled" *ngIf="pagination.showRightEllipsis">
-                <a class="page-link">...</a>
-              </li>
-
-              <!-- NEXT -->
-              <li class="paginate_button page-item next"
-                [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
-                <a class="page-link" (click)="pagination.next()">
-                  <i class="la la-angle-right"></i>
-                </a>
-              </li>
-
-              <!-- LAST -->
-              <li class="paginate_button page-item last"
-                [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
-                <a class="page-link" (click)="pagination.last()">
-                  <i class="la la-angle-double-right"></i>
-                </a>
-              </li>
-
-            </ul>
-
+        <!-- Enhanced Pagination -->
+        <div class="row align-items-center mt-4 bg-light p-3 rounded border w-100 m-0">
+          <div class="col-sm-12 col-md-5">
+            <div class="dataTables_info text-dark" role="status" aria-live="polite">
+              Displaying <span class="font-weight-bold">{{ pagination.startItem }} - {{ pagination.endItem }}</span> of
+              <span class="font-weight-bold">{{ pagination.totalItems }}</span> results
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-7">
+            <div class="dataTables_paginate paging_full_numbers">
+              <ul class="pagination pagination-sm justify-content-end mb-0">
+                <li class="paginate_button page-item" [class.disabled]="pagination.pageIndex === 0">
+                  <a class="page-link" (click)="pagination.first()"><i class="la la-angle-double-left"></i></a>
+                </li>
+                <li class="paginate_button page-item" [class.disabled]="pagination.pageIndex === 0">
+                  <a class="page-link" (click)="pagination.prev()"><i class="la la-angle-left"></i></a>
+                </li>
+                <li class="paginate_button page-item" *ngFor="let page of pagination.visiblePages"
+                  [class.active]="pagination.pageIndex === page">
+                  <a class="page-link" (click)="pagination.goToPage(page)">{{ page + 1 }}</a>
+                </li>
+                <li class="paginate_button page-item"
+                  [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
+                  <a class="page-link" (click)="pagination.next()"><i class="la la-angle-right"></i></a>
+                </li>
+                <li class="paginate_button page-item"
+                  [class.disabled]="pagination.pageIndex >= pagination.totalPages - 1">
+                  <a class="page-link" (click)="pagination.last()"><i class="la la-angle-double-right"></i></a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
+      } @else {
+        <div class="row">
+          <div class="col-12">
+            <div class="alert alert-custom alert-outline-2x alert-outline-dark fade show mb-5 shadow-sm" role="alert">
+              <div class="alert-icon"><i class="flaticon-search-1"></i></div>
+              <div class="alert-text">
+                <h4 class="alert-heading font-weight-bold">No Concession Rates Found</h4>
+                <p class="mb-0">We couldn't find any concession rates matching your criteria. Try adjusting your search filters
+                  or add a new concession rate to get started.</p>
+              </div>
+              <div class="alert-close">
+                <button (click)="resetForm()" class="btn btn-sm btn-dark font-weight-bold">
+                  Clear Filters
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
     </div>
-
-
-    <!--end: Datatable -->
   </div>
 </div>
+
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

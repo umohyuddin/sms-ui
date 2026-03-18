@@ -127,7 +127,7 @@ getDocsMeta(): Observable<any> {
   }
 
   getActiveDiscounts(paramsObj: any): Observable<any> {
-    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.DISCOUNT.DISCOUNT_RATES.GET_ACTIVE_DISCOUNTS}`, {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.STUDENTS.STUDENT_ASSIGNED_DISCOUNT.GET_ACTIVE_DISCOUNTS}`, {
       params: paramsObj,
       observeResponse: true
     });
