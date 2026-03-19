@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { FeeCatalogListingTableComponent } from '../../components/fee-catalog-listing-table/fee-catalog-listing-table.component';
-import { FeeCatalogCreateFormComponent } from '../../components/fee-catalog-create-form/fee-catalog-create-form.component';
 
 
 @Component({
@@ -12,15 +11,13 @@ import { FeeCatalogCreateFormComponent } from '../../components/fee-catalog-crea
   imports: [
     CommonModule,
     FormsModule,
-    FeeCatalogListingTableComponent,
-    FeeCatalogCreateFormComponent
+    FeeCatalogListingTableComponent
   ],
   templateUrl: './fee-catalog-listing.html',
   styleUrls: ['./fee-catalog-listing.css'],
   standalone: true,
 })
 export class FeeCatalogListing implements OnInit {
-  @ViewChild('feeCatalogModal') feeCatalogModal!: FeeCatalogCreateFormComponent;
   @ViewChild(FeeCatalogListingTableComponent) listingTable!: FeeCatalogListingTableComponent;
 
   constructor(private router: Router) { }
@@ -28,11 +25,11 @@ export class FeeCatalogListing implements OnInit {
   ngOnInit(): void { }
 
   goToFeeCatalog(): void {
-    this.feeCatalogModal.show();
+    this.router.navigate(ROUTES.FEE.FEE_CATALOG.CREATE);
   }
 
   openEditModal(item: any): void {
-    this.feeCatalogModal.show(item.id);
+    this.router.navigate(ROUTES.FEE.FEE_CATALOG.EDIT(item.id.toString()));
   }
 
   onSaveSuccess(): void {

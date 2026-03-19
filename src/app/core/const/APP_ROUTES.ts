@@ -262,5 +262,11 @@ export const ROUTES = {
     CREATE: ['student-exam-attendance', 'student-exam-attendance-create'],
     EDIT: (id: string) => ['student-exam-attendance', 'student-exam-attendance-edit', id],
     DETAILS: (id: string) => ['student-exam-attendance', 'student-exam-attendance-details', id]
+  },
+  ADMISSION_TYPES: {
+    LIST: ['admission-types'],
+    CREATE: ['admission-types', 'admission-type-create'],
+    EDIT: (id: string) => ['admission-types', 'admission-type-edit', id],
+    DETAILS: (id: string) => ['admission-types', 'admission-type-details', id],
   }
 };

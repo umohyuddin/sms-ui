@@ -1,17 +1,19 @@
+<app-toaster #toaster></app-toaster>
+
 <div class="kt-portlet">
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
       <h3 class="kt-portlet__head-title">
-        {{ isEditMode ? 'Update Student Details' : 'Add New Student' }}
+        {{ showGuardianForm ? 'Add Guardian Information' : (isEditMode ? 'Update Student Details' : 'Add New Student')
+        }}
       </h3>
     </div>
   </div>
 
-  <!--begin::Form-->
-  <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmit()">
+  <!--begin::Student Form-->
+  <form class="kt-form kt-form--label-right" [formGroup]="createForm" (ngSubmit)="onSubmitStudent()">
     <div class="kt-portlet__body">
-
-      <h4>Campus/Standard/Section Information</h4>
+      <h4>Academic Information</h4>
       <div class="form-group row form-group-marginless kt-margin-t-20">
         <label class="col-lg-1 col-form-label">Academic Year:</label>
         <div class="col-lg-3">
@@ -22,34 +24,21 @@
         <label class="col-lg-1 col-form-label required">Admission Type:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="admissionTypeId"
-            [class.is-invalid]="admissionTypeId?.invalid && (admissionTypeId?.touched || admissionTypeId?.dirty)"
-            [class.is-valid]="admissionTypeId?.valid && (admissionTypeId?.touched || admissionTypeId?.dirty)">
+            [class.is-invalid]="admissionTypeId?.invalid && admissionTypeId?.touched">
             <option value='' selected>Select Admission Type</option>
-            @for (p of admissionTypesDD; track p.id) {
-            <option [value]="p.id">{{ p.name }}</option>
-            }
+            <option *ngFor="let p of admissionTypesDD" [value]="p.id">{{ p.name }}</option>
           </select>
-          <span class="form-text text-muted">Please select Admission Type</span>
-          <span class="invalid-feedback"
-            *ngIf="admissionTypeId?.invalid && (admissionTypeId?.touched || admissionTypeId?.dirty)">
-            {{ getErrorMessage('admissionTypeId') }}
-          </span>
+          <span class="invalid-feedback">{{ getErrorMessage('admissionTypeId') }}</span>
         </div>
 
         <label class="col-lg-1 col-form-label required">Campus:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="campusId"
-            [class.is-invalid]="campusId?.invalid && (campusId?.touched || campusId?.dirty)"
-            [class.is-valid]="campusId?.valid && (campusId?.touched || campusId?.dirty)">
+            [class.is-invalid]="campusId?.invalid && campusId?.touched">
             <option value='' selected>Select Campus</option>
-            @for (p of campusDD; track p.id) {
-            <option [value]="p.id">{{ p.campusName }}</option>
-            }
+            <option *ngFor="let p of campusDD" [value]="p.id">{{ p.campusName }}</option>
           </select>
-          <span class="form-text text-muted">Please select Campus</span>
-          <span class="invalid-feedback" *ngIf="campusId?.invalid && (campusId?.touched || campusId?.dirty)">
-            {{ getErrorMessage('campusId') }}
-          </span>
+          <span class="invalid-feedback">{{ getErrorMessage('campusId') }}</span>
         </div>
       </div>
 
@@ -57,33 +46,21 @@
         <label class="col-lg-1 col-form-label required">Standard:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="standardId"
-            [class.is-invalid]="standardId?.invalid && (standardId?.touched || standardId?.dirty)"
-            [class.is-valid]="standardId?.valid && (standardId?.touched || standardId?.dirty)">
+            [class.is-invalid]="standardId?.invalid && standardId?.touched">
             <option value='' selected>Select Standard</option>
-            @for (p of standardDD; track p.id) {
-            <option [value]="p.id">{{ p.standardName }}</option>
-            }
+            <option *ngFor="let p of standardDD" [value]="p.id">{{ p.standardName }}</option>
           </select>
-          <span class="form-text text-muted">Please select Standard</span>
-          <span class="invalid-feedback" *ngIf="standardId?.invalid && (standardId?.touched || standardId?.dirty)">
-            {{ getErrorMessage('standardId') }}
-          </span>
+          <span class="invalid-feedback">{{ getErrorMessage('standardId') }}</span>
         </div>
 
         <label class="col-lg-1 col-form-label required">Section:</label>
         <div class="col-lg-3">
           <select class="form-control" formControlName="sectionId"
-            [class.is-invalid]="sectionId?.invalid && (sectionId?.touched || sectionId?.dirty)"
-            [class.is-valid]="sectionId?.valid && (sectionId?.touched || sectionId?.dirty)">
+            [class.is-invalid]="sectionId?.invalid && sectionId?.touched">
             <option value='' selected>Select Section</option>
-            @for (p of sectionDD; track p.id) {
-            <option [value]="p.id">{{ p.sectionName }}</option>
-            }
+            <option *ngFor="let p of sectionDD" [value]="p.id">{{ p.sectionName }}</option>
           </select>
-          <span class="form-text text-muted">Please select Section</span>
-          <span class="invalid-feedback" *ngIf="sectionId?.invalid && (sectionId?.touched || sectionId?.dirty)">
-            {{ getErrorMessage('sectionId') }}
-          </span>
+          <span class="invalid-feedback">{{ getErrorMessage('sectionId') }}</span>
         </div>
       </div>
 
@@ -95,142 +72,165 @@
         <label class="col-lg-1 col-form-label required">First Name:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="First Name" formControlName="firstName"
-            [class.is-invalid]="firstName?.invalid && (firstName?.touched || firstName?.dirty)"
-            [class.is-valid]="firstName?.valid && (firstName?.touched || firstName?.dirty)">
-          <span class="form-text text-muted">Please enter First Name</span>
-          <span class="invalid-feedback" *ngIf="firstName?.invalid && (firstName?.touched || firstName?.dirty)">
-            {{ getErrorMessage('firstName') }}
-          </span>
+            [class.is-invalid]="firstName?.invalid && firstName?.touched">
+          <span class="invalid-feedback">{{ getErrorMessage('firstName') }}</span>
         </div>
 
         <label class="col-lg-1 col-form-label required">Last Name:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Last Name" formControlName="lastName"
-            [class.is-invalid]="lastName?.invalid && (lastName?.touched || lastName?.dirty)"
-            [class.is-valid]="lastName?.valid && (lastName?.touched || lastName?.dirty)">
-          <span class="form-text text-muted">Please enter Last Name</span>
-          <span class="invalid-feedback" *ngIf="lastName?.invalid && (lastName?.touched || lastName?.dirty)">
-            {{ getErrorMessage('lastName') }}
-          </span>
+            [class.is-invalid]="lastName?.invalid && lastName?.touched">
+          <span class="invalid-feedback">{{ getErrorMessage('lastName') }}</span>
         </div>
 
         <label class="col-lg-1 col-form-label">Middle Name:</label>
         <div class="col-lg-3">
           <input type="text" class="form-control" placeholder="Middle Name" formControlName="middleName">
-          <span class="form-text text-muted">Please enter Middle Name</span>
         </div>
       </div>
 
       <div class="form-group row form-group-marginless kt-margin-t-20">
-        <label class="col-lg-1 col-form-label">Student Code:</label>
-        <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="Student Code" formControlName="studentCode">
-        </div>
-
-        <label class="col-lg-1 col-form-label required">National Id:</label>
-        <div class="col-lg-3">
-          <input type="text" class="form-control" placeholder="B-Form/CNIC" formControlName="cnic"
-            [class.is-invalid]="cnic?.invalid && (cnic?.touched || cnic?.dirty)"
-            [class.is-valid]="cnic?.valid && (cnic?.touched || cnic?.dirty)">
-          <span class="form-text text-muted">Please enter National Id</span>
-          <span class="invalid-feedback" *ngIf="cnic?.invalid && (cnic?.touched || cnic?.dirty)">
-            {{ getErrorMessage('cnic') }}
-          </span>
-        </div>
-
         <label class="col-lg-1 col-form-label required">DOB:</label>
         <div class="col-lg-3">
           <input type="date" class="form-control" placeholder="DOB" formControlName="dateOfBirth"
-            [class.is-invalid]="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)"
-            [class.is-valid]="dateOfBirth?.valid && (dateOfBirth?.touched || dateOfBirth?.dirty)">
-          <span class="form-text text-muted">Please enter DOB</span>
-          <span class="invalid-feedback" *ngIf="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)">
-            {{ getErrorMessage('dateOfBirth') }}
-          </span>
-        </div>
-      </div>
-
-      <div class="form-group row form-group-marginless kt-margin-t-20">
-        <label class="col-lg-1 col-form-label required">Phone:</label>
-        <div class="col-lg-3">
-          <input type="tel" class="form-control" placeholder="+923205500003" formControlName="phone"
-            [class.is-invalid]="phone?.invalid && (phone?.touched || phone?.dirty)"
-            [class.is-valid]="phone?.valid && (phone?.touched || phone?.dirty)">
-          <span class="form-text text-muted">Please enter Phone Number</span>
-          <span class="invalid-feedback" *ngIf="phone?.invalid && (phone?.touched || phone?.dirty)">
-            {{ getErrorMessage('phone') }}
-          </span>
-        </div>
-
-        <label class="col-lg-1 col-form-label required">Email:</label>
-        <div class="col-lg-3">
-          <input type="email" class="form-control" placeholder="example@mail.com" formControlName="email"
-            [class.is-invalid]="email?.invalid && (email?.touched || email?.dirty)"
-            [class.is-valid]="email?.valid && (email?.touched || email?.dirty)">
-          <span class="form-text text-muted">Please enter Email</span>
-          <span class="invalid-feedback" *ngIf="email?.invalid && (email?.touched || email?.dirty)">
-            {{ getErrorMessage('email') }}
-          </span>
+            [class.is-invalid]="dateOfBirth?.invalid && dateOfBirth?.touched">
+          <span class="invalid-feedback">{{ getErrorMessage('dateOfBirth') }}</span>
         </div>
 
         <label class="col-lg-1 col-form-label required">Gender:</label>
         <div class="col-lg-3">
-          <select class="form-control" formControlName="gender"
-            [class.is-invalid]="gender?.invalid && (gender?.touched || gender?.dirty)"
-            [class.is-valid]="gender?.valid && (gender?.touched || gender?.dirty)">
+          <select class="form-control" formControlName="gender" [class.is-invalid]="gender?.invalid && gender?.touched">
             <option value='' selected>Select Gender</option>
-            @for (p of genderDD; track p.key) {
-            <option [value]="p.key">{{ p.label }}</option>
-            }
+            <option *ngFor="let p of genderDD" [value]="p.key">{{ p.label }}</option>
           </select>
-          <span class="form-text text-muted">Please select Gender</span>
-          <span class="invalid-feedback" *ngIf="gender?.invalid && (gender?.touched || gender?.dirty)">
-            {{ getErrorMessage('gender') }}
-          </span>
+          <span class="invalid-feedback">{{ getErrorMessage('gender') }}</span>
+        </div>
+
+        <label class="col-lg-1 col-form-label">Phone:</label>
+        <div class="col-lg-3">
+          <input type="tel" class="form-control" placeholder="+92xxxxxxxxxx" formControlName="phone">
         </div>
       </div>
 
       <div class="form-group row form-group-marginless kt-margin-t-20">
-        <label class="col-lg-1 col-form-label required">Religion:</label>
+        <label class="col-lg-1 col-form-label required">Email:</label>
         <div class="col-lg-3">
-          <select class="form-control" formControlName="religion"
-            [class.is-invalid]="religion?.invalid && (religion?.touched || religion?.dirty)"
-            [class.is-valid]="religion?.valid && (religion?.touched || religion?.dirty)">
-            <option value='' selected>Select Religion</option>
-            @for (p of religionDD; track p.key) {
-            <option [value]="p.key">{{ p.label }}</option>
-            }
-          </select>
-          <span class="form-text text-muted">Please select Religion</span>
-          <span class="invalid-feedback" *ngIf="religion?.invalid && (religion?.touched || religion?.dirty)">
-            {{ getErrorMessage('religion') }}
-          </span>
+          <input type="email" class="form-control" placeholder="example@mail.com" formControlName="email" [class.is-invalid]="email?.invalid && email?.touched">
+          <span class="invalid-feedback">{{ getErrorMessage('email') }}</span>
         </div>
 
-        <label class="col-lg-1 col-form-label">Blood Group:</label>
+        <label class="col-lg-1 col-form-label">CNIC/B-Form:</label>
         <div class="col-lg-3">
-          <select class="form-control" formControlName="bloodGroup">
-            <option value='' selected>Select Blood Group</option>
-            @for (p of bloodGroupDD; track p.key) {
-            <option [value]="p.key">{{ p.label }}</option>
-            }
-          </select>
-          <span class="form-text text-muted">Please select Blood Group</span>
+          <input type="text" class="form-control" placeholder="CNIC/B-Form" formControlName="cnic">
         </div>
 
-        <label class="col-lg-1 col-form-label required">Nationality:</label>
+        <label class="col-lg-1 col-form-label">Passport No:</label>
         <div class="col-lg-3">
-          <select class="form-control" formControlName="nationality"
-            [class.is-invalid]="nationality?.invalid && (nationality?.touched || nationality?.dirty)"
-            [class.is-valid]="nationality?.valid && (nationality?.touched || nationality?.dirty)">
-            <option value='' selected>Select Nationality</option>
-            <option *ngFor="let p of nationalityDD" [value]="p.key">{{ p.label }}</option>
-          </select>
-          <span class="form-text text-muted">Please select Nationality</span>
-          <span class="invalid-feedback" *ngIf="nationality?.invalid && (nationality?.touched || nationality?.dirty)">
-            {{ getErrorMessage('nationality') }}
-          </span>
+          <input type="text" class="form-control" placeholder="Passport No" formControlName="passportNumber">
+        </div>
+      </div>
 
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Address:</label>
+        <div class="col-lg-11">
+          <input type="text" class="form-control" placeholder="Full Address" formControlName="address">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Only visible when Guardian Form hasn't kicked in -->
+    <div class="kt-portlet__foot" *ngIf="!showGuardianForm">
+      <div class="kt-form__actions">
+        <div class="row">
+          <div class="col-lg-5"></div>
+          <div class="col-lg-7">
+            <button type="submit" class="btn btn-dark mr-2" [disabled]="isLoading">
+              Save & Continue to Guardian
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="goToListing()"
+              [disabled]="isLoading">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!--end::Student Form-->
+
+  <!--begin::Guardian Form-->
+  <form *ngIf="showGuardianForm" class="kt-form kt-form--label-right" [formGroup]="guardianForm"
+    (ngSubmit)="onSubmitGuardian()">
+    <div class="kt-portlet__body">
+
+      <div
+        class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit kt-margin-b-20 kt-margin-t-0">
+      </div>
+
+      <h4>Guardian Details</h4>
+
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label required">First Name:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="First Name" formControlName="firstName"
+            [class.is-invalid]="gFirstName?.invalid && gFirstName?.touched">
+          <span class="invalid-feedback">{{ getErrorMessage('firstName', true) }}</span>
+        </div>
+
+        <label class="col-lg-1 col-form-label required">Last Name:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="Last Name" formControlName="lastName"
+            [class.is-invalid]="gLastName?.invalid && gLastName?.touched">
+          <span class="invalid-feedback">{{ getErrorMessage('lastName', true) }}</span>
+        </div>
+
+        <label class="col-lg-1 col-form-label">Middle Name:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="Middle Name" formControlName="middleName">
+        </div>
+      </div>
+
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label required">Relation:</label>
+        <div class="col-lg-3">
+          <select class="form-control" formControlName="relationId"
+            [class.is-invalid]="gRelationId?.invalid && gRelationId?.touched">
+            <option value='' selected>Select Relation</option>
+            <option *ngFor="let p of guardianRelationDD" [value]="p.id">{{ p.name }}</option>
+          </select>
+          <span class="invalid-feedback">{{ getErrorMessage('relationId', true) }}</span>
+        </div>
+
+        <label class="col-lg-1 col-form-label required">CNIC:</label>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" placeholder="Guardian CNIC" formControlName="cnic"
+            [class.is-invalid]="gCnic?.invalid && gCnic?.touched">
+          <span class="invalid-feedback">{{ getErrorMessage('cnic', true) }}</span>
+        </div>
+
+        <label class="col-lg-1 col-form-label required">Phone:</label>
+        <div class="col-lg-3">
+          <input type="tel" class="form-control" placeholder="Phone Number" formControlName="phone"
+            [class.is-invalid]="gPhone?.invalid && gPhone?.touched">
+          <span class="invalid-feedback">{{ getErrorMessage('phone', true) }}</span>
+        </div>
+      </div>
+
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Alt Phone:</label>
+        <div class="col-lg-3">
+          <input type="tel" class="form-control" placeholder="Alternate Phone" formControlName="alternatePhone">
+        </div>
+
+        <label class="col-lg-1 col-form-label">Email:</label>
+        <div class="col-lg-3">
+          <input type="email" class="form-control" placeholder="Email Address" formControlName="email">
+        </div>
+      </div>
+
+      <div class="form-group row form-group-marginless kt-margin-t-20">
+        <label class="col-lg-1 col-form-label">Address:</label>
+        <div class="col-lg-11">
+          <input type="text" class="form-control" placeholder="Full Address" formControlName="address">
         </div>
       </div>
 
@@ -241,14 +241,18 @@
         <div class="row">
           <div class="col-lg-5"></div>
           <div class="col-lg-7">
-            <button type="submit" class="btn btn-dark mr-2">
-              {{ isEditMode ? 'Update Section Details' : 'Add New Student' }}
+            <button type="submit" class="btn btn-success mr-2" [disabled]="isLoading">
+              Save Guardian & Finish
             </button>
-            <button type="button" class="btn btn-danger" (click)="goToListing()">Cancel</button>
+            <button type="button" class="btn btn-secondary" (click)="goToListing()" [disabled]="isLoading">Skip for
+              now</button>
           </div>
         </div>
       </div>
     </div>
   </form>
-  <!--end::Form-->
+  <!--end::Guardian Form-->
+
 </div>
+
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

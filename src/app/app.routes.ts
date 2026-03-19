@@ -504,6 +504,17 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'admission-types',
+    canActivate: [authGuard],
+    loadComponent: () => import('./layouts/main-layout/main-layout').then(m => m.MainLayout),
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./features/admission-type-management/admission-type-management.module').then(m => m.AdmissionTypeManagementModule)
+      }
+    ]
+  },
+  {
     path: '',
     redirectTo: 'auth/login',
     pathMatch: 'full'

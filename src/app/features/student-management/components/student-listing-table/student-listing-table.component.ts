@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Pagination } from '../../../../core/pagar/pagination';
@@ -14,27 +14,34 @@ import { StudentManagementService } from '../../services/student-management.serv
 import { SectionResponse } from '../../../section-management/models/SectionResponse';
 import { StudentResponse } from '../../models/StudentResponse';
 import { GENDER_CLASSES } from '../../../../core/const/COLOR_CONST';
-
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoggerUtil } from '../../../../core/utils/LoggerUtil';
 
 @Component({
   selector: 'app-student-listing-table',
   standalone: true,
-  imports: [CommonModule,
-    RouterModule,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, LoaderComponent, ToasterComponent],
   templateUrl: './student-listing-table.component.html',
   styleUrls: ['./student-listing-table.component.css']
 })
-export class StudentListingTableComponent {
+export class StudentListingTableComponent implements OnInit, OnDestroy {
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+
   pagination: Pagination<StudentResponse> = new Pagination([], 10);
   studentsResponse: StudentResponse[] = [];
   sectionsResponse: SectionResponse[] = [];
   standardsResponse: StandardResponse[] = [];
-  studentSearchForm !: FormGroup;
+  studentSearchForm!: FormGroup;
   private destroy$ = new Subject<void>();
   campusesResponse: any;
   genderClasses = GENDER_CLASSES;
+  
+  isLoading = false;
+  loadingMessage = '';
+  viewMode: 'grid' | 'table' = 'table'; 
+
+  private readonly MODULE = 'StudentList';
 
   constructor(
     private fb: FormBuilder,
@@ -49,29 +56,32 @@ export class StudentListingTableComponent {
   columns = [
     { key: 'studentCode', label: 'Student Code', sortable: true },
     { key: 'fullName', label: 'Full Name', sortable: true },
-    { key: 'fisrtName', label: 'First Name', sortable: true },
-    { key: 'lastName', label: 'Last Name', sortable: true },
     { key: 'phone', label: 'Contact #', sortable: true },
     { key: 'gender', label: 'Gender', sortable: true },
     { key: 'dob', label: 'DOB', sortable: true },
     { key: 'isActive', label: 'Status', sortable: true },
     { key: 'enrollmentDate', label: 'Enrollment Date', sortable: true },
     { key: 'standardName', label: 'Standard Name', sortable: true },
-    { key: 'standardCode', label: 'Standard Code', sortable: true },
     { key: 'campusName', label: 'Campus Name', sortable: true },
-    { key: 'campusCode', label: 'Campus Code', sortable: true },
-    { key: 'action', label: 'Action', sortable: true }
+    { key: 'action', label: 'Action', sortable: false }
   ];
 
   ngOnInit() {
     this.initializeForm();
-    this.getAllStudents()
+    this.getAllStudents();
     this.getCampuses();
-    this.onCampusChange()
-    //this.getStandards();
-    //this.getSections();
+    this.onCampusChange();
+    this.onStandardChange();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  toggleView(mode: 'grid' | 'table'): void {
+    this.viewMode = mode;
+  }
 
   private initializeForm() {
     this.studentSearchForm = this.fb.group({
@@ -81,108 +91,87 @@ export class StudentListingTableComponent {
       keyword: ['']
     });
   }
+
   private getCampuses() {
     this.campusManagementService.getAllCampuses().subscribe({
       next: (response) => {
-        this.logger.success('Success Status', response.status);
-        this.logger.info('Response Body', response.body);
         this.campusesResponse = response.body;
       },
       error: (error) => {
-        this.logger.error('Request Error Status', error.status);
-        this.logger.error('Message', error.message);
-      },
-      complete: () => {
-        this.logger.complete('Request Complete');
+        LoggerUtil.error(this.MODULE, 'Campuses', 'Failed to load', error);
       }
     });
   }
 
   onCampusChange() {
     this.studentSearchForm.get('campusId')?.valueChanges.subscribe(campusId => {
-      this.logger.info('Campus changed', campusId);
       this.loadStandardByCampusId(campusId);
     });
   }
+
+  onStandardChange() {
+    this.studentSearchForm.get('standardId')?.valueChanges.subscribe(standardId => {
+      this.loadSectionByStandardId(standardId);
+    });
+  }
+
   loadStandardByCampusId(campusId: any) {
-    this.studentSearchForm.get('standardId')?.setValue('')
+    this.studentSearchForm.patchValue({ standardId: '', sectionId: '' });
+    if (!campusId) {
+      this.standardsResponse = [];
+      this.sectionsResponse = [];
+      return;
+    }
     this.standardManagementService.getStandardsByCampusId(campusId).subscribe({
       next: (response) => {
-        this.logger.success('Success Status', response.status);
-        this.logger.info('Response Body', response.body);
         this.standardsResponse = response.body;
       },
       error: (error) => {
-        this.logger.error('Request Error Status', error.status);
-        this.logger.error('Message', error.message);
+         LoggerUtil.error(this.MODULE, 'Standards', 'Failed to load', error);
+      }
+    });
+  }
+
+  loadSectionByStandardId(standardId: any) {
+    this.studentSearchForm.get('sectionId')?.setValue('');
+    if (!standardId) {
+      this.sectionsResponse = [];
+      return;
+    }
+    this.sectionManagementService.getSectionByStandardId(standardId).subscribe({
+      next: (response: any) => {
+        this.sectionsResponse = response.body;
       },
-      complete: () => {
-        this.logger.complete('Request Complete');
+      error: (error: any) => {
+        LoggerUtil.error(this.MODULE, 'Sections', 'Failed to load', error);
       }
     });
   }
 
   getAllStudents() {
+    this.isLoading = true;
+    this.loadingMessage = 'Loading Students...';
     this.studentManagementService.getAllStudents().subscribe({
       next: (response) => {
-        this.logger.success('Success Status', response.status);
-        this.logger.info('Response Body', response.body);
         this.studentsResponse = response.body;
         this.pagination = new Pagination(this.studentsResponse, 10);
+        this.isLoading = false;
       },
       error: (error) => {
-        this.logger.error('Request Error Status', error.status);
-        this.logger.error('Message', error.message);
-      },
-      complete: () => {
-        this.logger.complete('Request Complete');
+        LoggerUtil.error(this.MODULE, 'List', 'Failed to load', error);
+        this.toaster?.show('Failed to load students', 'error');
+        this.isLoading = false;
       }
     });
-
   }
-  // getStandards() {
-  //   this.standardManagementService.getAllStandards().subscribe({
-  //     next: (response) => {
-  //       console.log('  Success Status:', response.status);
-  //       console.log('📦 Response Body:', response.body);
-  //       this.sectionsResponse = response.body;
-  //     },
-  //     error: (error) => {
-  //       console.error('❌ Request Error Status:', error.status);
-  //       console.error('Message:', error.message);
-  //     },
-  //     complete: () => {
-  //       console.log('🔚 Request Complete');
-  //     }
-  //   })
-  // }
 
-  // getSections() {
-  //   this.sectionManagementService.getAllSection().subscribe({
-  //     next: (response) => {
-  //       console.log('  Success Status:', response.status);
-  //       console.log('📦 Response Body:', response.body);
-  //       this.sectionsResponse = response.body;
-  //       this.pagination = new Pagination(this.sectionsResponse, 10);
-  //     },
-  //     error: (error) => {
-  //       console.error('❌ Request Error Status:', error.status);
-  //       console.error('Message:', error.message);
-  //     },
-  //     complete: () => {
-  //       console.log('🔚 Request Complete');
-  //     }
-  //   })
-  // }
   viewStudentDetails(student: StudentResponse, event: Event): void {
-    console.log('Viewing details for Student ID:', student.id);
-    event.preventDefault();  // prevents anchor default behavior
+    event.preventDefault();
     this.router.navigate(ROUTES.STUDENT.DETAILS(student.id.toString()));
   }
 
   quickFeeAssignment(student: StudentResponse, event: Event): void {
-    event.preventDefault();  // prevents anchor default behavior
-    console.log('Editing Student ID:', student.id);
+    event.preventDefault();
     this.router.navigate(ROUTES.STUDENT.STUDENT_FEE_CALCULATOR.DETAILS, {
       queryParams: {
         studentId: student.id,
@@ -191,46 +180,51 @@ export class StudentListingTableComponent {
         standardId: student.standardId,
         mode: 'edit'
       }
-    })
+    });
   }
-
 
   editStudentDetails(student: StudentResponse, event: Event): void {
-    event.preventDefault();  // prevents anchor default behavior
-    console.log('Editing Student ID:', student.id);
-    this.router.navigate(ROUTES.CAMPUS.SECTION.EDIT(student.id.toString()));
+    event.preventDefault();
+    this.router.navigate(ROUTES.STUDENT.EDIT(student.id.toString()));
   }
 
-  // deleteStandard(standardId: any, event: Event): void {
-  //   event.stopPropagation();
+  toggleActive(student: StudentResponse, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isLoading = true;
+    this.loadingMessage = 'Updating status...';
+    
+    setTimeout(() => {
+        student.isActive = !student.isActive;
+        this.toaster?.show('Status updated successfully', 'success');
+        this.isLoading = false;
+    }, 500);
+  }
 
-  //   console.log('Deleting standard', standardId);
-  //   if (confirm('Are you sure you want to delete this Standard?')) {
+  deleteStudent(student: StudentResponse, event: Event): void {
+     event.preventDefault();
+     event.stopPropagation();
+     if(confirm('Are you sure you want to delete this Student?')) {
+        this.toaster?.show('Delete not implemented purely in UI code yet', 'info');
+     }
+  }
 
-  //     this.standardManagementService.deleteCampus(standardId).subscribe({
-  //       next: (response) => {
-  //         console.log('  Delete Success Status:', response.status);
-  //         console.log('📦 Delete Response Body:', response.body);
-  //         // this.CampusData = this.CampusData.filter(t => t.CampusId !== CampusId);
-  //         console.log(`Campus ${standardId} deleted successfully`);
-  //       },
-  //       error: (error) => {
-  //         console.error('❌ Delete Error Status:', error.status);
-  //         console.error('Message:', error.message);
-  //       },
-  //       complete: () => {
-  //         console.log('🔚 Delete Complete');
-  //       }
-  //     })
-  //   }
-  // }
+  resetForm() {
+    this.studentSearchForm.reset({
+      campusId: '',
+      standardId: '',
+      sectionId: '',
+      keyword: ''
+    });
+    this.getAllStudents();
+  }
 
   onPageSizeChange(event: any) {
     const newSize = +event.target.value;
     this.pagination.changePageSize(newSize);
   }
+
   onSubmitSearch(): void {
-    console.log('  Student Search Form Data:', this.studentSearchForm.getRawValue());
     let formValues = this.studentSearchForm.value;
     let params = {
       campusId: formValues.campusId,
@@ -238,21 +232,19 @@ export class StudentListingTableComponent {
       keyword: formValues.keyword?.trim() || ''
     };
 
+    this.isLoading = true;
+    this.loadingMessage = 'Searching...';
     this.studentManagementService.searchStudents(params).subscribe({
       next: (response) => {
-        console.log('  Success Status:', response.status);
-        console.log('📦 Response Body:', response.body);
         this.studentsResponse = response.body;
         this.pagination = new Pagination(this.studentsResponse, 10);
+        this.isLoading = false;
       },
       error: (error) => {
-        console.error('❌ Post Error Status:', error.status);
-        console.error('Message:', error.message);
-        this.router.navigate(['/Campuss']);
-      },
-      complete: () => {
-        console.log('🔚 Post Complete');
+        LoggerUtil.error(this.MODULE, 'Search', 'Failed to search', error);
+        this.toaster?.show('Search failed', 'error');
+        this.isLoading = false;
       }
-    })
+    });
   }
 }

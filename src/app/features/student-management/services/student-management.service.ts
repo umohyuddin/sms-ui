@@ -175,4 +175,15 @@ getDocsMeta(): Observable<any> {
   //   return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}/${id}`, { observeResponse: true });
   // }
 
+  getActiveGuardianRelations(): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}/api/guardian/relation/active`, { observeResponse: true });
+  }
+
+  saveGuardian(payload: any): Observable<any> {
+    return this.http.request(HTTP_METHOD.POST, `${this.baseUrl}/api/guardians`, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
 }

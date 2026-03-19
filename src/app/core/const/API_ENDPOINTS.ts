@@ -263,7 +263,13 @@ export const API_ENDPOINTS = {
 
         },
         ADMISSION_TYPES: {
+            CREATE: '/api/admission/types',
+            UPDATE: (id: string | number) => `/api/admission/types/${id}`,
             GET_ALL: '/api/admission/types',
+            GET_BY_ID: (id: string | number) => `/api/admission/types/${id}`,
+            DELETE: (id: string | number) => `/api/admission/types/${id}`,
+            SEARCH: (keyword: string) => `/api/admission/types/search?keyword=${keyword}`,
+            STATISTICS: '/api/admission/types/statistics'
         },
         CAMPUSES: {
             CREATE: '/api/institute/campuses',

@@ -30,7 +30,6 @@ export class FeeCatalogCreateFormComponent {
   routedId: string | null = null;
   isEditMode = false;
   resourceData: FeeCatalogResponse | null = null;
-  isVisible: boolean = false;
   @Output() saved = new EventEmitter<void>();
 
   recurrenceRuleOptions: KeyValueOption[] = [];
@@ -194,7 +193,7 @@ export class FeeCatalogCreateFormComponent {
         this.toaster?.show(message, 'success');
         this.saved.emit();
         setTimeout(() => {
-          this.close();
+          this.router.navigate(ROUTES.FEE.FEE_CATALOG.LIST);
         }, 1500);
       },
       error: (error) => {
@@ -250,21 +249,13 @@ export class FeeCatalogCreateFormComponent {
   }
 
   goToFeeCatalogList(): void {
-    this.close();
+    this.router.navigate(ROUTES.FEE.FEE_CATALOG.LIST);
   }
 
-  show(id: string | null = null) {
-    this.routedId = id;
-    this.isEditMode = !!id;
-    this.isVisible = true;
-    this.initializeForm();
-    if (this.isEditMode && id) {
-      this.getFeeCatalogDetails(id);
-    }
-  }
+
 
   close() {
-    this.isVisible = false;
+    this.router.navigate(ROUTES.FEE.FEE_CATALOG.LIST);
   }
 
   // Validators
