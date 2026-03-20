@@ -28,101 +28,126 @@
             </div>
         </div>
         <div class="kt-portlet__body">
+          <app-toaster></app-toaster>
 
-            <div *ngIf="!showStudentForm">
-                <div class="form-group row kt-margin-t-10">
-                    <div class="col-6">
-                        <!-- <label class="col-form-label">Name:</label> -->
-                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">First Name :
-                        </span> {{studentData?.firstName}}
+            <div *ngIf="!showStudentForm" class="animate__animated animate__fadeIn">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="info-item-box">
+                            <span class="info-label">First Name</span>
+                            <span class="info-value">{{studentData?.firstName || 'N/A'}}</span>
+                        </div>
                     </div>
-                    <div class="col-6">
-                        <!-- <label class="col-form-label">Name:</label> -->
-                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Last Name :
-                        </span> {{studentData?.lastName}}
+                    <div class="col-md-4 mb-4">
+                        <div class="info-item-box">
+                            <span class="info-label">Middle Name</span>
+                            <span class="info-value">{{studentData?.middleName || 'N/A'}}</span>
+                        </div>
                     </div>
-
-                </div>
-                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
-                </div>
-                <div class="form-group row kt-margin-t-10">
-                    <div class="col-6">
-                        <!-- <label class="col-form-label">Name:</label> -->
-                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Full Name :
-                        </span> {{studentData?.fullName}}
-                    </div>
-                    <div class="col-6">
-                        <!-- <label class="col-form-label">Name:</label> -->
-                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">DOB :
-                        </span> {{studentData?.dateOfBirth}}
-                    </div>
-                </div>
-                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
-                </div>
-                <div class="form-group row kt-margin-t-10">
-                    <div class="col-6">
-                        <!-- <label class="col-form-label">Name:</label> -->
-                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Gender :
-                        </span> {{studentData?.gender}}
-                    </div>
-                    <div class="col-6">
-                        <!-- <label class="col-form-label">Name:</label> -->
-                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">CRC/CNIC :
-                        </span> {{studentData?.cnic}}
-                    </div>
-                </div>
-                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
-                </div>
-                <div class="form-group row kt-margin-t-10">
-                    <div class="col-6">
-                        <!-- <label class="col-form-label">Name:</label> -->
-                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Email :
-                        </span> {{studentData?.email}}
-                    </div>
-                    <div class="col-6">
-                        <!-- <label class="col-form-label">Name:</label> -->
-                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Contact # :
-                        </span> {{studentData?.phone}}
-                    </div>
-                </div>
-                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
-                </div>
-                <div class="form-group row kt-margin-t-10">
-                    <div class="col-6">
-                        <!-- <label class="col-form-label">Name:</label> -->
-                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Religion :
-                        </span> {{studentData?.religion}}
-                    </div>
-                    <div class="col-6">
-                        <!-- <label class="col-form-label">Name:</label> -->
-                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Nationality :
-                        </span> {{studentData?.nationality}}
-                    </div>
-                </div>
-                <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit kt-margin-t-10">
-                </div>
-                <div class="form-group row kt-margin-t-10">
-                    <div class="col-6">
-                        <!-- <label class="col-form-label">Name:</label> -->
-                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Blood_Group :
-                        </span> {{studentData?.bloodGroup}}
-                    </div>
-                    <div class="col-6">
-                        <!-- <label class="col-form-label">Name:</label> -->
-                        <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Place Of Birth
-                            # :
-                        </span> {{studentData?.phone}}
+                    <div class="col-md-4 mb-4">
+                        <div class="info-item-box">
+                            <span class="info-label">Last Name</span>
+                            <span class="info-value">{{studentData?.lastName || 'N/A'}}</span>
+                        </div>
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="info-item-box">
+                            <span class="info-label">Full Name</span>
+                            <span class="info-value">{{studentData?.fullName || 'N/A'}}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="info-item-box">
+                            <span class="info-label">Date of Birth</span>
+                            <span class="info-value text-primary">
+                                <i class="la la-calendar mr-1"></i> {{studentData?.dateOfBirth || 'N/A'}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kt-separator custom-sep"></div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="info-item-box">
+                            <span class="info-label">Gender</span>
+                            <span class="info-value">
+                                <i class="la la-transgender mr-1"></i> {{studentData?.gender || 'N/A'}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="info-item-box">
+                            <span class="info-label">CRC / CNIC</span>
+                            <span class="info-value">
+                                <i class="la la-vcard mr-1"></i> {{studentData?.cnic || 'N/A'}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="info-item-box">
+                            <span class="info-label">Blood Group</span>
+                            <span class="info-value text-danger">
+                                <i class="la la-tint mr-1"></i> {{studentData?.bloodGroup || 'N/A'}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="info-item-box">
+                            <span class="info-label">Phone Number</span>
+                            <span class="info-value">
+                                <i class="la la-phone mr-1"></i> {{studentData?.phone || 'N/A'}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="info-item-box">
+                            <span class="info-label">Email Address</span>
+                            <span class="info-value text-truncate" [title]="studentData?.email || 'N/A'">
+                                <i class="la la-envelope mr-1"></i> {{studentData?.email || 'N/A'}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="info-item-box">
+                            <span class="info-label">Religion</span>
+                            <span class="info-value">{{studentData?.religion || 'N/A'}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="info-item-box">
+                            <span class="info-label">Nationality</span>
+                            <span class="info-value">
+                                <i class="la la-globe mr-1"></i> {{studentData?.nationality || 'N/A'}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-8 mb-4">
+                        <div class="info-item-box">
+                            <span class="info-label">Residential Address</span>
+                            <span class="info-value">
+                                <i class="la la-map-marker mr-1"></i> {{studentData?.address || 'N/A'}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div *ngIf="showStudentForm">
                 <form class="kt-form" [formGroup]="createForm" (ngSubmit)="onStudentSubmit()">
 
-
                     <div class="form-group row form-group-marginless kt-margin-t-20">
-                        <label class="col-lg-1 col-form-label required">First Name:</label>
-                        <div class="col-lg-3">
+                        <label class="col-lg-2 col-form-label required">First Name:</label>
+                        <div class="col-lg-4">
                             <input type="text" class="form-control" placeholder="First Name" formControlName="firstName"
                                 [class.is-invalid]="firstName?.invalid && (firstName?.touched || firstName?.dirty)"
                                 [class.is-valid]="firstName?.valid && (firstName?.touched || firstName?.dirty)">
@@ -133,8 +158,8 @@
                             </span>
                         </div>
 
-                        <label class="col-lg-1 col-form-label required">Last Name:</label>
-                        <div class="col-lg-3">
+                        <label class="col-lg-2 col-form-label required">Last Name:</label>
+                        <div class="col-lg-4">
                             <input type="text" class="form-control" placeholder="Last Name" formControlName="lastName"
                                 [class.is-invalid]="lastName?.invalid && (lastName?.touched || lastName?.dirty)"
                                 [class.is-valid]="lastName?.valid && (lastName?.touched || lastName?.dirty)">
@@ -144,24 +169,18 @@
                                 {{ getErrorMessage('lastName') }}
                             </span>
                         </div>
+                    </div>
 
-                        <label class="col-lg-1 col-form-label">Middle Name:</label>
-                        <div class="col-lg-3">
+                    <div class="form-group row form-group-marginless kt-margin-t-20">
+                        <label class="col-lg-2 col-form-label">Middle Name:</label>
+                        <div class="col-lg-4">
                             <input type="text" class="form-control" placeholder="Middle Name"
                                 formControlName="middleName">
                             <span class="form-text text-muted">Please enter Middle Name</span>
                         </div>
-                    </div>
 
-                    <div class="form-group row form-group-marginless kt-margin-t-20">
-                        <!-- <label class="col-lg-1 col-form-label">Student Code:</label>
-                        <div class="col-lg-3">
-                            <input type="text" class="form-control" placeholder="Student Code"
-                                formControlName="studentCode">
-                        </div> -->
-
-                        <label class="col-lg-1 col-form-label required">National Id:</label>
-                        <div class="col-lg-3">
+                        <label class="col-lg-2 col-form-label">National Id:</label>
+                        <div class="col-lg-4">
                             <input type="text" class="form-control" placeholder="B-Form/CNIC" formControlName="cnic"
                                 [class.is-invalid]="cnic?.invalid && (cnic?.touched || cnic?.dirty)"
                                 [class.is-valid]="cnic?.valid && (cnic?.touched || cnic?.dirty)">
@@ -170,9 +189,17 @@
                                 {{ getErrorMessage('cnic') }}
                             </span>
                         </div>
+                    </div>
 
-                        <label class="col-lg-1 col-form-label required">DOB:</label>
-                        <div class="col-lg-3">
+                    <div class="form-group row form-group-marginless kt-margin-t-20">
+                        <label class="col-lg-2 col-form-label">Passport #:</label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" placeholder="Passport Number" formControlName="passportNumber">
+                            <span class="form-text text-muted">Optional</span>
+                        </div>
+
+                        <label class="col-lg-2 col-form-label required">DOB:</label>
+                        <div class="col-lg-4">
                             <input type="date" class="form-control" placeholder="DOB" formControlName="dateOfBirth"
                                 [class.is-invalid]="dateOfBirth?.invalid && (dateOfBirth?.touched || dateOfBirth?.dirty)"
                                 [class.is-valid]="dateOfBirth?.valid && (dateOfBirth?.touched || dateOfBirth?.dirty)">
@@ -185,9 +212,9 @@
                     </div>
 
                     <div class="form-group row form-group-marginless kt-margin-t-20">
-                        <label class="col-lg-1 col-form-label required">Phone:</label>
-                        <div class="col-lg-3">
-                            <input type="tel" class="form-control" placeholder="+923205500003" formControlName="phone"
+                        <label class="col-lg-2 col-form-label required">Phone:</label>
+                        <div class="col-lg-4">
+                            <input type="tel" class="form-control" placeholder="+92XXXXXXXXXX" formControlName="phone"
                                 [class.is-invalid]="phone?.invalid && (phone?.touched || phone?.dirty)"
                                 [class.is-valid]="phone?.valid && (phone?.touched || phone?.dirty)">
                             <span class="form-text text-muted">Please enter Phone Number</span>
@@ -196,8 +223,8 @@
                             </span>
                         </div>
 
-                        <label class="col-lg-1 col-form-label required">Email:</label>
-                        <div class="col-lg-3">
+                        <label class="col-lg-2 col-form-label required">Email:</label>
+                        <div class="col-lg-4">
                             <input type="email" class="form-control" placeholder="example@mail.com"
                                 formControlName="email"
                                 [class.is-invalid]="email?.invalid && (email?.touched || email?.dirty)"
@@ -207,16 +234,16 @@
                                 {{ getErrorMessage('email') }}
                             </span>
                         </div>
+                    </div>
 
-                        <label class="col-lg-1 col-form-label required">Gender:</label>
-                        <div class="col-lg-3">
+                    <div class="form-group row form-group-marginless kt-margin-t-20">
+                        <label class="col-lg-2 col-form-label required">Gender:</label>
+                        <div class="col-lg-4">
                             <select class="form-control" formControlName="gender"
                                 [class.is-invalid]="gender?.invalid && (gender?.touched || gender?.dirty)"
                                 [class.is-valid]="gender?.valid && (gender?.touched || gender?.dirty)">
                                 <option value='' selected>Select Gender</option>
-                                @for (p of genderDD; track p.key) {
-                                <option [value]="p.key">{{ p.label }}</option>
-                                }
+                                <option *ngFor="let p of genderDD" [value]="p.key">{{ p.label }}</option>
                             </select>
                             <span class="form-text text-muted">Please select Gender</span>
                             <span class="invalid-feedback"
@@ -224,18 +251,14 @@
                                 {{ getErrorMessage('gender') }}
                             </span>
                         </div>
-                    </div>
 
-                    <div class="form-group row form-group-marginless kt-margin-t-20">
-                        <label class="col-lg-1 col-form-label required">Religion:</label>
-                        <div class="col-lg-3">
+                        <label class="col-lg-2 col-form-label required">Religion:</label>
+                        <div class="col-lg-4">
                             <select class="form-control" formControlName="religion"
                                 [class.is-invalid]="religion?.invalid && (religion?.touched || religion?.dirty)"
                                 [class.is-valid]="religion?.valid && (religion?.touched || religion?.dirty)">
                                 <option value='' selected>Select Religion</option>
-                                @for (p of religionDD; track p.key) {
-                                <option [value]="p.key">{{ p.label }}</option>
-                                }
+                                <option *ngFor="let p of religionDD" [value]="p.key">{{ p.label }}</option>
                             </select>
                             <span class="form-text text-muted">Please select Religion</span>
                             <span class="invalid-feedback"
@@ -243,20 +266,20 @@
                                 {{ getErrorMessage('religion') }}
                             </span>
                         </div>
+                    </div>
 
-                        <label class="col-lg-1 col-form-label">Blood Group:</label>
-                        <div class="col-lg-3">
+                    <div class="form-group row form-group-marginless kt-margin-t-20">
+                        <label class="col-lg-2 col-form-label">Blood Group:</label>
+                        <div class="col-lg-4">
                             <select class="form-control" formControlName="bloodGroup">
                                 <option value='' selected>Select Blood Group</option>
-                                @for (p of bloodGroupDD; track p.key) {
-                                <option [value]="p.key">{{ p.label }}</option>
-                                }
+                                <option *ngFor="let p of bloodGroupDD" [value]="p.key">{{ p.label }}</option>
                             </select>
                             <span class="form-text text-muted">Please select Blood Group</span>
                         </div>
 
-                        <label class="col-lg-1 col-form-label required">Nationality:</label>
-                        <div class="col-lg-3">
+                        <label class="col-lg-2 col-form-label required">Nationality:</label>
+                        <div class="col-lg-4">
                             <select class="form-control" formControlName="nationality"
                                 [class.is-invalid]="nationality?.invalid && (nationality?.touched || nationality?.dirty)"
                                 [class.is-valid]="nationality?.valid && (nationality?.touched || nationality?.dirty)">
@@ -268,18 +291,25 @@
                                 *ngIf="nationality?.invalid && (nationality?.touched || nationality?.dirty)">
                                 {{ getErrorMessage('nationality') }}
                             </span>
+                        </div>
+                    </div>
 
+                    <div class="form-group row form-group-marginless kt-margin-t-20">
+                        <label class="col-lg-2 col-form-label">Address:</label>
+                        <div class="col-lg-10">
+                            <textarea class="form-control" formControlName="address" rows="2" placeholder="Residential Address"></textarea>
+                            <span class="form-text text-muted">Please enter complete residential address</span>
                         </div>
                     </div>
 
 
-                    <div class="kt-portlet__foot">
+                    <div class="kt-portlet__foot mt-3">
                         <div class="kt-form__actions">
                             <div class="row">
                                 <div class="col-lg-5"></div>
                                 <div class="col-lg-7">
-                                    <button type="submit" class="btn btn-dark mr-2">
-                                        Update
+                                    <button type="submit" class="btn btn-dark mr-2" [disabled]="createForm.invalid">
+                                        Update Profile
                                     </button>
                                     <button type="button" class="btn btn-danger" (click)="toggleStudentForm()">Cancel</button>
                                 </div>
@@ -291,3 +321,5 @@
         </div>
     </div>
 </div>
+
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

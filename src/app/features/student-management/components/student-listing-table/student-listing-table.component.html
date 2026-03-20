@@ -107,7 +107,7 @@
                             border-bottom-left-radius: 30px;
                             text-align: right;
                             justify-content: flex-end;">
-                {{ item.standard?.standardName || 'STD' }}
+                {{ item.standard.standardName || 'STD' }}
               </div>
             </div>
 
@@ -137,7 +137,7 @@
                   </div>
                   <div class="d-flex align-items-center justify-content-between w-100 pb-1">
                     <span class="text-dark font-weight-normal" style="font-size: 0.85rem; color: #495057;">{{
-                      item.campus?.campusName || 'N/A' }}</span>
+                      item.campus.campusName || 'N/A' }}</span>
                     <span class="text-muted font-weight-normal text-uppercase"
                       style="font-size: 0.6rem; letter-spacing: 0.5px;">CAMPUS</span>
                   </div>
@@ -241,8 +241,8 @@
                     </span>
                   </td>
                   <td class="align-middle text-muted">{{ item.enrollmentDate | date: 'longDate' }}</td>
-                  <td class="align-middle">{{ item.standard?.standardName }}</td>
-                  <td class="align-middle">{{ item.campus?.campusName }}</td>
+                  <td class="align-middle">{{ item.standard.standardName }}</td>
+                  <td class="align-middle">{{ item.campus.campusName }}</td>
                   <td nowrap="" class="align-middle text-right">
                     <a (click)="editStudentDetails(item,$event)"
                       class="btn btn-sm btn-clean btn-icon btn-icon-md text-muted" title="Edit">

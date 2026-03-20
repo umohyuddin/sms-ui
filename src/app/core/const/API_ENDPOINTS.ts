@@ -1,4 +1,4 @@
-export const API_ENDPOINTS = {
+export const API_ENDPOINTS: any = {
     AUTH: {
         CREATE: '/sms/auth',
     },
@@ -98,6 +98,7 @@ export const API_ENDPOINTS = {
     STUDENTS: {
         CREATE: '/api/institute/students',
         UPDATE: (id: string) => `/api/institute/students/${id}`,
+        UPDATE_BASIC_INFO: (id: string) => `/api/institute/students/${id}/basic-info`,
         GET_ALL: '/api/institute/students',
         SEARCH: `/api/institute/students/search`,
         GET_BY_ID: (id: string) => `/api/institute/students/${id}`,
@@ -121,6 +122,12 @@ export const API_ENDPOINTS = {
             GET_STUDENT_ASSIGNED_FEE_FLAT: (id: string) => `/api/students/${id}/fees/assigned-flat`,
         }
 
+    },
+    GUARDIANS: {
+        GET_BY_STUDENT: (studentId: string) => `/api/guardians/students/${studentId}`,
+        CREATE: '/api/guardians',
+        UPDATE: (id: string) => `/api/guardians/${id}`,
+        DELETE: (id: string | number) => `/api/guardians/${id}`
     },
     EMPLOYEE: {
         CREATE: '/api/institute/employees/list',
@@ -394,6 +401,9 @@ export const API_ENDPOINTS = {
     LOOKUP: {
         FEE_CATALOG_META: '/api/lookup/fee-catalog/metadata',
         STUDENT_ADMISSION_META: '/api/lookup/admission/metadata',
+        COUNTRIES: {
+            GET_ALL: '/api/lookups/countries/v1'
+        },
         EMPLOYEE_DOCS_META: '/api/lookup/docs/metadata',
         FEE_RECURRENCE_RULES: {
             GET_ALL: (id?: string | number) => `/api/lookups/fee-recurrence-rules${id ? `/${id}` : ''}`,

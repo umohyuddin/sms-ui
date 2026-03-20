@@ -86,10 +86,10 @@
     <div *ngIf="activeTab === 'academic_details'" class="tab-content full-width-tab" style="margin-left: 10px;">
         <app-student-academic-detail [studentId]="studentId"></app-student-academic-detail>
     </div>
-    <!-- Guardian Details -->
 
-    <!-- enrollment_administrative -->
-
+    <div *ngIf="activeTab === 'guardian'" class="tab-content full-width-tab" style="margin-left: 10px;">
+        <app-student-guardian-detail [studentId]="studentId"></app-student-guardian-detail>
+    </div>
 
     <!-- documents -->
     <div *ngIf="activeTab === 'documents'" class="tab-content full-width-tab" style="margin-left: 10px;">

@@ -7,73 +7,68 @@
                 </h3>
             </div>
             <div class="kt-portlet__head-toolbar">
-                <div class="kt-portlet__head-actions"></div>
+                <div class="kt-portlet__head-actions">
+                    <span class="badge badge-pill font-weight-bold" 
+                          [ngClass]="studentData?.isActive ? 'badge-light-success' : 'badge-light-danger'">
+                        {{ studentData?.isActive ? 'Active' : 'Inactive' }}
+                    </span>
+                </div>
             </div>
         </div>
 
         <div class="kt-portlet__body">
-
-            <div class="form-group row">
-                <div class="col-6">
-                    <span class="form-control-plaintext kt-font-bolder"  style="display: inline;">Student Code :</span>
-                    {{ studentData?.studentCode }}
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="info-item-box">
+                        <span class="info-label">Student Code</span>
+                        <span class="info-value">{{ studentData?.studentCode || 'N/A' }}</span>
+                    </div>
                 </div>
-                <div class="col-6">
-                    <span class="form-control-plaintext kt-font-bolder"  style="display: inline;">Status :</span>
-                    {{ studentData?.status }}
+                <div class="col-md-4 mb-4">
+                    <div class="info-item-box">
+                        <span class="info-label">Status</span>
+                        <span class="info-value">
+                            <span class="badge badge-inline badge-light-primary font-weight-bold">{{ studentData?.status || 'N/A' }}</span>
+                        </span>
+                    </div>
                 </div>
-            </div>
-
-            <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit"></div>
-
-            <div class="form-group row">
-                <div class="col-6">
-                    <span class="form-control-plaintext kt-font-bolder"  style="display: inline;">Campus :</span>
-                    {{ studentData?.campusName }}
+                <div class="col-md-4 mb-4">
+                    <div class="info-item-box">
+                        <span class="info-label">Campus</span>
+                        <span class="info-value">{{ studentData?.campusName || 'N/A' }}</span>
+                    </div>
                 </div>
-                <div class="col-6">
-                    <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Academic Year :</span>
-                    {{ studentData?.academicYearName }}
+                <div class="col-md-4 mb-4">
+                    <div class="info-item-box">
+                        <span class="info-label">Academic Year</span>
+                        <span class="info-value">{{ studentData?.academicYearName || 'N/A' }}</span>
+                    </div>
                 </div>
-            </div>
-
-            <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit"></div>
-
-            <div class="form-group row">
-                <div class="col-6">
-                    <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Class / Standard :</span>
-                    {{ studentData?.standardName }}
+                <div class="col-md-4 mb-4">
+                    <div class="info-item-box">
+                        <span class="info-label">Class / Standard</span>
+                        <span class="info-value">{{ studentData?.standardName || 'N/A' }}</span>
+                    </div>
                 </div>
-                <div class="col-6">
-                    <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Section :</span>
-                    {{ studentData?.sectionName }}
+                <div class="col-md-4 mb-4">
+                    <div class="info-item-box">
+                        <span class="info-label">Section</span>
+                        <span class="info-value">{{ studentData?.sectionName || 'N/A' }}</span>
+                    </div>
                 </div>
-            </div>
-
-            <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit"></div>
-
-            <div class="form-group row">
-                <div class="col-6">
-                    <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Admission Type :</span>
-                    {{ studentData?.admissionTypeName }}
+                <div class="col-md-4 mb-4">
+                    <div class="info-item-box">
+                        <span class="info-label">Admission Type</span>
+                        <span class="info-value">{{ studentData?.admissionTypeName || 'N/A' }}</span>
+                    </div>
                 </div>
-                <div class="col-6">
-                    <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Enrollment Date :</span>
-                    {{ studentData?.enrollmentDate }}
-                </div>
-            </div>
-
-            <div class="kt-separator kt-separator--border-dashed kt-separator--portlet-fit"></div>
-
-            <div class="form-group row">
-                <div class="col-6">
-                    <span class="form-control-plaintext kt-font-bolder" style="display: inline;">Active :</span>
-                    <span [ngClass]="studentData?.isActive ? 'kt-font-success' : 'kt-font-danger'">
-                        {{ studentData?.isActive ? 'Yes' : 'No' }}
-                    </span>
+                <div class="col-md-4 mb-4">
+                    <div class="info-item-box">
+                        <span class="info-label">Enrollment Date</span>
+                        <span class="info-value">{{ studentData?.enrollmentDate | date:'dd MMM, yyyy' }}</span>
+                    </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

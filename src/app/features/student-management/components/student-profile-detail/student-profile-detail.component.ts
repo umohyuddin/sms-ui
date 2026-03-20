@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { StudentManagementService } from '../../services/student-management.service';
 import { AcademicYear, StudentResponse } from '../../models/StudentResponse';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -8,17 +8,19 @@ import { KeyValueOption } from '../../../../core/models/KeyValueOption';
 import { ROUTES } from '../../../../core/const/APP_ROUTES';
 import { Router } from '@angular/router';
 import { LoggerService } from '../../../../core/services/logger.service';
+import { ToasterComponent } from '../../../../shared/components/toaster/toaster.component';
+import { LoaderComponent } from '../../../../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-student-profile-detail',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ToasterComponent, LoaderComponent],
   templateUrl: './student-profile-detail.component.html',
   styleUrl: './student-profile-detail.component.css'
 })
 export class StudentProfileDetailComponent {
 
-    @Output() studentDataChange = new EventEmitter<StudentResponse>();
+  @Output() studentDataChange = new EventEmitter<StudentResponse>();
   provinceDD: KeyValueOption[] = [];
   nationalityDD: KeyValueOption[] = [];
   religionDD: KeyValueOption[] = [];
@@ -26,15 +28,20 @@ export class StudentProfileDetailComponent {
   genderDD: KeyValueOption[] = [];
 
   createForm!: FormGroup;
+  @ViewChild(ToasterComponent) private toaster?: ToasterComponent;
+
   showStudentForm: boolean = false;
   studentData?: StudentResponse;
   @Input() studentId!: string;
+
+  isLoading = false;
+  loadingMessage = '';
 
   constructor(
     private fb: FormBuilder,
     private studentManagementService: StudentManagementService,
     private router: Router
-  , private logger: LoggerService) { }
+    , private logger: LoggerService) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -47,11 +54,21 @@ export class StudentProfileDetailComponent {
   private loadLookups(): void {
     this.studentManagementService.getAddmissionMeta().subscribe(r => {
       this.provinceDD = Object.entries(r.body.provinces).map(([k, v]) => ({ key: k, label: v as string }));
-      this.nationalityDD = Object.entries(r.body.nationalities).map(([k, v]) => ({ key: k, label: v as string }));
       this.religionDD = Object.entries(r.body.religions).map(([k, v]) => ({ key: k, label: v as string }));
       this.bloodGroupDD = Object.entries(r.body.bloodGroup).map(([k, v]) => ({ key: k, label: v as string }));
       this.genderDD = Object.entries(r.body.gender).map(([k, v]) => ({ key: k, label: v as string }));
     });
+
+    this.studentManagementService.getCountries().subscribe({
+  next: (response) => {
+    const countries = response.body || [];
+    this.nationalityDD = countries.map((c: any) => ({
+      key: c.countryName,
+      label: c.countryName
+    }));
+  },
+  error: (err) => console.error('❌ Error fetching countries for nationality dropdown:', err)
+});
   }
   private initializeForm(): void {
     const today = new Date();
@@ -68,7 +85,6 @@ export class StudentProfileDetailComponent {
       gender: ['', Validators.required],
 
       cnic: ['', [
-        Validators.required,
         Validators.pattern(/^[0-9]{5}-[0-9]{7}-[0-9]{1}$/)
       ]],
 
@@ -83,6 +99,7 @@ export class StudentProfileDetailComponent {
       religion: ['', Validators.required],
       nationality: ['', Validators.required],
       bloodGroup: [''],
+      address: ['', [Validators.maxLength(250)]]
     });
 
   }
@@ -104,9 +121,10 @@ export class StudentProfileDetailComponent {
       phone: this.studentData.phone,
       email: this.studentData.email,
 
-      religion: this.studentData.religion.toUpperCase(),
-      nationality: this.studentData.nationality.toUpperCase(),
-      bloodGroup:this.studentData.bloodGroup
+      religion: this.studentData.religion?.toUpperCase() || '',
+      nationality: this.studentData.nationality?.toUpperCase() || '',
+      bloodGroup: this.studentData.bloodGroup || '',
+      address: this.studentData.address || ''
       //bloodGroup: this.BLOOD_GROUP_API_TO_UI[this.studentData.bloodGroup] ?? '',
     });
   }
@@ -118,11 +136,25 @@ export class StudentProfileDetailComponent {
       return;
     }
 
+    this.isLoading = true;
+    this.loadingMessage = 'Updating Student Details...';
+    this.createForm.disable();
+
     this.studentManagementService.updateStudent(this.studentId, this.createForm.value)
       .subscribe({
         next: () => {
           this.getStudentDetails(this.studentId);
-          this.toggleStudentForm(null); // back to view
+          this.createForm.disable();
+          this.toaster?.show('Student information updated successfully.', 'success');
+        },
+        error: (error) => {
+          console.error('❌ Error updating student:', error);
+          this.toaster?.show('Failed to update student information.', 'error');
+        },
+        complete: () => {
+          this.isLoading = false;
+          this.loadingMessage = '';
+          this.createForm.enable();
         }
       });
   }
@@ -136,7 +168,7 @@ export class StudentProfileDetailComponent {
         this.studentData = response.body;
         this.patchStudentForm();
         console.log('✅ Student details fetched:', this.studentData);
-         this.studentDataChange.emit(this.studentData);
+        this.studentDataChange.emit(this.studentData);
       },
       error: (error) => console.error('❌ Error fetching student details:', error),
       complete: () => console.log('✅ getStudentDetails completed')
@@ -146,6 +178,11 @@ export class StudentProfileDetailComponent {
 
   toggleStudentForm(studentId: string | null = null): void {
     this.showStudentForm = !this.showStudentForm;
+
+    if (this.showStudentForm) {
+      // Ensure the form is editable when opening
+      this.createForm.enable();
+    }
 
     if (studentId) {
       // EDIT MODE
@@ -260,6 +297,7 @@ export class StudentProfileDetailComponent {
   get religion() { return this.createForm.get('religion'); }
   get nationality() { return this.createForm.get('nationality'); }
   get bloodGroup() { return this.createForm.get('bloodGroup'); }
+  get address() { return this.createForm.get('address'); }
 
   BLOOD_GROUP_API_TO_UI: Record<string, string> = {
     'A+': 'A_POSITIVE',

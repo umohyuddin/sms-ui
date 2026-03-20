@@ -87,6 +87,10 @@ getDocsMeta(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.STUDENT_ADMISSION_META}`, { observeResponse: true });
   }
 
+  getCountries(): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.LOOKUP.COUNTRIES.GET_ALL}`, { observeResponse: true });
+  }
+
   getAllStudents(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.STUDENTS.GET_ALL}`, { observeResponse: true });
   }
@@ -164,8 +168,16 @@ getDocsMeta(): Observable<any> {
   }
 
   updateStudent(id: string, payload: any): Observable<any>{
-    const url = `${this.baseUrl}${API_ENDPOINTS.STUDENTS.UPDATE(id)}`;
-    return this.http.request(HTTP_METHOD.PUT, url, {
+    const url = `${this.baseUrl}${API_ENDPOINTS.STUDENTS.UPDATE_BASIC_INFO(id)}`;
+    return this.http.request(HTTP_METHOD.PATCH, url, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
+  updateStudentBasicInfo(id: string, payload: any): Observable<any>{
+    const url = `${this.baseUrl}${API_ENDPOINTS.STUDENTS.UPDATE_BASIC_INFO(id)}`;
+    return this.http.request(HTTP_METHOD.PATCH, url, {
       observeResponse: true,
       body: payload
     });
@@ -179,10 +191,27 @@ getDocsMeta(): Observable<any> {
     return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}/api/guardian/relation/active`, { observeResponse: true });
   }
 
+  getGuardiansByStudentId(studentId: string): Observable<any> {
+    return this.http.request(HTTP_METHOD.GET, `${this.baseUrl}${API_ENDPOINTS.GUARDIANS.GET_BY_STUDENT(studentId)}`, { observeResponse: true });
+  }
+
   saveGuardian(payload: any): Observable<any> {
-    return this.http.request(HTTP_METHOD.POST, `${this.baseUrl}/api/guardians`, {
+    return this.http.request(HTTP_METHOD.POST, `${this.baseUrl}${API_ENDPOINTS.GUARDIANS.CREATE}`, {
       observeResponse: true,
       body: payload
+    });
+  }
+
+  updateGuardian(id: string, payload: any): Observable<any> {
+    return this.http.request(HTTP_METHOD.PUT, `${this.baseUrl}${API_ENDPOINTS.GUARDIANS.UPDATE(id)}`, {
+      observeResponse: true,
+      body: payload
+    });
+  }
+
+  deleteGuardian(id: string | number): Observable<any> {
+    return this.http.request(HTTP_METHOD.DELETE, `${this.baseUrl}${API_ENDPOINTS.GUARDIANS.DELETE(id)}`, {
+      observeResponse: true
     });
   }
 

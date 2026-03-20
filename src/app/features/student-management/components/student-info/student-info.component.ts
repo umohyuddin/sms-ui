@@ -17,10 +17,11 @@ import { StudentDocumentsComponent } from '../student-documents/student-document
 import { StudentFeeSummaryComponent } from '../student-fee-summary/student-fee-summary.component';
 import { StudentProfileDetailComponent } from '../student-profile-detail/student-profile-detail.component';
 import { StudentAcademicDetailComponent } from '../student-academic-detail/student-academic-detail.component';
+import { StudentGuardianDetailComponent } from '../student-guardian-detail/student-guardian-detail.component';
 @Component({
   selector: 'app-student-info',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ProfileSideWidgetTabComponent,StudentAcademicDetailComponent, StudentDocumentsComponent, StudentFeeSummaryComponent, StudentProfileDetailComponent
+  imports: [CommonModule, ReactiveFormsModule, ProfileSideWidgetTabComponent, StudentAcademicDetailComponent, StudentDocumentsComponent, StudentFeeSummaryComponent, StudentProfileDetailComponent, StudentGuardianDetailComponent
   ],
   templateUrl: './student-info.component.html',
   styleUrls: ['./student-info.component.css']
@@ -165,6 +166,15 @@ export class StudentInfoComponent {
             <path d="M3.5,21 L20.5,21 C21.33,21 22,20.33 22,19.5 L22,8.5 C22,7.67 21.33,7 20.5,7 L10,7 L7.44,4.44 C7.15,4.15 6.77,4 6.38,4 L3.5,4 C2.67,4 2,4.67 2,5.5 L2,19.5 C2,20.33 2.67,21 3.5,21 Z" fill="#000000" opacity="0.3"></path>
             <path d="M14.88,12.83 L12.93,12.83 L12.93,10.82 C12.93,10.55 12.71,10.32 12.43,10.32 L11.41,10.32 C11.13,10.32 10.91,10.55 10.91,10.82 L10.91,12.83 L8.95,12.83 C8.67,12.83 8.45,13.05 8.45,13.33 C8.45,13.44 8.49,13.56 8.57,13.65 L11.54,17.16 C11.71,17.37 12.03,17.39 12.24,17.22 L15.27,13.65 C15.44,13.44 15.42,13.13 15.21,12.95 C15.12,12.87 15.01,12.83 14.88,12.83 Z" fill="#000000"></path>
           </g>
+        </svg>`
+    },
+    {
+      key: 'guardian',
+      label: 'Guardians',
+      iconSvg: `
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path fill="#000000" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" opacity="0.3"/>
+          <path fill="#000000" d="M12 14c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/>
         </svg>`
     }
   ];

@@ -1,0 +1,236 @@
+<app-toaster #toaster></app-toaster>
+
+<div class="kt-portlet shadow-sm border-0">
+  <div class="kt-portlet__head kt-portlet__head--lg glass-header border-bottom">
+    <div class="kt-portlet__head-label">
+      <span class="kt-portlet__head-icon">
+        <i class="kt-font-brand flaticon-users-1"></i>
+      </span>
+      <h3 class="kt-portlet__head-title text-dark font-weight-bold">
+        Guardians
+        <small class="text-muted ml-2 tracking-widest text-uppercase" style="font-size: 0.65rem;">Manage primary and
+          secondary contacts</small>
+      </h3>
+    </div>
+    <div class="kt-portlet__head-toolbar">
+      <button type="button" class="btn btn-brand btn-elevate btn-pill btn-sm font-weight-bold" (click)="onAddGuardian()"
+        *ngIf="!showGuardianForm">
+        <i class="la la-plus"></i> Add Guardian
+      </button>
+      <button type="button" class="btn btn-secondary btn-pill btn-sm font-weight-bold" (click)="toggleGuardianForm()"
+        *ngIf="showGuardianForm">
+        <i class="la la-close"></i> Close Form
+      </button>
+    </div>
+  </div>
+
+  <div class="kt-portlet__body bg-light-soft">
+    <!-- Guardian Cards Grid -->
+    <div *ngIf="!showGuardianForm">
+      <div *ngIf="guardians.length === 0"
+        class="alert alert-custom alert-outline-2x alert-outline-brand fade show mb-5 shadow-sm bg-white" role="alert">
+        <div class="alert-icon"><i class="flaticon-info"></i></div>
+        <div class="alert-text">
+          <h4 class="alert-heading font-weight-bold">No Guardians Registered</h4>
+          <p class="mb-0">This student does not have any guardians listed. Please add at least one primary contact.</p>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="guardians.length > 0">
+        <div class="col-xl-4 col-lg-6 mb-4" *ngFor="let guardian of guardians">
+          <div class="guardian-card shadow-soft h-100">
+            <div class="card-gradient-header"></div>
+            <div class="guardian-avatar-wrapper">
+              <span class="guardian-initials">{{ guardian.firstName[0] }}{{ guardian.lastName[0] }}</span>
+            </div>
+
+            <div class="guardian-info-section">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                  <h4 class="guardian-name">{{ guardian.fullName }}</h4>
+                  <span class="guardian-relation-badge">{{ getRelationLabel(guardian.relationId) }}</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-muted font-weight-boldest text-uppercase tracking-widest d-block mb-1"
+                    style="font-size: 0.8rem;">Status</span>
+                  <span class="badge badge-pill font-weight-bold"
+                    [ngClass]="guardian.isActive ? 'badge-light-success' : 'badge-light-danger'">
+                    {{ guardian.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="guardian-details mt-3">
+                <div
+                  class="guardian-detail-item d-flex align-items-center justify-content-between border-bottom border-light pb-2 mb-2">
+                  <span class="text-muted font-weight-boldest text-uppercase tracking-widest"
+                    style="font-size: 0.8rem;">
+                    <i class="la la-phone mr-1"></i> Phone
+                  </span>
+                  <span class="text-dark font-weight-bold ml-2">{{ guardian.phone || 'N/A' }}</span>
+                </div>
+                <div
+                  class="guardian-detail-item d-flex align-items-center justify-content-between border-bottom border-light pb-2 mb-2">
+                  <span class="text-muted font-weight-boldest text-uppercase tracking-widest"
+                    style="font-size: 0.8rem;">
+                    <i class="la la-envelope mr-1"></i> Email
+                  </span>
+                  <span class="text-dark font-weight-bold ml-2 text-truncate" style="max-width: 150px;"
+                    [title]="guardian.email || 'N/A'">{{ guardian.email || 'N/A' }}</span>
+                </div>
+                <div
+                  class="guardian-detail-item d-flex align-items-center justify-content-between border-bottom border-light pb-2 mb-2">
+                  <span class="text-muted font-weight-boldest text-uppercase tracking-widest"
+                    style="font-size: 0.8rem;">
+                    <i class="la la-id-card mr-1"></i> CNIC
+                  </span>
+                  <span class="text-dark font-weight-bold ml-2">{{ guardian.cnic || 'N/A' }}</span>
+                </div>
+                <div
+                  class="guardian-detail-item d-flex align-items-center justify-content-between border-bottom border-light pb-2 mb-2">
+                  <span class="text-muted font-weight-boldest text-uppercase tracking-widest"
+                    style="font-size: 0.8rem;">
+                    <i class="la la-briefcase mr-1"></i> Occupation
+                  </span>
+                  <span class="text-dark font-weight-bold ml-2 text-truncate" style="max-width: 150px;"
+                    [title]="guardian.occupation || 'N/A'">{{ guardian.occupation || 'N/A' }}</span>
+                </div>
+                <div
+                  class="guardian-detail-item d-flex align-items-center justify-content-between border-bottom border-light pb-2 mb-2">
+                  <span class="text-muted font-weight-boldest text-uppercase tracking-widest"
+                    style="font-size: 0.8rem;">
+                    <i class="la la-map-marker mr-1"></i> Address
+                  </span>
+                  <span class="text-dark font-weight-bold ml-2 text-truncate" style="max-width: 150px;"
+                    [title]="guardian.address || 'N/A'">{{ guardian.address || 'N/A' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <button type="button" class="btn-elite-edit" (click)="onEditGuardian(guardian)" title="Edit Guardian">
+                <i class="la la-edit"></i>
+              </button>
+              <button type="button" class="btn-elite-delete" (click)="onDeleteGuardian(guardian)"
+                title="Delete Guardian">
+                <i class="la la-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guardian Form Section -->
+    <div *ngIf="showGuardianForm" class="animate__animated animate__fadeIn">
+        <form class="kt-form" [formGroup]="guardianForm" (ngSubmit)="onGuardianSubmit()">
+
+          <div class="form-group row form-group-marginless kt-margin-t-20">
+            <label class="col-lg-2 col-form-label required">First Name:</label>
+            <div class="col-lg-4">
+              <input type="text" class="form-control" formControlName="firstName" placeholder="Enter first name">
+              <span class="form-text text-muted">Please enter first name</span>
+              <div class="invalid-feedback d-block" *ngIf="firstName?.invalid && (firstName?.touched || firstName?.dirty)">
+                First Name is required
+              </div>
+            </div>
+
+            <label class="col-lg-2 col-form-label required">Last Name:</label>
+            <div class="col-lg-4">
+              <input type="text" class="form-control" formControlName="lastName" placeholder="Enter last name">
+              <span class="form-text text-muted">Please enter last name</span>
+              <div class="invalid-feedback d-block" *ngIf="lastName?.invalid && (lastName?.touched || lastName?.dirty)">
+                Last Name is required
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row form-group-marginless kt-margin-t-20">
+            <label class="col-lg-2 col-form-label">Middle Name:</label>
+            <div class="col-lg-4">
+              <input type="text" class="form-control" formControlName="middleName" placeholder="Optional">
+              <span class="form-text text-muted">Please enter middle name</span>
+            </div>
+
+            <label class="col-lg-2 col-form-label required">Relationship:</label>
+            <div class="col-lg-4">
+              <select class="form-control" formControlName="relationId">
+                <option value="">-- Select Relation --</option>
+                <option *ngFor="let r of relationDD" [value]="r.key">{{ r.label }}</option>
+              </select>
+              <span class="form-text text-muted">Please select relationship</span>
+              <div class="invalid-feedback d-block" *ngIf="relationId?.invalid && (relationId?.touched || relationId?.dirty)">
+                Relationship is required
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row form-group-marginless kt-margin-t-20">
+            <label class="col-lg-2 col-form-label">National Id:</label>
+            <div class="col-lg-4">
+              <input type="text" class="form-control" formControlName="cnic" placeholder="e.g. 42101-XXXXXXX-X">
+              <span class="form-text text-muted">Please enter CNIC/ID</span>
+            </div>
+
+            <label class="col-lg-2 col-form-label required">Phone:</label>
+            <div class="col-lg-4">
+              <input type="tel" class="form-control" formControlName="phone" placeholder="Enter phone number">
+              <span class="form-text text-muted">Please enter phone number</span>
+              <div class="invalid-feedback d-block" *ngIf="phone?.invalid && (phone?.touched || phone?.dirty)">
+                Phone number is required
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row form-group-marginless kt-margin-t-20">
+            <label class="col-lg-2 col-form-label">Email:</label>
+            <div class="col-lg-4">
+              <input type="email" class="form-control" formControlName="email" placeholder="example@domain.com">
+              <span class="form-text text-muted">Please enter email address</span>
+              <div class="invalid-feedback d-block" *ngIf="email?.invalid && (email?.touched || email?.dirty)">
+                Invalid email address
+              </div>
+            </div>
+
+            <label class="col-lg-2 col-form-label">Occupation:</label>
+            <div class="col-lg-4">
+              <input type="text" class="form-control" formControlName="occupation" placeholder="e.g. Engineer">
+              <span class="form-text text-muted">Please enter occupation</span>
+            </div>
+          </div>
+
+          <div class="form-group row form-group-marginless kt-margin-t-20">
+            <label class="col-lg-2 col-form-label">Organization:</label>
+            <div class="col-lg-4">
+              <input type="text" class="form-control" formControlName="organization" placeholder="Employer name">
+              <span class="form-text text-muted">Please enter organization name</span>
+            </div>
+          </div>
+
+          <div class="form-group row form-group-marginless kt-margin-t-20">
+            <label class="col-lg-2 col-form-label">Address:</label>
+            <div class="col-lg-10">
+              <textarea class="form-control" formControlName="address" rows="2" placeholder="Residential Address"></textarea>
+              <span class="form-text text-muted">Please enter complete residential address</span>
+            </div>
+          </div>
+
+          <div class="kt-portlet__foot mt-3">
+            <div class="kt-form__actions">
+              <div class="row">
+                <div class="col-lg-5"></div>
+                <div class="col-lg-7">
+                  <button type="submit" class="btn btn-dark mr-2" [disabled]="guardianForm.invalid || isLoading">
+                    {{ isEditMode ? 'Update Profile' : 'Create Guardian' }}
+                  </button>
+                  <button type="button" class="btn btn-danger" (click)="toggleGuardianForm()">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+<app-loader *ngIf="isLoading" [message]="loadingMessage" [fullScreen]="true"></app-loader>

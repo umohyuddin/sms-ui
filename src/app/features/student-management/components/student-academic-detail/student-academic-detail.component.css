@@ -1,0 +1,67 @@
+.kt-portlet {
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 0;
+}
+
+.glass-header {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+.kt-portlet__head-title {
+    color: #2c3e50 !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem !important;
+}
+
+.bg-light-soft {
+    background-color: #f8fafc;
+}
+
+/* Info Labels and Values */
+.info-label {
+    color: #7e8299;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.8px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    color: #3f4254;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: block;
+}
+
+.info-item-box {
+    padding: 12px 15px;
+    background: #fcfcfd;
+    border-radius: 8px;
+    border: 1px solid #f1f1f4;
+    height: 100%;
+    transition: all 0.2s ease;
+}
+
+.info-item-box:hover {
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: #e4e6ef;
+}
+
+.info-item-box i {
+    font-size: 1.2rem;
+    margin-right: 8px;
+    color: #5c5cee;
+    vertical-align: middle;
+}
+
+.tracking-widest {
+    letter-spacing: 1.5px;
+}
